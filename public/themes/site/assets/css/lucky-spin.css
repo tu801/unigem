@@ -1,0 +1,136 @@
+.m-game {
+    width: 500px;
+    height: 500px;
+    margin: 50px auto;
+    position: relative;
+}
+
+.m-game__text {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 20px;
+    transform-origin: 0 50%;
+    padding-left: 3%;
+}
+
+.m-game__image {
+    width: 50px;
+    height: 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .m-game {
+        width: 300px;
+        height: 300px;
+        margin: 50px auto;
+        position: relative;
+    }
+    .m-game__text {
+        width: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+        color: #000000;
+        font-size: 10px;
+        transform-origin: 0 50%;
+        padding-left: 3%;
+    }
+
+    .m-game__image {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+
+.m-game__wrapper {
+    display: block;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 7s cubic-bezier(0.25, 0.1, 0, 1);
+}
+
+.m-game__bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.m-game__start {
+    display: block;
+    width: 20%;
+    height: 20%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.m-game__start:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.m-game__start img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: contain;
+    object-fit: contain;
+    -o-object-position: 50% 50%;
+    object-position: 50% 50%;
+}
+
+.m-game__text:nth-child(1) {
+    transform: translateY(-50%) rotate(-36deg);
+}
+
+.m-game__text:nth-child(2) {
+    transform: translateY(-50%) rotate(-72deg);
+}
+
+.m-game__text:nth-child(3) {
+    transform: translateY(-50%) rotate(-108deg);
+}
+
+.m-game__text:nth-child(4) {
+    transform: translateY(-50%) rotate(-144deg);
+}
+
+.m-game__text:nth-child(5) {
+    transform: translateY(-50%) rotate(-180deg);
+}
+
+.m-game__text:nth-child(6) {
+    transform: translateY(-50%) rotate(-216deg);
+}
+
+.m-game__text:nth-child(7) {
+    transform: translateY(-50%) rotate(-252deg);
+}
+
+.m-game__text:nth-child(8) {
+    transform: translateY(-50%) rotate(-288deg);
+}
+
+.m-game__text:nth-child(9) {
+    transform: translateY(-50%) rotate(-324deg);
+}
+
+.m-game__text:nth-child(10) {
+    transform: translateY(-50%) rotate(-360deg);
+}

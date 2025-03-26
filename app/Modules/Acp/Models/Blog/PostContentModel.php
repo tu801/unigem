@@ -1,0 +1,29 @@
+<?php
+/**
+ * @author tmtuan
+ * created Date: 10/28/2021
+ * project: foxcms
+ */
+
+namespace Modules\Acp\Models\Blog;
+
+
+use CodeIgniter\Model;
+use Modules\Acp\Entities\Post;
+
+class PostContentModel extends Model
+{
+    protected $table = 'post_content';
+    protected $primaryKey = 'ct_id';
+
+    protected $returnType = 'object';
+    protected $useSoftDeletes = false;
+
+    protected $allowedFields = [
+        'post_id', 'lang_id', 'title', 'slug', 'image', 'description', 'content', 'tags', 'seo_meta'
+    ];
+
+    protected $useTimestamps = false;
+
+    protected $skipValidation = true;
+}

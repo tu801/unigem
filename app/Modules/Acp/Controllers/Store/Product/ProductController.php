@@ -1,0 +1,356 @@
+<?php
+/**
+ * @author tmtuan
+ * created Date: 10/23/2023
+ * Project: Unigem
+ */
+
+namespace Modules\Acp\Controllers\Store\Product;
+
+
+use CodeIgniter\Database\Exceptions\DatabaseException;
+use CodeIgniter\HTTP\RedirectResponse;
+use Config\Database;
+use Modules\Acp\Controllers\AcpController;
+use Modules\Acp\Controllers\Traits\ProductImage;
+use Modules\Acp\Entities\Product;
+use Modules\Acp\Enums\Store\Product\ProductAttachMetaEnum;
+use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
+use Modules\Acp\Models\AttachMetaModel;
+use Modules\Acp\Models\Blog\CategoryModel;
+use Modules\Acp\Models\Store\Product\ProductManufacturer;
+use Modules\Acp\Models\Store\Product\ProductMetaModel;
+use Modules\Acp\Models\Store\Product\ProductModel;
+use Modules\Acp\Traits\deleteItem;
+use Modules\Acp\Traits\SystemLog;
+
+class ProductController extends AcpController
+{
+    use ProductImage, SystemLog, deleteItem;
+    protected $_productManufacturerModel;
+    protected $_categoryModel;
+    protected $_attachMetaModel;
+    protected $_productMetaModel;
+    protected $db;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_model                    = model(ProductModel::class);
+        $this->_productManufacturerModel = model(ProductManufacturer::class);
+        $this->_categoryModel            = model(CategoryModel::class);
+        $this->_attachMetaModel          = model(AttachMetaModel::class);
+        $this->_productMetaModel         = model(ProductMetaModel::class);
+        $this->db                        = Database::connect(); //Load database connection
+
+    }
+
+    public function index()
+    {
+        $getData = $this->request->getGet();
+
+        if (isset($getData['listtype'])) {
+            switch ($getData['listtype']) {
+                case 'all':
+                    $this->_data['listtype'] = 'all';
+                    break;
+                case 'deleted':
+                    $this->_model->onlyDeleted();
+                    $this->_data['listtype'] = 'deleted';
+                    break;
+                case 'user':
+                    $this->_model->where("user_init", $this->user->id);
+                    $this->_data['listtype'] = 'user';
+                    break;
+            }
+        } else {
+            $this->_model->where("user_init", $this->user->id);
+            $this->_data['listtype'] = 'user';
+        }
+
+        if (isset($getData['search'])) {
+            if (isset($getData['pd_name']) && $getData['pd_name'] !== '') {
+                $this->_model->like('pd_name', $getData['pd_name']);
+                $this->_data['search_pd_name'] = $getData['pd_name'];
+            }
+        }
+        if (isset($getData['mdelete'])) {
+            if (isset($getData['sel']) && !empty($getData['sel'])) {
+                $this->_model->delete($getData['sel']);
+            }
+        }
+
+        if (isset($getData['category']) && $getData['category'] > 0) {
+            $this->_model->join('category_content', "category_content.cat_id = {$getData['category']}")
+                    ->where('category_content.lang_id', $this->_data['curLang']->id);
+            $this->_data['select_cat'] = $getData['category'];
+        }
+        if (isset($getData['pd_status']) && $getData['pd_status'] !== '') {
+            $this->_model->like('pd_status', $getData['pd_status']);
+            $this->_data['pd_status'] = $getData['pd_status'];
+        }
+
+        //get Data
+        $this->_model
+            ->select('product.*')->orderBy('product.id DESC');
+        $productCategory                 = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_category'] = $productCategory;
+        $this->_data['data']             = $this->_model->paginate();
+        $this->_data['pager']            = $this->_model->pager;
+        $this->_data['title']            = lang("Product.product_title");
+        $this->_render('\store\product\index', $this->_data);
+    }
+
+    public function addProduct()
+    {
+        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
+        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_manufacturer'] = $productManufacturer;
+        $this->_data['product_category']     = $productCategory;
+        $this->_data['title']                = lang("Product.title_add");
+        $this->_render('\store\product\add', $this->_data);
+    }
+
+    public function addProductAction()
+    {
+        $postData = $this->request->getPost();
+
+        // Validate here first, since some things wrong
+        $rules = array_merge([
+            'pd_name' => 'required|min_length[3]|is_unique[product.pd_name]|checkProductSlugExist',
+        ], $this->ruleValidate());
+
+        $errMess = $this->messageValidate();
+
+        //validate the input
+        if (!$this->validate($rules, $errMess)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+        $slug                  = clean_url($postData['pd_name']);
+        $postData['pd_slug']   = $slug;
+        $postData['user_init'] = $this->user->id;
+        $newProduct = new Product($postData);
+        if (!empty($postData['tagcloud']))  $newProduct->pd_tags = json_encode($postData['tagcloud']);
+
+        $image   = $this->request->getFile('image');
+        if ($image->getName()) {
+            $response = $this->uploadProductImage($postData, $image);
+            if ( $response instanceof RedirectResponse) return $response;
+            $newProduct->pd_image = $response;
+        }
+
+        try {
+            $this->db->transBegin();
+
+            if (!$this->_model->save($newProduct)) {
+                return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+            }
+            $id   = $this->_model->getInsertID();
+            $item = $this->_model->find($id);
+
+            // save gallery image
+            if (!empty($postData['images_product'])) {
+                $this->_attachMetaModel->saveAttachFiles([
+                    'att_meta_type'     => ProductAttachMetaEnum::META_TYPE,
+                    'att_meta_mod_name' => ProductAttachMetaEnum::MODE_NAME,
+                    'att_meta_mod_id'   => $item->id,
+                    'att_meta_img'      => $postData['images_product'],
+                ]);
+            }
+
+            // save meta data
+            $this->_productMetaModel->saveCustomMeta($id, $postData);
+            $this->db->transCommit();
+        } catch (DatabaseException $e) {
+            $this->db->transRollback();
+            return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+        }
+
+        //log Action
+        $logData = [
+            'title'        => 'Add Product',
+            'description'  => "#{$this->user->username} đã thêm post #{$item->pd_name}",
+            'properties'   => $item->toArray(),
+            'subject_id'   => $item->id,
+            'subject_type' => ProductModel::class,
+        ];
+        $this->logAction($logData);
+
+        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.addSuccess', [$item->pd_name]));
+        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.addSuccess', [$item->pd_name]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.addSuccess', [$item->pd_name]));
+    }
+
+    public function editProduct($id)
+    {
+        $item = $this->_model->find($id);
+
+        if (!isset($item->id)) {
+            return redirect()->route('product')->with('error', lang('Product.no_item_found'));
+        }
+        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
+        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_manufacturer'] = $productManufacturer;
+        $this->_data['product_category']     = $productCategory;
+        $this->_data['itemData']             = $item;
+        $this->_data['title']                = lang("Product.title_edit");
+        $this->_render('\store\product\edit', $this->_data);
+    }
+
+    public function editProductAction($id)
+    {
+        $item = $this->_model->find($id);
+
+        if (!isset($item->id)) {
+            return redirect()->route('product')->with('error', lang('Product.no_item_found'));
+        }
+        $postData = $this->request->getPost();
+
+        // Validate here first, since some things wrong
+        $rules = array_merge([
+            'pd_name' => 'required|min_length[3]|is_unique[product.pd_name,id,'.$id.']|checkProductSlugExist['.$id.']',
+        ], $this->ruleValidate());
+
+        $errMess =$this->messageValidate();
+
+        //validate the input
+        if (!$this->validate($rules, $errMess)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $slug                  = clean_url($postData['pd_name']);
+        $postData['pd_slug']   = $slug;
+        $postData['user_edit'] = $this->user->id;
+
+        if (!empty($postData['tagcloud']))  $postData['pd_tags'] = json_encode($postData['tagcloud']);
+
+        $image   = $this->request->getFile('image');
+        if ($image->getName()) {
+            $response = $this->editProductImage($postData, $image, $item);
+            if ( $response instanceof RedirectResponse) return $response;
+        }
+        try {
+            $this->db->transBegin();
+
+            if (!$this->_model->update($id, $postData)) {
+                return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+            }
+
+            $item = $this->_model->find($id);
+
+            // save gallery image
+            if (!empty($postData['images_product'])) {
+                $imageProduct = [
+                    'att_meta_type'     => ProductAttachMetaEnum::META_TYPE,
+                    'att_meta_mod_name' => ProductAttachMetaEnum::MODE_NAME,
+                    'att_meta_mod_id'   => $item->id,
+                    'att_meta_img'      => $postData['images_product'],
+                ];
+                if (isset($item->images->id)) {
+                    $this->_attachMetaModel->updateMeta($imageProduct, $item->images->id);
+                } else {
+                    $this->_attachMetaModel->saveAttachFiles($imageProduct);
+                }
+            }
+
+            // save meta data
+            $this->_productMetaModel->saveCustomMeta($id, $postData);
+            $this->db->transCommit();
+        } catch (DatabaseException $e) {
+            $this->db->transRollback();
+            return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+        }
+        //log Action
+        $logData = [
+            'title'        => 'edit Product',
+            'description'  => "#{$this->user->username} đã sửa post #{$item->pd_name}",
+            'properties'   => $item->toArray(),
+            'subject_id'   => $item->id,
+            'subject_type' => ProductModel::class,
+        ];
+        $this->logAction($logData);
+
+        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.editSuccess', [$item->pd_name]));
+        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.editSuccess', [$item->pd_name]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.editSuccess', [$item->pd_name]));
+    }
+
+    private function ruleValidate(){
+        return [
+            'cat_id'         => 'required',
+            'pd_sku'         => 'required',
+            'pd_tags'        => 'permit_empty',
+            'manufacture_id' => 'required',
+            'origin_price'   => 'required|numeric',
+            'price'          => 'required|numeric',
+            'price_discount' => 'required|numeric',
+            'pd_status'      => 'required',
+            'minimum'        => 'required|numeric',
+            'weight'         => 'required|numeric',
+        ];
+    }
+
+    private function messageValidate()
+    {
+        return [
+            'cat_id'         => [
+                'required' => lang('Product.cat_id_required'),
+            ],
+            'pd_name'        => [
+                'required'   => lang('Product.pd_name_required'),
+                'min_length' => lang('Product.pd_name_min_length'),
+                'is_unique'  => lang('Product.pd_name_is_unique'),
+                'checkProductSlugExist'  => lang('Product.pd_name_is_not_create_slug'),
+            ],
+            'pd_sku'         => [
+                'required' => lang('Product.pd_sku_required'),
+            ],
+            'image'          => [
+                'required' => lang('Product.pd_image_required'),
+            ],
+            'manufacture_id' => [
+                'required' => lang('Product.manufacture_id_required'),
+            ],
+            'origin_price'   => [
+                'required' => lang('Product.origin_price_required'),
+            ],
+            'price'          => [
+                'required' => lang('Product.price_required'),
+            ],
+            'price_discount' => [
+                'required' => lang('Product.price_discount_required'),
+            ],
+            'pd_status'      => [
+                'required' => lang('Product.pd_status_required'),
+            ],
+            'minimum'        => [
+                'required' => lang('Product.minimum_required'),
+            ],
+            'weight'         => [
+                'required' => lang('Product.weight_required'),
+            ],
+        ];
+    }
+
+    public function ajaxSearchProduct()
+    {
+        $inputData = $this->request->getPost();
+        $response = [];
+        if (isset($inputData['keyword_search']) && $inputData['keyword_search'] !== '') {
+            $data = $this->_model
+                ->like('pd_name', $inputData['keyword_search'])
+                ->where('pd_status', ProductStatusEnum::PUBLISH)
+                ->findAll();
+
+            foreach ($data as $item) {
+                $item->product_meta = $item->product_meta;
+            }
+            $response['error'] = 0;
+            $response['data'] = $data;
+        } else {
+            $response['error'] = 1;
+            $response['message'] = lang('Vui lòng nhập Từ khóa');
+        }
+        return $this->response->setJson($response);
+    }
+}

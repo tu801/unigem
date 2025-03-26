@@ -1,0 +1,71 @@
+<?php
+/**
+ * @author tmtuan
+ * created Date: 10/24/2021
+ * project: foxcms
+ */
+
+namespace Modules\Acp\Models;
+
+
+use CodeIgniter\Model;
+
+class LangModel extends Model
+{
+    protected $table = 'language';
+    protected $primaryKey = 'id';
+
+    protected $returnType = 'object';
+    protected $useSoftDeletes = true;
+
+    protected $allowedFields = [
+        'user_init', 'user_type', 'name', 'locale', 'lang_code', 'flag', 'order', 'is_default', 'is_rtl', 'updated_at'
+    ];
+
+    protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
+
+    protected $skipValidation = true;
+
+    /**
+     * List language items
+     * @return array|\CodeIgniter\Cache\CacheInterface|mixed
+     */
+    public function listLang()
+    {
+        if ( !$langData = cache('_languages') ) {
+            $langData = $this->select(['id', 'name', 'locale', 'is_default', 'flag'])
+                        ->orderBy('order', 'ASC')
+                        ->findAll();
+
+            foreach ($langData as $item) {
+                $flagIcon = base_url("themes/flag/{$item->flag}");
+                $item->icon = $flagIcon;
+            }
+            cache()->save('_languages', $langData, 7200);
+        }
+
+        return $langData;
+    }
+
+    public function getPrivLang()
+    {
+        return $this->select(['id', 'name', 'locale', 'is_default', 'flag'])->where('is_default', 1)->first();
+    }
+
+    /**
+     * insert or update language
+     * @param $input
+     */
+    public function insertOrUpdate($input)
+    {
+        $chkLang = $this->where(['locale' => $input['locale'], 'lang_code' => $input['lang_code']])->first();
+        if( !isset($chkLang->id) ) {
+            $this->insert($input);
+        } else {
+            $this->update($chkLang->id, $input);
+        }
+    }
+}
