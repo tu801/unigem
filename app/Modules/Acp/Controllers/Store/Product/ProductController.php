@@ -27,7 +27,6 @@ use Modules\Acp\Traits\SystemLog;
 class ProductController extends AcpController
 {
     use ProductImage, SystemLog, deleteItem;
-    protected $_productManufacturerModel;
     protected $_categoryModel;
     protected $_attachMetaModel;
     protected $_productMetaModel;
@@ -37,7 +36,6 @@ class ProductController extends AcpController
     {
         parent::__construct();
         $this->_model                    = model(ProductModel::class);
-        $this->_productManufacturerModel = model(ProductManufacturer::class);
         $this->_categoryModel            = model(CategoryModel::class);
         $this->_attachMetaModel          = model(AttachMetaModel::class);
         $this->_productMetaModel         = model(ProductMetaModel::class);
@@ -103,10 +101,7 @@ class ProductController extends AcpController
 
     public function addProduct()
     {
-        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
-        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_manufacturer'] = $productManufacturer;
-        $this->_data['product_category']     = $productCategory;
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
         $this->_data['title']                = lang("Product.title_add");
         $this->_render('\store\product\add', $this->_data);
     }
@@ -188,10 +183,8 @@ class ProductController extends AcpController
         if (!isset($item->id)) {
             return redirect()->route('product')->with('error', lang('Product.no_item_found'));
         }
-        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
-        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_manufacturer'] = $productManufacturer;
-        $this->_data['product_category']     = $productCategory;
+        
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
         $this->_data['itemData']             = $item;
         $this->_data['title']                = lang("Product.title_edit");
         $this->_render('\store\product\edit', $this->_data);

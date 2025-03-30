@@ -64,17 +64,6 @@ echo $this->section('content');
                             </div>
                         </div>
 
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
-                                <select class="custom-select form-control" name="pd_status">
-                                    <?php foreach (ProductStatusEnum::toArray() as $item): ?>
-                                        <option value="<?= $item ?>" <?= old('cat_id') == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                     <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" img-data="" ></config-img>
@@ -103,18 +92,28 @@ echo $this->section('content');
         </div>
 
         <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <div class="card-body">
+                <div class="form-group ">
+                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
+                    <select class="custom-select form-control" name="pd_status">
+                        <?php foreach (ProductStatusEnum::toArray() as $item): ?>
+                            <option value="<?= $item ?>" <?= old('cat_id') == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <feature-img img-desc="<?= lang('Product.avatar_size') ?>" img-title="<?= lang('Product.image') ?>"></feature-img>
 
-                    <div class="form-group">
-                        <label for="inputProductManufacture"><?= lang('Product.pd_manufacture') ?> <span class="text-danger">*</span></label>
-                        <select class="custom-select form-control" name="manufacture_id">
-                            <?php foreach ($product_manufacturer as $item): ?>
-                                <option value="<?= $item->manufacturer_id ?>" <?= old('manufacture_id') == $item->manufacturer_id ? 'selected' : ''  ?> ><?= $item->manufacture_name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
                     <div class="form-group">
                         <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
                         <select class="custom-select form-control" name="cat_id">
