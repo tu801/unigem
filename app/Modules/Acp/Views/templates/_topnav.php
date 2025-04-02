@@ -71,7 +71,7 @@
                 <!--					<span class="float-right text-muted text-sm">2 days</span>-->
                 <!--				</a>-->
                 <div class="dropdown-divider"></div>
-                <a href="<?=base_url('auth/logout')?>" class="dropdown-item dropdown-footer"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="<?=base_url('logout')?>" class="dropdown-item dropdown-footer"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </li>
 

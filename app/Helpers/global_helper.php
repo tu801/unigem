@@ -5,6 +5,9 @@
  * created Date: 12-Mar-21
  */
 
+use Modules\Acp\Models\LangModel;
+use Modules\Acp\Models\LogModel;
+
 if (!function_exists('insert_vue')) {
     /**
      * Returns the Vuejs file url
@@ -126,4 +129,33 @@ if (!function_exists('getRandomString')) {
     }
 }
 
+
+/**
+ * log action
+ */
+if(!function_exists('logAction')){
+    function logAction(array $data) {
+        $user = auth()->user();
+        $properties = ( isset($data['properties']) && !empty($data['properties'])) ? json_encode($data['properties']) : null;
+
+        if ( !isset($data['lang_id']) || empty($data['lang_id']) || $data['lang_id'] == 0 ) {
+            $privLang = model(LangModel::class)->getPrivLang();
+            $data['lang_id'] = $privLang->id;
+        }
+
+        $logData = [
+            'module' => 'acp',
+            'title' => $data['title'] ?? null,
+            'description' => $data['description'] ?? null,
+            'properties' => $properties,
+            'subject_id' => $data['subject_id'] ?? null,
+            'subject_type' => $data['subject_type'] ?? null,
+            'causer_id' => $user->id ?? null,
+            'causer_type' => get_class($user),
+            'lang_id' => $data['lang_id']
+        ];
+        $_logModel = model(LogModel::class);
+        $_logModel->insert($logData);
+    }
+}
 ?>

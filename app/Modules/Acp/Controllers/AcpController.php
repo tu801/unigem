@@ -23,6 +23,8 @@ class AcpController extends Controller
     protected $_model;
     protected $config;
     protected $user;
+    protected $router;
+    protected $currentAct;
 
     /**
      * @var int
@@ -51,7 +53,7 @@ class AcpController extends Controller
 	public function __construct()
     {
         helper($this->helpers);
-        $this->user = user();
+        $this->user = auth()->user();
     }
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
