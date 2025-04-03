@@ -6,7 +6,7 @@
 
 $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($routes) {
     //handle db migration
-    $routes->group('dbMigrate', ['namespace' => 'Modules\Acp\Controllers\System'], function ($routes) {
+    $routes->group('dbMigrate', ['namespace' => 'Modules\Acp\Controllers\System', 'filter' => 'group:superadmin'], function ($routes) {
         $routes->get('/', 'Migrate::index');
     });
 
@@ -22,7 +22,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //user controller
-    $routes->group('user', ['namespace' => 'Modules\Acp\Controllers\User'], function ($routes) {
+    $routes->group('user', ['namespace' => 'Modules\Acp\Controllers\User', 'filter' => 'group:superadmin,admin'], function ($routes) {
         $routes->get('/', 'User::index', ['as' => 'list_user']);
         $routes->post('/', 'User::index');
         $routes->get('profile', 'User::profile');
@@ -65,7 +65,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //config controller
-    $routes->group('config', ['namespace' => 'Modules\Acp\Controllers\System\Config'], function ($routes) {
+    $routes->group('config', ['namespace' => 'Modules\Acp\Controllers\System\Config', 'filter' => 'group:superadmin,admin'], function ($routes) {
         $routes->get('/', 'Config::index', ['as' => 'config']);
         $routes->post('/', 'Config::index');
         $routes->get('add/(:alpha)', 'Config::add/$1', ['as' => 'add_config']);
@@ -83,7 +83,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('get-custom-attach/', 'Config::getCustomAttachFile/$1');
     });
 
-    $routes->group('theme-option', ['namespace' => 'Modules\Acp\Controllers\System\Config'], function ($routes) {
+    $routes->group('theme-option', ['namespace' => 'Modules\Acp\Controllers\System\Config', 'filter' => 'group:superadmin,admin'], function ($routes) {
         $routes->get('/', 'ThemeOptionController::index', ['as' => 'theme-option']);
         $routes->post('/', 'ThemeOptionController::saveOptions');
 
@@ -93,7 +93,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //log controller
-    $routes->group('log', ['namespace' => 'Modules\Acp\Controllers\System'], function ($routes) {
+    $routes->group('log', ['namespace' => 'Modules\Acp\Controllers\System', 'filter' => 'group:superadmin,admin'], function ($routes) {
         $routes->get('/', 'Log::index', ['as' => 'sys_log']);
         $routes->get('lst-sys-act', 'Log::ajaxLstSysAct');
         $routes->get('lst-sys-login', 'Log::ajaxLstSysLogin');
@@ -112,7 +112,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     // menu routes
-    $routes->group('menu', ['namespace' => 'Modules\Acp\Controllers\Blog'], function ($routes) {
+    $routes->group('menu', ['namespace' => 'Modules\Acp\Controllers\Blog', 'filter' => 'group:superadmin,admin,content_manager'], function ($routes) {
         $routes->get('/', 'MenuController::index', ['as' => 'menu']);
         $routes->get('edit/(:num)', 'MenuController::edit/$1', ['as' => 'edit_menu']);
 
@@ -130,7 +130,6 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('list-page-menu', 'MenuController::listPageMenuAjx');
         $routes->post('ajx-add-menu', 'MenuController::addMenuAjx', ['as' => 'ajx_add_menu']);
         $routes->post('edit-menu/(:num)', 'MenuController::editAjx/$1');
-        
     });
 
     //category routes
@@ -181,7 +180,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //page routes
-    $routes->group('page', ['namespace' => 'Modules\Acp\Controllers\Blog'], function ($routes) {
+    $routes->group('page', ['namespace' => 'Modules\Acp\Controllers\Blog', 'filter' => 'group:superadmin,admin,content_manager'], function ($routes) {
         $routes->get('/', 'Page::index', ['as' => 'page']);
         $routes->post('/', 'Page::index');
 
@@ -195,7 +194,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //product routes
-    $routes->group('product', ['namespace' => 'Modules\Acp\Controllers\Store\Product'], function ($routes) {
+    $routes->group('product', ['namespace' => 'Modules\Acp\Controllers\Store\Product', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->get('/', 'ProductController::index', ['as' => 'product']);
 
         $routes->get('add', 'ProductController::addProduct', ['as' => 'add_product']);
@@ -211,7 +210,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
 
 
     // shop routes
-    $routes->group('shop', ['namespace' => 'Modules\Acp\Controllers\Store'], function ($routes) {
+    $routes->group('shop', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->match(['get', 'post'], '/', 'ShopController::index', ['as' => 'list_shop']);
         $routes->match(['get', 'post'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
         $routes->match(['get', 'post'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
@@ -236,7 +235,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('get-shipping-fee', 'AjaxController::getShippingFee', ['as' => 'get_shipping_fee']);
     });
 
-    $routes->group('payment-config', ['namespace' => 'Modules\Acp\Controllers\Store'], function ($routes) {
+    $routes->group('payment-config', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->match(['get', 'post'], '/', 'PaymentConfigController::index', ['as' => 'payment_config']);
         $routes->match(['get', 'post'], 'add', 'PaymentConfigController::savePayment', ['as' => 'save_payment']);
         $routes->post('remove/(:num)', 'PaymentConfigController::ajxRemove/$1', ['as' => 'remove_payment']);
@@ -244,7 +243,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     // customer routes
-    $routes->group('customer', ['namespace' => 'Modules\Acp\Controllers\Store\Customer'], function ($routes) {
+    $routes->group('customer', ['namespace' => 'Modules\Acp\Controllers\Store\Customer', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->get('/', 'CustomerController::index', ['as' => 'customer']);
         $routes->post('/', 'CustomerController::index');
 
@@ -266,7 +265,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     // order routes
-    $routes->group('order', ['namespace' => 'Modules\Acp\Controllers\Store\Order'], function ($routes) {
+    $routes->group('order', ['namespace' => 'Modules\Acp\Controllers\Store\Order', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->get('/', 'OrderController::index', ['as' => 'order']);
         $routes->post('/', 'OrderController::index');
 
@@ -284,5 +283,4 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('invoice/(:num)', 'OrderController::invoice/$1', ['as' => 'invoice_order']);
         $routes->get('view-deposit/(:num)', 'OrderController::viewDeposit/$1', ['as' => 'view_deposit_order']);
     });
-
 });

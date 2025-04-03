@@ -51,7 +51,7 @@ replace `[path-to-project-folder]` with the real path to project folder in Linux
 
 ## Server Requirements
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+PHP version 8.2 or higher is required, with the following extensions installed:
 
 - [intl](http://php.net/manual/en/intl.requirements.php)
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
