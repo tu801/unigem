@@ -133,7 +133,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //category routes
-    $routes->group('category', ['namespace' => 'Modules\Acp\Controllers\Blog', 'filter' => 'group:superadmin,admin,content_manager'], function ($routes) {
+    $routes->group('category', ['namespace' => 'Modules\Acp\Controllers\Blog', 'filter' => 'group:superadmin,admin,content_manager,sale_manager'], function ($routes) {
         $routes->get('(:alpha)', 'Category::index/$1', ['as' => 'category']);
         $routes->post('(:alpha)', 'Category::index/$1');
 

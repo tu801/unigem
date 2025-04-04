@@ -14,6 +14,7 @@ return [
     'parent_cat'                => 'Danh Mục Cha',
     'cat_status'                => 'Trạng Thái',
     'description'               => 'Mô tả',
+    'change_slug'               => 'Đổi slug tương ứng với tiêu đề khi lưu',
 
     //Error
     'invalid_request'   => 'Yêu cầu bị lỗi! Vui lòng thử lại sau',
@@ -28,6 +29,7 @@ return [
 
     'slug_required'                 => 'Vui lòng điền đường dẫn cho danh mục',
     'slug_min_length'               => 'URL phải có ít nhất 3 ký tự',
+    'slug_invalid'                  => 'Slug URL chỉ bao gồm các chữ cái, số và dấu gạch nối',
     'updateSlug_success'            => 'Đã cập nhật thành công URL mới',
 
 ];

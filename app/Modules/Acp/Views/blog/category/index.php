@@ -141,6 +141,7 @@ echo $this->section('content');?>
                                 <th><?= lang('Category.title') ?></th>
                                 <th><?= lang('Category.parent_cat') ?></th>
                                 <th><?= lang('Category.slug') ?></th>
+                                <th><?= lang('Category.cat_status') ?></th>
                                 <th><?= lang('Actions') ?></th>
                             </tr>
                         </thead>
@@ -155,6 +156,7 @@ echo $this->section('content');?>
                                 <td><a :href="renderEditUrl(cat)">{{ cat.title }}</a></td>
                                 <td>{{ catParent(cat) }}</td>
                                 <td>{{ cat.slug }}</td>
+                                <td>{{ cat.status }}</td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2" :href="renderEditUrl(cat)"><i class="fas fa-edit"></i></a> &nbsp;
                                         <a class="btn btn-danger btn-sm mb-2" @click.prevent="delCat(cat.id)"><i class="fas fa-trash"></i></a>
@@ -163,7 +165,7 @@ echo $this->section('content');?>
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="5"><?= lang('Acp.no_item_found') ?></td>
+                                <td colspan="6"><?= lang('Acp.no_item_found') ?></td>
                             </tr>
                         </tbody>
                     </table>

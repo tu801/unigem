@@ -21,6 +21,15 @@ class Category extends AcpController
 
     public function index($type)
     {
+        // check permission
+        switch($type) {
+            case 'product':
+                if (!$this->user->inGroup('superadmin', 'admin', 'sale_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                break; 
+            case 'post':
+                if (!$this->user->inGroup('superadmin', 'admin', 'content_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                break; 
+        }
 
         $this->_data['title'] = lang("Category.category_title");
         $postData = $this->request->getPost();
@@ -101,8 +110,11 @@ class Category extends AcpController
         ];
 
         if (isset($insertData['slug']) && $insertData['slug'] !== '') {
-            $rules['slug'] = 'is_unique[category_content.slug]';
-            $errMess['slug'] = ['is_unique' => lang('Category.slug_is_exist')];
+            $rules['slug'] = 'is_unique[category_content.slug]|alpha_dash';
+            $errMess['slug'] = [
+                'is_unique' => lang('Category.slug_is_exist'),
+                'alpha_dash' => lang('Category.slug_invalid')
+            ];
         }
 
         //validate the input
@@ -120,10 +132,11 @@ class Category extends AcpController
             ]);
         }
 
-        $insertData['cat_type'] = $type;
-        $insertData['user_init'] = $this->user->id;
-        $insertData['user_type'] = $this->user->model_class;
-        $insertData['lang_id']   = $this->_data['curLang']->id;
+        $insertData['cat_type']     = $type;
+        $insertData['user_init']    = $this->user->id;
+        $insertData['user_type']    = $this->user->model_class;
+        $insertData['lang_id']      = $this->_data['curLang']->id;
+        $insertData['user_type']    = config('Auth')->userProvider;
         $cat = $this->_model->insertOrUpdate($insertData);
         if (!$cat) {
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
@@ -216,6 +229,17 @@ class Category extends AcpController
             if (!isset($inputData['home_tab_display'])) $inputData['home_tab_display'] = 0;
             $inputData['cur_lang_id'] = $this->_data['curLang']->id;
             $inputData['id'] = $idItem;
+            
+            if ( isset($inputData['onChangeSlug']) && $inputData['onChangeSlug'] == 'on') {
+                $inputData['slug'] = clean_url($inputData['title']);
+                if($this->_model->checkSlug($inputData['slug'], $this->_data['curLang']->id)) {
+                    return redirect()->back()->withInput()->with('errors', [
+                        'slug' =>  lang('Category.slug_is_exist')
+                    ]);
+                }
+                
+            }
+            
             $cat = $this->_model->insertOrUpdate($inputData);
             //good then save the new item
             if (!$cat) {
@@ -236,11 +260,10 @@ class Category extends AcpController
             ];
             $this->logAction($logData);
 
-            if (isset($inputData['save'])) return redirect()->route('category', [$data->cat_type])->with('message', lang('Acp.edit_Success'));
+            if (isset($inputData['save'])) return redirect()->route('edit_category', [$data->id])->with('message', lang('Acp.edit_Success'));
             else if (isset($inputData['save_exit'])) {
                 $route = base_url($this->_data['module'] . "/category/{$data->cat_type}");
                 return redirect()->to($route)->with('message', lang('Acp.edit_Success'));
-                //return redirect()->route('category', [$data->cat_type])->with('message', lang('Acp.edit_Success'));
             }
         } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));
     }
@@ -283,7 +306,7 @@ class Category extends AcpController
             $this->_model->like('title', $key);
         }
 
-        $catSelect = 'category.id, parent_id, title, slug, description, seo_meta';
+        $catSelect = 'category.id, category.cat_status, parent_id, title, slug, description, seo_meta';
         $this->_model->select($catSelect)
             ->join('category_content', 'category_content.cat_id = category.id')
             ->where('lang_id', $this->_data['curLang']->id)
@@ -303,6 +326,8 @@ class Category extends AcpController
                 }
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;
+                $cat->status = $this->config->cmsStatus['status'][$cat->cat_status];
+                
             }
             $response['data'] = $catData;
             $response['error'] = 0;
