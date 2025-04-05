@@ -89,9 +89,6 @@ trait deleteItem {
         $item = $this->_model->withDeleted()->find($idItem);
 
         if ( isset($item->id) ) {
-            //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
             if ( $this->_model->recover($item->id) ) {
                 //log Action
                 if ( method_exists(__CLASS__,'logAction') ) {

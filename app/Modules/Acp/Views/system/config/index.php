@@ -76,7 +76,7 @@ $cfGroups = $config->cfGroup; //print_r($configs);exit;
                                     <a class="btn btn-warning btn-xs mb-2"
                                        href="<?=route_to("clone_config", $row->id)?>">
                                         <i class="fas fa-copy"></i></a>
-                                    <?php if ( $login_user->can('root') ) : ?>
+                                    <?php if ( $login_user->inGroup('superadmin') ) : ?>
                                     <a class="btn btn-danger btn-xs mb-2 acp_item_del"
                                         href="<?=route_to("delete_config", $row->id)?>" >
                                             <i class="fas fa-trash"></i></a>

@@ -1,6 +1,8 @@
 <?php
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
+
+$siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_site_name']) ) ? $config->sys['default_site_name'] : getenv('app.site_name');
 ?>
 
 <div class="row">
@@ -9,10 +11,10 @@ echo $this->section('content');
             <div class="row">
                 <div class="col-12">
                     <h4>
-                        <i class="fas fa-globe"></i> <?=lang('Acp.welcom')?> <?=$config->sys['default_site_name']??''?>
+                        <i class="fas fa-globe"></i> <?=lang('Acp.welcome_label')?> <?=$siteName?>
                         <small class="float-right">Hôm nay là: <?=date('d/m/Y')?></small>
                     </h4>
-                    <small>Chào mừng bạn đến với trang quản trị. Hãy bắt đầu quản lý website của bạn</small>
+                    <small><?=lang('Acp.welcome_text')?></small>
                 </div>
                 <!-- /.col -->
             </div>
@@ -20,9 +22,7 @@ echo $this->section('content');
             <div class="row">
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                        <a class="btn btn-primary btn-sm " href="<?=route_to('add_post')?>" >
-                            New Post</a>
-
+                        <a class="btn btn-primary btn-sm " href="<?=route_to('add_post')?>" >New Post</a>
                     </div>
                     <!-- /.description-block -->
                 </div>

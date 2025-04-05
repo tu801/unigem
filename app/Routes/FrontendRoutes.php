@@ -5,12 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get(ADMIN_AREA, '\Modules\Acp\Controllers\Dashboard::index');
-$routes->get('/', 'Home::index');
-$routes->get("lang/(:alpha)", '\App\Controllers\Language::setLang/$1', ['as' => 'setLang']);
-
-$routes->get('/', 'Home::index');
-
 $routes->get('404.html', 'Home::error_404', ['as'=> 'show_error']);
 
 /**

@@ -7,6 +7,9 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+$routes->get("lang/(:alpha)", '\App\Controllers\Language::setLang/$1', ['as' => 'setLang']);
+$routes->get(ADMIN_AREA, '\Modules\Acp\Controllers\Dashboard::index');
+
 // Auth routes
 service('auth')->routes($routes);
 

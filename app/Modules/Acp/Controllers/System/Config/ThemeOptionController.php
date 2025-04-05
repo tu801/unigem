@@ -31,8 +31,6 @@ class ThemeOptionController extends AcpController
     }
 
     public function index() {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
         $this->_data['title']= lang("Config.theme_option_title");
 
         $optData = $this->themeOptions->getOptionGroups();

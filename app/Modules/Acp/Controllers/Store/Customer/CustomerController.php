@@ -265,7 +265,7 @@ class CustomerController extends AcpController
     public function generateCustomer()
     {
         //check permission
-        if (!$this->user->can('root')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+        if (!$this->user->inGroup('superadmin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
         $total = $this->_model->countAll();
         $provinces = model(ProvinceModel::class)->findAll();
