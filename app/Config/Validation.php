@@ -2,6 +2,9 @@
 
 namespace Config;
 
+use App\Validations\CheckProductSlugValidation;
+use App\Validations\PhoneValidation;
+use App\Validations\ShippingFeeConfigValidation;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Validation\StrictRules\CreditCardRules;
 use CodeIgniter\Validation\StrictRules\FileRules;
@@ -25,6 +28,9 @@ class Validation extends BaseConfig
         FormatRules::class,
         FileRules::class,
         CreditCardRules::class,
+        PhoneValidation::class,
+        ShippingFeeConfigValidation::class,
+        CheckProductSlugValidation::class,
     ];
 
     /**

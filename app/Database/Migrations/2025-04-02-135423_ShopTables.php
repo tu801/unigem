@@ -54,7 +54,7 @@ class ShopTables extends Migration
 
         //add table product content
         $this->forge->addField([
-            'id'              	    => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'pd_ct_id'              => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'product_id'            => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true],
             'lang_id'	      	    => ['type' => 'int',  'unsigned' => true],
             'pd_name'               => ['type' => 'varchar', 'constraint' => 255],

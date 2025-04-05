@@ -24,17 +24,9 @@ class ProductModel extends Model
         'user_init',
         'cat_id',
         'pd_sku',
-        'pd_name',
-        'pd_slug',
         'pd_image',
-        'pd_tags',
-        'manufacture_id',
-        'origin_price',
-        'price',
-        'price_discount',
         'pd_status',
-        'minimum',
-        'user_edit',
+        'minimum'
     ];
 
     // Dates

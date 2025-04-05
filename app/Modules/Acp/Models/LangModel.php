@@ -30,7 +30,7 @@ class LangModel extends Model
     protected $skipValidation = true;
 
     /**
-     * List language items
+     * List all language data
      * @return array|\CodeIgniter\Cache\CacheInterface|mixed
      */
     public function listLang()

@@ -25,12 +25,6 @@ echo $this->section('content');
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="inputOriginPrice"><?= lang('Product.pd_origin_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="origin_price" class="form-control <?= session('errors.origin_price') ? 'is-invalid' : '' ?>" id="inputOriginPrice" placeholder="<?= lang('Product.pd_origin_price') ?>" value="<?= $itemData->origin_price ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
                                 <input type="number" name="price" class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>" value="<?= $itemData->price  ?>">
                             </div>
@@ -44,35 +38,7 @@ echo $this->section('content');
                                 <input type="number" name="price_discount" class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" value="<?= $itemData->price_discount ?>">
                             </div>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputMinimum"><?= lang('Product.minimum') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="minimum" class="form-control <?= session('errors.minimum') ? 'is-invalid' : '' ?>" id="inputMinimum" placeholder="<?= lang('Product.minimum') ?>" value="<?= $itemData->minimum ?>">
-                            </div>
-                        </div>
 
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
-                                <div class="input-group" >
-                                    <input type="number" name="weight" step="any" class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= $itemData->product_meta['weight'] ?? 0  ?>">
-                                    <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                        <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputProductManufacture"><?= lang('Product.pd_manufacture') ?> <span class="text-danger">*</span></label>
-                                <select class="custom-select form-control" name="manufacture_id">
-                                    <?php foreach ($product_manufacturer as $item): ?>
-                                        <option value="<?= $item->manufacturer_id ?>" <?= $item->manufacturer_id == $itemData->manufacturer_id ? 'selected' : ''  ?> ><?= $item->manufacture_name ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" img-data="<?php
                         if (isset($itemData->images->images)) {
@@ -147,6 +113,20 @@ echo $this->section('content');
         </div>
 
         <div class="col-md-3">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
+                        <div class="input-group" >
+                            <input type="number" name="weight" step="any" class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= $itemData->product_meta['weight'] ?? 0  ?>">
+                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <feature-img img-desc="<?= lang('Product.avatar_size') ?>" demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>" img-title="<?= lang('Product.image') ?>"></feature-img>

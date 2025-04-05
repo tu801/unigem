@@ -49,7 +49,7 @@ echo $this->section('content');
                     </div>
 
                     <div class="form-group">
-                        <label><?= lang('Product.product_info') ?> </label>
+                        <label><?= lang('Product.product_info') ?> <span class="text-danger">*</span></label>
                         <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" id="tmteditor" name="product_info"><?= old('product_info') ?></textarea>
                     </div>
                 </div>
