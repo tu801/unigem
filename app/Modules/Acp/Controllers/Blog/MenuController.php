@@ -90,9 +90,6 @@ class MenuController extends AcpController
      */
     public function addMenuItem($catId)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $catData = $this->_categoryModel
             ->select('category.*, category_content.title, category_content.slug')
             ->join('category_content', 'category_content.cat_id = category.id')
@@ -147,9 +144,6 @@ class MenuController extends AcpController
 
     public function addPageItem($pageId)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $key = $this->request->getGet('key');
         $menuData = $this->_model->find($key);
 
@@ -286,9 +280,6 @@ class MenuController extends AcpController
      */
     public function removeItem($idItem)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $item = $this->_menuItemsModel->find($idItem);
         $key = $this->request->getGet('key');
         if (!isset($key) || $key === '') return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -357,7 +348,7 @@ class MenuController extends AcpController
     {
         $response = [];
         //check permission
-        if (!$this->user->can('root')) {
+        if (!$this->user->inGroup('superadmin', 'admin')) {
             $response = [
                 'error' => 1,
                 'message' => lang('Acp.no_permission_request')
@@ -492,9 +483,6 @@ class MenuController extends AcpController
      */
     public function addUrlAjx()
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return $this->response->setJSON(['error' => 1, 'message' => lang('Acp.no_permission_request')]);
-
         $postData = $this->request->getPost();
 
         $rules = [

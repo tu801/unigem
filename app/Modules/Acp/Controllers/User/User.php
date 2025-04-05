@@ -91,9 +91,6 @@ class User extends AcpController
      */
     public function add()
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang('User.title_add');
 
         $this->_data['list_userg'] = $this->userMetaModel->findAll();
@@ -211,7 +208,7 @@ class User extends AcpController
         if (isset($user->id)) {
             if ($user->id != $this->user->id) {
                 //check permission
-                if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                if (!$this->user->inGroup('superadmin', 'admin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
             }
 
             //$this->_modelUsmeta->getMeta($user); //echo "<pre>"; print_r($user);exit;
@@ -435,72 +432,6 @@ class User extends AcpController
     }
 
     /**
-     * Show edit permission page
-     */
-    public function editPermission($id)
-    {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
-        $this->_data['title'] = lang('User.edit_permission_title');
-        $user = $this->_model->find($id);
-        if (empty($user)) return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-
-        $_perModel = new PermissionModel();
-        $persData = $_perModel->orderBy('name', 'ASC')->findAll();
-        if (empty($persData)) return redirect()->route('permissions')->with('error', lang('Acp.empty_permissions'));
-
-        $permissions = [];
-        foreach ($persData as $perItem) {
-            if (!array_key_exists($perItem->name, $permissions)) {
-                $permissions[trim($perItem->name)] = [];
-            }
-            array_push($permissions[trim($perItem->name)], $perItem);
-        }
-        //echo '<pre>'; print_r($permissions);exit;
-
-        if (isset($user->id)) {
-            $this->_data['dataTitle'] = $user->fullname . ' - ' . $user->username;
-            $this->_data['userData'] = $user;
-            $this->_data['persData'] = $permissions;
-
-            $this->_render('\user\permission', $this->_data);
-        } else {
-            return redirect()->route('list_userg')->with('error', lang('User.invalid_user_group'));
-        }
-    }
-
-    /**
-     * Update user permission
-     * @param $id
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function editPermissionAction($id)
-    {
-        $postData = $this->request->getPost();
-        $user = $this->_model->withDeleted()
-            ->find($id);
-        if (empty($user)) return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-
-        if (empty($postData)) return redirect()->back()->with('error', lang('Acp.invalid_pers'));
-        else {
-            //set user permissions
-            $user->permissions = $postData['pers'];
-            //log Action
-            $logData = [
-                'title' => 'Change Permission',
-                'description' => "#{$this->user->username} đã thêm quyền user #{$user->username}",
-                'properties' => ['permissions' => $postData['pers']],
-                'subject_id' => $user->id,
-                'subject_type' => $user->model_class,
-            ];
-            $this->logAction($logData);
-
-            return redirect()->route('list_user')->with('message', lang('User.save_user_permission_success', [$user->username]));
-        }
-    }
-
-    /**
      * Remove a user
      */
     public function remove($id)
@@ -511,9 +442,6 @@ class User extends AcpController
             if ($user->id == $this->user->id) {
                 return redirect()->route('list_user')->with('error', lang('User.invalid_delete_user'));
             }
-
-            //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
             if ($this->_model->delete($user->id)) {
                 //log Action
@@ -543,9 +471,7 @@ class User extends AcpController
             if ($user->id == $this->user->id) {
                 return redirect()->route('list_user')->with('error', lang('User.invalid_delete_user'));
             }
-            //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
+            
             $this->_model->validate(false);
             if ($this->_model->recover($user->id)) {
                 //log Action
