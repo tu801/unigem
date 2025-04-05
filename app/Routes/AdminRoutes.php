@@ -22,36 +22,25 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
     });
 
     //user controller
-    $routes->group('user', ['namespace' => 'Modules\Acp\Controllers\User', 'filter' => 'group:superadmin,admin'], function ($routes) {
-        $routes->get('/', 'User::index', ['as' => 'list_user']);
-        $routes->post('/', 'User::index');
+    $routes->group('user', ['namespace' => 'Modules\Acp\Controllers\User'], function ($routes) {
         $routes->get('profile', 'User::profile');
-        $routes->get('search/', 'User::ajxSearchUser');
-
-        $routes->get('recover/(:num)', 'User::recover/$1', ['as' => 'recover_user']);
-        $routes->get('ativate/(:num)', 'User::active/$1', ['as' => 'active_user']);
-
-        $routes->get('add', 'User::add', ['as' => 'add_user']);
-        $routes->post('add', 'User::addAction');
-
-        $routes->get('edit/(:num)', 'User::edit/$1', ['as' => 'edit_user']);
-        $routes->post('edit/(:num)', 'User::editAction/$1');
-
-        $routes->get('remove/(:num)', 'User::remove/$1', ['as' => 'remove_user']);
-
-        $routes->get('edit-permission/(:num)', 'User::editPermission/$1', ['as' => 'edit_user_permission']);
-        $routes->post('edit-permission/(:num)', 'User::editPermissionAction/$1');
-
         $routes->get('edit-password/(:num)', 'User::editPassword/$1', ['as' => 'edit_password']);
         $routes->post('edit-password/(:num)', 'User::attempEditPassword/$1');
 
-        //user group controller
-        $routes->get('group', 'UserGroup::index', ['as' => 'list_userg']);
-        $routes->get('group/permission/(:num)', 'UserGroup::editPermission/$1', ['as' => 'userg_permission']);
-        $routes->post('group/permission/(:num)', 'UserGroup::editPermissionAction/$1');
-        $routes->get('get-groups', 'UserGroup::fetchUsersData');
-        $routes->post('update-group', 'UserGroup::updateGroup');
-        $routes->get('del-group/(:num)', 'UserGroup::deleteGroup/$1');
+        $routes->match(['GET', 'POST'], '/', 'User::index', ['as' => 'list_user', 'filter' => 'group:superadmin,admin']);
+
+        $routes->get('search/', 'User::ajxSearchUser');
+
+        $routes->get('recover/(:num)', 'User::recover/$1', ['as' => 'recover_user', 'filter' => 'group:superadmin,admin']);
+        $routes->get('ativate/(:num)', 'User::active/$1', ['as' => 'active_user', 'filter' => 'group:superadmin,admin']);
+
+        $routes->get('add', 'User::add', ['as' => 'add_user', 'filter' => 'group:superadmin,admin']);
+        $routes->post('add', 'User::addAction', ['filter' => 'group:superadmin,admin']);
+
+        $routes->get('edit/(:num)', 'User::edit/$1', ['as' => 'edit_user', 'filter' => 'group:superadmin,admin']);
+        $routes->post('edit/(:num)', 'User::editAction/$1', ['filter' => 'group:superadmin,admin']);
+
+        $routes->get('remove/(:num)', 'User::remove/$1', ['as' => 'remove_user', 'filter' => 'group:superadmin,admin']);
     });
 
     //permission routes
@@ -215,7 +204,6 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->match(['get', 'post'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
         $routes->match(['get', 'post'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
-
     });
 
     // ajax routes

@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\AdminFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -43,6 +44,7 @@ class Filters extends BaseFilters
         'permission'    => \CodeIgniter\Shield\Filters\PermissionFilter::class,
         'force-reset'   => \CodeIgniter\Shield\Filters\ForcePasswordResetFilter::class,
         'jwt'           => \CodeIgniter\Shield\Filters\JWTAuth::class,
+        'admin'         => AdminFilter::class
     ];
 
     /**
@@ -116,7 +118,9 @@ class Filters extends BaseFilters
     public array $filters = [
         'auth-rates' => [
             'before' => [
-                'login*', 'register', 'auth/*'
+                'login*',
+                'register',
+                'auth/*'
             ]
         ]
     ];
@@ -128,6 +132,7 @@ class Filters extends BaseFilters
     {
         $adminArea =  config('Acp')->adminSlug;
 
-        $this->filters['session'] = ['before' => [$adminArea, $adminArea.'/*']];
+        $this->filters['session']   = ['before' => [$adminArea, $adminArea . '/*']];
+        $this->filters['admin']     = ['before' => [$adminArea, $adminArea . '/*']];
     }
 }
