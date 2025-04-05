@@ -21,7 +21,7 @@ echo $this->section('content');
                         <div class="card-tools">
                             <div class="input-group input-group-sm">
                                 <input name="listtype" id="listtype" value="<?= $listtype ?? 'user'; ?>" class="form-control" type="hidden" />
-                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm Sản phẩm">
+                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm tên sản phẩm">
                                 <div class="input-group-append">
                                     <button name="search" class="btn btn-primary">
                                         <i class="fas fa-search"></i>

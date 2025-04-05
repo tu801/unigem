@@ -40,7 +40,7 @@ class CmsTables extends Migration
          */
         $fields = [
             'id'          		=> ['type' => 'bigint', 'unsigned' => true, 'auto_increment' => true],
-            'user_id'        	=> ['type' => 'bigint', 'unsigned' => true],
+            'user_id'        	=> ['type' => 'int', 'unsigned' => true],
             'meta_key'	 		=> ['type' => 'varchar', 'constraint' => 50],
             'meta_value'		=> ['type' => 'text'],
         ];
