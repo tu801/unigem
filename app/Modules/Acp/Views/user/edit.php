@@ -64,7 +64,7 @@ echo $this->section('content') ?>
                             <input type="file" name="avatar" class="filestyle" data-icon="false" data-classButton="btn btn-default"
                                    data-classInput="form-control inline input-s"><br>
 
-                            <img src="<?=$userData->img_avatar?>" class="img-lg img-thumbnail mt-2">
+                            <img src="<?=getUserAvatar($userData)?>" class="img-lg img-thumbnail mt-2">
                         </div>
                     </div>
                 </div>

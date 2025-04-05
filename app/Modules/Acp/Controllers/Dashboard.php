@@ -1,13 +1,12 @@
 <?php
 namespace Modules\Acp\Controllers;
 
-use Config\Modules;
+use App\Models\User\UserModel;
 use Modules\Acp\Controllers\Traits\itemDelete;
 use Modules\Acp\Enums\PostTypeEnum;
 use Modules\Acp\Enums\UserTypeEnum;
 use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Models\Store\Product\ProductModel;
-use Modules\Acp\Models\User\UserModel;
 
 class Dashboard extends AcpController {
     use itemDelete;

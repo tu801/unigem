@@ -169,7 +169,7 @@ class OrderController extends AcpController
 
         if ( isset($item->order_id) ) {
             //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+            if (!$this->user->inGroup('superadmin', 'admin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
             if ( $this->_model->recover($item->order_id) ) {
                 //log Action

@@ -1,6 +1,9 @@
 <?php
+
 namespace Modules\Acp\Controllers\User;
 
+use App\Models\User\UserMetaModel;
+use App\Models\User\UserModel;
 use CodeIgniter\Database\Exceptions\DataException;
 use CodeIgniter\HTTP\RedirectResponse;
 use Config\Email;
@@ -8,49 +11,47 @@ use Modules\Acp\Controllers\Traits\UserAvatar;
 use Modules\Acp\Enums\UserTypeEnum;
 use Modules\Acp\Models\PermissionModel;
 use Modules\Acp\Models\Store\Customer\CustomerModel;
-use Modules\Acp\Models\User\UserModel;
-use Modules\Acp\Models\User\UsergModel;
-use Modules\Acp\Models\User\UsermetaModel;
 use Config\Services;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Traits\SystemLog;
 
-class User extends AcpController {
+class User extends AcpController
+{
     use UserAvatar;
     use SystemLog;
+
+    protected $userMetaModel;
+    protected $auth_config;
+
+    protected $currentAct = 'user';
 
     public function __construct()
     {
         parent::__construct();
-        if ( empty($this->_model)) {
+        if (empty($this->_model)) {
             $this->_model = new UserModel();
         }
 
-        $this->_modelUserg = new UsergModel();
-        $this->_modelUsmeta = new UsermetaModel();
+        $this->userMetaModel = new UserMetaModel();
 
-        $this->auth = Services::authentication();
         $this->auth_config = config('Auth');
-
     }
 
-    public function index(){
-        //check permission
-        if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
-        $this->_data['title']= lang("User.user_title");
+    public function index()
+    {
+        $this->_data['title'] = lang("User.user_title");
         $inputData = $this->request->getPost();
         $query = $this->request->getGet();
 
         //get Users Data
-        if ( isset($inputData['search']) ) {
-            if ( $inputData['username'] !== '' ) {
+        if (isset($inputData['search'])) {
+            if ($inputData['username'] !== '') {
                 $this->_model->like('username', $inputData['username']);
                 $this->_data['search_title'] = $inputData['username'];
             }
         }
 
-        if ( isset($query['deleted']) && $query['deleted'] == 1 ) {
+        if (isset($query['deleted']) && $query['deleted'] == 1) {
             $this->_model->onlyDeleted();
             $this->_data['action'] = 'deleted';
         } else $this->_data['action'] = 'all';
@@ -68,18 +69,19 @@ class User extends AcpController {
     /**
      * Displays the profile page
      */
-    public function profile(){
-        $this->_data['title']= lang('Acp.title_profile');
+    public function profile()
+    {
+        $this->_data['title'] = lang('Acp.title_profile');
 
         $id = $this->request->getVar('user') ?? $this->user->id;
 
         $user = $this->_model->find($id);
-        if ( isset($user->id) ) {
+        if (isset($user->id)) {
             // $this->_modelUsmeta->getMeta($user);
-            $user->GroupInfo = $this->_modelUserg->find($user->gid);
+            $user->GroupInfo = $this->userMetaModel->find($user->gid);
             $this->_data['User'] = $user;
             $this->_render('\user\profile', $this->_data);
-        }else {
+        } else {
             return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
         }
     }
@@ -87,29 +89,28 @@ class User extends AcpController {
     /**
      * Display Add User Page
      */
-    public function add(){
-        //check permission
-        if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+    public function add()
+    {
+        $this->_data['title'] = lang('User.title_add');
 
-        $this->_data['title']= lang('User.title_add');
-
-        $this->_data['list_userg'] = $this->_modelUserg->findAll();
+        $this->_data['list_userg'] = $this->userMetaModel->findAll();
         $this->_render('\user\add', $this->_data);
     }
 
     /**
      * Attempt to add a new user.
      */
-    public function addAction(){
+    public function addAction()
+    {
         $postData = $this->request->getPost();
         // Validate here first, since some things,
         // like the password, can only be validated properly here.
         $rules = [
-            'username'  	=> 'required|alpha_numeric_space|min_length[4]|is_unique[users.username]',
-            'email'			=> 'required|valid_email|is_unique[users.email]',
+            'username'      => 'required|alpha_numeric_space|min_length[4]|is_unique[users.username]',
+            'email'            => 'required|valid_email|is_unique[users.email]',
             'fullname'      => 'required',
-            'password'	 	=> 'required|min_length[4]|strong_password',
-            'pass_confirm' 	=> 'required|matches[password]',
+            'password'         => 'required|min_length[4]|strong_password',
+            'pass_confirm'     => 'required|matches[password]',
         ];
         $errMess = [
             'username' => [
@@ -137,32 +138,30 @@ class User extends AcpController {
         ];
 
         //validate the input
-        if (! $this->validate($rules, $errMess))
-        {
+        if (! $this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         //upload user avata first
         $avatar   = $this->request->getFile('avatar');
-        if ( $avatar->getName() ) {
+        if ($avatar->getName()) {
             $response = $this->uploadAvatar($postData, $avatar);
-            if ( $response instanceof RedirectResponse) return $response;
+            if ($response instanceof RedirectResponse) return $response;
             $postData['avatar'] = $response;
         }
 
         //good then save the new user
         $user = new \Modules\Acp\Entities\User($postData);
 
-        if ( $this->auth_config->requireActivation !== false ) {
+        if ($this->auth_config->requireActivation !== false) {
             $user->generateActivateHash();
         } else {
             $user->activate();
         }
-        if ( isset($postData['force_pass_reset']) ) $user->generateResetHash();
+        if (isset($postData['force_pass_reset'])) $user->generateResetHash();
 
         $user_id = $this->_model->insert($user);
-        if (! $user_id )
-        {
+        if (! $user_id) {
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
         // Success!
@@ -180,63 +179,63 @@ class User extends AcpController {
         ];
         $this->logAction($logData);
 
-//        if ($this->auth_config->requireActivation !== false)
-//        {
-//            $activator = service('activator');
-//            $sent = $activator->send($user);
-//
-//            if (! $sent)
-//            {
-//                return redirect()->back()->withInput()->with('error', $activator->error() ?? lang('Auth.unknownError'));
-//            }
-//
-//            // Success!
-//            return redirect()->route('login')->with('message', lang('Auth.activationSuccess'));
-//        }
+        //        if ($this->auth_config->requireActivation !== false)
+        //        {
+        //            $activator = service('activator');
+        //            $sent = $activator->send($user);
+        //
+        //            if (! $sent)
+        //            {
+        //                return redirect()->back()->withInput()->with('error', $activator->error() ?? lang('Auth.unknownError'));
+        //            }
+        //
+        //            // Success!
+        //            return redirect()->route('login')->with('message', lang('Auth.activationSuccess'));
+        //        }
 
         return redirect()->route('list_user')->with('message', lang('User.addSuccess', [$postData['username']]));
-
     }
 
     /**
      * Display Edit User Page
      */
-    public function edit($userID){
-        $this->_data['title']= lang('User.edit_title');
+    public function edit($userID)
+    {
+        $this->_data['title'] = lang('User.edit_title');
         $user = $this->_model->withDeleted()
-                            ->find($userID);
+            ->find($userID);
 
-        if ( isset($user->id) ) {
-            if ( $user->id != $this->user->id) {
+        if (isset($user->id)) {
+            if ($user->id != $this->user->id) {
                 //check permission
-                if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                if (!$this->user->inGroup('superadmin', 'admin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
             }
 
             //$this->_modelUsmeta->getMeta($user); //echo "<pre>"; print_r($user);exit;
             $this->_data['userData'] = $user;
-            $this->_data['list_userg'] = $this->_modelUserg->findAll();
+            $this->_data['list_userg'] = $this->userMetaModel->findAll();
 
             $this->_render('\user\edit', $this->_data);
         } else {
             return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
         }
-
     }
 
     /**
      * Attempt to edit a user.
      */
-    public function editAction($userID = 0){
+    public function editAction($userID = 0)
+    {
         $this->_data['title'] = lang('User.edit_title');
 
         $user = $this->_model->find($userID);
         $this->_model->skipValidation(true);
 
-        if ( isset($user->id) ) {
+        if (isset($user->id)) {
             $inputData = $this->request->getPost();
             //validate the data
             $rules = [
-                'email'			=> 'required|valid_email',
+                'email'            => 'required|valid_email',
                 'fullname'      => 'required',
             ];
 
@@ -256,7 +255,7 @@ class User extends AcpController {
                 ]
             ];
 
-            if ( isset($inputData['password']) && $inputData['password'] !== '' ) {
+            if (isset($inputData['password']) && $inputData['password'] !== '') {
                 $rules['password'] = 'required|min_length[4]|strong_password';
                 $rules['pass_confirm'] = 'required|matches[password]';
 
@@ -269,19 +268,18 @@ class User extends AcpController {
                     'matches'  => lang('User.pwcf_matches')
                 ];
             }
-            if ( isset($inputData['email']) && $inputData['email'] !== $user->email ) {
+            if (isset($inputData['email']) && $inputData['email'] !== $user->email) {
                 $rules['email'] .= '|is_unique[users.email]';
                 $errMess['email']['is_unique'] = lang('User.email_exits');
             }
             //validate the input
-            if (! $this->validate($rules, $errMess))
-            {
+            if (! $this->validate($rules, $errMess)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
 
             //upload user avata first
             $avatar   = $this->request->getFile('avatar');
-            if ( $avatar->getName() ) {
+            if ($avatar->getName()) {
                 $this->editAvatar($user, $avatar);
             }
             //good then save the new user
@@ -292,11 +290,10 @@ class User extends AcpController {
                     return redirect()->back()->withInput()->with('errors', $this->_model->errors());
                 }
             } catch (DataException $e) {
-
             }
 
-            if ( isset($inputData['sync_permission']) && $inputData['sync_permission'] == 1 ) {
-                $userGroup = $this->_modelUserg->find($user->gid);
+            if (isset($inputData['sync_permission']) && $inputData['sync_permission'] == 1) {
+                $userGroup = $this->userMetaModel->find($user->gid);
                 $user->permissions = json_decode($userGroup->permissions);
             }
             // Success!
@@ -313,12 +310,10 @@ class User extends AcpController {
             ];
             $this->logAction($logData);
 
-            if ( isset($inputData['save']) ) return redirect()->to(route_to('list_user'))->with('message', lang('User.editSuccess', [$user->username]));
-            else if ( isset($inputData['save_exit']) ) return redirect()->route('list_user')->with('message', lang('User.editSuccess', [$user->username]));
-            else if ( isset($inputData['save_addnew']) ) return redirect()->route('add_user')->with('message', lang('User.editSuccess', [$user->username]));
-
+            if (isset($inputData['save'])) return redirect()->to(route_to('list_user'))->with('message', lang('User.editSuccess', [$user->username]));
+            else if (isset($inputData['save_exit'])) return redirect()->route('list_user')->with('message', lang('User.editSuccess', [$user->username]));
+            else if (isset($inputData['save_addnew'])) return redirect()->route('add_user')->with('message', lang('User.editSuccess', [$user->username]));
         } else return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-
     }
 
     /**
@@ -326,17 +321,18 @@ class User extends AcpController {
      * @param $id
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function editPassword($id) {
-        $this->_data['title']= lang('User.edit_password');
+    public function editPassword($id)
+    {
+        $this->_data['title'] = lang('User.edit_password');
         $user = $this->_model->find($id);
 
-        if ( isset($user->id) ) {
+        if (isset($user->id)) {
             $this->_data['userData'] = $user;
             $redirect_url = base_url(route_to('list_user'));
-            if ( previous_url() != current_url() ) {
+            if (previous_url() != current_url()) {
                 $redirect_url = previous_url();
             } else {
-                if ( $user->user_type == UserTypeEnum::CUSTOMER ){
+                if ($user->user_type == UserTypeEnum::CUSTOMER) {
                     $cusData = model(CustomerModel::class)
                         ->where('user_id', $user->id)
                         ->first();
@@ -357,11 +353,12 @@ class User extends AcpController {
      * @return \CodeIgniter\HTTP\RedirectResponse
      * @throws \ReflectionException
      */
-    public function attempEditPassword($id) {
+    public function attempEditPassword($id)
+    {
         $user = $this->_model->find($id);
-        $postData = $this->request->getPost(); 
+        $postData = $this->request->getPost();
 
-        if ( isset($user->id) ) {
+        if (isset($user->id)) {
             $rules['password'] = 'required|min_length[6]|alpha_numeric';
             $rules['pass_confirm'] = 'required|matches[password]';
 
@@ -379,9 +376,9 @@ class User extends AcpController {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
             // Success! Save the new password.
-            $user->password 		= $postData['password'];
-            $user->reset_at 	    = date('Y-m-d H:i:s'); 
-            if ( isset($postData['force_pass_reset']) && $postData['force_pass_reset'] == 1 ) $user->generateResetHash();
+            $user->password         = $postData['password'];
+            $user->reset_at         = date('Y-m-d H:i:s');
+            if (isset($postData['force_pass_reset']) && $postData['force_pass_reset'] == 1) $user->generateResetHash();
             else {
                 $user->force_pass_reset = 0;
                 $user->reset_hash = null;
@@ -409,11 +406,11 @@ class User extends AcpController {
             //send email
             $email = Services::email();
             $config = new Email();
-            if ( $checkSendMail ) {
+            if ($checkSendMail) {
                 $sent = $email->setFrom($config->fromEmail, $config->fromName)
                     ->setTo($user->email)
                     ->setSubject("Your password was reset")
-                    ->setMessage(view($this->config->view.'\user\email\editPassword', $data))
+                    ->setMessage(view($this->config->view . '\user\email\editPassword', $data))
                     ->setMailType('html')
                     ->send();
                 if (! $sent) {
@@ -421,7 +418,7 @@ class User extends AcpController {
                 }
             }
 
-            if ( $user->user_type == UserTypeEnum::CUSTOMER ) {
+            if ($user->user_type == UserTypeEnum::CUSTOMER) {
                 $cusData = model(CustomerModel::class)
                     ->where('user_id', $user->id)
                     ->first();
@@ -429,91 +426,24 @@ class User extends AcpController {
             } else {
                 $routeTo = base_url("acp/user/profile?user={$user->id}");
             }
-            if ( !empty($emailErr) ) return redirect()->to($routeTo)->with('message', $emailErr['error']);
+            if (!empty($emailErr)) return redirect()->to($routeTo)->with('message', $emailErr['error']);
             return redirect()->to($routeTo)->with('message', lang('User.edit_pass_success', [$user->username]));
-
         } else return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-    }
-
-    /**
-     * Show edit permission page
-     */
-    public function editPermission($id) {
-        //check permission
-        if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
-        $this->_data['title']= lang('User.edit_permission_title');
-        $user = $this->_model->find($id);
-        if ( empty($user) ) return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-
-        $_perModel = new PermissionModel();
-        $persData = $_perModel->orderBy('name', 'ASC')->findAll();
-        if ( empty($persData) ) return redirect()->route('permissions')->with('error', lang('Acp.empty_permissions'));
-
-        $permissions = [];
-        foreach ($persData as $perItem){
-            if ( !array_key_exists($perItem->name, $permissions)) {
-                $permissions[trim($perItem->name)] = [];
-            }
-            array_push($permissions[trim($perItem->name)], $perItem);
-        }
-        //echo '<pre>'; print_r($permissions);exit;
-
-        if ( isset($user->id) ) {
-            $this->_data['dataTitle'] = $user->fullname.' - '.$user->username;
-            $this->_data['userData'] = $user;
-            $this->_data['persData'] = $permissions;
-
-            $this->_render('\user\permission', $this->_data);
-        } else {
-            return redirect()->route('list_userg')->with('error', lang('User.invalid_user_group'));
-        }
-    }
-
-    /**
-     * Update user permission
-     * @param $id
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function editPermissionAction($id) {
-        $postData = $this->request->getPost();
-        $user = $this->_model->withDeleted()
-            ->find($id);
-        if ( empty($user) ) return redirect()->route('list_user')->with('error', lang('User.invalid_user'));
-
-        if ( empty($postData) ) return redirect()->back()->with('error', lang('Acp.invalid_pers'));
-        else {
-            //set user permissions
-            $user->permissions = $postData['pers'];
-            //log Action
-            $logData = [
-                'title' => 'Change Permission',
-                'description' => "#{$this->user->username} đã thêm quyền user #{$user->username}",
-                'properties' => ['permissions' => $postData['pers']],
-                'subject_id' => $user->id,
-                'subject_type' => $user->model_class,
-            ];
-            $this->logAction($logData);
-
-            return redirect()->route('list_user')->with('message', lang('User.save_user_permission_success', [$user->username]));
-        }
     }
 
     /**
      * Remove a user
      */
-    public function remove($id){
+    public function remove($id)
+    {
         $user = $this->_model->find($id);
 
-        if ( isset($user->id) ) {
-            if ($user->id == $this->user->id ) {
+        if (isset($user->id)) {
+            if ($user->id == $this->user->id) {
                 return redirect()->route('list_user')->with('error', lang('User.invalid_delete_user'));
             }
 
-            //check permission
-            if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
-            if ( $this->_model->delete($user->id) ) {
+            if ($this->_model->delete($user->id)) {
                 //log Action
                 $logData = [
                     'title' => 'Delete User',
@@ -525,7 +455,6 @@ class User extends AcpController {
 
                 return redirect()->route('list_user')->with('message', lang('User.delete_success', [$user->id]));
             } else return redirect()->route('list_user')->with('error', lang('User.delete_fail'));
-
         } else return redirect()->route('list_user')->with('error', lang('Acp.invalid_request'));
     }
 
@@ -534,18 +463,17 @@ class User extends AcpController {
      * @param $id
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function recover($id) {
+    public function recover($id)
+    {
         $user = $this->_model->withDeleted()->find($id);
 
-        if ( isset($user->id) ) {
-            if ($user->id == $this->user->id ) {
+        if (isset($user->id)) {
+            if ($user->id == $this->user->id) {
                 return redirect()->route('list_user')->with('error', lang('User.invalid_delete_user'));
             }
-            //check permission
-            if ( !$this->user->can($this->currentAct) ) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
+            
             $this->_model->validate(false);
-            if ( $this->_model->recover($user->id) ) {
+            if ($this->_model->recover($user->id)) {
                 //log Action
                 $logData = [
                     'title' => 'Recover User',
@@ -557,18 +485,20 @@ class User extends AcpController {
 
                 return redirect()->route('list_user')->with('message', lang('User.recover_success', [$user->id]));
             } else return redirect()->route('list_user')->with('error', lang('User.recover_fail'));
-
         } else return redirect()->route('list_user')->with('error', lang('Acp.invalid_request'));
     }
 
-    public function active($id) {
-        $user = $this->_model->find($id);
-
+    public function active($id)
+    {
         $throttler = service('throttler');
 
-        if ($throttler->check($this->request->getIPAddress(), 2, MINUTE) === false)
-        {
+        if ($throttler->check($this->request->getIPAddress(), 2, MINUTE) === false) {
             return service('response')->setStatusCode(429)->setBody(lang('Auth.tooManyRequests', [$throttler->getTokentime()]));
+        }
+        $user = $this->_model->find($id);
+
+        if (!isset($user->id) || $user->isActivated()) {
+            return redirect()->back()->with('error', lang('User.invalid_user'));
         }
 
         $user->activate();
@@ -587,11 +517,12 @@ class User extends AcpController {
     }
 
     //insert user meta
-    public function insertUserMeta($inputData, $userID){
+    public function insertUserMeta($inputData, $userID)
+    {
 
-        if ( !empty($this->config->user_meta) ) {
-            foreach ($this->config->user_meta as $metaKey=>$val) {
-                if ( isset($inputData[$metaKey]) && !empty($inputData[$metaKey]) ) {
+        if (!empty($this->config->user_meta)) {
+            foreach ($this->config->user_meta as $metaKey => $val) {
+                if (isset($inputData[$metaKey]) && !empty($inputData[$metaKey])) {
                     $insertData['meta_key'] = $metaKey;
                     $insertData['meta_value'] = $inputData[$metaKey];
                     $insertData['user_id'] = $userID;
@@ -605,16 +536,17 @@ class User extends AcpController {
      * Update user meta
      * @param $inputData
      */
-    public function updateUserMeta($inputData, $userID){
+    public function updateUserMeta($inputData, $userID)
+    {
 
-        if ( !empty($this->config->user_meta) ) {
-            foreach ($this->config->user_meta as $metaKey=>$val) {
-                if ( isset($inputData[$metaKey]) && !empty($inputData[$metaKey]) ) {
+        if (!empty($this->config->user_meta)) {
+            foreach ($this->config->user_meta as $metaKey => $val) {
+                if (isset($inputData[$metaKey]) && !empty($inputData[$metaKey])) {
                     //check user meta
                     $where = array("meta_key" => $metaKey, "user_id" => $userID);
                     $userMeta = $this->_modelUsmeta->getWhere($where)->getFirstRow('array'); //echo $this->_modelUsmeta->getlastQuery();
                     //echo "<pre>";  print_r($userMeta);exit;
-                    if ( isset($userMeta['id']) && $userMeta['id'] > 0 ) {
+                    if (isset($userMeta['id']) && $userMeta['id'] > 0) {
                         $updateData['meta_value'] = $inputData[$metaKey];
                         $this->_modelUsmeta->update($userMeta['id'], $updateData);
                     } else {
@@ -623,10 +555,8 @@ class User extends AcpController {
                         $insertData['user_id'] = $userID;
                         $this->_modelUsmeta->insert($insertData);
                     }
-
                 }
             }
         }
     }
-
 }

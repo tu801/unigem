@@ -1,6 +1,7 @@
 <?php
 return [
-    'welcom'            => 'Website:',
+    'welcome_label'     => 'Website:',
+    'welcome_text'      => 'Chào mừng bạn đến với trang quản trị. Hãy bắt đầu quản lý website của bạn',
     //title
     'title'             => 'Module ACP',
     'title_profile'     => 'Thông tin user',

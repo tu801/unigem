@@ -1,9 +1,10 @@
 <?php
 return [
-    'welcom' => 'Website:',
+    'welcome_label'         => 'Website: ',
+    'welcome_text'          => 'Welcome to the administration page. Start managing your website',
     //title
-    'title' => 'ACP Module',
-    'title_profile' => 'User Information',
+    'title'                 => 'ACP Module',
+    'title_profile'         => 'User Information',
 
     //language
     'lang'              => 'Language',

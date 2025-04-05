@@ -39,12 +39,6 @@ return [
     //User Meta
     'user_meta_title'       => 'Thông tin thêm',
 
-    // User Group Controller
-    'userGroup_title'       => 'Quản lý nhóm',
-    'userGroup_add_title'   => 'Thêm nhóm',
-    'userGroup_name'        => 'Tên nhóm',
-    'userGroup_description' => 'Mô tả nhóm',
-
     //Error
     'invalid_user'          => 'Tài khoản này không tồn tại! Vui lòng thử lại',
     'invalid_user_group'    => 'Nhóm này không tồn tại! Vui lòng thử lại',
@@ -69,8 +63,8 @@ return [
     'delete_fail'           => 'Lệnh xóa chưa được thực hiện. Vui lòng thử lại sau',
     'recover_fail'           => 'Lệnh khôi phục chưa được thực hiện. Vui lòng thử lại sau',
 
-    'userGroupName_required'=> "Vui lòng điền tên nhóm",
-    'userGroupName_is_exist'=> 'Tên nhóm này đã tồn tại',
+    'userGroupName_required' => "Vui lòng điền tên nhóm",
+    'userGroupName_is_exist' => 'Tên nhóm này đã tồn tại',
     'save_group_permission_success' => 'Đã phân quyền cho nhóm #{0} thành công',
     'save_user_permission_success' => 'Đã phân quyền cho user #{0} thành công',
     'edit_pass_success'     => 'Đổi mật khẩu thành công',

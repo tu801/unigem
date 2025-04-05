@@ -164,7 +164,7 @@
                             <p><?= lang('Acp.menu_setup'); ?></p>
                         </a>
                     </li>
-                    <?php if ($login_user->can($config->adminSlug . '/config/index')) : ?>
+                    <?php if ($login_user->can('config.*')) : ?>
                         <li class="nav-item">
                             <a href="<?= base_url($config->adminSlug . '/log') ?>" class="nav-link <?= ($controller == 'log' && in_array($method, array('index', 'detail'))) ? "active" : ''; ?>">
                                 <i class="fa fa-history"></i>

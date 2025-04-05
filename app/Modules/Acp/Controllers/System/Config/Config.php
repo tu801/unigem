@@ -22,9 +22,6 @@ class Config extends AcpController
 
     public function index()
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title']= lang("Config.config_title");
         $postData = $this->request->getPost(); //print_r($postData);exit;
         $getData = $this->request->getGet(); //print_r($postData);exit;
@@ -55,9 +52,6 @@ class Config extends AcpController
     //show config custom page
     public function custom($group)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang("Acp.config_customtitle");
 
         if ($this->config->sys['themes_name'] === 'default') return redirect()->back()->with('error', lang('Acp.themes_name_invalid'));
@@ -179,9 +173,6 @@ class Config extends AcpController
      */
     public function add($group)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang('Acp.cf_title_add');
         $this->_data['selected_group'] = $group;
         $this->_render('\system\config\add', $this->_data);
@@ -251,9 +242,6 @@ class Config extends AcpController
      */
     public function edit($idItem)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang('Acp.cf_edit_title');
         $item = $this->_model->withDeleted()
             ->find($idItem);
@@ -327,9 +315,6 @@ class Config extends AcpController
 
     public function clone($id)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $item = $this->_model->find($id);
 
         if (isset($item->id)) {
@@ -370,8 +355,6 @@ class Config extends AcpController
         $item = $this->_model->find($idItem);
 
         if (isset($item->id)) {
-            //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
             if ($this->_model->delete($item->id)) {
                 //log Action
