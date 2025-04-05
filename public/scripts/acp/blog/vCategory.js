@@ -89,10 +89,19 @@ const catList = Vue.createApp({
             this.allCategories = [...response.data]; // Lưu trữ danh sách gốc
           } else {
             if (typeof dataAction != "undefined" && dataAction != "deleted") {
-              Swal.fire({
-                icon: "error",
-                text: response.message,
-              });
+              const productCategoryCheck = localStorage.getItem(
+                "product_category_is_empty"
+              );
+
+              if (parseInt(productCategoryCheck) !== 1) {
+                console.log("Show message");
+                Swal.fire({
+                  icon: "error",
+                  text: response.message,
+                });
+              } else {
+                localStorage.removeItem("product_category_is_empty");
+              }
             }
           }
           this.loading = false;

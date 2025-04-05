@@ -156,7 +156,7 @@ echo $this->section('content');?>
                                 <td><a :href="renderEditUrl(cat)">{{ cat.title }}</a></td>
                                 <td>{{ catParent(cat) }}</td>
                                 <td>{{ cat.slug }}</td>
-                                <td>{{ cat.status }}</td>
+                                <td v-html="cat.status"></td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2" :href="renderEditUrl(cat)"><i class="fas fa-edit"></i></a> &nbsp;
                                         <a class="btn btn-danger btn-sm mb-2" @click.prevent="delCat(cat.id)"><i class="fas fa-trash"></i></a>
@@ -179,7 +179,7 @@ echo $this->section('content');?>
 </div>
 <?= $this->endSection() ?>
 
-<?php echo $this->section('pageScripts') ?>
+<?=$this->section('pageScripts') ?>
 <!-- Import Category App -->
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/vCategory.js"></script>
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/postWordCount.js"></script>

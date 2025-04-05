@@ -178,6 +178,9 @@ echo $this->section('content');
             dataType: "json",
             success: function (response) {
                 if( response.error === 1 ) {
+                    // Store value in localStorage when category is empty
+                    localStorage.setItem('product_category_is_empty', '1');
+                    
                     Swal.fire({
                         icon: 'error',
                         text: response.message,

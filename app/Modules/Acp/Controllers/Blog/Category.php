@@ -326,7 +326,7 @@ class Category extends AcpController
                 }
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;
-                $cat->status = $this->config->cmsStatus['status'][$cat->cat_status];
+                $cat->status = $this->__transformStatusView($cat->cat_status);
                 
             }
             $response['data'] = $catData;
@@ -401,5 +401,19 @@ class Category extends AcpController
         }
 
         return $this->response->setJSON($response);
+    }
+
+    private function __transformStatusView($cat_status) {
+        switch ($cat_status) {
+            case 'draft':
+                return '<span class="badge badge-secondary">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
+                break; 
+            case 'pending':
+                return '<span class="badge badge-warning">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
+                break; 
+            case 'publish':
+                return '<span class="badge badge-success">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
+                break; 
+        }
     }
 }

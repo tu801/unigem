@@ -89,10 +89,9 @@ class ProductController extends AcpController
         }
 
         //get Data
-        $this->_model
-            ->select('product.*')->orderBy('product.id DESC');
-        $productCategory                 = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_category'] = $productCategory;
+        $this->_model->select('product.*')->orderBy('product.id DESC');
+
+        $this->_data['product_category'] = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
         $this->_data['data']             = $this->_model->paginate();
         $this->_data['pager']            = $this->_model->pager;
         $this->_data['title']            = lang("Product.product_title");
