@@ -41,7 +41,11 @@ trait SetLang {
      */
     public function checkMultilang()
     {
-        $count = model(LangModel::class)->countAll();
+        $count = cache()->get('lang_count');
+        if (empty($count)) {
+            $count = model(LangModel::class)->countAll();
+            cache()->save('lang_count', $count, config('Cache')->ttl);
+        }
 
         $this->_data['multiLang'] = $count > 1 ? true : false;
     }

@@ -44,15 +44,26 @@ class LangModel extends Model
                 $flagIcon = base_url("themes/flag/{$item->flag}");
                 $item->icon = $flagIcon;
             }
-            cache()->save('_languages', $langData, 7200);
+            cache()->save('_languages', $langData, config('Cache')->ttl);
         }
 
         return $langData;
     }
 
+    /**
+     * get default language item
+     */
     public function getPrivLang()
     {
-        return $this->select(['id', 'name', 'locale', 'is_default', 'flag'])->where('is_default', 1)->first();
+        $defaultLang = cache()->get('default_lang');
+        if ( empty($defaultLang) ) {
+            $defaultLang = $this->select(['id', 'name', 'locale', 'is_default', 'flag'])
+                            ->where('is_default', 1)
+                            ->first();
+            cache()->save('default_lang', $defaultLang, config('Cache')->ttl);
+        }
+        
+        return $defaultLang;
     }
 
     /**

@@ -112,7 +112,7 @@ echo $this->section('content');
                                         </td>
                                         <td>
                                             <a href="<?= route_to("edit_product", $row->id) ?>"><?= $row->pd_name ?></a>
-                                            <p><?=lang('Product.pd_price')?>: <?=format_currency($row->price, $curLang->locale )?></p>
+                                            <p><i class="fas fa-cart-plus fa-lg mr-2"></i>&nbsp;<?=lang('Product.pd_price')?>: <?=format_currency($row->price, $curLang->locale )?></p>
                                         </td>
                                         <td>
                                             <img src="<?= $img ?>" class="img-responsive img-thumbnail" style="max-width:150px">
@@ -131,7 +131,7 @@ echo $this->section('content');
                                                     echo '<span class="badge badge-warning">' . lang('Product.status_'.$row->pd_status) . '</span>';
                                                     break;
                                                 case ProductStatusEnum::DRAFT :
-                                                    echo '<span class="badge badge-primary">' . lang('Product.status_'.$row->pd_status). '</span>';
+                                                    echo '<span class="badge badge-secondary">' . lang('Product.status_'.$row->pd_status). '</span>';
                                                     break;
                                             }
                                             ?>
