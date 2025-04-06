@@ -10,10 +10,8 @@ echo $this->section('content')
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=user") ?>"><?= lang('Post.list_user_post') ?></a> |
-                        <?php if (in_array($login_user->gid, [1, 2])) : ?>
-                            <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=all") ?>"><?= lang('Post.list_all_post') ?></a> |
-                        <?php endif; ?>
+                        <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=all") ?>"><?= lang('Post.list_all_post') ?></a> |
+                        <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=user") ?>"><?= lang('Post.list_user_post') ?></a> | 
                         <a class="<?= ($listtype == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=deleted") ?>"><?= lang('Post.list_delete_post') ?></a>
                     </div>
 

@@ -40,9 +40,11 @@ class AcpData extends \CodeIgniter\Database\Seeder
             'slug'              => 'uncategory',
             'lang_id'           => $lang->id??1,
         ];
-        $_catModel->insertOrUpdate($catData);
-        CLI::write("- Insert Default Categories ");
-
+        $checkCat = $_catModel->checkSlug($catData['slug'], $lang->id);
+        if ( !isset($checkCat->id) ) { 
+            $_catModel->insertOrUpdate($catData);
+            CLI::write("- Insert Default Categories ");
+        }
     }
 
     /**

@@ -59,6 +59,8 @@ return [
     'meta_description'              => 'Mô tả SEO',
     'meta_desc_left'                => 'Số kí tự còn lại:',
 
+    'currency_sign'                 => 'VND',
+
     //Error
     'invalid_request'           => 'Yêu cầu bị lỗi! Vui lòng thử lại sau',
     'edit_Success'              => 'Cập nhật thành công',

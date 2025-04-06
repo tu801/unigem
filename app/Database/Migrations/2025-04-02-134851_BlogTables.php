@@ -50,7 +50,7 @@ class BlogTables extends Migration
         $this->forge->addField([
             'id'              	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'lang_id'          	=> ['type' => 'int',  'unsigned' => true],
-            'user_init'	      	=> ['type' => 'bigint', 'unsigned' => true],
+            'user_init'	      	=> ['type' => 'int', 'unsigned' => true],
 			'user_type'  		=> ['type' => 'varchar', 'constraint' => 255, 'null' => true], //store user model namespace
             'name'				=> ['type' => 'varchar', 'constraint' => 120],
             'slug'				=> ['type' => 'varchar', 'constraint' => 120],
@@ -69,7 +69,7 @@ class BlogTables extends Migration
          */
         $this->forge->addField([
             'id'              	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'user_init'	      	=> ['type' => 'bigint', 'unsigned' => true],
+            'user_init'	      	=> ['type' => 'int', 'unsigned' => true],
 			'user_type'  		=> ['type' => 'varchar', 'constraint' => 255, 'null' => true], //store user model namespace
             'menu_id'			=> ['type' => 'int', 'unsigned' => true],
             'parent_id'         => ['type' => 'int', 'default' => 0],
@@ -94,7 +94,7 @@ class BlogTables extends Migration
          */
         $this->forge->addField([
             'id'              	=> ['type' => 'bigint',  'unsigned' => true, 'auto_increment' => true],
-            'user_init'	      	=> ['type' => 'bigint', 'unsigned' => true],
+            'user_init'	      	=> ['type' => 'int', 'unsigned' => true],
 			'user_type'  		=> ['type' => 'varchar', 'constraint' => 255, 'null' => true], //store user model namespace
             'post_status'		=> ['type' => 'varchar', 'constraint' => 20],
             'post_type'			=> ['type' => 'varchar', 'constraint' => 20, 'default' => 'post'],
@@ -170,7 +170,7 @@ class BlogTables extends Migration
             'id'              	=> ['type' => 'bigint', 'unsigned' => true, 'auto_increment' => true],
             'lang_id'	      	=> ['type' => 'int',  'unsigned' => true],
             'mod_name'	        => ['type' => 'varchar', 'constraint' => 32, 'null' => false],
-            'mod_id'      		=> ['type' => 'int', 'constraint' => 11, 'null' => false],
+            'mod_id'      		=> ['type' => 'bigint', 'null' => false],
             'meta_key'      	=> ['type' => 'varchar', 'constraint' => 32, 'null' => false],
             'meta_value'		=> ['type' => 'text', 'null' => true],
             'created_at'       	=> ['type' => 'datetime', 'null' => true],

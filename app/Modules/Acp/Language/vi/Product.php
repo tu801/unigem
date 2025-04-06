@@ -9,7 +9,7 @@ return [
     'pd_name'                 => 'Tên sản phẩm',
     'pd_sku'                  => 'Mã SKU',
     'pd_slug'                 => 'Slug',
-    'image'                   => 'Ảnh sản phẩm',
+    'image'                   => 'Hình đại diện',
     'avatar_size'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 1280 x 720pixel',
     'pd_tags'                 => 'Thẻ',
     'pd_origin_price'         => 'Giá gốc',
@@ -19,7 +19,9 @@ return [
     'pd_status'               => 'Trạng thái',
     'minimum'                 => 'Tối thiểu',
     'weight'                  => 'Trọng lượng',
-    'description'             => 'Mô tả sản phẩm',
+    'size'                    => 'Kích thước',
+    'cut_angle'               => 'Giác cắt',
+    'description'             => 'Mô tả ngắn',
     'product_info'            => 'Thông số sản phẩm',
     'pd_category'             => 'Danh mục sản phẩm',
     'pd_image_other'          => 'Hình ảnh khác của sản phẩm',
@@ -45,7 +47,8 @@ return [
     // product status
     'status_3'                => 'Bản nháp',
     'status_2'                => 'Đợi duyệt',
-    'status_1'                => 'Xuất bản',
+    'status_1'                => 'Đăng bán',
+    'status_4'                => 'Ngừng bán',
 
     // message
     'addSuccess'              => "Đã thêm thành công sản phẩm mới #{0}",

@@ -9,7 +9,6 @@ use Modules\Acp\Enums\UploadFolderEnum;
 use Modules\Acp\Models\AttachMetaModel;
 use Modules\Acp\Models\Blog\CategoryModel;
 use Modules\Acp\Models\Store\Product\ProductManufacturer;
-use Modules\Acp\Models\Store\Product\ProductMetaModel;
 
 class Product extends Entity
 {
@@ -48,23 +47,6 @@ class Product extends Entity
         $images         = $metaAttach->getAttMeta($this->id, 'product_images');
         $this->images = $images;
         return $this->images;
-    }
-
-
-    public function getProductMeta()
-    {
-        if (empty($this->id)) {
-            throw new \RuntimeException(lang('Product.product_must_be_created'));
-        }
-        $productMetaModel = model(ProductMetaModel::class);
-        $meta = $productMetaModel->where('product_id', $this->id)->findAll();
-        $metaData = [];
-        if ($meta) {
-            foreach ($meta as $data) {
-                $metaData[$data->meta_key] = $data->meta_value;
-            }
-        }
-        return $metaData;
     }
 
     public function getCategory()

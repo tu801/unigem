@@ -37,17 +37,16 @@ class TagsModel extends Model
         else return false;
     }
 
-    public function getTagByProduct($id)
+    public function getTagByProduct($productId, $langID)
     {
-        $tblPrefix = $this->db->getPrefix();
-        $builder = $this->db->table("{$tblPrefix}product");
-//        $data = \model(ProductModel::class)
-//            ->select('pd_tags')
-//            ->find($id);
-        $data = $builder
-            ->select('pd_tags')
-            ->where('id', $id)
+        $productModel = model(ProductModel::class);
+        $data = $productModel
+            ->join('product_content', 'product_content.product_id = product.id')
+            ->select('product_content.pd_tags')
+            ->where('id', $productId)
+            ->where('product_content.lang_id', $langID)
             ->get()->getFirstRow('object');
+
         return $data ?? false;
     }
 }

@@ -11,7 +11,7 @@
 <script type="text/x-template" id="vpostTags-template">
     <div class="col-sm-12">
 
-        <vtagcloud-item v-if="tagitem" :tagdata="tagitem" ></vtagcloud-item>
+        <vtagcloud-item v-if="tagitem" :tagdata="tagitem" @remove-tag-cloud="deleteTag" ></vtagcloud-item>
 
         <div class="input-group">
             <input class="form-control" type="text" v-model="searchText" @keyup="onKeyUp()" >
@@ -40,7 +40,7 @@
     <ul class="list-inline" id="tags-cloud">
         <li class="list-inline-item" v-for="tag in tagdata" :key="tag.id">
             <span class="badge badge-primary">{{ tag.title }}
-                <a class="tag-item-remove ml-2 text-light" href="#">x</a>
+                <a class="tag-item-remove ml-2 text-light" href="#"  @click.prevent="removeTag(tag)" >x</a>
             </span>
             <input type='hidden' class='tmt_inp_tagcloud' name='tagcloud[]' :value='setTagVal(tag)' >
         </li>
