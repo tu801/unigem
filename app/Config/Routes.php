@@ -17,7 +17,5 @@ service('auth')->routes($routes, ['except' => ['login', 'register', 'reset-passw
 $routes->get('login', '\App\Modules\Auth\Controllers\LoginController::loginView');
 $routes->post('login', '\CodeIgniter\Shield\Controllers\LoginController::loginAction');
 
-$routes->get('reset-password', '\App\Modules\Auth\Controllers\ResetPasswordController::resetPasswordView');
-
 $routes->get('reset-password', [App\Modules\Auth\Controllers\ResetPasswordController::class, 'resetPasswordView']);
 $routes->post('reset-password', [App\Modules\Auth\Controllers\ResetPasswordController::class, 'resetPasswordAction']);
