@@ -9,7 +9,7 @@
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
-            <p class="login-box-msg"><?=lang('Common.cmsLoginWelcomeText')?></p>
+            <h4 class="login-box-msg"><?=lang('Common.cmsLoginWelcomeText')?></h4>
             <?php if (session('error') !== null) : ?>
                 <div class="alert alert-danger" role="alert"><?= session('error') ?></div>
             <?php elseif (session('errors') !== null) : ?>

@@ -2,8 +2,9 @@
 
 return [
     // CMS Authentication
-    'cmsLoginWelcomeText'     => 'Đăng nhập để bắt đầu',
-    'cmsResetPassword'        => 'Reset Password',
-    'passwordResetSuccess'    => 'Password Reset Successfully! Please login with your new password.',
-    'errorPasswordTooShort'   => 'Password must be at least 8 characters long.',
+    'cmsLoginWelcomeText'               => 'Đăng nhập',
+    'cmsFirstTimeChangePassText'        => 'Đổi mật khẩu',
+    'cmsResetPassword'                  => 'Đặt lại mật khẩu',
+    'passwordResetSuccess'              => 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới của bạn.',
+    'errorPasswordTooShort'             => 'Mật khẩu phải có ít nhất 8 ký tự.',
 ];

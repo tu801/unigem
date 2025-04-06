@@ -36,7 +36,11 @@ class ResetPasswordController extends BaseController {
             return redirect()->to('/');
         }
 
-        return $this->view('\App\Modules\Auth\Views\cms-reset-password', ['username' => $user->username, 'email' => $user->email]);
+        return $this->view(setting('Auth.views')['reset-password'], [
+            'config' => config('Acp'), 
+            'username' => $user->username, 
+            'email' => $user->email
+        ]);
     }
 
     public function resetPasswordAction() {

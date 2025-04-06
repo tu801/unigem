@@ -47,6 +47,7 @@ class Auth extends ShieldAuth
      */
     public array $views = [
         'login'                       => '\App\Modules\Auth\Views\cms-login',
+        'reset-password'              => '\App\Modules\Auth\Views\cms-reset-password',
         'register'                    => '\CodeIgniter\Shield\Views\register',
         'layout'                      => '\App\Modules\Auth\Views\layout',
         'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
