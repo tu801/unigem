@@ -47,6 +47,8 @@ return [
     'meta_description' => 'SEO Description',
     'meta_desc_left' => 'Characters left:',
 
+    'currency_sign'                 => '$',
+
     //Error
     'invalid_request' => 'Request is invalid! Please try again later',
     'edit_Success' => 'Update successful',

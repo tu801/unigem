@@ -18,7 +18,14 @@ echo $this->section('content') ?>
                     <div class="form-group">
                         <label for="categoryTitle"><?= lang('Category.title') ?></label>
                         <input type="text" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>" id="categoryTitle" name="title" value="<?= $data->title ?>" placeholder="<?= lang('Category.title') ?>">
+                        <div id="updateSlugOption" style="display: none; margin-top: 10px;" class="form-check">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="onChangeSlug" name="onChangeSlug">
+                                <label for="onChangeSlug" class="custom-control-label"><?=lang('Category.change_slug')?></label>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="form-group">
                         <category-slug full-slug="<?= base_url(route_to('category_list', $data->slug, $data->id)) ?>" slug="<?= $data->slug ?>" label="<?= lang('Category.slug') ?>" category-id="<?= $data->id ?>" token="<?= csrf_hash() ?>" tkname="<?= csrf_token() ?>"></category-slug>
                     </div>
@@ -135,6 +142,20 @@ echo $this->section('content') ?>
 <?= $this->endSection() ?>
 <?php echo $this->section('pageScripts') ?>
 <script>
+    $( document ).ready(function() {
+        // Track original title to detect changes
+        const originalTitle = document.getElementById('categoryTitle').value;
+
+        // Show update slug option when title changes
+        $('#categoryTitle').on('keyup', function() {
+            if (this.value.length > 1) {
+                const titleChanged = this.value !== originalTitle;
+        document.getElementById('updateSlugOption').style.display = titleChanged ? 'block' : 'none';
+            }
+        });
+    });
+
+    
     const categorySlug = {
         props:['slug', 'fullSlug', 'label', 'categoryId', 'token', 'tkname'],
         template: "#vcategory-slug",
@@ -144,6 +165,10 @@ echo $this->section('content') ?>
                 newSlug: '',
                 newUrl: '',
             }
+        },
+        mounted() {
+            // Store reference to this component for access from outside Vue
+            slugComponent = this;
         },
         methods: {
             edit() {

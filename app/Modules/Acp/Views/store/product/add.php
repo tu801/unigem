@@ -26,14 +26,18 @@ echo $this->section('content');
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="inputOriginPrice"><?= lang('Product.pd_origin_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="origin_price" class="form-control <?= session('errors.origin_price') ? 'is-invalid' : '' ?>" id="inputOriginPrice" placeholder="<?= lang('Product.pd_origin_price') ?>" value="<?= old('origin_price') ?? 0 ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="price" class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>" value="<?= old('price') ?? 0 ?>">
+                                <div class="input-group">
+                                    <input  type="number" name="price" 
+                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
+                                            id="inputPrice" 
+                                            placeholder="<?= lang('Product.pd_price') ?>" 
+                                            value="<?= ($curLang->locale == 'en') ? (old('price') ?? 0) : floor((float)(old('price') ?? 0)) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -42,39 +46,31 @@ echo $this->section('content');
                                     <span class="text-danger">*</span> &nbsp;
                                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
                                 </label>
-                                <input type="number" name="price_discount" class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" value="<?= old('price_discount') ?? 0 ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputMinimum"><?= lang('Product.minimum') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="minimum" class="form-control <?= session('errors.minimum') ? 'is-invalid' : '' ?>" id="inputMinimum" placeholder="<?= lang('Product.minimum') ?>" value="<?= old('minimum') ?? 1 ?>">
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
-                                <div class="input-group" >
-                                    <input type="number" step="any" name="weight" class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
-                                    <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                        <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
+                                <div class="input-group">
+                                    <input  type="number" name="price_discount" 
+                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
+                                            id="inputPriceDiscount" 
+                                            placeholder="<?= lang('Product.pd_price_discount') ?>" 
+                                            value="<?= ($curLang->locale == 'en') ? (old('price_discount') ?? 0) : floor((float)(old('price_discount') ?? 0)) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" img-data="" ></config-img>
 
                     <div class="form-group">
                         <label><?= lang('Product.description') ?></label>
-                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" id="description-editor" name="description"><?= old('description') ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" 
+                                id="description-editor" name="pd_description"><?= old('description') ?></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label><?= lang('Product.product_info') ?> </label>
+                        <label><?= lang('Product.product_info') ?> <span class="text-danger">*</span></label>
                         <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" id="tmteditor" name="product_info"><?= old('product_info') ?></textarea>
                     </div>
                 </div>
@@ -105,6 +101,30 @@ echo $this->section('content');
                             <option value="<?= $item ?>" <?= old('cat_id') == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputWeight"><?= lang('Product.weight') ?></label>
+                    <div class="input-group" >
+                        <input type="number" name="weight" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
+                        <div class="input-group-append">
+                            <div class="input-group-text">g &nbsp;<i class="fas fa-weight"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputWeight"><?= lang('Product.size') ?></label>
+                    <div class="input-group" >
+                        <input type="text" name="size" class="form-control" id="inputSize" placeholder="<?= lang('Product.size') ?>" value="<?= old('size') ?? 1 ?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
+                    <div class="input-group" >
+                        <input type="text" name="cut_angle" class="form-control" id="inputCutAngle" placeholder="<?= lang('Product.cut_angle') ?>" value="<?= old('cut_angle') ?? 1 ?>">
+                    </div>
                 </div>
 
             </div>

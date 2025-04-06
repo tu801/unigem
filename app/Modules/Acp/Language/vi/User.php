@@ -10,7 +10,7 @@ return [
     'edit_password'         => 'Đổi mật khẩu',
 
     //Profile info
-    'title_info'            => 'Thông tin',
+    'title_info'            => 'Thông tin đăng nhập',
     'title_general_info'    => 'Thông tin chung',
 
 
@@ -22,6 +22,9 @@ return [
     //Edit user
     'edit_title'            => 'Sửa thông tin thành viên',
     'editSuccess'           => 'Đã cập nhật thành công thông tin cho user #{0}',
+
+    'requiredChangePass'    => 'Yêu cầu đổi mật khẩu sau khi đăng nhập',
+    'sendMail'              => 'Gửi mail thông báo',
 
     //User info
     'username'              => 'Tên đăng nhập',

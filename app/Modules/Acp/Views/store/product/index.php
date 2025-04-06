@@ -11,17 +11,15 @@ echo $this->section('content');
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
+                            <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=all") ?>"><?= lang('Product.list_all_product') ?></a> |
                             <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=user") ?>"><?= lang('Product.list_user_product') ?></a> |
-                            <?php if (in_array($login_user->gid, [1, 2])) : ?>
-                                <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=all") ?>"><?= lang('Product.list_all_product') ?></a> |
-                            <?php endif; ?>
                             <a class="<?= ($listtype == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=deleted") ?>"><?= lang('Product.list_delete_product') ?></a>
                         </div>
 
                         <div class="card-tools">
                             <div class="input-group input-group-sm">
                                 <input name="listtype" id="listtype" value="<?= $listtype ?? 'user'; ?>" class="form-control" type="hidden" />
-                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm Sản phẩm">
+                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm tên sản phẩm">
                                 <div class="input-group-append">
                                     <button name="search" class="btn btn-primary">
                                         <i class="fas fa-search"></i>
@@ -114,6 +112,7 @@ echo $this->section('content');
                                         </td>
                                         <td>
                                             <a href="<?= route_to("edit_product", $row->id) ?>"><?= $row->pd_name ?></a>
+                                            <p><i class="fas fa-cart-plus fa-lg mr-2"></i>&nbsp;<?=lang('Product.pd_price')?>: <?=format_currency($row->price, $curLang->locale )?></p>
                                         </td>
                                         <td>
                                             <img src="<?= $img ?>" class="img-responsive img-thumbnail" style="max-width:150px">
@@ -132,7 +131,7 @@ echo $this->section('content');
                                                     echo '<span class="badge badge-warning">' . lang('Product.status_'.$row->pd_status) . '</span>';
                                                     break;
                                                 case ProductStatusEnum::DRAFT :
-                                                    echo '<span class="badge badge-primary">' . lang('Product.status_'.$row->pd_status). '</span>';
+                                                    echo '<span class="badge badge-secondary">' . lang('Product.status_'.$row->pd_status). '</span>';
                                                     break;
                                             }
                                             ?>
@@ -178,6 +177,9 @@ echo $this->section('content');
             dataType: "json",
             success: function (response) {
                 if( response.error === 1 ) {
+                    // Store value in localStorage when category is empty
+                    localStorage.setItem('product_category_is_empty', '1');
+                    
                     Swal.fire({
                         icon: 'error',
                         text: response.message,

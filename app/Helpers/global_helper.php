@@ -87,34 +87,6 @@ if (!function_exists('support_langs')) {
     }
 }
 
-if (!function_exists('vnd_decode')) {
-    /**
-     * convert VND currency value to number
-     * @param $number
-     * @return string|string[]|null
-     */
-    function vnd_decode($number) {
-        return preg_replace('/,+/', '',$number);
-    }
-}
-
-if (!function_exists('vnd_encode')) {
-    /**
-     * transform number to VND currency format
-     * @param $number
-     * @param bool $suffixes
-     * @return string
-     */
-    function vnd_encode($number,$suffixes=false) {
-        if($suffixes){
-            $Vnddot = strrev(implode(',', str_split(strrev($number), 3))) . 'đ';
-        } else {
-            $Vnddot = strrev(implode(',', str_split(strrev($number), 3)));
-        }
-        return $Vnddot;
-    }
-}
-
 if (!function_exists('getRandomString')) {
     function getRandomString($n): string
     {
@@ -128,7 +100,6 @@ if (!function_exists('getRandomString')) {
         return $randomString;
     }
 }
-
 
 /**
  * log action
@@ -158,4 +129,5 @@ if(!function_exists('logAction')){
         $_logModel->insert($logData);
     }
 }
+
 ?>
