@@ -2,7 +2,7 @@
 
 namespace Config;
 
-use App\Validations\CheckProductSlugValidation;
+use App\Validations\ProductNameValidation;
 use App\Validations\PhoneValidation;
 use App\Validations\ShippingFeeConfigValidation;
 use CodeIgniter\Config\BaseConfig;
@@ -30,7 +30,7 @@ class Validation extends BaseConfig
         CreditCardRules::class,
         PhoneValidation::class,
         ShippingFeeConfigValidation::class,
-        CheckProductSlugValidation::class,
+        ProductNameValidation::class,
     ];
 
     /**

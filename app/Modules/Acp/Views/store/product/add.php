@@ -27,7 +27,17 @@ echo $this->section('content');
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="price" class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>" value="<?= old('price') ?? 0 ?>">
+                                <div class="input-group">
+                                    <input  type="number" name="price" 
+                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
+                                            id="inputPrice" 
+                                            placeholder="<?= lang('Product.pd_price') ?>" 
+                                            value="<?= ($curLang->locale == 'en') ? (old('price') ?? 0) : floor((float)(old('price') ?? 0)) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -36,7 +46,17 @@ echo $this->section('content');
                                     <span class="text-danger">*</span> &nbsp;
                                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
                                 </label>
-                                <input type="number" name="price_discount" class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" value="<?= old('price_discount') ?? 0 ?>">
+                                <div class="input-group">
+                                    <input  type="number" name="price_discount" 
+                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
+                                            id="inputPriceDiscount" 
+                                            placeholder="<?= lang('Product.pd_price_discount') ?>" 
+                                            value="<?= ($curLang->locale == 'en') ? (old('price_discount') ?? 0) : floor((float)(old('price_discount') ?? 0)) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -45,7 +65,8 @@ echo $this->section('content');
 
                     <div class="form-group">
                         <label><?= lang('Product.description') ?></label>
-                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" id="description-editor" name="description"><?= old('description') ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" 
+                                id="description-editor" name="pd_description"><?= old('description') ?></textarea>
                     </div>
 
                     <div class="form-group">
@@ -86,8 +107,8 @@ echo $this->section('content');
                     <label for="inputWeight"><?= lang('Product.weight') ?></label>
                     <div class="input-group" >
                         <input type="number" name="weight" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
-                        <div class="input-group-append" data-target="#timepicker">
-                            <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
+                        <div class="input-group-append">
+                            <div class="input-group-text">g &nbsp;<i class="fas fa-weight"></i></div>
                         </div>
                     </div>
                 </div>

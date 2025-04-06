@@ -32,26 +32,22 @@ class Post extends AcpController
     public function index()
     {
         $this->_data['title'] = lang("Post.post_title");
-        $getData = $this->request->getGet(); //print_r($postData);exit;
-
-        if (isset($getData['listtype'])) {
-            switch ($getData['listtype']) {
-                case 'all':
-                    $this->_data['listtype'] = 'all';
-                    break;
-                case 'deleted':
-                    $this->_model->onlyDeleted();
-                    $this->_data['listtype'] = 'deleted';
-                    break;
-                case 'user':
-                    $this->_model->where("user_init", $this->user->id);
-                    $this->_data['listtype'] = 'user';
-                    break;
-            }
-        } else {
-            $this->_model->where("user_init", $this->user->id);
-            $this->_data['listtype'] = 'user';
+        $getData = $this->request->getGet(); 
+        
+        switch ($getData['listtype'] ?? '') {
+            case 'deleted':
+                $this->_model->onlyDeleted();
+                $this->_data['listtype'] = 'deleted';
+                break;
+            case 'user':
+                $this->_model->where("user_init", $this->user->id);
+                $this->_data['listtype'] = 'user';
+                break;
+            default:
+                $this->_data['listtype'] = 'all';
+                break;
         }
+
         $this->_model->where('post_type', 'post');
 
         if (isset($getData['search'])) {

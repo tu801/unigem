@@ -39,7 +39,7 @@ class AcpController extends Controller
      *
      * @var array
      */
-    protected $helpers = ['auth', 'form', 'acp', 'global', 'user'];
+    protected $helpers = ['auth', 'form', 'acp', 'global', 'user', 'ecom'];
 
     /**
      * Instance of the main Request object.

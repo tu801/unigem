@@ -26,7 +26,17 @@ echo $this->section('content');
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="price" class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>" value="<?= $itemData->price  ?>">
+                                <div class="input-group">
+                                    <input type="number" name="price" 
+                                           step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                           class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
+                                           id="inputPrice" 
+                                           placeholder="<?= lang('Product.pd_price') ?>" 
+                                           value="<?= ($curLang->locale == 'en') ? number_format($itemData->price, 2) : floor((float)$itemData->price) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -35,7 +45,16 @@ echo $this->section('content');
                                     <span class="text-danger">*</span> &nbsp;
                                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
                                 </label>
-                                <input type="number" name="price_discount" class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" value="<?= $itemData->price_discount ?>">
+                                <div class="input-group">
+                                    <input  type="number" name="price_discount" 
+                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
+                                            id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" 
+                                            value="<?= ($curLang->locale == 'en') ? number_format($itemData->price_discount, 2) : floor((float)$itemData->price_discount) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -52,12 +71,14 @@ echo $this->section('content');
 
                     <div class="form-group">
                         <label><?= lang('Product.description') ?> </label>
-                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" id="description-editor" name="description"><?= $itemData->product_meta['description'] ?? '' ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" 
+                                id="description-editor" name="pd_description"><?= $itemData->pd_description ?? '' ?></textarea>
                     </div>
 
                     <div class="form-group">
                         <label><?= lang('Product.product_info') ?> </label>
-                        <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" id="tmteditor" name="product_info"><?= $itemData->product_meta['product_info'] ?? '' ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" 
+                                id="tmteditor" name="product_info"><?= $itemData->product_info ?? '' ?></textarea>
                     </div>
 
                 </div>
@@ -115,13 +136,49 @@ echo $this->section('content');
         <div class="col-md-3">
             <div class="card card-outline card-primary">
                 <div class="card-body">
+                    <div class="form-group ">
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
+                        <select class="custom-select form-control" name="pd_status">
+                            <?php foreach (ProductStatusEnum::toArray() as $item): ?>
+                                <option value="<?= $item ?>" <?= $itemData->pd_status == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
                         <div class="input-group" >
-                            <input type="number" name="weight" step="any" class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= $itemData->product_meta['weight'] ?? 0  ?>">
-                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
+                            <input type="number" name="weight" step="any" 
+                                    class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" 
+                                    id="inputWeight" placeholder="<?= lang('Product.weight') ?>" 
+                                    value="<?= $itemData->pd_weight ?? 1  ?>">
+                            <div class="input-group-append">
+                                <div class="input-group-text">g &nbsp;<i class="fas fa-weight"></i></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.size') ?></label>
+                        <div class="input-group" >
+                            <input type="text" name="size" 
+                                class="form-control" id="inputSize" 
+                                placeholder="<?= lang('Product.size') ?>" 
+                                value="<?= $itemData->pd_size ?? 1 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
+                        <div class="input-group" >
+                            <input type="text" name="cut_angle" 
+                                    class="form-control" id="inputCutAngle" 
+                                    placeholder="<?= lang('Product.cut_angle') ?>" 
+                                    value="<?= $itemData->pd_cut_angle ?? 1 ?>">
                         </div>
                     </div>
                 </div>
@@ -130,7 +187,6 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <feature-img img-desc="<?= lang('Product.avatar_size') ?>" demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>" img-title="<?= lang('Product.image') ?>"></feature-img>
-
 
                     <div class="form-group">
                         <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>

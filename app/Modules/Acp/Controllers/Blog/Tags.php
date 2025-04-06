@@ -139,7 +139,7 @@ class Tags extends AcpController
                 break;
             case 'product':
 //                exit('asd');
-                $tags = $this->_model->getTagByProduct($modId);
+                $tags = $this->_model->getTagByProduct($modId, $langID);
                 $tags = json_decode($tags->pd_tags);
                 if ( isset($tags) && count($tags) > 0 ) {
                     foreach ($tags as $item){
