@@ -1,35 +1,19 @@
 <?= $this->extend(config('Auth')->views['layout']) ?>
+
+<?= $this->section('title')?>
+<?=getenv('App.site_name')?> - CMS Login
+<?= $this->endSection()?>
+
 <?= $this->section('main') ?>
 <div class="login-box">
-    <div class="login-logo">
-        <a href="<?=base_url()?>">
-            <img src="<?=base_url()?>/themes/unigem/unigem-logo.png" alt="Fox CMS" width="200px" height="200px" class="img-fluid rounded mx-auto d-block">
-        </a>
-    </div>
-    <!-- /.login-logo -->
+    
     <div class="card">
         <div class="card-body login-card-body">
             <h4 class="login-box-msg"><?=lang('Common.cmsLoginWelcomeText')?></h4>
-            <?php if (session('error') !== null) : ?>
-                <div class="alert alert-danger" role="alert"><?= session('error') ?></div>
-            <?php elseif (session('errors') !== null) : ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php if (is_array(session('errors'))) : ?>
-                        <?php foreach (session('errors') as $error) : ?>
-                            <?= $error ?>
-                            <br>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <?= session('errors') ?>
-                    <?php endif ?>
-                </div>
-            <?php endif ?>
-
-            <?php if (session('message') !== null) : ?>
-                <div class="alert alert-success" role="alert"><?= session('message') ?></div>
-            <?php endif ?>
+            <?= view('Modules\Auth\Views\error_message_block') ?>
 
             <form action="<?= url_to('login') ?>" method="post">
+                <?= csrf_field() ?>
                 <!-- Username -->
                 <div class="input-group mb-3">
                     <input  type="text" class="form-control" name="username" 

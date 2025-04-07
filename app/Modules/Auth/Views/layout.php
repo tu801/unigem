@@ -1,9 +1,13 @@
+<?php
+$config = config('Acp');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
-    <title><?=getenv('App.site_name')?></title>
+
+    <title><?= $this->renderSection('title') ?></title>
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,6 +27,13 @@
 </head>
 
 <body class="hold-transition login-page">
+
+<div class="login-logo">
+    <a href="<?=base_url()?>">
+        <img src="<?=base_url()?>/themes/unigem/unigem-logo.png" alt="Fox CMS" width="150px" height="150px" class="img-fluid rounded mx-auto d-block">
+    </a>
+</div>
+<!-- /.login-logo -->
 
 <?= $this->renderSection('main') ?>
 

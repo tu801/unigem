@@ -37,7 +37,6 @@ class ResetPasswordController extends BaseController {
         }
 
         return $this->view(setting('Auth.views')['reset-password'], [
-            'config' => config('Acp'), 
             'username' => $user->username, 
             'email' => $user->email
         ]);

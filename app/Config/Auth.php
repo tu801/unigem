@@ -26,6 +26,7 @@ use CodeIgniter\Shield\Authentication\Passwords\NothingPersonalValidator;
 use CodeIgniter\Shield\Authentication\Passwords\PwnedValidator;
 use CodeIgniter\Shield\Authentication\Passwords\ValidatorInterface;
 use CodeIgniter\Shield\Models\UserModel;
+use Modules\Acp\Enums\UserTypeEnum;
 
 class Auth extends ShieldAuth
 {
@@ -46,8 +47,8 @@ class Auth extends ShieldAuth
      * --------------------------------------------------------------------
      */
     public array $views = [
-        'login'                       => '\App\Modules\Auth\Views\cms-login',
-        'reset-password'              => '\App\Modules\Auth\Views\cms-reset-password',
+        'login'                       => '\App\Modules\Auth\Views\cms_login',
+        'reset-password'              => '\App\Modules\Auth\Views\cms_reset_password',
         'register'                    => '\CodeIgniter\Shield\Views\register',
         'layout'                      => '\App\Modules\Auth\Views\layout',
         'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
@@ -55,9 +56,9 @@ class Auth extends ShieldAuth
         'action_email_2fa_email'      => '\CodeIgniter\Shield\Views\Email\email_2fa_email',
         'action_email_activate_show'  => '\CodeIgniter\Shield\Views\email_activate_show',
         'action_email_activate_email' => '\CodeIgniter\Shield\Views\Email\email_activate_email',
-        'magic-link-login'            => '\CodeIgniter\Shield\Views\magic_link_form',
-        'magic-link-message'          => '\CodeIgniter\Shield\Views\magic_link_message',
-        'magic-link-email'            => '\CodeIgniter\Shield\Views\Email\magic_link_email',
+        'magic-link-login'            => '\App\Modules\Auth\Views\cms_magic_link_form',
+        'magic-link-message'          => '\App\Modules\Auth\Views\cms_magic_link_message',
+        'magic-link-email'            => '\App\Modules\Auth\Views\Email\cms_magic_link_email',
     ];
 
     /**
@@ -482,7 +483,8 @@ class Auth extends ShieldAuth
      */
     public function permissionDeniedRedirect(): string
     {
-        $url = setting('Auth.redirects')['permission_denied'];
+        $user = auth()->user(); dd($user->user_type);
+        $url = ( $user->user_type == UserTypeEnum::ADMIN ) ? ADMIN_AREA : setting('Auth.redirects')['permission_denied'];
 
         return $this->getUrl($url);
     }
@@ -493,7 +495,8 @@ class Auth extends ShieldAuth
      */
     public function groupDeniedRedirect(): string
     {
-        $url = setting('Auth.redirects')['group_denied'];
+        $user = auth()->user();
+        $url = ( $user->user_type == UserTypeEnum::ADMIN ) ? ADMIN_AREA : setting('Auth.redirects')['group_denied'];
 
         return $this->getUrl($url);
     }

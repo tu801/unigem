@@ -25,6 +25,6 @@ class LoginController extends ShieldLogin
             return redirect()->route('auth-action-show');
         }
 
-        return $this->view(setting('Auth.views')['login'], ['config' => config('Acp')]);
+        return $this->view(setting('Auth.views')['login']);
     }
 }

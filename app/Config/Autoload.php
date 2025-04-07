@@ -42,6 +42,7 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE                       => APPPATH,
         'Modules\Acp'                       => APPPATH . 'Modules/Acp',
+        'Modules\Auth'                      => APPPATH . 'Modules/Auth',
         'Libraries\Collection\Collection'   => APPPATH . 'Libraries/Collection/Collection',
     ];
 

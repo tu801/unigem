@@ -30,8 +30,8 @@ class CmsTables extends Migration
          * https://shield.codeigniter.com/customization/adding_attributes_to_users/
          */
 		$userFields = [
-            'avatar'	        => ['type' => 'varchar', 'constraint' => 255, 'null' => true, 'after' => 'username'],
-            'user_type'      	=> ['type' => 'varchar', 'constraint' => 64, 'default' => UserTypeEnum::ADMIN],
+            'user_type'      	=> ['type' => 'varchar', 'constraint' => 64, 'default' => UserTypeEnum::ADMIN, 'after' => 'username'],
+            'avatar'	        => ['type' => 'varchar', 'constraint' => 255, 'null' => true, 'after' => 'user_type'],            
         ];
         $this->forge->addColumn('users', $userFields);
 

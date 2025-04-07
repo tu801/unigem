@@ -1,38 +1,20 @@
 <?= $this->extend(config('Auth')->views['layout']) ?>
-<?= $this->section('main') ?>
 
-<div style="width: 500px;">
-    <div class="login-logo">
-        <a href="<?=base_url()?>">
-            <img src="<?=base_url()?>/themes/unigem/unigem-logo.png" alt="Fox CMS" width="200px" height="200px" class="img-fluid rounded mx-auto d-block">
-        </a>
-    </div>
-    <!-- /.login-logo -->
+<?= $this->section('title')?>
+<?=getenv('App.site_name')?> - CMS Change Password
+<?= $this->endSection()?>
+
+<?= $this->section('main') ?>
+<div class="login-box">
     <div class="card">
         <div class="card-body login-card-body">
             <h4 class="login-box-msg"><?=lang('Common.cmsFirstTimeChangePassText')?></h4>
-            <?php if (session('error') !== null) : ?>
-                <div class="alert alert-danger" role="alert"><?= session('error') ?></div>
-            <?php elseif (session('errors') !== null) : ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php if (is_array(session('errors'))) : ?>
-                        <?php foreach (session('errors') as $error) : ?>
-                            <?= $error ?>
-                            <br>
-                        <?php endforeach ?>
-                    <?php else : ?>
-                        <?= session('errors') ?>
-                    <?php endif ?>
-                </div>
-            <?php endif ?>
-
-            <?php if (session('message') !== null) : ?>
-                <div class="alert alert-success" role="alert"><?= session('message') ?></div>
-            <?php endif ?>
+            <?= view('Modules\Auth\Views\error_message_block') ?>
 
             <form action="<?= url_to('reset-password') ?>" method="post">
+                <?= csrf_field() ?>
                 <!-- Username -->
-                <div class="form-floating mb-3">
+                <div class="form-group mb-3">
                     <label for="floatingUsernameInput"><?= lang('Auth.username') ?></label>
                     <div class="input-group mb-3">
                         <input  type="text" class="form-control" value="<?= $username ?>" disabled>
@@ -45,7 +27,7 @@
                 </div>
 
                 <!-- Email -->
-                <div class="form-floating mb-3">
+                <div class="form-group mb-3">
                     <label for="floatingEmailInput"><?= lang('Auth.email')?></label>
                     <div class="input-group mb-3">
                         <input  type="text" class="form-control" value="<?= $email?>" disabled>
@@ -58,7 +40,7 @@
                 </div>
 
                 <!-- Password -->
-                <div class="form-floating mb-3">
+                <div class="form-group mb-3">
                     <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>
                     <input type="password" class="form-control" 
                             id="floatingPasswordInput" name="password" 
@@ -67,7 +49,7 @@
                 </div>
 
                 <!-- Password (Again) -->
-                <div class="form-floating mb-5">
+                <div class="form-group mb-5">
                     <label for="floatingPasswordConfirmInput"><?= lang('Auth.passwordConfirm') ?></label>
                     <input type="password" class="form-control" 
                             id="floatingPasswordConfirmInput" 
@@ -76,13 +58,19 @@
                             placeholder="<?= lang('Auth.passwordConfirm') ?>" required> 
                 </div>
 
-                <div class="d-grid col-12 col-md-8 mx-auto m-3">
+                <div class="row">
+                    <div class="col-12">
                         <button type="submit" class="btn btn-primary btn-block"><?= lang('Common.cmsResetPassword') ?></button>
                     </div>
+                    <!-- /.col -->
+                </div>
             </form>
+            <p class="mt-3 mb-1">
+                <a href="<?=route_to('login')?>"><?= lang('Auth.backToLogin') ?></a>
+            </p>
+            
         </div>
         <!-- /.login-card-body -->
     </div>
 </div>
-
 <?= $this->endSection() ?>
