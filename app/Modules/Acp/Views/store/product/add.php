@@ -104,6 +104,15 @@ echo $this->section('content');
                 </div>
 
                 <div class="form-group">
+                    <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
+                    <select class="custom-select form-control" name="cat_id">
+                        <?php foreach ($product_category as $item): ?>
+                            <option value="<?= $item->cat_id ?>" <?= old('cat_id') == $item->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label for="inputWeight"><?= lang('Product.weight') ?></label>
                     <div class="input-group" >
                         <input type="number" name="weight" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
@@ -127,26 +136,17 @@ echo $this->section('content');
                     </div>
                 </div>
 
+                <div class="form-group ">
+                    <label><?= lang('Product.pd_tags') ?></label>
+                    <vposttags :limitlength="2"></vposttags>
+                </div>
+
             </div>
         </div>
         
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <feature-img img-desc="<?= lang('Product.avatar_size') ?>" img-title="<?= lang('Product.image') ?>"></feature-img>
-
-                    <div class="form-group">
-                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
-                        <select class="custom-select form-control" name="cat_id">
-                            <?php foreach ($product_category as $item): ?>
-                                <option value="<?= $item->cat_id ?>" <?= old('cat_id') == $item->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group ">
-                        <label><?= lang('Product.pd_tags') ?></label>
-                        <vposttags :limitlength="2"></vposttags>
-                    </div>
-
                 </div>
             </div>
 

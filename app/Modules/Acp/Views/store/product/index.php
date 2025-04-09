@@ -125,7 +125,7 @@ echo $this->section('content');
                                             <?php
                                             switch ($row->pd_status) {
                                                 case ProductStatusEnum::PUBLISH:
-                                                    echo '<span class="badge badge-info">' . lang('Product.status_'.$row->pd_status) . '</span>';
+                                                    echo '<span class="badge badge-success">' . lang('Product.status_'.$row->pd_status) . '</span>';
                                                     break;
                                                 case ProductStatusEnum::PENDING :
                                                     echo '<span class="badge badge-warning">' . lang('Product.status_'.$row->pd_status) . '</span>';

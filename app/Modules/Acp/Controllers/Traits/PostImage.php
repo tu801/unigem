@@ -46,7 +46,7 @@ trait PostImage {
         $myTime = Time::parse($post->created_at);
 
         $info = [
-            'file_name' => clean_url($postData['title']).'.'.$image->getClientExtension(),
+            'file_name' => clean_url($postData['title']).'-'.time().'.'.$image->getClientExtension(),
             'sub_folder' => UploadFolderEnum::POST . '/' . $myTime->format( 'Y/m')
         ];
 
@@ -72,7 +72,7 @@ trait PostImage {
      */
     public function getUploadRule()
     {
-        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png';
+        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png,image/webp';
         $maxUploadSize = ( isset($this->config->sys['default_max_size']) && $this->config->sys['default_max_size'] > 0 )
             ? $this->config->sys['default_max_size'] * 1024
             : 2048;

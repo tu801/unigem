@@ -25,9 +25,7 @@ trait SetLang {
         }
         else {
             //get default lang
-            $defLang = model(LangModel::class)
-                ->select('id, name, locale, flag, is_default')
-                ->where('is_default', 1)->first();
+            $defLang = model(LangModel::class)->getPrivLang();
 
             $lang = $defLang->locale ?? config('App')->defaultLocale;
             $language->setLocale($lang);

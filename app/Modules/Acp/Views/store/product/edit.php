@@ -150,6 +150,15 @@ echo $this->section('content');
                     </div>
 
                     <div class="form-group">
+                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
+                        <select class="custom-select form-control" name="cat_id">
+                            <?php foreach ($product_category as $item): ?>
+                                <option value="<?= $item->cat_id ?>" <?= $item->cat_id == $itemData->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
                         <div class="input-group" >
                             <input type="number" name="weight" step="any" 
@@ -181,33 +190,19 @@ echo $this->section('content');
                                     value="<?= $itemData->pd_cut_angle ?? 1 ?>">
                         </div>
                     </div>
+
+                    <div class="form-group ">
+                        <label><?= lang('Product.pd_tags') ?></label>
+                        <vposttags :limitlength="2"></vposttags>
+                    </div>
                 </div>
             </div>
 
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <feature-img img-desc="<?= lang('Product.avatar_size') ?>" demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>" img-title="<?= lang('Product.image') ?>"></feature-img>
-
-                    <div class="form-group">
-                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
-                        <select class="custom-select form-control" name="cat_id">
-                            <?php foreach ($product_category as $item): ?>
-                                <option value="<?= $item->cat_id ?>" <?= $item->cat_id == $itemData->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
-                        <select class="custom-select form-control" name="pd_status">
-                            <?php foreach (ProductStatusEnum::toArray() as $item): ?>
-                                <option value="<?= $item ?>" <?= $itemData->pd_status == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-group ">
-                        <label><?= lang('Product.pd_tags') ?></label>
-                        <vposttags :limitlength="2"></vposttags>
-                    </div>
+                    <feature-img img-desc="<?= lang('Product.avatar_size') ?>" 
+                                demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>" 
+                                img-title="<?= lang('Product.image') ?>"></feature-img>
                 </div>
             </div>
 

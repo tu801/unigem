@@ -161,14 +161,16 @@ if (! function_exists('delete_image')) {
      */
     function delete_image($name, $path = '')
     {
+        if (empty($name) ) return;
+
         $config = config('Acp');
-        $path = str_replace(array('..', '/', ':'), '/', $path);
-        $image_path = ($path !== '') ? $config->uploadFolder . "{$path}/" : $config->uploadFolder . "/";
-        $image_thumb_path = $image_path . "thumb/";
+        $path = str_replace(array('..', '/', ':'), '\\', $path);
+        $image_path = ($path !== '') ? $config->uploadPath . "{$path}\\" : $config->uploadPath . "\\";
+        $image_thumb_path = $image_path . "thumb\\";
 
         //delete image file
-        @unlink(realpath($image_path . $name));
-        @unlink(realpath($image_thumb_path . $name));
+        @unlink($image_path . $name);
+        @unlink($image_thumb_path . $name);
     }
 }
 

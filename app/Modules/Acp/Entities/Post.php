@@ -6,15 +6,14 @@
 
 namespace Modules\Acp\Entities;
 
+use App\Models\User\UserModel;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
 use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\CategoryContentModel;
 use Modules\Acp\Models\Blog\MetaDataModel;
 use Modules\Acp\Models\Blog\PostContentModel;
 use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\User\UserModel;
 use Modules\Acp\Traits\SeoMeta;
 
 class Post extends Entity {
@@ -65,7 +64,7 @@ class Post extends Entity {
     public function getAuthor() {
         if ( isset($this->attributes['user_init']) && $this->attributes['user_init'] > 0 ) {
             $this->attributes['author'] = (model(UserModel::class))
-                                        ->select('id, username, avatar, email, created_at')
+                                        ->select('id, username, avatar, created_at')
                                         ->find($this->attributes['user_init']);
         } else $this->attributes['author'] = null;
         return $this->attributes['author'];

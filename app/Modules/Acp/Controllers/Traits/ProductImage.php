@@ -65,7 +65,7 @@ trait ProductImage {
      */
     public function getUploadRule()
     {
-        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png';
+        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png,image/webp';
         $maxUploadSize = ( isset($this->config->sys['default_max_size']) && $this->config->sys['default_max_size'] > 0 )
             ? $this->config->sys['default_max_size'] * 1024
             : 2048;

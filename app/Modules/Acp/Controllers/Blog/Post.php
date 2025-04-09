@@ -209,10 +209,13 @@ class Post extends AcpController
     public function editAction($itemID = 0)
     {
         $this->_data['title'] = lang('Post.edit_title');
-        $item = $this->_model->find($itemID);
+        $item = $this->_model
+            ->join('post_content', 'post_content.post_id = post.id')
+            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->find($itemID);
 
         if ($this->user->id !== $item->user_id) {
-            if (!$this->user->can($this->currentAct)) {
+            if (!$this->user->inGroup('admin', 'superadmin', 'content_manager')) {
                 return redirect()->route('post')->with('error', lang('Post.you_can_not_edit'));
             }
         }
@@ -295,9 +298,9 @@ class Post extends AcpController
             ];
             $this->logAction($logData);
 
-            if (isset($postData['save'])) return redirect()->route('edit_post', [$item->id])->with('message', lang('Post.editSuccess', [$item->title]));
-            else if (isset($postData['save_exit'])) return redirect()->route('post')->with('message', lang('Post.editSuccess', [$item->title]));
-            else if (isset($postData['save_addnew'])) return redirect()->route('add_post')->with('message', lang('Post.editSuccess', [$item->title]));
+            if (isset($postData['save'])) return redirect()->route('edit_post', [$item->id])->with('message', lang('Post.editSuccess', [$postData['title']]));
+            else if (isset($postData['save_exit'])) return redirect()->route('post')->with('message', lang('Post.editSuccess', [$postData['title']]));
+            else if (isset($postData['save_addnew'])) return redirect()->route('add_post')->with('message', lang('Post.editSuccess', [$postData['title']]));
         } else return redirect()->route('post')->with('error', lang('Acp.invalid_request'));
     }
 
