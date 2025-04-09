@@ -195,9 +195,9 @@ class ShopController extends AcpController
         ];
         $this->logAction($logData);
 
-        if ( isset($postData['save']) ) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.addSuccess', [$item->name]));
-        else if ( isset($postData['save_exit']) ) return redirect()->route('list_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
-        else if ( isset($postData['save_addnew']) ) return redirect()->route('add_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
+        if ( isset($postData['save']) ) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.editSuccess', [$item->name]));
+        else if ( isset($postData['save_exit']) ) return redirect()->route('list_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
+        else if ( isset($postData['save_addnew']) ) return redirect()->route('add_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
     }
 
     private function _getValidateRules($old_item)

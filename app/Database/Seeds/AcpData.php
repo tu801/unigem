@@ -12,6 +12,7 @@ class AcpData extends Seeder
         CLI::write("===== Start insert default CMS Data: =====");
         $this->call('App\Database\Seeds\CmsData\AcpData');
         $this->call('App\Database\Seeds\CmsData\DefaultConfigs');
+        $this->call('App\Database\Seeds\CmsData\ShopInfor');
         CLI::write("===== insert default CMS Data Done! =====");
     }
 }

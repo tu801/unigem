@@ -25,6 +25,7 @@ return [
 
     // success message
     'addSuccess'            => 'Đã tạo thành công cửa hàng #{0}',
+    'editSuccess'           => 'Đã sửa thành công thông tin của cửa hàng #{0}',
 
     /******************************************************
      * shipping_config config page

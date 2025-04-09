@@ -13,13 +13,13 @@ class AcpData extends \CodeIgniter\Database\Seeder
 
     public function __construct()
     {
-        $this->userModel = auth()->getProvider();;
+        $this->userModel = auth()->getProvider();
     }
     
     public function run()
     {
         //insert default user data
-        $this->generateDefaultUsers();
+        // $this->generateDefaultUsers();
 
         //get user data
         $user = $this->userModel->findByCredentials(['email' => 'tmtuan801@gmail.com']);
@@ -41,7 +41,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
             'lang_id'           => $lang->id??1,
         ];
         $checkCat = $_catModel->checkSlug($catData['slug'], $lang->id);
-        if ( !isset($checkCat->id) ) { 
+        if ( $checkCat == 0 ) { 
             $_catModel->insertOrUpdate($catData);
             CLI::write("- Insert Default Categories ");
         }
