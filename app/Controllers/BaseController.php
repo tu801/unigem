@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Traits\SetLang;
+use App\Traits\SystemLog;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -21,6 +23,9 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
+    use SetLang;
+    use SystemLog;
+    
     /**
      * Instance of the main Request object.
      *

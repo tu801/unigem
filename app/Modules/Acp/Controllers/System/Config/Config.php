@@ -4,13 +4,13 @@ namespace Modules\Acp\Controllers\System\Config;
 
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Models\AttachModel;
+use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\PostModel;
-use Modules\Acp\Traits\SystemLog;
 
 class Config extends AcpController
 {
-    use SystemLog;
+    protected $_modelPost;
+    
     public function __construct()
     {
         parent::__construct();

@@ -14,14 +14,11 @@ use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Models\Blog\CategoryModel;
 use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\LangModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class MenuController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
 
     protected $_menuItemsModel;
     protected $_categoryModel;

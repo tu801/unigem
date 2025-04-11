@@ -2,6 +2,7 @@
 
 namespace Modules\Acp\Controllers\User;
 
+use App\Entities\User as EntitiesUser;
 use App\Models\User\UserMetaModel;
 use App\Models\User\UserModel;
 use CodeIgniter\Database\Exceptions\DataException;
@@ -9,16 +10,13 @@ use CodeIgniter\HTTP\RedirectResponse;
 use Config\Email;
 use Modules\Acp\Controllers\Traits\UserAvatar;
 use Modules\Acp\Enums\UserTypeEnum;
-use Modules\Acp\Models\PermissionModel;
 use Modules\Acp\Models\Store\Customer\CustomerModel;
 use Config\Services;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Traits\SystemLog;
 
 class User extends AcpController
 {
     use UserAvatar;
-    use SystemLog;
 
     protected $userMetaModel;
     protected $auth_config;
@@ -29,11 +27,9 @@ class User extends AcpController
     {
         parent::__construct();
         if (empty($this->_model)) {
-            $this->_model = new UserModel();
+            $this->_model = model(UserModel::class);
         }
-
-        $this->userMetaModel = new UserMetaModel();
-
+        $this->userMetaModel = model(UserMetaModel::class);
         $this->auth_config = config('Auth');
     }
 
@@ -151,14 +147,7 @@ class User extends AcpController
         }
 
         //good then save the new user
-        $user = new \Modules\Acp\Entities\User($postData);
-
-        if ($this->auth_config->requireActivation !== false) {
-            $user->generateActivateHash();
-        } else {
-            $user->activate();
-        }
-        if (isset($postData['force_pass_reset'])) $user->generateResetHash();
+        $user = new EntitiesUser($postData);
 
         $user_id = $this->_model->insert($user);
         if (! $user_id) {
@@ -166,6 +155,9 @@ class User extends AcpController
         }
         // Success!
         $item = $this->_model->find($user_id);
+
+        if (isset($postData['force_pass_reset'])) $item->forcePasswordReset();
+
         //add user meta
         $this->insertUserMeta($this->request->getPost(), $user_id);
 
@@ -378,14 +370,10 @@ class User extends AcpController
             // Success! Save the new password.
             $user->password         = $postData['password'];
             $user->reset_at         = date('Y-m-d H:i:s');
-            if (isset($postData['force_pass_reset']) && $postData['force_pass_reset'] == 1) $user->generateResetHash();
-            else {
-                $user->force_pass_reset = 0;
-                $user->reset_hash = null;
-                $user->reset_expires = null;
-            }
 
             $this->_model->save($user);
+
+            if (isset($postData['force_pass_reset'])) $user->forcePasswordReset();
 
             //log Action
             $logData = [
@@ -526,7 +514,7 @@ class User extends AcpController
                     $insertData['meta_key'] = $metaKey;
                     $insertData['meta_value'] = $inputData[$metaKey];
                     $insertData['user_id'] = $userID;
-                    $this->_modelUsmeta->insert($insertData);
+                    $this->userMetaModel->insert($insertData);
                 }
             }
         }
@@ -544,16 +532,16 @@ class User extends AcpController
                 if (isset($inputData[$metaKey]) && !empty($inputData[$metaKey])) {
                     //check user meta
                     $where = array("meta_key" => $metaKey, "user_id" => $userID);
-                    $userMeta = $this->_modelUsmeta->getWhere($where)->getFirstRow('array'); //echo $this->_modelUsmeta->getlastQuery();
+                    $userMeta = $this->userMetaModel->getWhere($where)->getFirstRow('array'); //echo $this->_modelUsmeta->getlastQuery();
                     //echo "<pre>";  print_r($userMeta);exit;
                     if (isset($userMeta['id']) && $userMeta['id'] > 0) {
                         $updateData['meta_value'] = $inputData[$metaKey];
-                        $this->_modelUsmeta->update($userMeta['id'], $updateData);
+                        $this->userMetaModel->update($userMeta['id'], $updateData);
                     } else {
                         $insertData['meta_key'] = $metaKey;
                         $insertData['meta_value'] = $inputData[$metaKey];
                         $insertData['user_id'] = $userID;
-                        $this->_modelUsmeta->insert($insertData);
+                        $this->userMetaModel->insert($insertData);
                     }
                 }
             }

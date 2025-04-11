@@ -1,12 +1,10 @@
 <?php
 /**
  * @author tmtuan
- * created Date: 9/29/2021
- * project: fox_cms
+ * created Date: 04/11/2025
  */
 
-namespace Modules\Acp\Traits;
-
+namespace App\Traits;
 
 use Modules\Acp\Models\LangModel;
 use Modules\Acp\Models\LogModel;

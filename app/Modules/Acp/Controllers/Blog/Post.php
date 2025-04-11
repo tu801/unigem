@@ -13,11 +13,9 @@ use Modules\Acp\Enums\PostTypeEnum;
 use Modules\Acp\Models\Blog\PostContentModel;
 use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class Post extends AcpController
 {
-    use SystemLog;
     use deleteItem;
     use PostImage;
 

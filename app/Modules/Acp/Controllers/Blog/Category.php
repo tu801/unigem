@@ -5,12 +5,9 @@ namespace Modules\Acp\Controllers\Blog;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Models\Blog\CategoryContentModel;
 use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Traits\SystemLog;
 
 class Category extends AcpController
 {
-    use SystemLog;
-
     public function __construct()
     {
         parent::__construct();

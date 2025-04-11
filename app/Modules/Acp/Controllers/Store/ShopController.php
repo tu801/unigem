@@ -14,11 +14,9 @@ use Modules\Acp\Entities\Store\Shop;
 use Modules\Acp\Enums\UploadFolderEnum;
 use Modules\Acp\Models\Store\ProvinceModel;
 use Modules\Acp\Models\Store\ShopModel;
-use Modules\Acp\Traits\SystemLog;
 
 class ShopController extends AcpController
 {
-    use SystemLog;
 
     public function __construct()
     {

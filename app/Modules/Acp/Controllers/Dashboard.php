@@ -32,7 +32,9 @@ class Dashboard extends AcpController {
             ->findAll(10);
 
         $this->_data['products'] = model(ProductModel::class)
-            ->select('product.*')
+            ->select('product.*, pdc.pd_name ')
+            ->join('product_content AS pdc', 'pdc.product_id = product.id')
+            ->where('pdc.lang_id', $this->_data['curLang']->id)
             ->orderBy('product.id DESC')
             ->findAll(10);
 

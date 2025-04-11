@@ -21,11 +21,10 @@ use Modules\Acp\Models\Blog\CategoryModel;
 use Modules\Acp\Models\Store\Product\ProductContentModel;
 use Modules\Acp\Models\Store\Product\ProductModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class ProductController extends AcpController
 {
-    use ProductImage, SystemLog, deleteItem;
+    use ProductImage, deleteItem;
     protected $_categoryModel;
     protected $_attachMetaModel;
     protected $_productContentModel;

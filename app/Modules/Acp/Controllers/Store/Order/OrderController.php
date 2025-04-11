@@ -29,12 +29,10 @@ use Modules\Acp\Models\Store\Product\ProductModel;
 use Modules\Acp\Models\Store\Promotion\PromotionVoucherModel;
 use Modules\Acp\Models\Store\ShopModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class OrderController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
 
     protected $db;
     protected $_shopModel;

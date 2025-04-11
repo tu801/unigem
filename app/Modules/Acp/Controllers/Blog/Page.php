@@ -15,11 +15,9 @@ use Modules\Acp\Models\Blog\PostContentModel;
 use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Models\LangModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class Page extends AcpController {
     use deleteItem;
-    use SystemLog;
     use PostImage;
 
     public function __construct()

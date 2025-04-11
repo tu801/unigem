@@ -24,12 +24,10 @@ use Modules\Acp\Models\Store\ProvinceModel;
 use Modules\Acp\Models\Store\WardModel;
 use Modules\Acp\Models\User\UserModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class CustomerController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
     use CustomerAvatar;
 
     protected $db;
