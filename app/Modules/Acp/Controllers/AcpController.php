@@ -7,19 +7,17 @@ namespace Modules\Acp\Controllers;
  */
 
 use App\Traits\SetLang;
+use App\Traits\SysConfig;
 use App\Traits\SystemLog;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Controller;
 use Modules\Acp\Models\LangModel;
-use Modules\Acp\Traits\SysConfig;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 
 class AcpController extends Controller
 {
-    use SysConfig;
-    use SetLang;
-    use SystemLog;
+    use SysConfig, SetLang, SystemLog;
 
     protected $_layout = "layout";
     protected $_data = [];
