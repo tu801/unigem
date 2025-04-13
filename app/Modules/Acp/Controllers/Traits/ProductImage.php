@@ -2,7 +2,7 @@
 namespace Modules\Acp\Controllers\Traits;
 
 use CodeIgniter\I18n\Time;
-use Modules\Acp\Enums\UploadFolderEnum;
+use App\Enums\UploadFolderEnum;
 
 trait ProductImage {
 

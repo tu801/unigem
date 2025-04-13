@@ -1,5 +1,5 @@
 <?php
-$_catModel = model(\Modules\Acp\Models\Blog\CategoryModel::class);
+$_catModel = model(\App\Models\Blog\CategoryModel::class);
 if ( isset($productMenu-> id) ) :
     foreach ($productMenu->menu_items as $menuItem ) :
         if ( count($menuItem->children) ) :
@@ -18,7 +18,7 @@ if ( isset($productMenu-> id) ) :
                             ->where('lang_id', $locale->id)
                             ->find($childItem->related_id);
 
-                        if ( $catData->cat_type == \Modules\Acp\Enums\CategoryEnum::CAT_TYPE_PRODUCT) {
+                        if ( $catData->cat_type == \App\Enums\CategoryEnum::CAT_TYPE_PRODUCT) {
                             $catUrl = base_url(route_to('product_category', $catData->slug));
                         } else {
                             $catUrl = base_url($catData->slug);

@@ -2,8 +2,8 @@
 namespace App\Database\Seeds\CmsData;
 
 use CodeIgniter\CLI\CLI;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\LangModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\LangModel;
 use Faker\Factory;
 use CodeIgniter\Shield\Entities\User;
 

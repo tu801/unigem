@@ -6,8 +6,8 @@
 
 namespace Modules\Acp\Libraries;
 
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\User\UserModel;
+use App\Models\AttachModel;
+use App\Models\User\UserModel;
 
 class Crawler
 {

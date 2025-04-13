@@ -73,10 +73,10 @@ echo $this->section('content')
                                     <?php
                                     switch ($row->status) {
                                         case 0:
-                                            echo '<span class="badge badge-info">'.lang('Shop.status_'.\Modules\Acp\Enums\Store\ShopEnum::_getStatusKey(0)).'</span>';
+                                            echo '<span class="badge badge-info">'.lang('Shop.status_'.\App\Enums\Store\ShopEnum::_getStatusKey(0)).'</span>';
                                             break;
                                         case 1:
-                                            echo '<span class="badge badge-success">'.lang('Shop.status_'.\Modules\Acp\Enums\Store\ShopEnum::_getStatusKey(1)).'</span>';
+                                            echo '<span class="badge badge-success">'.lang('Shop.status_'.\App\Enums\Store\ShopEnum::_getStatusKey(1)).'</span>';
                                             break;
                                     }
                                     ?>

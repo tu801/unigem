@@ -16,13 +16,13 @@ use Libraries\Collection\Collection;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\CustomerAvatar;
 use Modules\Acp\Entities\User;
-use Modules\Acp\Enums\Store\CustomerActiveEnum;
-use Modules\Acp\Enums\UserTypeEnum;
-use Modules\Acp\Models\Store\Customer\CustomerModel;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\WardModel;
-use Modules\Acp\Models\User\UserModel;
+use App\Enums\Store\CustomerActiveEnum;
+use App\Enums\UserTypeEnum;
+use App\Models\Store\Customer\CustomerModel;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\WardModel;
+use App\Models\User\UserModel;
 use Modules\Acp\Traits\deleteItem;
 
 class CustomerController extends AcpController

@@ -7,13 +7,13 @@
 namespace Modules\Acp\Controllers\Blog;
 
 use Modules\Acp\Entities\MenuItem;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\MenuItemsModel;
-use Modules\Acp\Models\Blog\MenuModel;
+use App\Enums\PostTypeEnum;
+use App\Models\Blog\MenuItemsModel;
+use App\Models\Blog\MenuModel;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\ConfigModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\Blog\PostModel;
+use App\Models\ConfigModel;
 use Modules\Acp\Traits\deleteItem;
 
 class MenuController extends AcpController

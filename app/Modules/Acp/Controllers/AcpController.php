@@ -11,7 +11,7 @@ use App\Traits\SysConfig;
 use App\Traits\SystemLog;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Controller;
-use Modules\Acp\Models\LangModel;
+use App\Models\LangModel;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 

@@ -3,9 +3,9 @@
 namespace App\Cells;
 
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Models\Store\Customer\CustomerModel;
-use Modules\Acp\Models\Store\Order\OrderModel;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Models\Store\Customer\CustomerModel;
+use App\Models\Store\Order\OrderModel;
 
 class EcommerceOverviewCell extends Cell
 {

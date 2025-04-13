@@ -10,10 +10,10 @@ use App\Models\User\UserModel;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\MetaDataModel;
-use Modules\Acp\Models\Blog\PostContentModel;
-use Modules\Acp\Models\Blog\PostModel;
+use App\Enums\PostTypeEnum;
+use App\Models\Blog\MetaDataModel;
+use App\Models\Blog\PostContentModel;
+use App\Models\Blog\PostModel;
 use Modules\Acp\Traits\SeoMeta;
 
 class Post extends Entity {

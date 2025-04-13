@@ -9,11 +9,11 @@ namespace Modules\Acp\Controllers\System\Config;
 
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Enums\ThemeOptionEnum;
-use Modules\Acp\Enums\UploadFolderEnum;
+use App\Enums\ThemeOptionEnum;
+use App\Enums\UploadFolderEnum;
 use Modules\Acp\Libraries\ThemeOptions;
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\ConfigModel;
+use App\Models\AttachModel;
+use App\Models\ConfigModel;
 
 class ThemeOptionController extends AcpController
 {

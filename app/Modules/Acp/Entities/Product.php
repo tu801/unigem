@@ -5,10 +5,10 @@ namespace Modules\Acp\Entities;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
-use Modules\Acp\Enums\UploadFolderEnum;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Store\Product\ProductManufacturer;
+use App\Enums\UploadFolderEnum;
+use App\Models\AttachMetaModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\Store\Product\ProductManufacturer;
 
 class Product extends Entity
 {

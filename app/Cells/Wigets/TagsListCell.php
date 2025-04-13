@@ -8,7 +8,7 @@
 namespace App\Cells\Wigets;
 
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Models\Blog\TagsModel;
+use App\Models\Blog\TagsModel;
 
 class TagsListCell extends Cell
 {

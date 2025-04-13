@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');

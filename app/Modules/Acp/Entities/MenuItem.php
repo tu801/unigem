@@ -9,8 +9,8 @@ namespace Modules\Acp\Entities;
 
 
 use CodeIgniter\Entity\Entity;
-use Modules\Acp\Enums\CategoryEnum;
-use Modules\Acp\Models\Blog\CategoryModel;
+use App\Enums\CategoryEnum;
+use App\Models\Blog\CategoryModel;
 
 class MenuItem extends Entity
 {

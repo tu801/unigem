@@ -9,8 +9,8 @@ use CodeIgniter\Database\Exceptions\DataException;
 use CodeIgniter\HTTP\RedirectResponse;
 use Config\Email;
 use Modules\Acp\Controllers\Traits\UserAvatar;
-use Modules\Acp\Enums\UserTypeEnum;
-use Modules\Acp\Models\Store\Customer\CustomerModel;
+use App\Enums\UserTypeEnum;
+use App\Models\Store\Customer\CustomerModel;
 use Config\Services;
 use Modules\Acp\Controllers\AcpController;
 

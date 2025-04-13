@@ -9,11 +9,11 @@ namespace Modules\Acp\Controllers\Store;
 
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Enums\BankingPaymentEnum;
-use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\WardModel;
+use App\Enums\BankingPaymentEnum;
+use App\Models\ConfigModel;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\WardModel;
 
 class AjaxController extends AcpController
 {

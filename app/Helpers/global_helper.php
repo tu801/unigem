@@ -5,8 +5,8 @@
  * created Date: 12-Mar-21
  */
 
-use Modules\Acp\Models\LangModel;
-use Modules\Acp\Models\LogModel;
+use App\Models\LangModel;
+use App\Models\LogModel;
 
 if (!function_exists('insert_vue')) {
     /**

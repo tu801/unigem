@@ -2,7 +2,7 @@
 namespace App\Traits;
 
 use CodeIgniter\Config\Services;
-use Modules\Acp\Models\LangModel;
+use App\Models\LangModel;
 
 /**
  * Author: tmtuan

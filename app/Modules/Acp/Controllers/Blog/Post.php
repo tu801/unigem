@@ -9,9 +9,9 @@ namespace Modules\Acp\Controllers\Blog;
 
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\PostContentModel;
-use Modules\Acp\Models\Blog\PostModel;
+use App\Enums\PostTypeEnum;
+use App\Models\Blog\PostContentModel;
+use App\Models\Blog\PostModel;
 use Modules\Acp\Traits\deleteItem;
 
 class Post extends AcpController

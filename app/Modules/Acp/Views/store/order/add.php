@@ -1,9 +1,9 @@
 <?php
 
-use Modules\Acp\Enums\Store\Order\EDeliveryType;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Enums\Store\Order\EPaymentMethod;
-use Modules\Acp\Enums\Store\Order\EPaymentStatus;
+use App\Enums\Store\Order\EDeliveryType;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Enums\Store\Order\EPaymentMethod;
+use App\Enums\Store\Order\EPaymentStatus;
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');

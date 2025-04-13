@@ -91,7 +91,7 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
                 <div class="form-group">
                     <label><?= lang('Post.category') ?> <span class="text-danger">*</span></label>
                     <?php
-                    $_cats = model(\Modules\Acp\Models\Blog\CategoryModel::class);
+                    $_cats = model(\App\Models\Blog\CategoryModel::class);
                     $catData = $_cats->where('cat_type', 'post')
                         ->join('category_content', 'category_content.cat_id = category.id')
                         ->where('lang_id', $curLang->id)

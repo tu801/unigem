@@ -7,7 +7,7 @@
 namespace Modules\Acp\Controllers\System;
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\LogModel;
+use App\Models\LogModel;
 use Modules\Auth\Models\LoginModel;
 
 class Log extends AcpController

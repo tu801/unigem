@@ -2,10 +2,10 @@
 namespace Modules\Acp\Entities\Store\Customer;
 
 use CodeIgniter\Entity\Entity;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\WardModel;
-use Modules\Acp\Models\User\UserModel;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\WardModel;
+use App\Models\User\UserModel;
 
 class Customer extends Entity
 {

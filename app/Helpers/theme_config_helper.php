@@ -80,8 +80,8 @@ if (!function_exists('get_menu')) {
 
     function get_menu($location = null)
     {
-        $menuModel = model(\Modules\Acp\Models\Blog\MenuModel::class);
-        $menuItemModel = model(\Modules\Acp\Models\Blog\MenuItemsModel::class);
+        $menuModel = model(\App\Models\Blog\MenuModel::class);
+        $menuItemModel = model(\App\Models\Blog\MenuItemsModel::class);
 
         if ( empty($location) ) {
             $menu = $menuModel

@@ -3,7 +3,7 @@
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
-use Modules\Acp\Enums\UserTypeEnum;
+use App\Enums\UserTypeEnum;
 
 class CmsTables extends Migration
 {

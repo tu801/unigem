@@ -10,10 +10,10 @@ namespace Modules\Acp\Entities\Store;
 
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
-use Modules\Acp\Enums\UploadFolderEnum;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\WardModel;
+use App\Enums\UploadFolderEnum;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\WardModel;
 
 class Shop extends Entity
 {

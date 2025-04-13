@@ -4,8 +4,8 @@ namespace App\Cells\Customer;
 
 use App\Models\CusModel;
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Models\Store\Order\OrderModel;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Models\Store\Order\OrderModel;
 
 class RecentOrdersCell extends Cell
 {

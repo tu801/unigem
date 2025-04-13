@@ -2,10 +2,10 @@
 
 namespace App\Database\Seeds\CmsData;
 
-use Modules\Acp\Enums\Store\ShopEnum;
+use App\Enums\Store\ShopEnum;
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Database\Seeder;
-use Modules\Acp\Models\ConfigModel;
+use App\Models\ConfigModel;
 
 class DefaultConfigs extends Seeder
 {

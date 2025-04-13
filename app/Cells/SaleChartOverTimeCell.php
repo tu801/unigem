@@ -4,9 +4,9 @@ namespace App\Cells;
 
 use CodeIgniter\View\Cells\Cell;
 use Libraries\Collection\Collection;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Enums\Store\Order\EPaymentStatus;
-use Modules\Acp\Models\Store\Order\OrderModel;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Enums\Store\Order\EPaymentStatus;
+use App\Models\Store\Order\OrderModel;
 
 class SaleChartOverTimeCell extends Cell
 {

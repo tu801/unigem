@@ -6,8 +6,8 @@
 
 namespace App\Traits;
 
-use Modules\Acp\Models\LangModel;
-use Modules\Acp\Models\LogModel;
+use App\Models\LangModel;
+use App\Models\LogModel;
 
 trait SystemLog
 {

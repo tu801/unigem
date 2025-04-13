@@ -26,7 +26,7 @@ use CodeIgniter\Shield\Authentication\Passwords\NothingPersonalValidator;
 use CodeIgniter\Shield\Authentication\Passwords\PwnedValidator;
 use CodeIgniter\Shield\Authentication\Passwords\ValidatorInterface;
 use CodeIgniter\Shield\Models\UserModel;
-use Modules\Acp\Enums\UserTypeEnum;
+use App\Enums\UserTypeEnum;
 
 class Auth extends ShieldAuth
 {

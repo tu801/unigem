@@ -7,7 +7,7 @@
 namespace Modules\Acp\Controllers\Blog;
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\Blog\TagsModel;
+use App\Models\Blog\TagsModel;
 
 class Tags extends AcpController
 {

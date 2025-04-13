@@ -10,7 +10,7 @@ use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Modules\Acp\Enums\UserTypeEnum;
+use App\Enums\UserTypeEnum;
 use Modules\Acp\Libraries\ThemeOptions;
 use Psr\Log\LoggerInterface;
 

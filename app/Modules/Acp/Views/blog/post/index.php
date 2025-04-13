@@ -43,7 +43,7 @@ echo $this->section('content')
                             <div class="row">
                                 <div class="col-sm-5">
                                     <?php
-                                    $catModel = new Modules\Acp\Models\Blog\CategoryModel();
+                                    $catModel = new App\Models\Blog\CategoryModel();
                                     $catData = $catModel->where('cat_type', 'post')
                                         ->join('category_content', 'category_content.cat_id = category.id')
                                         ->where('lang_id', $curLang->id)

@@ -9,9 +9,9 @@ namespace App\Cells\Product;
 
 
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
-use Modules\Acp\Models\Blog\CategoryContentModel;
-use Modules\Acp\Models\Store\Product\ProductModel;
+use App\Enums\Store\Product\ProductStatusEnum;
+use App\Models\Blog\CategoryContentModel;
+use App\Models\Store\Product\ProductModel;
 
 class TopRankingCell extends Cell
 {

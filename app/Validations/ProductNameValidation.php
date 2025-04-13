@@ -3,7 +3,7 @@
 namespace App\Validations;
 
 use Config\Database;
-use Modules\Acp\Models\Store\Product\ProductContentModel;
+use App\Models\Store\Product\ProductContentModel;
 use CodeIgniter\Config\Services;
 
 class ProductNameValidation

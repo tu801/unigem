@@ -5,7 +5,7 @@
  */
 namespace App\Traits;
 
-use Modules\Acp\Models\ConfigModel;
+use App\Models\ConfigModel;
 
 trait SysConfig {
 

@@ -7,12 +7,12 @@
 namespace Modules\Acp\Libraries;
 
 use CodeIgniter\Config\Services;
-use Modules\Acp\Enums\CategoryEnum;
-use Modules\Acp\Enums\ThemeOptionEnum;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\ConfigModel;
+use App\Enums\CategoryEnum;
+use App\Enums\ThemeOptionEnum;
+use App\Models\AttachMetaModel;
+use App\Models\AttachModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\ConfigModel;
 
 class ThemeOptions
 {

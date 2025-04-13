@@ -11,9 +11,9 @@ namespace Modules\Acp\Controllers\Store;
 use CodeIgniter\I18n\Time;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Entities\Store\Shop;
-use Modules\Acp\Enums\UploadFolderEnum;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\ShopModel;
+use App\Enums\UploadFolderEnum;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\ShopModel;
 
 class ShopController extends AcpController
 {

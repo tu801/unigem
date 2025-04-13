@@ -8,10 +8,10 @@ namespace Modules\Acp\Entities;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\Blog\CategoryContentModel;
-use Modules\Acp\Models\Blog\MetaDataModel;
+use App\Models\AttachMetaModel;
+use App\Models\AttachModel;
+use App\Models\Blog\CategoryContentModel;
+use App\Models\Blog\MetaDataModel;
 
 class Category extends Entity {
 

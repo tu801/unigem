@@ -10,10 +10,10 @@ use CodeIgniter\I18n\Time;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
 use Modules\Acp\Entities\Post;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\PostContentModel;
-use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\LangModel;
+use App\Enums\PostTypeEnum;
+use App\Models\Blog\PostContentModel;
+use App\Models\Blog\PostModel;
+use App\Models\LangModel;
 use Modules\Acp\Traits\deleteItem;
 
 class Page extends AcpController {

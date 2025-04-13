@@ -8,7 +8,7 @@
 namespace Modules\Acp\Entities\Traits;
 
 
-use Modules\Acp\Models\PermissionModel;
+use App\Models\PermissionModel;
 
 
 

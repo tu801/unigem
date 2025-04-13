@@ -4,11 +4,11 @@ namespace App\Database\Seeds\CmsData;
 
 use CodeIgniter\CLI\CLI;
 use CodeIgniter\Database\Seeder;
-use Modules\Acp\Models\Store\ShopModel;
+use App\Models\Store\ShopModel;
 use Faker\Factory;
-use Modules\Acp\Enums\CategoryEnum;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\LangModel;
+use App\Enums\CategoryEnum;
+use App\Models\Blog\CategoryModel;
+use App\Models\LangModel;
 
 class ShopInfor extends Seeder
 {

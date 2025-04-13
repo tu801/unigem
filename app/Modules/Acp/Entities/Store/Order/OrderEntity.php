@@ -2,11 +2,11 @@
 namespace Modules\Acp\Entities\Store\Order;
 
 use CodeIgniter\Entity\Entity;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\ShopModel;
-use Modules\Acp\Models\Store\WardModel;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\ShopModel;
+use App\Models\Store\WardModel;
 
 class OrderEntity extends Entity
 {

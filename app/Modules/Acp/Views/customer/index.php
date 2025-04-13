@@ -65,7 +65,7 @@ echo $this->section('content')
                                 <td><?=$row->cus_email ?? ''?></td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2"  href="<?=route_to("edit_customer", $row->id)?>"><i class="fas fa-edit"></i></a>
-                                    <?php if ( $login_user->root_user && $row->active == \Modules\Acp\Enums\Store\CustomerActiveEnum::INACTIVE ) : ?>
+                                    <?php if ( $login_user->root_user && $row->active == \App\Enums\Store\CustomerActiveEnum::INACTIVE ) : ?>
                                         <a class="btn btn-success btn-sm mb-2" title="Activate Customer" href="<?=route_to("active_customer", $row->id)?>"><i class="fa fa-lock-open"></i></a>
                                     <?php endif; ?>
                                     <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-delete="<?=route_to("remove_customer", $row->id)?>"

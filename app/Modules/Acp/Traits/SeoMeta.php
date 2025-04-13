@@ -6,7 +6,7 @@
 
 namespace Modules\Acp\Traits;
 
-use Modules\Acp\Models\Blog\MetaDataModel;
+use App\Models\Blog\MetaDataModel;
 
 trait SeoMeta {
     /**

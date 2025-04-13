@@ -10,8 +10,8 @@ namespace App\Cells\Wigets;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Enums\CategoryEnum;
-use Modules\Acp\Models\Blog\CategoryModel;
+use App\Enums\CategoryEnum;
+use App\Models\Blog\CategoryModel;
 
 class CategoryListCell extends Cell
 {

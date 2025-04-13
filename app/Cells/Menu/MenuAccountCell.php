@@ -4,7 +4,7 @@ namespace App\Cells\Menu;
 
 use App\Models\CusModel;
 use CodeIgniter\View\Cells\Cell;
-use Modules\Acp\Enums\UserTypeEnum;
+use App\Enums\UserTypeEnum;
 
 class MenuAccountCell extends Cell
 {

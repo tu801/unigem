@@ -14,12 +14,12 @@ use Config\Database;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\ProductImage;
 use Modules\Acp\Entities\Product;
-use Modules\Acp\Enums\Store\Product\ProductAttachMetaEnum;
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Store\Product\ProductContentModel;
-use Modules\Acp\Models\Store\Product\ProductModel;
+use App\Enums\Store\Product\ProductAttachMetaEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
+use App\Models\AttachMetaModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\Store\Product\ProductContentModel;
+use App\Models\Store\Product\ProductModel;
 use Modules\Acp\Traits\deleteItem;
 
 class ProductController extends AcpController

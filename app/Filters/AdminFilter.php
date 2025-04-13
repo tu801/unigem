@@ -11,7 +11,7 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Modules\Acp\Enums\UserTypeEnum;
+use App\Enums\UserTypeEnum;
 use CodeIgniter\HTTP\IncomingRequest;
 
 class AdminFilter implements FilterInterface
