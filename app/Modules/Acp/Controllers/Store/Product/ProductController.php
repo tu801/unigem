@@ -13,7 +13,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 use Config\Database;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\ProductImage;
-use App\Entities\Product;
+use App\Entities\Store\Product;
 use App\Enums\Store\Product\ProductAttachMetaEnum;
 use App\Enums\Store\Product\ProductStatusEnum;
 use App\Models\AttachMetaModel;

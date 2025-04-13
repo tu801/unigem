@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Enums\Store\Product\ProductStatusEnum;
 use App\Libraries\SeoMeta\SeoMetaCell;
+use App\Models\Store\Product\ProductModel;
 
 class Home extends BaseController
 {
@@ -11,7 +13,7 @@ class Home extends BaseController
     public function __construct()
     {
         parent::__construct();
-        
+
         //SEOData config
         SeoMetaCell::setCanonical();
         SeoMetaCell::setOgType();
@@ -30,6 +32,15 @@ class Home extends BaseController
 
     public function index(): string
     {
+        $productList = model(ProductModel::class)
+                    ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.price, pdc.price_discount ')
+                    ->join('product_content AS pdc', 'pdc.product_id = product.id')
+                    ->where('pdc.lang_id', $this->_data['curLang']->id)
+                    ->orderBy('product.id DESC')
+                    ->where('pd_status', ProductStatusEnum::PUBLISH)
+                    ->findAll(8);
+
+        $this->_data['productList'] = $productList;
         return $this->_render('home/index', $this->_data);
     }
 }

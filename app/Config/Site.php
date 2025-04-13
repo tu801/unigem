@@ -18,6 +18,7 @@ class Site extends BaseConfig {
     //--------------------------------------------------------------------
     // Layout for the views to extend
     //--------------------------------------------------------------------
+    public $theme_name = "unigem";
     public $viewLayout = 'master';
     public $templatePath = "themes/";
     public $noimg = "images/no-image.svg";

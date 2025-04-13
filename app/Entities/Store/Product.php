@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entities;
+namespace App\Entities\Store;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
@@ -8,7 +8,6 @@ use CodeIgniter\I18n\Time;
 use App\Enums\UploadFolderEnum;
 use App\Models\AttachMetaModel;
 use App\Models\Blog\CategoryModel;
-use App\Models\Store\Product\ProductManufacturer;
 
 class Product extends Entity
 {
@@ -59,16 +58,6 @@ class Product extends Entity
         return $catModel->getById($this->cat_id, $session->lang->id, 'product');
     }
 
-    public function getBrand()
-    {
-        if (empty($this->id)) {
-            throw new \RuntimeException(lang('Product.product_must_be_created'));
-        }
-        $_productManufacturerModel = model(ProductManufacturer::class);
-        return $_productManufacturerModel->where('manufacturer_id', $this->manufacture_id)->first();
-    }
-
-
     public function getUrl() {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Product.product_must_be_created'));
@@ -76,4 +65,5 @@ class Product extends Entity
         $this->url = base_url('product/'.$this->attributes['pd_slug']);
         return $this->url;
     }
+
 }

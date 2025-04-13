@@ -11,7 +11,9 @@ echo $this->section('content');
 <!-- //Categories -->
 
 <!-- Products -->
-<?= view($configs->view. '\components\home\products')?>
+<?php if ( !empty($productList) ) : ?>
+<?= view($configs->view. '\components\home\products', ['productList' => $productList])?>
+<?php endif; ?>
 <!-- //Products -->
 
 <!-- Collection -->

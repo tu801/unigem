@@ -50,7 +50,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = ['global', 'theme_config'];
+    protected $helpers = ['global', 'theme_config', 'ecom'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -94,7 +94,7 @@ abstract class BaseController extends Controller
         $themeOption = new ThemeOptions();
         $this->_data['themeOption'] = $themeOption->getThemeOptions();
 
-        $theme = $this->config->sys['default_theme_name'] ?? 'unigem';
+        $theme = $this->config->theme_name ?? $this->config->sys['default_theme_name'];
         $this->config->templatePath .= $theme;
         $this->config->noimg = "{$theme}/".$this->config->noimg;
         $this->config->view = 'App\Views';

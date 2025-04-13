@@ -9,7 +9,7 @@ namespace App\Models\Store\Product;
 
 
 use CodeIgniter\Model;
-use App\Entities\Product;
+use App\Entities\Store\Product;
 
 class ProductModel extends Model
 {

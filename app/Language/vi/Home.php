@@ -23,4 +23,7 @@ return [
     'search_btn'                        => 'Tìm Kiếm',
     'search_box_placeholder'            => 'Tìm sản phẩm',
     'mobile_search_text'                => 'Bạn đang tìm sản phẩm gì?',
+
+    'best_sell_product'                 => 'Sản phẩm bán chạy',
+    'best_sell_view_all_btn'            => 'Xem tất cả',
 ];
