@@ -26,17 +26,21 @@ return [
     'item_seo_open_graph_image'     => 'Ảnh SEO cho Open Graph Protocol',
     'item_copyright'                => 'bản quyền',
     'item_copyright_desc'           => 'Copyright on footer of site',
-    'item_hotline'                  => 'Đường dây nóng',
+    'item_hotline'                  => 'Số điện thoại',
     'item_address'                  => 'Địa chỉ',
     'item_email'                    => 'Email',
+    'item_mst'                      => 'Mã số thuế',
     'item_facebook_link'            => 'Liên Kết Facebook',
     'item_youtube_link'             => 'Liên Kết Youtube',
     'item_tiktok_link'              => 'Liên Kết Tiktok',
+    'item_instagram_link'           => 'Liên Kết Instagram',
+    'item_twitter_x_link'           => 'Liên Kết Twitter X',
+    'item_pinterest_link'           => 'Liên Kết Pinterest',
 
     // Main slider
     'item_main_slider'              => 'Home Slider',
     'slider_image_selector'         => 'Upload ảnh cho Slider',
-    'slider_image_info'             => 'Hình slider phải có kích thước tối thiểu là full HD ( 974x407px )',
+    'slider_image_info'             => 'Hình slider phải có kích thước tối thiểu là full HD ( 1800x785px )',
 
     // Utility block
     'item_ship_title'               => 'Tiêu đề block 1',

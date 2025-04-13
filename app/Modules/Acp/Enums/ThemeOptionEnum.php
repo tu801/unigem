@@ -60,6 +60,9 @@ final class ThemeOptionEnum extends BaseEnum
         'email' => [
             'input' => 'text',
         ],
+        'mst' => [
+            'input' => 'text',
+        ],
         'facebook_link' => [
             'input' => 'text',
         ],
@@ -67,6 +70,15 @@ final class ThemeOptionEnum extends BaseEnum
             'input' => 'text',
         ],
         'tiktok_link' => [
+            'input' => 'text',
+        ],
+        'instagram_link' => [
+            'input' => 'text',
+        ],
+        'twitter_x_link' => [
+            'input' => 'text',
+        ],
+        'pinterest_link' => [
             'input' => 'text',
         ],
     ];

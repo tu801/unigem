@@ -3,7 +3,7 @@ echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
 <!-- slider -->
-<?= view($configs->view . '\templates\slider') ?>
+<?= view($configs->view . '\components\home\slider') ?>
 <!-- //slider -->
 
 <!-- Categories -->
