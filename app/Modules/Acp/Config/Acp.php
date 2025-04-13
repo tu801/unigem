@@ -8,7 +8,7 @@ class Acp extends BaseConfig
 {
     public $uploadPath =  WRITEPATH . "uploads" . DIRECTORY_SEPARATOR;
     public $uploadFolder =  "uploads";
-    public $imageThumb = ['height' => 433, 'width' => 770];
+    public $imageThumb = ['height' => 340, 'width' => 340];
     public $adminSlug = ADMIN_AREA;
 
     //--------------------------------------------------------------------

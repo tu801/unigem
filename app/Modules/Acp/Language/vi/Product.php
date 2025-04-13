@@ -10,7 +10,7 @@ return [
     'pd_sku'                  => 'Mã SKU',
     'pd_slug'                 => 'Slug',
     'image'                   => 'Hình đại diện',
-    'avatar_size'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 1280 x 720pixel',
+    'avatar_size'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 620 x 620pixel',
     'pd_tags'                 => 'Thẻ',
     'pd_origin_price'         => 'Giá gốc',
     'pd_price'                => 'Giá bán',
