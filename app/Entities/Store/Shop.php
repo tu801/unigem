@@ -5,7 +5,7 @@
  * created Date: 10/25/2023
  */
 
-namespace Modules\Acp\Entities\Store;
+namespace App\Entities\Store;
 
 
 use CodeIgniter\Entity\Entity;

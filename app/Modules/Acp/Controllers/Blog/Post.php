@@ -11,7 +11,8 @@ use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
 use App\Enums\PostTypeEnum;
 use App\Models\Blog\PostContentModel;
-use App\Models\Blog\PostModel;
+use CodeIgniter\HTTP\RedirectResponse;
+use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Traits\deleteItem;
 
 class Post extends AcpController
@@ -135,7 +136,7 @@ class Post extends AcpController
 
         //good then save the new post
         $postData['slug'] = $slug;
-        $newPost = new \Modules\Acp\Entities\Post($postData);
+        $newPost = new \App\Entities\Post($postData);
 
         if ($newPost->post_status === 'publish') $newPost->publish_date = date('Y-m-d H:i:s');
         if (isset($postData['tagcloud']) && !empty($postData['tagcloud']))  $newPost->tags = json_encode($postData['tagcloud']);

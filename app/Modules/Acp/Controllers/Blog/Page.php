@@ -9,10 +9,10 @@ namespace Modules\Acp\Controllers\Blog;
 use CodeIgniter\I18n\Time;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
-use Modules\Acp\Entities\Post;
+use App\Entities\Post;
 use App\Enums\PostTypeEnum;
 use App\Models\Blog\PostContentModel;
-use App\Models\Blog\PostModel;
+use Modules\Acp\Models\Blog\PostModel;
 use App\Models\LangModel;
 use Modules\Acp\Traits\deleteItem;
 
@@ -145,7 +145,7 @@ class Page extends AcpController {
         $postData = $this->request->getPost();
 
         if ( $this->user->id !== $item->user_id) {
-            if ( !$this->user->can($this->currentAct) ) {
+            if ( !$this->user->inGroup('admin', 'superadmin', 'content_manager') ) {
                 return redirect()->route('page')->with('error', lang('Post.you_can_not_edit'));
             }
         }

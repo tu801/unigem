@@ -4,7 +4,7 @@
  * created Date: 13-Oct-20
  */
 
-namespace Modules\Acp\Entities;
+namespace App\Entities;
 
 use App\Models\User\UserModel;
 use CodeIgniter\Config\Services;

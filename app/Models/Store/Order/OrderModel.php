@@ -9,7 +9,7 @@ namespace App\Models\Store\Order;
 
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\Store\Order\OrderEntity;
+use App\Entities\Store\Order\OrderEntity;
 
 class OrderModel extends Model
 {

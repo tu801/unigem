@@ -4,7 +4,7 @@
  * created Date: 18-Oct-20
  */
 
-namespace Modules\Acp\Entities;
+namespace App\Entities;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;

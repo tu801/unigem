@@ -5,7 +5,7 @@
  * Project: Unigem
  **/
 
-namespace Modules\Acp\Entities;
+namespace App\Entities;
 
 
 use CodeIgniter\Entity\Entity;

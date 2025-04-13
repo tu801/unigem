@@ -10,7 +10,7 @@ namespace Modules\Acp\Controllers\Store;
 
 use CodeIgniter\I18n\Time;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Entities\Store\Shop;
+use App\Entities\Store\Shop;
 use App\Enums\UploadFolderEnum;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\ShopModel;

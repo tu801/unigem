@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Acp\Entities\Store\Order;
+namespace App\Entities\Store\Order;
 
 use CodeIgniter\Entity\Entity;
 use App\Enums\Store\Order\EOrderStatus;

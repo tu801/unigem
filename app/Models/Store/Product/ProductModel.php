@@ -9,7 +9,7 @@ namespace App\Models\Store\Product;
 
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\Product;
+use App\Entities\Product;
 
 class ProductModel extends Model
 {
@@ -52,14 +52,5 @@ class ProductModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * Recover soft delete post
-     */
-    public function recover($id) {
-        $sql = "UPDATE `{$this->table}` SET `deleted_at` = NULL WHERE `id` = {$id}";
-        if ( $this->db->query($sql) ) return true;
-        else return false;
-    }
 
 }

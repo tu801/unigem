@@ -1,15 +1,13 @@
 <?php
 /**
  * @author tmtuan
- * created Date: 10/28/2021
- * project: foxcms
+ * created Date: 13-Apr-2025
  */
 
 namespace App\Models\Blog;
 
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\Post;
 
 class PostContentModel extends Model
 {

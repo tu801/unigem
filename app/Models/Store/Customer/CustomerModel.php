@@ -8,7 +8,7 @@ namespace App\Models\Store\Customer;
 
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\Store\Customer\Customer;
+use App\Entities\Store\Customer\Customer;
 
 class CustomerModel extends Model
 {

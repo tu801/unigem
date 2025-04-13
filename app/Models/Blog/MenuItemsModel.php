@@ -9,7 +9,7 @@
 namespace App\Models\Blog;
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\MenuItem;
+use App\Entities\MenuItem;
 
 class MenuItemsModel extends Model
 {

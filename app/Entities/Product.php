@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Acp\Entities;
+namespace App\Entities;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;

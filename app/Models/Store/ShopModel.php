@@ -3,7 +3,7 @@
 namespace App\Models\Store;
 
 use CodeIgniter\Model;
-use Modules\Acp\Entities\Store\Shop;
+use App\Entities\Store\Shop;
 
 class ShopModel extends Model
 {

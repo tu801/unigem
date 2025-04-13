@@ -15,7 +15,7 @@ use Config\Database;
 use Libraries\Collection\Collection;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\CustomerAvatar;
-use Modules\Acp\Entities\User;
+use App\Entities\User;
 use App\Enums\Store\CustomerActiveEnum;
 use App\Enums\UserTypeEnum;
 use App\Models\Store\Customer\CustomerModel;

@@ -1,13 +1,11 @@
 <?php
 /**
  * @author tmtuan
- * created Date: 10/23/2021
- * project: fox_cms
+ * created Date: 13-Apr-2025
  */
 namespace App\Models\Blog;
 
 use CodeIgniter\Model;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class CategoryContentModel extends Model
 {

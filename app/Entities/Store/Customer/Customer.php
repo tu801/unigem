@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Acp\Entities\Store\Customer;
+namespace App\Entities\Store\Customer;
 
 use CodeIgniter\Entity\Entity;
 use App\Models\Store\DistrictModel;
