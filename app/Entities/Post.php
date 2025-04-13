@@ -10,8 +10,10 @@ use App\Models\User\UserModel;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
+use App\Models\Blog\CategoryModel;
 use App\Models\Blog\MetaDataModel;
+use App\Models\Blog\PostCategoryModel;
 use App\Models\Blog\PostContentModel;
 use App\Models\Blog\PostModel;
 use Modules\Acp\Traits\SeoMeta;
@@ -57,6 +59,11 @@ class Post extends Entity {
      * @var string - post detail url
      */
     protected $url;
+
+    /**
+     * @var object - list post categories
+     */
+    protected $priv_cat;
 
 
     public $metaModName = 'post';
@@ -165,10 +172,10 @@ class Post extends Entity {
 
         switch ($this->attributes['post_type']) {
             case PostTypeEnum::POST:
-                $this->url = base_url($postContent->slug.'-'.$this->id.'.html');
+                $this->url = base_url( route_to('post_detail', $postContent->slug, $this->id) );
                 break;
             case PostTypeEnum::PAGE:
-                $this->url = base_url('page/'.$postContent->slug.'-'.$this->id);
+                $this->url = base_url( route_to('page_detail', $postContent->slug, $this->id) );
                 break;
             default:
                 $this->url = base_url($postContent->slug.'-'.$this->id);
@@ -221,6 +228,21 @@ class Post extends Entity {
             }
         }
         return $this->customMeta;
+    }
+
+    /**
+     * get private category
+     * @return object|bool
+     */
+    public function getPrivCat() {
+        if (empty($this->id)) {
+            throw new \RuntimeException('Post must be created before getting meta data.');
+        } 
+        $session = Services::session();
+        $priv_cat = model(PostCategoryModel::class)->queryPostPrivCat($this->id, $session->lang->id);
+        $priv_cat->url = base_url(route_to('category', $priv_cat->slug));
+        $this->priv_cat = $priv_cat;
+        return $this->priv_cat;
     }
 
 }

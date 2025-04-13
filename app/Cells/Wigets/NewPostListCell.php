@@ -10,7 +10,7 @@ namespace App\Cells\Wigets;
 
 use CodeIgniter\Config\Services;
 use CodeIgniter\View\Cells\Cell;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
 use App\Models\Blog\PostModel;
 
 class NewPostListCell extends Cell

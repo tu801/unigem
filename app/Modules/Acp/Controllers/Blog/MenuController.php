@@ -7,7 +7,7 @@
 namespace Modules\Acp\Controllers\Blog;
 
 use App\Entities\MenuItem;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
 use App\Models\Blog\MenuItemsModel;
 use App\Models\Blog\MenuModel;
 use Modules\Acp\Controllers\AcpController;

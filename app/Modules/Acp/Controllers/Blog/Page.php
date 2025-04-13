@@ -10,7 +10,7 @@ use CodeIgniter\I18n\Time;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
 use App\Entities\Post;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
 use App\Models\Blog\PostContentModel;
 use Modules\Acp\Models\Blog\PostModel;
 use App\Models\LangModel;

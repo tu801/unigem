@@ -1,6 +1,5 @@
 <?php
 echo $this->extend($config->viewLayout);
-$postConfigs = $config->postCf;
 echo $this->section('content')
 ?>
 

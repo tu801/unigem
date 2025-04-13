@@ -1,8 +1,11 @@
 <?php
+
+use App\Enums\Post\PostPositionEnum;
+use App\Enums\Post\PostStatusEnum;
+
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
-$postConfigs = $config->cmsStatus;
-$postPos = $config->postCf;
+
 $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'id' => $controller . 'Form'];
 ?>
 <!-- form start -->
@@ -68,8 +71,8 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
                 <div class="form-group ">
                     <label><?= lang('Post.post_status') ?></label>
                     <select class="form-control" name="post_status">
-                        <?php foreach ($postConfigs['status'] as $key => $title) : ?>
-                            <option value='<?= $key ?>'><?= $title ?></option>
+                        <?php foreach (PostStatusEnum::toArray() as $key) : ?>
+                            <option value='<?= $key ?>'><?= lang('Post.post_status_'.$key) ?></option>
                         <?php endforeach;    ?>
                     </select>
                 </div>
@@ -78,8 +81,8 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
                     <label><?= lang('Post.post_position') ?></label>
                     <select class="form-control" name="post_position">
                         <option value="">--Chọn Vị Trí--</option>
-                        <?php foreach ($postPos['post_position'] as $key => $title) : ?>
-                            <option value='<?= $key ?>'><?= $title ?></option>
+                        <?php foreach ( PostPositionEnum::toArray() as $key ) : ?>
+                            <option value='<?= $key ?>'><?= lang('Post.post_position_'.$key) ?></option>
                         <?php endforeach;    ?>
                     </select>
                 </div>
@@ -131,7 +134,7 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
 
         <div class="card card-outline card-primary">
             <div class="card-body">
-                <feature-img img-desc="Hình đại diện phải có kích thước lớn hơn hoặc bằng 1280 x 720pixel" img-title="<?= lang('Post.image') ?>"></feature-img>
+                <feature-img img-desc="<?=lang('Post.feature_image_desc')?>" img-title="<?= lang('Post.image') ?>"></feature-img>
             </div>
         </div>
 

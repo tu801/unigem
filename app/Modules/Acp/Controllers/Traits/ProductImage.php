@@ -14,6 +14,7 @@ trait ProductImage {
      */
     public function uploadProductImage($postData, $image)
     {
+        $shopConfigs = config('Shop');
         $info = [
             'file_name' => clean_url($postData['pd_name']).'-'.time().'.'.$image->getClientExtension(),
             'sub_folder' => UploadFolderEnum::PRODUCT . '/' . date('Y/m')
@@ -27,7 +28,7 @@ trait ProductImage {
                 'original_image' => $this->config->uploadFolder.'/'.$info['sub_folder']."/{$info['file_name']}",
                 'path' => $this->config->uploadFolder.'/'.$info['sub_folder']."/thumb"
             ];
-            create_thumb($imgThumb);
+            create_thumb($imgThumb, $shopConfigs->productThumbSize);
             return $info['file_name'];
         } else {
             return redirect()->back()->withInput()->with('errors', $imgPath['error']);

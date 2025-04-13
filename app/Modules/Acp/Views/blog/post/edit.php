@@ -1,9 +1,11 @@
 <?php
+
+use App\Enums\Post\PostPositionEnum;
+use App\Enums\Post\PostStatusEnum;
+
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
-// print_r($itemData->categories);exit;
-$postConfigs = $config->cmsStatus;
-$postPos = $config->postCf;
+
 ?>
 <!-- form start -->
 <form id="<?= $controller ?>Form" role="form" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -114,10 +116,10 @@ $postPos = $config->postCf;
                         <label><?= lang('Post.post_status') ?></label>
                         <select class="form-control" name="post_status">
                             <?php
-                            foreach ($postConfigs['status'] as $key => $title) :
+                            foreach (PostStatusEnum::toArray() as $key) :
                                 $sel = ($key == $itemData->post_status) ? 'selected' : '';
                             ?>
-                                <option <?= $sel ?> value='<?= $key ?>'><?= $title ?></option>
+                                <option <?= $sel ?> value='<?= $key ?>'><?= lang('Post.post_status_'.$key) ?></option>
                             <?php endforeach;    ?>
                         </select>
                     </div>
@@ -127,10 +129,10 @@ $postPos = $config->postCf;
                         <select class="form-control" name="post_position">
                             <option value="">--Chọn Vị Trí--</option>
                             <?php
-                            foreach ($postPos['post_position'] as $key => $title) :
+                            foreach (PostPositionEnum::toArray() as $key) :
                                 $sel = ($key == $itemData->post_position) ? 'selected' : '';
                             ?>
-                                <option <?= $sel ?> value='<?= $key ?>'><?= $title ?></option>
+                                <option <?= $sel ?> value='<?= $key ?>'><?= lang('Post.post_position_'.$key) ?></option>
                             <?php endforeach;    ?>
                         </select>
                     </div>
@@ -178,7 +180,7 @@ $postPos = $config->postCf;
 
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <feature-img img-desc="Hình đại diện phải có kích thước lớn hơn hoặc bằng 1280 x 720pixel" demo="<?= (!empty($itemData->images)) ? $itemData->images['thumbnail'] : '' ?>" img-title="<?= lang('Post.image') ?>"></feature-img>
+                    <feature-img img-desc="<?=lang('Post.feature_image_desc')?>" demo="<?= (!empty($itemData->images)) ? $itemData->images['thumbnail'] : '' ?>" img-title="<?= lang('Post.image') ?>"></feature-img>
                 </div>
             </div>
 

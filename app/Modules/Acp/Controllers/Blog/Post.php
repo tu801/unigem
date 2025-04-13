@@ -9,7 +9,7 @@ namespace Modules\Acp\Controllers\Blog;
 
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
 use App\Models\Blog\PostContentModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Acp\Models\Blog\PostModel;

@@ -12,6 +12,7 @@ return [
     'back_to_home'                      => 'Trở lại trang chủ',
     'all_product_categories'            => 'Danh Mục Sản Phẩm',
     'wiget_tags_title'                  => 'Tags',
+    'read_more'                         => 'Xem thêm',
 
     'menu_acc_welcome_line'             => 'Chào mừng đến với {0}',
 
@@ -26,4 +27,6 @@ return [
 
     'best_sell_product'                 => 'Sản phẩm bán chạy',
     'best_sell_view_all_btn'            => 'Xem tất cả',
+
+    'top_news'                          => 'Tin nổi bật',
 ];

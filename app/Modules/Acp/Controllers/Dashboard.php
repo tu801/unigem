@@ -3,7 +3,7 @@ namespace Modules\Acp\Controllers;
 
 use App\Models\User\UserModel;
 use Modules\Acp\Controllers\Traits\itemDelete;
-use App\Enums\PostTypeEnum;
+use App\Enums\Post\PostTypeEnum;
 use App\Enums\UserTypeEnum;
 use App\Models\Blog\PostModel;
 use App\Models\Store\Product\ProductModel;

@@ -72,7 +72,7 @@ $routes->group('ajax', ['namespace' => '\App\Controllers'], function ($routes) {
 /**
  * blog routes
  */
-$routes->get('([a-zA-Z0-9_-]+)','\App\Controllers\Blog\Category::list/$1', ['as' => 'category_list']);
+$routes->get('([a-zA-Z0-9_-]+)','\App\Controllers\Blog\Category::list/$1', ['as' => 'category']);
 $routes->get('([a-zA-Z0-9_-]+).html','\App\Controllers\Blog\Post::detail/$1', ['as' => 'post_detail']);
 $routes->get('page/([a-zA-Z0-9_-]+)-(:num)','\App\Controllers\Blog\Post::pageDetail/$1', ['as' => 'page_detail']);
 $routes->get('author/([a-zA-Z0-9_-]+)','\App\Controllers\Blog\Post::author/$1', ['as' => 'post_author']);

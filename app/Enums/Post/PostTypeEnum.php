@@ -5,8 +5,9 @@
  * Project: unigem
  **/
 
-namespace App\Enums;
+namespace App\Enums\Post;
 
+use App\Enums\BaseEnum;
 
 /**
  * Contain the post_type for each post

@@ -63,4 +63,5 @@ class CategoryModel extends Model
         }
         return $builder->find($id);
     }
+
 }
