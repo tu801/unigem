@@ -45,7 +45,7 @@ echo $this->section('content')
                                     $catModel = new App\Models\Blog\CategoryModel();
                                     $catData = $catModel->where('cat_type', 'post')
                                         ->join('category_content', 'category_content.cat_id = category.id')
-                                        ->where('lang_id', $curLang->id)
+                                        ->where('lang_id', $currentLang->id)
                                         ->findAll();
                                     ?>
                                     <div id="chkCategory" class="form-group">

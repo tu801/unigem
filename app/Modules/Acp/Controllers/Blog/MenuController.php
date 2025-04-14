@@ -37,7 +37,7 @@ class MenuController extends AcpController
     {
         $this->_data['title'] = lang("Menu.menu_title");
         $this->_data['data'] = $this->_model
-                            ->where('lang_id', $this->_data['curLang']->id)
+                            ->where('lang_id', $this->currentLang->id)
                             ->findAll();
         $this->_render('\blog\menu\index', $this->_data);
     }
@@ -52,7 +52,7 @@ class MenuController extends AcpController
         $catList = [];
         if (isset($this->config->catGroup)) {
             foreach ($this->config->catGroup as $key => $val) {
-                $catData = $this->_categoryModel->getCategories($key, $this->_data['curLang']->id);
+                $catData = $this->_categoryModel->getCategories($key, $this->currentLang->id);
 
                 $catList[$key] = [
                     'title' => $val,
@@ -90,7 +90,7 @@ class MenuController extends AcpController
         $catData = $this->_categoryModel
             ->select('category.*, category_content.title, category_content.slug')
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->find($catId);
         if (!isset($catData->id)) return redirect()->back()->with('error', lang('Acp.invalid_request'));
 
@@ -147,7 +147,7 @@ class MenuController extends AcpController
         $pageData = model(PostModel::class)
             ->select('post.*, post_content.title')
             ->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->find($pageId);
 
         if (!isset($pageData->id) || !isset($menuData->id)) return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -314,7 +314,7 @@ class MenuController extends AcpController
 
         if (isset($inputData['name']) && !empty($inputData['name'])) $this->_model->like('name', $inputData['name']);
 
-        if (!isset($inputData['lang'])) $this->_model->where('lang_id', $this->_data['curLang']->id);
+        if (!isset($inputData['lang'])) $this->_model->where('lang_id', $this->currentLang->id);
         else $this->_model->where('lang_id', $inputData['lang']->id);
 
         $menuData = $this->_model->findAll();
@@ -374,7 +374,7 @@ class MenuController extends AcpController
                 $response['message'] = $textReturn;
             } else {
                 if ( !isset($postData['lang_id']) || empty($postData['lang_id']) || $postData['lang_id'] == 0 ) {
-                    $postData['lang_id'] = $this->_data['curLang']->id;
+                    $postData['lang_id'] = $this->currentLang->id;
                 }
 
                 $postData['slug'] = clean_url($postData['name']);
@@ -557,7 +557,7 @@ class MenuController extends AcpController
             ->join('post_content', 'post_content.post_id = post.id')
             ->where('post_type', PostTypeEnum::PAGE)
             ->where('post_status', 'publish')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->findAll();
 
         foreach ($pages as $item) {

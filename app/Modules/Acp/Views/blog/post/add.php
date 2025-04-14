@@ -65,7 +65,7 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
         <div class="card card-outline card-primary">
             <div class="card-body">
                 <div class="form-group ">
-                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                 </div>
 
                 <div class="form-group ">
@@ -97,7 +97,7 @@ $frmAttr = ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'i
                     $_cats = model(\App\Models\Blog\CategoryModel::class);
                     $catData = $_cats->where('cat_type', 'post')
                         ->join('category_content', 'category_content.cat_id = category.id')
-                        ->where('lang_id', $curLang->id)
+                        ->where('lang_id', $currentLang->id)
                         ->where('cat_status', 'publish')
                         ->findAll();
                     $catOld = old('categories');

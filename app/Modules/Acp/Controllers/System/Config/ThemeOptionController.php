@@ -57,26 +57,26 @@ class ThemeOptionController extends AcpController
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::GENERAL_CONFIGS,
-                    $this->_data['curLang']->locale,
+                    $this->currentLang->locale,
                     'general');
                 break;
             case 'utility_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::UTILITY_BLOCK,
-                    $this->_data['curLang']->locale);
+                    $this->currentLang->locale);
                 break;
             case 'top_ranking':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::TOP_RANKING,
-                    $this->_data['curLang']->locale);
+                    $this->currentLang->locale);
                 break;
             case 'ads_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::ADS_BLOCK,
-                    $this->_data['curLang']->locale);
+                    $this->currentLang->locale);
                 break;
         }
 
@@ -87,7 +87,7 @@ class ThemeOptionController extends AcpController
     public function saveSlider()
     {
         $postData = $this->request->getPost();
-        $data = $this->themeOptions->saveMainSlider($postData, $this->_data['curLang']->locale);
+        $data = $this->themeOptions->saveMainSlider($postData, $this->currentLang->locale);
         $response = [
             'error'   => 0,
             'message' => lang('Config.save_slider_success'),
@@ -98,7 +98,7 @@ class ThemeOptionController extends AcpController
 
     public function getSlider()
     {
-        $data = $this->themeOptions->getMainSlider($this->_data['curLang']->locale);
+        $data = $this->themeOptions->getMainSlider($this->currentLang->locale);
         $response = [
             'error' => 0,
             'data'  => $data,
@@ -117,7 +117,7 @@ class ThemeOptionController extends AcpController
             $modelAttach->delete($item->id);
         }
 
-        $this->themeOptions->deleteMainSlider($postData, $this->_data['curLang']->locale);
+        $this->themeOptions->deleteMainSlider($postData, $this->currentLang->locale);
         $response = [
             'error' => 0,
             'message' => lang('Config.update_slider_success'),

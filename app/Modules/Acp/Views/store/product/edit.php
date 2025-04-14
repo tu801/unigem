@@ -28,11 +28,11 @@ echo $this->section('content');
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="number" name="price" 
-                                           step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                           step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
                                            class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
                                            id="inputPrice" 
                                            placeholder="<?= lang('Product.pd_price') ?>" 
-                                           value="<?= ($curLang->locale == 'en') ? number_format($itemData->price, 2) : floor((float)$itemData->price) ?>">
+                                           value="<?= ($currentLang->locale == 'en') ? number_format($itemData->price, 2) : floor((float)$itemData->price) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -47,10 +47,10 @@ echo $this->section('content');
                                 </label>
                                 <div class="input-group">
                                     <input  type="number" name="price_discount" 
-                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
                                             class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
                                             id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" 
-                                            value="<?= ($curLang->locale == 'en') ? number_format($itemData->price_discount, 2) : floor((float)$itemData->price_discount) ?>">
+                                            value="<?= ($currentLang->locale == 'en') ? number_format($itemData->price_discount, 2) : floor((float)$itemData->price_discount) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -137,7 +137,7 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
 
                     <div class="form-group">
@@ -161,7 +161,7 @@ echo $this->section('content');
                     <div class="form-group">
                         <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
                         <div class="input-group" >
-                            <input type="number" name="weight" step="any" 
+                            <input type="number" name="pd_weight" step="any" 
                                     class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" 
                                     id="inputWeight" placeholder="<?= lang('Product.weight') ?>" 
                                     value="<?= $itemData->pd_weight ?? 1  ?>">
@@ -174,7 +174,7 @@ echo $this->section('content');
                     <div class="form-group">
                         <label for="inputWeight"><?= lang('Product.size') ?></label>
                         <div class="input-group" >
-                            <input type="text" name="size" 
+                            <input type="text" name="pd_size" 
                                 class="form-control" id="inputSize" 
                                 placeholder="<?= lang('Product.size') ?>" 
                                 value="<?= $itemData->pd_size ?? 1 ?>">
@@ -184,7 +184,7 @@ echo $this->section('content');
                     <div class="form-group">
                         <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
                         <div class="input-group" >
-                            <input type="text" name="cut_angle" 
+                            <input type="text" name="pd_cut_angle" 
                                     class="form-control" id="inputCutAngle" 
                                     placeholder="<?= lang('Product.cut_angle') ?>" 
                                     value="<?= $itemData->pd_cut_angle ?? 1 ?>">

@@ -31,7 +31,6 @@
 
  */
 
-
 (function ($) {
   "use strict";
 
@@ -93,7 +92,6 @@
         });
       }, 100);
     }
-    
   };
 
   /* Scroll process
@@ -142,7 +140,7 @@
       $this.closest(".file-delete").remove();
     });
 
-    $('.tf-compapre-button-clear-all').on("click", function (e) {
+    $(".tf-compapre-button-clear-all").on("click", function (e) {
       $(".tf-compare-item").remove();
     });
     $(".tf-compare-item .icon").on("click", function (e) {
@@ -150,10 +148,9 @@
       $this.closest(".tf-compare-item").remove();
     });
     $(".tf-mini-cart-remove").on("click", function (e) {
-      console.log('hhh')
+      console.log("hhh");
       $(this).closest(".tf-mini-cart-item").remove();
     });
-
   };
 
   /* Go Top
@@ -367,8 +364,6 @@
     }
   };
 
-
-
   /* item checkbox
   -------------------------------------------------------------------------*/
   var itemCheckbox = function () {
@@ -383,21 +378,20 @@
   -------------------------------------------------------------------------*/
   var checkClick = function () {
     $(".flat-check-list").on("click", ".check-item", function () {
-        $(this)
-            .closest(".flat-check-list")
-            .find(".check-item")
-            .removeClass("active");
-        $(this).addClass("active");
+      $(this)
+        .closest(".flat-check-list")
+        .find(".check-item")
+        .removeClass("active");
+      $(this).addClass("active");
     });
-};
+  };
 
   /* infinite scroll
   -------------------------------------------------------------------------*/
   var infiniteScroll = function () {
+    var display = $(".loadmore-item").data("display") || 8;
+    var count = $(".loadmore-item").data("count") || 4;
 
-    var display = $(".loadmore-item").data("display") || 8; 
-    var count = $(".loadmore-item").data("count") || 4; 
-    
     $(".fl-item").slice(0, display).show();
     $(".fl-item2").slice(0, display).show();
     $(".fl-item3").slice(0, display).show();
@@ -447,9 +441,6 @@
         }, 600);
       });
     }
-
-
-
   };
   /* stagger wrap
   -------------------------------------------------------------------------*/
@@ -468,16 +459,16 @@
   /* filter
   -------------------------------------------------------------------------*/
   var filterTab = function () {
-    var $btnFilter = $('.tf-btns-filter').click(function() {
-      if (this.id == 'all') {
-        $('#parent > div').show();
+    var $btnFilter = $(".tf-btns-filter").click(function () {
+      if (this.id == "all") {
+        $("#parent > div").show();
       } else {
-        var $el = $('.' + this.id).show();
-        $('#parent > div').not($el).hide();
+        var $el = $("." + this.id).show();
+        $("#parent > div").not($el).hide();
       }
-      $btnFilter.removeClass('is--active');
-      $(this).addClass('is--active');
-    })
+      $btnFilter.removeClass("is--active");
+      $(this).addClass("is--active");
+    });
   };
 
   /* modal second
@@ -508,8 +499,6 @@
       }
     );
   };
-
-
 
   /* header sticky
   -------------------------------------------------------------------------*/
@@ -547,24 +536,25 @@
 
   /* bottom sticky
   -------------------------------------------------------------------------*/
-  var scrollBottomSticky = function(){
-    $(window).on('scroll', function () {
-      var scrollPosition = $(this).scrollTop(); 
-      var myElement = $('.tf-sticky-btn-atc');
+  var scrollBottomSticky = function () {
+    $(window).on("scroll", function () {
+      var scrollPosition = $(this).scrollTop();
+      var myElement = $(".tf-sticky-btn-atc");
 
       if (scrollPosition >= 500) {
-          myElement.addClass('show');
+        myElement.addClass("show");
       } else {
-          myElement.removeClass('show');
+        myElement.removeClass("show");
       }
-  });
-  }
+    });
+  };
 
-   /* total cart
+  /* total cart
   -------------------------------------------------------------------------*/
   var totalPriceVariant = function () {
-
-    var basePrice = parseFloat($(".price-on-sale").data("base-price")) || parseFloat($(".price-on-sale").text().replace("$", ""));
+    var basePrice =
+      parseFloat($(".price-on-sale").data("base-price")) ||
+      parseFloat($(".price-on-sale").text().replace("$", ""));
     var quantityInput = $(".quantity-product");
     // quantityInput.on("keydown keypress input", function(event) {
     //   event.preventDefault();
@@ -572,9 +562,13 @@
     $(".color-btn, .size-btn").on("click", function () {
       var newPrice = parseFloat($(this).data("price")) || basePrice;
       quantityInput.val(1);
-      $(".price-on-sale").text("$" + newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+      $(".price-on-sale").text(
+        "$" + newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      );
       var totalPrice = newPrice;
-      $(".total-price").text("$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+      $(".total-price").text(
+        "$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      );
     });
 
     $(".btn-increase").on("click", function () {
@@ -592,52 +586,63 @@
     });
 
     function updateTotalPrice() {
-      var currentPrice = parseFloat($(".price-on-sale").text().replace("$", ""));
+      var currentPrice = parseFloat(
+        $(".price-on-sale").text().replace("$", "")
+      );
       var quantity = parseInt(quantityInput.val());
       var totalPrice = currentPrice * quantity;
-      $(".total-price").text("$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+      $(".total-price").text(
+        "$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      );
     }
-
   };
 
   /* scroll grid product
   ------------------------------------------------------------------------------------- */
-  var scrollGridProduct = function(){
-
-    var headerHeight = $("#header").outerHeight(); 
-    var activeColorBtn = null; 
+  var scrollGridProduct = function () {
+    var headerHeight = $("#header").outerHeight();
+    var activeColorBtn = null;
     $(".btn-grid-color").on("click", function () {
-        var color = $(this).data("color");
-        var target = $(".item-img-color[data-color='" + color + "']"); 
-        $('html, body').animate({
-            scrollTop: target.offset().top - headerHeight 
-        }, 100);
+      var color = $(this).data("color");
+      var target = $(".item-img-color[data-color='" + color + "']");
+      $("html, body").animate(
+        {
+          scrollTop: target.offset().top - headerHeight,
+        },
+        100
+      );
 
-        $(".btn-grid-color").removeClass("active");
-        $(this).addClass("active");
-        activeColorBtn = $(this); 
+      $(".btn-grid-color").removeClass("active");
+      $(this).addClass("active");
+      activeColorBtn = $(this);
     });
 
     $(window).on("scroll", function () {
-        var isActiveSet = false; 
-        $(".item-img-color").each(function () {
-            var targetTop = $(this).offset().top - headerHeight;
-            if ($(window).scrollTop() >= targetTop && $(window).scrollTop() < (targetTop + $(this).outerHeight())) {
-                var color = $(this).data("color");
-                if (!isActiveSet && (activeColorBtn === null || activeColorBtn.data("color") !== color)) {
-                    $(".btn-grid-color").removeClass("active");
-                    $(".btn-grid-color[data-color='" + color + "']").addClass("active");
-                    // $('.value-currentColor').text(color);
-                }
-                isActiveSet = true; 
-            }
-        });
-        if (!isActiveSet && activeColorBtn !== null) {
+      var isActiveSet = false;
+      $(".item-img-color").each(function () {
+        var targetTop = $(this).offset().top - headerHeight;
+        if (
+          $(window).scrollTop() >= targetTop &&
+          $(window).scrollTop() < targetTop + $(this).outerHeight()
+        ) {
+          var color = $(this).data("color");
+          if (
+            !isActiveSet &&
+            (activeColorBtn === null || activeColorBtn.data("color") !== color)
+          ) {
             $(".btn-grid-color").removeClass("active");
-            activeColorBtn.addClass("active");
+            $(".btn-grid-color[data-color='" + color + "']").addClass("active");
+            // $('.value-currentColor').text(color);
+          }
+          isActiveSet = true;
         }
+      });
+      if (!isActiveSet && activeColorBtn !== null) {
+        $(".btn-grid-color").removeClass("active");
+        activeColorBtn.addClass("active");
+      }
     });
-  }
+  };
 
   /* contact form
   ------------------------------------------------------------------------------------- */
@@ -687,7 +692,7 @@
       });
     }); // each contactform
   };
-  
+
   /* subscribe mailchimp
   ------------------------------------------------------------------------------------- */
   var ajaxSubscribe = {
@@ -802,20 +807,19 @@
   /* auto popup
   ------------------------------------------------------------------------------------- */
   var autoPopup = function () {
-    if($("body").hasClass("popup-loader")){
+    if ($("body").hasClass("popup-loader")) {
       if ($(".auto-popup").length > 0) {
         let showPopup = sessionStorage.getItem("showPopup");
         if (!JSON.parse(showPopup)) {
           setTimeout(function () {
-            $(".auto-popup").modal('show');
+            $(".auto-popup").modal("show");
           }, 3000);
         }
       }
       $(".btn-hide-popup").on("click", function () {
         sessionStorage.setItem("showPopup", true);
       });
-    };
-
+    }
   };
   /* toggle control
   ------------------------------------------------------------------------------------- */
@@ -830,10 +834,16 @@
     });
 
     $(".btn-edit-address").click(function () {
-      $(this).closest(".account-address-item").find(".edit-form-address").toggle();
+      $(this)
+        .closest(".account-address-item")
+        .find(".edit-form-address")
+        .toggle();
     });
     $(".btn-hide-edit-address").click(function () {
-      $(this).closest(".account-address-item").find(".edit-form-address").hide();
+      $(this)
+        .closest(".account-address-item")
+        .find(".edit-form-address")
+        .hide();
     });
   };
   /* RTL
@@ -842,27 +852,29 @@
     if (localStorage.getItem("dir") === "rtl") {
       $("html").attr("dir", "rtl");
       $("body").addClass("rtl");
-      $('#toggle-rtl').text('ltr');
-      $(".tf-slideshow .tf-btn,.view-all-demo .tf-btn, .pagination-link, .pagination-item").find(".icon").removeClass("icon-arrow-right").addClass("icon-arrow-left");    
+      $("#toggle-rtl").text("ltr");
+      $(
+        ".tf-slideshow .tf-btn,.view-all-demo .tf-btn, .pagination-link, .pagination-item"
+      )
+        .find(".icon")
+        .removeClass("icon-arrow-right")
+        .addClass("icon-arrow-left");
     } else {
       $("html").attr("dir", "ltr");
       $("body").removeClass("rtl");
-      $('#toggle-rtl').text('rtl');      
-      
+      $("#toggle-rtl").text("rtl");
     }
-    $("#toggle-rtl").on("click", function() {
+    $("#toggle-rtl").on("click", function () {
       if ($("html").attr("dir") === "rtl") {
-        localStorage.setItem("dir", "ltr"); 
-        $('#toggle-rtl').text('rtl');      
-
+        localStorage.setItem("dir", "ltr");
+        $("#toggle-rtl").text("rtl");
       } else {
         localStorage.setItem("dir", "rtl");
-        $('#toggle-rtl').text('ltr');      
+        $("#toggle-rtl").text("ltr");
       }
       location.reload();
     });
   };
-
 
   /* hoverPin
   -------------------------------------------------------------------------*/
@@ -870,8 +882,10 @@
     if ($(".wrap-lookbook-hover").length) {
       $(".bundle-pin-item").on("mouseover", function () {
         $(".bundle-hover-wrap").addClass("has-hover");
-        var $el = $('.' + this.id).show();
-        $('.bundle-hover-wrap .bundle-hover-item').not($el).addClass("no-hover");
+        var $el = $("." + this.id).show();
+        $(".bundle-hover-wrap .bundle-hover-item")
+          .not($el)
+          .addClass("no-hover");
       });
       $(".bundle-pin-item").on("mouseleave", function () {
         $(".bundle-hover-wrap").removeClass("has-hover");
@@ -880,67 +894,83 @@
     }
   };
 
-    /* write-review
+  /* write-review
   ------------------------------------------------------------------------------------- */
   var writeReview = function () {
-
     if ($(".write-cancel-review-wrap").length > 0) {
       $(".btn-comment-review").click(function () {
-        $(this).closest(".write-cancel-review-wrap").toggleClass("write-review");
+        $(this)
+          .closest(".write-cancel-review-wrap")
+          .toggleClass("write-review");
       });
     }
-   
   };
 
   // video
   var video = function () {
     if ($("div").hasClass("widget-video")) {
-        $(".popup-youtube").magnificPopup({
-            type: "iframe",
-        });
+      $(".popup-youtube").magnificPopup({
+        type: "iframe",
+      });
     }
   };
 
-var totalVariant = function () {
-  $(".tf-variant-item,.tf-cart-item").each(function () {
-    var productItem = $(this);
-    var basePrice = parseFloat(productItem.find(".tf-variant-item-price .price").data("base-price")) || parseFloat(productItem.find(".tf-variant-item-price .price").text().replace("$", ""));
-    var quantityInput = productItem.find("input");
+  var totalVariant = function () {
+    $(".tf-variant-item,.tf-cart-item").each(function () {
+      var productItem = $(this);
+      var basePrice =
+        parseFloat(
+          productItem.find(".tf-variant-item-price .price").data("base-price")
+        ) ||
+        parseFloat(
+          productItem
+            .find(".tf-variant-item-price .price")
+            .text()
+            .replace("$", "")
+        );
+      var quantityInput = productItem.find("input");
 
-    productItem.find(".color-btn, .size-btn").on("click", function () {
-      var newPrice = parseFloat($(this).data("price")) || basePrice;
-      quantityInput.val(1);
-      productItem.find(".tf-variant-item-price .price").text(
-        "$" + newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      );
-      updateTotalPrice(newPrice, productItem);
-    });
+      productItem.find(".color-btn, .size-btn").on("click", function () {
+        var newPrice = parseFloat($(this).data("price")) || basePrice;
+        quantityInput.val(1);
+        productItem
+          .find(".tf-variant-item-price .price")
+          .text(
+            "$" + newPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          );
+        updateTotalPrice(newPrice, productItem);
+      });
 
-    productItem.find(".btnincrease").on("click", function () {
-      var currentQuantity = parseInt(quantityInput.val());
-      quantityInput.val(currentQuantity + 1);
-      updateTotalPrice(null, productItem);
-    });
-
-    productItem.find(".btndecrease").on("click", function () {
-      var currentQuantity = parseInt(quantityInput.val());
-      if (currentQuantity > 1) {
-        quantityInput.val(currentQuantity - 1);
+      productItem.find(".btnincrease").on("click", function () {
+        var currentQuantity = parseInt(quantityInput.val());
+        quantityInput.val(currentQuantity + 1);
         updateTotalPrice(null, productItem);
+      });
+
+      productItem.find(".btndecrease").on("click", function () {
+        var currentQuantity = parseInt(quantityInput.val());
+        if (currentQuantity > 1) {
+          quantityInput.val(currentQuantity - 1);
+          updateTotalPrice(null, productItem);
+        }
+      });
+
+      function updateTotalPrice(price, scope) {
+        var currentPrice =
+          price ||
+          parseFloat(
+            scope.find(".tf-variant-item-price .price").text().replace("$", "")
+          );
+        var quantity = parseInt(scope.find("input").val());
+        var totalPrice = currentPrice * quantity;
+        scope
+          .find(".tf-variant-item-total .price")
+          .text(
+            "$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          );
       }
     });
-
-    function updateTotalPrice(price, scope) {
-      var currentPrice = price || parseFloat(scope.find(".tf-variant-item-price .price").text().replace("$", ""));
-      var quantity = parseInt(scope.find("input").val());
-      var totalPrice = currentPrice * quantity;
-      scope.find(".tf-variant-item-total .price").text(
-        "$" + totalPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-      );
-    }
-  });
-};
-
+  };
 
   // Dom Ready
   $(function () {
@@ -980,6 +1010,11 @@ var totalVariant = function () {
     hoverPin();
     video();
     totalVariant();
+
+    if (typeof window.initQuickViewProduct === "function") {
+      window.initQuickViewProduct();
+    }
+
     new WOW().init();
   });
 })(jQuery);

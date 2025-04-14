@@ -110,7 +110,7 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
                     <div class="form-group ">
                         <label><?= lang('Post.post_status') ?></label>
@@ -147,7 +147,7 @@ echo $this->section('content');
                         $_cats = model(\App\Models\Blog\CategoryModel::class);
                         $catData = $_cats->where('cat_type', 'post')
                             ->join('category_content', 'category_content.cat_id = category.id')
-                            ->where('lang_id', $curLang->id)
+                            ->where('lang_id', $currentLang->id)
                             ->where('cat_status', 'publish')
                             ->findAll();
                         ?>

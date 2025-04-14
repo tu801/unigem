@@ -60,13 +60,17 @@ $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($ro
 });
 
 // ajax routes
-$routes->group('ajax', ['namespace' => '\App\Controllers'], function ($routes) {
+$routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($routes) {
     $routes->get('get-province', 'AjaxController::getProvinces');
     $routes->get('get-district/(:num)', 'AjaxController::getDistricts/$1');
     $routes->get('get-ward/(:num)', 'AjaxController::getWards/$1');
     $routes->get('get-shipping-fee', 'AjaxController::getShippingFee');
 
-    $routes->post('search-products', 'AjaxController::searchProduct');
+    $routes->group('product',null, function ($routes) {
+        $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');
+        $routes->post('search-products', 'AjaxController::searchProduct');
+    });
+    
 });
 
 /**

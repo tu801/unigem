@@ -37,7 +37,7 @@ class Home extends BaseController
         $productList = model(ProductModel::class)
                     ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.price, pdc.price_discount ')
                     ->join('product_content AS pdc', 'pdc.product_id = product.id')
-                    ->where('pdc.lang_id', $this->_data['curLang']->id)
+                    ->where('pdc.lang_id', $this->currentLang->id)
                     ->orderBy('product.id DESC')
                     ->where('pd_status', ProductStatusEnum::PUBLISH)
                     ->findAll(8);
@@ -45,7 +45,7 @@ class Home extends BaseController
         $postList = model(PostModel::class)
                     ->select('post.*, pc.title, pc.slug, pc.image')
                     ->join('post_content AS pc', 'pc.post_id = post.id')
-                    ->where('pc.lang_id', $this->_data['curLang']->id)
+                    ->where('pc.lang_id', $this->currentLang->id)
                     ->orderBy('post.id DESC')
                     ->where('post.post_status', PostStatusEnum::PUBLISH)
                     ->where('post.post_position', PostPositionEnum::TOP)

@@ -26,7 +26,7 @@ class Dashboard extends AcpController {
             ->select('post.*,post_content.*')
             ->join('post_content', 'post_content.post_id = post.id')
             ->where('Month(created_at)', $thisMonth)
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_type', PostTypeEnum::POST)
             ->orderBy('post.id DESC')
             ->findAll(10);
@@ -34,7 +34,7 @@ class Dashboard extends AcpController {
         $this->_data['products'] = model(ProductModel::class)
             ->select('product.*, pdc.pd_name ')
             ->join('product_content AS pdc', 'pdc.product_id = product.id')
-            ->where('pdc.lang_id', $this->_data['curLang']->id)
+            ->where('pdc.lang_id', $this->currentLang->id)
             ->orderBy('product.id DESC')
             ->findAll(10);
 

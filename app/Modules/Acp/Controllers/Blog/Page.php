@@ -44,7 +44,7 @@ class Page extends AcpController {
 
         $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
             ->where('post_type', PostTypeEnum::PAGE)
-            ->where('lang_id', $this->_data['curLang']->id);
+            ->where('lang_id', $this->currentLang->id);
 
         $this->_data['data'] = $this->_model->paginate();
         $this->_data['pager'] = $this->_model->pager;
@@ -72,7 +72,7 @@ class Page extends AcpController {
 
         // check slug
         $slug = clean_url($postData['title']);
-        if ($this->_model->checkSlug($slug, $this->_data['curLang']->id)) {
+        if ($this->_model->checkSlug($slug, $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'title' =>  lang('Post.slug_can_not_create')
             ]);
@@ -105,10 +105,10 @@ class Page extends AcpController {
 
         // Success!
         $item = $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
-            ->where('slug', $newPost->slug)->where('lang_id', $this->_data['curLang']->id)->first();
+            ->where('slug', $newPost->slug)->where('lang_id', $this->currentLang->id)->first();
 
         // save seo meta
-        $postData['lang_id'] = $this->_data['curLang']->id;
+        $postData['lang_id'] = $this->currentLang->id;
         $item->setSeoMeta($postData);
 
         //log Action
@@ -130,7 +130,7 @@ class Page extends AcpController {
     public function editPage($id) {
         $this->_data['title'] = lang('Post.edit_page_title');
         $item = $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
-            ->where('lang_id', $this->_data['curLang']->id)->find($id);
+            ->where('lang_id', $this->currentLang->id)->find($id);
 
         if ( !isset($item->id) ) return redirect()->route('page')->with('error', lang('Acp.invalid_request'));
         $this->_data['itemData'] = $item;
@@ -140,7 +140,7 @@ class Page extends AcpController {
     public function editPageAction($id) {
         $this->_data['title'] = lang('Post.edit_page_title');
         $item = $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
-            ->where('lang_id', $this->_data['curLang']->id)->find($id);
+            ->where('lang_id', $this->currentLang->id)->find($id);
 
         $postData = $this->request->getPost();
 
@@ -194,7 +194,7 @@ class Page extends AcpController {
             model(PostContentModel::class)->update($item->ct_id, $postData);
 
             // save seo meta
-            $postData['lang_id'] = $this->_data['curLang']->id;
+            $postData['lang_id'] = $this->currentLang->id;
             $item->setSeoMeta($postData);
 
             //log Action

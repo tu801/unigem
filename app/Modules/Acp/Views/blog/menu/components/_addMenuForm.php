@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="hidden" name="lang_id" value="<?=$curLang->id??0?>" >
+                            <input type="hidden" name="lang_id" value="<?=$currentLang->id??0?>" >
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" @click.prevent="onSubmit" class="btn btn-primary">Save changes</button>
                         </div>

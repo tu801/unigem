@@ -35,6 +35,7 @@ abstract class BaseController extends Controller
     protected $user;
     protected $customer;
     protected $theme;
+    protected $currentLang;
     
     /**
      * Instance of the main Request object.

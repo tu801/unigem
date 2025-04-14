@@ -83,10 +83,10 @@ class ProductController extends AcpController
         //get Data
         $this->_model->select('product.*, product_content.*')
             ->join('product_content', 'product_content.product_id = product.id')
-            ->where('product_content.lang_id', $this->_data['curLang']->id)
+            ->where('product_content.lang_id', $this->currentLang->id)
             ->orderBy('product.id DESC');
 
-        $this->_data['product_category'] = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_category'] = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['data']             = $this->_model->paginate();
         $this->_data['pager']            = $this->_model->pager;
         $this->_data['title']            = lang("Product.product_title");
@@ -95,7 +95,7 @@ class ProductController extends AcpController
 
     public function addProduct()
     {
-        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['title']                = lang("Product.title_add");
         $this->_render('\store\product\add', $this->_data);
     }
@@ -174,14 +174,14 @@ class ProductController extends AcpController
         $item = $this->_model
         ->select('product.*, product_content.*')
         ->join('product_content', 'product_content.product_id  = product.id')
-        ->where('product_content.lang_id', $this->_data['curLang']->id)
+        ->where('product_content.lang_id', $this->currentLang->id)
         ->find($id);
         
         if (!isset($item->id)) {
             return redirect()->route('product')->with('error', lang('Product.no_item_found'));
         }
         
-        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['itemData']             = $item;
         $this->_data['title']                = lang("Product.title_edit");
         $this->_render('\store\product\edit', $this->_data);
@@ -192,7 +192,7 @@ class ProductController extends AcpController
         $item = $this->_model
                     ->select('product.*, product_content.*')
                     ->join('product_content', 'product_content.product_id  = product.id')
-                    ->where('product_content.lang_id', $this->_data['curLang']->id)
+                    ->where('product_content.lang_id', $this->currentLang->id)
                     ->find($id);
         if (!isset($item->id)) {
             return redirect()->route('product')->with('error', lang('Product.no_item_found'));
@@ -245,7 +245,7 @@ class ProductController extends AcpController
             // save product content data
             $this->_productContentModel
                 ->where('product_id', $item->id)
-                ->where('lang_id', $this->_data['curLang']->id)
+                ->where('lang_id', $this->currentLang->id)
                 ->update(null, $postData);
 
             $this->db->transCommit();

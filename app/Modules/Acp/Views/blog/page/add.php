@@ -59,7 +59,7 @@ $postConfigs = $config->cmsStatus;
                         <select class="form-control" name="lang_id">
                             <?php foreach ($language as $item) :
                                 if ( old('lang_id') ) $sel = old('lang_id') == $item->id ? 'selected' : '';
-                                else $sel = ( $curLang->id == $item->id ) ? 'selected' : '';
+                                else $sel = ( $currentLang->id == $item->id ) ? 'selected' : '';
                                 ?>
                                 <option value='<?= $item->id ?>' <?=$sel?> >
                                     <?="<img src='{$item->icon}' width='16' title='{$item->name}' alt='{$item->name}'>"?>
@@ -70,7 +70,7 @@ $postConfigs = $config->cmsStatus;
                     <?php endif; ?>
 
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
 
                     <div class="form-group ">

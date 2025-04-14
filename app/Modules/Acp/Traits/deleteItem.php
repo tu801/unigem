@@ -20,7 +20,7 @@ trait deleteItem {
         if ( !isset($item->id) || empty($item) ) return redirect()->back()->with('error', lang('Acp.no_item'));
         else {
             if ( ( isset($item->user_init) && $item->user_init == $this->user->id )
-                || $this->user->can($this->currentAct)
+                || $this->user->inGroup('superadmin', 'admin')
             )
             {
                 if ($this->_model->delete($item->id)) {

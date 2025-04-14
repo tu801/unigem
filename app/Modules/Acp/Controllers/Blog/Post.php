@@ -63,7 +63,7 @@ class Post extends AcpController
         if (isset($getData['category']) && $getData['category'] > 0) {
             $this->_model->join('post_categories', "post_categories.post_id = post.id")
                         ->join('category_content', "category_content.cat_id = {$getData['category']}")
-                        ->where('category_content.lang_id', $this->_data['curLang']->id)
+                        ->where('category_content.lang_id', $this->currentLang->id)
                         ->where("post_categories.cat_id = {$getData['category']}");
             $this->_data['select_cat'] = $getData['category'];
         }
@@ -76,7 +76,7 @@ class Post extends AcpController
         $this->_model
             ->select('post.*,post_content.*')
             ->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_type', PostTypeEnum::POST)
             ->orderBy('post.id DESC');
 
@@ -128,7 +128,7 @@ class Post extends AcpController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         $slug = clean_url($postData['title']);
-        if ($this->_model->checkSlug($slug, $this->_data['curLang']->id)) {
+        if ($this->_model->checkSlug($slug, $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'title' =>  lang('Post.slug_can_not_create')
             ]);
@@ -155,9 +155,9 @@ class Post extends AcpController
 
         // Success!
         $item = $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
-            ->where('slug', $newPost->slug)->where('lang_id', $this->_data['curLang']->id)->first();
+            ->where('slug', $newPost->slug)->where('lang_id', $this->currentLang->id)->first();
         //add seo meta
-        $postData['lang_id'] = $this->_data['curLang']->id;
+        $postData['lang_id'] = $this->currentLang->id;
         $item->setSeoMeta($postData);
         //add category
         foreach ($postData['categories'] as $catId) {
@@ -190,7 +190,7 @@ class Post extends AcpController
     {
         $this->_data['title'] = lang('Post.edit_title');
         $this->_model->join('post_content', 'post_content.post_id = post.id')
-                     ->where('post_content.lang_id', $this->_data['curLang']->id);
+                     ->where('post_content.lang_id', $this->currentLang->id);
         $item = $this->_model->find($itemID);
         if (isset($item->id)) {
             // $this->_model->convertData($item);
@@ -210,7 +210,7 @@ class Post extends AcpController
         $this->_data['title'] = lang('Post.edit_title');
         $item = $this->_model
             ->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->find($itemID);
 
         if ($this->user->id !== $item->user_id) {
@@ -257,7 +257,7 @@ class Post extends AcpController
             if (isset($postData['createSlug'])) {
                 $postData['slug'] = clean_url($postData['title']);
 
-                if ($this->_model->checkSlug($postData['slug'], $this->_data['curLang']->id)) {
+                if ($this->_model->checkSlug($postData['slug'], $this->currentLang->id)) {
                     return redirect()->back()->withInput()->with('errors', [
                         'title' => lang('Post.slug_can_not_create')
                     ]);
@@ -274,7 +274,7 @@ class Post extends AcpController
             }
             $modelPostContent = model(PostContentModel::class);
             $modelPostContent->where('post_id', $itemID)
-                    ->where('post_content.lang_id', $this->_data['curLang']->id)
+                    ->where('post_content.lang_id', $this->currentLang->id)
                     ->update(null, $postData);
 
             // Success!
@@ -284,7 +284,7 @@ class Post extends AcpController
                 if ($cat == $postData['cat_is_primary']) $this->_model->addCategories($item->id, $cat, 1);
                 else $this->_model->addCategories($item->id, $cat);
             }
-            $postData['lang_id'] = $this->_data['curLang']->id;
+            $postData['lang_id'] = $this->currentLang->id;
             $item->setSeoMeta($postData);
 
             //log Action
@@ -373,7 +373,7 @@ class Post extends AcpController
                         'slug' => $postData['post_slug']
                     );
                     $modelPostContent = model(PostContentModel::class);
-                    $modelPostContent->where('post_content.lang_id', $this->_data['curLang']->id)
+                    $modelPostContent->where('post_content.lang_id', $this->currentLang->id)
                                      ->where('post_id', $itemId);
                     if ($modelPostContent->update(null, $updateArray)) {
                         $this->_model->join('post_content', 'post_content.post_id = post.id');

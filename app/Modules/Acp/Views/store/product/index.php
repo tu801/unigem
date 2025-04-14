@@ -112,7 +112,10 @@ echo $this->section('content');
                                         </td>
                                         <td>
                                             <a href="<?= route_to("edit_product", $row->id) ?>"><?= $row->pd_name ?></a>
-                                            <p><i class="fas fa-cart-plus fa-lg mr-2"></i>&nbsp;<?=lang('Product.pd_price')?>: <?=format_currency($row->price, $curLang->locale )?></p>
+                                            <?php
+                                            $price = ($row->price_discount > 0 && $row->price_discount < $row->price) ? $row->price_discount : $row->price;
+                                            ?>
+                                            <p><i class="fas fa-cart-plus fa-lg mr-2"></i>&nbsp;<?=lang('Product.pd_price')?>: <?=format_currency($price, $currentLang->locale )?></p>
                                         </td>
                                         <td>
                                             <img src="<?= $img ?>" class="img-responsive img-thumbnail" style="max-width:150px">

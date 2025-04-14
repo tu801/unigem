@@ -55,14 +55,14 @@ class Category extends AcpController
 
         $this->_data['data'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
             ->where([
-                'lang_id'  => $this->_data['curLang']->id,
+                'lang_id'  => $this->currentLang->id,
                 'cat_type' => $type,
             ])->findAll();
 
         //get parent
         $this->_data['list_parent'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
             ->where([
-                'lang_id' => $this->_data['curLang']->id,
+                'lang_id' => $this->currentLang->id,
                 'parent_id' => 0,
                 'cat_type' => $type,
             ])
@@ -123,7 +123,7 @@ class Category extends AcpController
         if (!isset($insertData['slug']) || $insertData['slug'] === '') $insertData['slug'] = clean_url($insertData['title']);
 
         // check slug
-        if($this->_model->checkSlug($insertData['slug'], $this->_data['curLang']->id)) {
+        if($this->_model->checkSlug($insertData['slug'], $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'slug' =>  lang('Category.slug_is_exist')
             ]);
@@ -132,7 +132,7 @@ class Category extends AcpController
         $insertData['cat_type']     = $type;
         $insertData['user_init']    = $this->user->id;
         $insertData['user_type']    = $this->user->model_class;
-        $insertData['lang_id']      = $this->_data['curLang']->id;
+        $insertData['lang_id']      = $this->currentLang->id;
         $insertData['user_type']    = config('Auth')->userProvider;
         $cat = $this->_model->insertOrUpdate($insertData);
         if (!$cat) {
@@ -141,7 +141,7 @@ class Category extends AcpController
         // Success!
         $catItem = $this->_model->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
                                 ->where('id', $cat)
-                                ->where('lang_id', $this->_data['curLang']->id)
+                                ->where('lang_id', $this->currentLang->id)
                                 ->first();
 
         $catItem->setSeoMeta($insertData);
@@ -168,14 +168,14 @@ class Category extends AcpController
         $this->_data['title'] = lang('Category.edit_title');
         $cat = $this->_model
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->withDeleted()
             ->find($idItem);
 
         if (isset($cat->id)) {
             $this->_data['list_parent'] = $this->_model
                 ->join('category_content', 'category_content.cat_id = category.id')
-                ->where('lang_id', $this->_data['curLang']->id)
+                ->where('lang_id', $this->currentLang->id)
                 ->where(['parent_id' => 0, 'category.cat_type' => $cat->cat_type])
                 ->findAll();
             $this->_data['data'] = $cat;
@@ -195,7 +195,7 @@ class Category extends AcpController
 
         $data = $this->_model->join('category_content', 'category_content.cat_id = category.id')
                              ->where('id', $idItem)
-                             ->where('lang_id', $this->_data['curLang']->id)
+                             ->where('lang_id', $this->currentLang->id)
                              ->first();
         $this->_model->skipValidation(true);
 
@@ -224,12 +224,12 @@ class Category extends AcpController
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
             if (!isset($inputData['home_tab_display'])) $inputData['home_tab_display'] = 0;
-            $inputData['cur_lang_id'] = $this->_data['curLang']->id;
+            $inputData['cur_lang_id'] = $this->currentLang->id;
             $inputData['id'] = $idItem;
             
             if ( isset($inputData['onChangeSlug']) && $inputData['onChangeSlug'] == 'on') {
                 $inputData['slug'] = clean_url($inputData['title']);
-                if($this->_model->checkSlug($inputData['slug'], $this->_data['curLang']->id)) {
+                if($this->_model->checkSlug($inputData['slug'], $this->currentLang->id)) {
                     return redirect()->back()->withInput()->with('errors', [
                         'slug' =>  lang('Category.slug_is_exist')
                     ]);
@@ -244,7 +244,7 @@ class Category extends AcpController
             }
 
             //set seo meta
-            $inputData['lang_id'] = $this->_data['curLang']->id;
+            $inputData['lang_id'] = $this->currentLang->id;
             $data->setSeoMeta($inputData);
 
             //log Action
@@ -272,7 +272,7 @@ class Category extends AcpController
     {
         $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
                                 ->where('id', $idItem)
-                                ->where('lang_id', $this->_data['curLang']->id)
+                                ->where('lang_id', $this->currentLang->id)
                                 ->withDeleted()
                                 ->find($idItem);
         if (isset($item->id)) {
@@ -306,7 +306,7 @@ class Category extends AcpController
         $catSelect = 'category.id, category.cat_status, parent_id, title, slug, description, seo_meta';
         $this->_model->select($catSelect)
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->where('cat_type', $type ?? 'post');
 
         if (isset($input['deleted']) && $input['deleted'] == 1) $catData = $this->_model->onlyDeleted()->findAll();
@@ -317,7 +317,7 @@ class Category extends AcpController
                 if ($cat->parent_id > 0) {
                     $parent = $this->_model->select($catSelect)
                         ->join('category_content', 'category_content.cat_id = category.id')
-                        ->where('lang_id', $this->_data['curLang']->id)
+                        ->where('lang_id', $this->currentLang->id)
                         ->find($cat->parent_id);
                     $cat->parent = $parent;
                 }
@@ -377,7 +377,7 @@ class Category extends AcpController
                         'slug' => $postData['category_slug']
                     );
                     $modelCategoryContent = model(CategoryContentModel::class);
-                    $modelCategoryContent->where('category_content.lang_id', $this->_data['curLang']->id)
+                    $modelCategoryContent->where('category_content.lang_id', $this->currentLang->id)
                         ->where('cat_id', $itemId);
 
                     if ($modelCategoryContent->update(null, $updateArray)) {

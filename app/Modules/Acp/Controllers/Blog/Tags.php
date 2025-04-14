@@ -100,7 +100,7 @@ class Tags extends AcpController
             $response['error'] = 1;
             $response['text'] = lang('Acp.invalid_request');
         } else {
-            $langID = $this->_data['curLang']->id;
+            $langID = $this->currentLang->id;
             $tags = $this->_model->getTagByPost($postID, $langID);
             $tags = json_decode($tags->tags);
             $tagList = [];
@@ -123,7 +123,7 @@ class Tags extends AcpController
     public function getTags($modId, $modName)
     {
         $response = array();
-        $langID = $this->_data['curLang']->id;
+        $langID = $this->currentLang->id;
         $tagList = [];
 
         switch ($modName) {

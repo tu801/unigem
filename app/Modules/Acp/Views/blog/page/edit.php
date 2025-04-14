@@ -101,7 +101,7 @@ $postConfigs = $config->cmsStatus;
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
                     <div class="form-group ">
                         <label><?= lang('Post.post_status') ?></label>

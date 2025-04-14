@@ -21,7 +21,7 @@ trait SetLang {
 
         if ($session->lang) {
             $language->setLocale($session->lang->locale);
-            $this->_data['curLang'] = $session->lang;
+            $this->currentLang = $session->lang;
         }
         else {
             //get default lang
@@ -30,7 +30,7 @@ trait SetLang {
             $lang = $defLang->locale ?? config('App')->defaultLocale;
             $language->setLocale($lang);
             $session->set('lang', $defLang);
-            $this->_data['curLang'] = $defLang;
+            $this->currentLang = $defLang;
         }
     }
 

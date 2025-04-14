@@ -11,4 +11,8 @@ return [
     'see_more'    => 'Xem thêm',
     'top_ranking' => 'Đánh giá cao',
     'recommended' => 'Để xuất cho bạn',
+
+    'pd_size'     => 'Kích thước',
+    'pd_weight'   => 'Trọng lượng',
+    'pd_cut_angle'=> 'Góc cắt',
 ];

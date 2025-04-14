@@ -27,7 +27,7 @@ echo $this->section('content') ?>
                     </div>
                     
                     <div class="form-group">
-                        <category-slug full-slug="<?= base_url(route_to('category_list', $data->slug, $data->id)) ?>" slug="<?= $data->slug ?>" label="<?= lang('Category.slug') ?>" category-id="<?= $data->id ?>" token="<?= csrf_hash() ?>" tkname="<?= csrf_token() ?>"></category-slug>
+                        <category-slug full-slug="<?= base_url(route_to('category', $data->slug, $data->id)) ?>" slug="<?= $data->slug ?>" label="<?= lang('Category.slug') ?>" category-id="<?= $data->id ?>" token="<?= csrf_hash() ?>" tkname="<?= csrf_token() ?>"></category-slug>
                     </div>
 
                     <div class="form-group">

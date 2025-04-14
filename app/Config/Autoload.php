@@ -43,6 +43,7 @@ class Autoload extends AutoloadConfig
         APP_NAMESPACE                       => APPPATH,
         'Modules\Acp'                       => APPPATH . 'Modules/Acp',
         'Modules\Auth'                      => APPPATH . 'Modules/Auth',
+        'Modules\Ajax'                      => APPPATH . 'Modules/Ajax',
         'Libraries\Collection\Collection'   => APPPATH . 'Libraries/Collection/Collection',
     ];
 

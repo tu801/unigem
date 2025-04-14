@@ -11,7 +11,7 @@
                 aria-haspopup="true" aria-expanded="false">
                 <?php
                     foreach ($language as $item) {
-                        if ($item->locale == $curLang->locale) {
+                        if ($item->locale == $currentLang->locale) {
                             echo "<img src='{$item->icon}' width='16' title='{$item->name}' alt='{$item->name}'> {$item->name}";
                         }
                     }

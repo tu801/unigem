@@ -161,7 +161,7 @@ class CustomerController extends AcpController
 
     public function editAction($cus_id)
     {
-        if ( !$this->user->can($this->currentAct) ) {
+        if ( !$this->user->inGroup('superadmin', 'admin') ) {
             return redirect()->route('customer')->with('error', lang('Acp.no_permission'));
         }
 

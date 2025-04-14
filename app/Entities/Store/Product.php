@@ -62,7 +62,7 @@ class Product extends Entity
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Product.product_must_be_created'));
         }
-        $this->url = base_url('product/'.$this->attributes['pd_slug']);
+        $this->url = base_url(route_to('product_detail',$this->attributes['pd_slug'], $this->id ));
         return $this->url;
     }
 

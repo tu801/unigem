@@ -60,13 +60,13 @@ if (!function_exists('format_currency')) {
     /**
      * Format currency based on language locale
      * @param $number
-     * @param object|string $curLang
+     * @param object|string $currentLang
      * @param bool $suffixes
      * @return string
      */
-    function format_currency($number, $curLang=null, $suffixes=false) {
-        // Handle when $curLang is a string (locale directly passed)
-        $locale = is_string($curLang) ? $curLang : (is_object($curLang) && isset($curLang->locale) ? $curLang->locale : 'vi');
+    function format_currency($number, $currentLang=null, $suffixes=false) {
+        // Handle when $currentLang is a string (locale directly passed)
+        $locale = is_string($currentLang) ? $currentLang : (is_object($currentLang) && isset($currentLang->locale) ? $currentLang->locale : 'vi');
         
         if ($locale == "en") {
             return usd_encode($number, $suffixes);

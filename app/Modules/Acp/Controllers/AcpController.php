@@ -25,7 +25,7 @@ class AcpController extends Controller
     protected $config;
     protected $user;
     protected $router;
-    protected $currentAct;
+    protected $currentLang;
 
     /**
      * @var int
@@ -76,7 +76,6 @@ class AcpController extends Controller
         $controller = explode('\\', $controller);
         $this->_data['controller'] = strtolower(end($controller));
         $this->_data['method'] = $this->router->methodName();
-        $this->currentAct = $this->_data['module'] . '/' . $this->_data['controller'] . '/' . $this->_data['method'];
     }
 
     /**
@@ -88,9 +87,9 @@ class AcpController extends Controller
     {
         $data['config'] = $this->config;
         $data['login_user'] = $this->user;
-        $data['currentAct'] = $this->currentAct;
         $data['adminSlug'] = $this->_data['module'];
         $data['language'] = model(LangModel::class)->listLang();
+        $data['currentLang'] = $this->currentLang;
 
         echo view($this->config->view . $viewPage, $data);
     }

@@ -29,11 +29,11 @@ echo $this->section('content');
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input  type="number" name="price" 
-                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
                                             class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
                                             id="inputPrice" 
                                             placeholder="<?= lang('Product.pd_price') ?>" 
-                                            value="<?= ($curLang->locale == 'en') ? (old('price') ?? 0) : floor((float)(old('price') ?? 0)) ?>">
+                                            value="<?= ($currentLang->locale == 'en') ? (old('price') ?? 0) : floor((float)(old('price') ?? 0)) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -48,11 +48,11 @@ echo $this->section('content');
                                 </label>
                                 <div class="input-group">
                                     <input  type="number" name="price_discount" 
-                                            step="<?= ($curLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
                                             class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
                                             id="inputPriceDiscount" 
                                             placeholder="<?= lang('Product.pd_price_discount') ?>" 
-                                            value="<?= ($curLang->locale == 'en') ? (old('price_discount') ?? 0) : floor((float)(old('price_discount') ?? 0)) ?>">
+                                            value="<?= ($currentLang->locale == 'en') ? (old('price_discount') ?? 0) : floor((float)(old('price_discount') ?? 0)) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -91,7 +91,7 @@ echo $this->section('content');
         <div class="card card-outline card-primary">
             <div class="card-body">
                 <div class="form-group ">
-                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                 </div>
 
                 <div class="form-group">

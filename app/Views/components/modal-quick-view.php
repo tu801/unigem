@@ -32,7 +32,7 @@
                             <div class="badges text-uppercase">Best seller</div>
                             <div class="product-status-content">
                                 <i class="icon-lightning"></i>
-                                <p class="fw-6">Selling fast! 48 people have this in their carts.</p>
+                                <!-- <p class="fw-6">Selling fast! 48 people have this in their carts.</p> -->
                             </div>
                         </div>
                         <div class="tf-product-info-price">
@@ -41,7 +41,17 @@
                         <div class="tf-product-description">
                             <p>Nunc arcu faucibus a et lorem eu a mauris adipiscing conubia ac aptent ligula facilisis a auctor habitant parturient a a.Interdum fermentum.</p>
                         </div>
-                        <div class="tf-product-info-variant-picker">
+                        <div class="tf-product-size">
+                            <p><?=lang('Product.pd_size')?> : <span id="tmt_pd_size"></span></p>
+                        </div>
+                        <div class="tf-product-weight">
+                            <p><?=lang('Product.pd_weight')?> : <span id="tmt_pd_weight"></span></p>
+                        </div>
+                        <div class="tf-product-cut_angle">
+                            <p><?=lang('Product.pd_cut_angle')?> : <span id="tmt_pd_cut_angle"></span></p>
+                        </div>
+
+                        <!-- <div class="tf-product-info-variant-picker">
                             <div class="variant-picker-item">
                                 <div class="variant-picker-label">
                                     Color: <span class="fw-6 variant-picker-label-value">Orange</span>
@@ -90,18 +100,18 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tf-product-info-quantity">
+                        </div> -->
+                        <!-- <div class="tf-product-info-quantity">
                             <div class="quantity-title fw-6">Quantity</div>
                             <div class="wg-quantity">
                                 <span class="btn-quantity minus-btn">-</span>
                                 <input type="text" name="number" value="1">
                                 <span class="btn-quantity plus-btn">+</span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="tf-product-info-buy-button">
                             <form class="">
-                                <a href="javascript:void(0);" class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add to cart -&nbsp;</span><span class="tf-qty-price">$8.00</span></a>
+                                <!-- <a href="javascript:void(0);" class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart"><span>Add to cart -&nbsp;</span><span class="tf-qty-price">$8.00</span></a>
                                 <a href="javascript:void(0);" class="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action">
                                     <span class="icon icon-heart"></span>
                                     <span class="tooltip">Add to Wishlist</span>
@@ -111,10 +121,10 @@
                                     <span class="icon icon-compare"></span>
                                     <span class="tooltip">Add to Compare</span>
                                     <span class="icon icon-check"></span>
-                                </a>
+                                </a> -->
                                 <div class="w-100">
                                     <a href="#" class="btns-full">Buy with <img src="images/payments/paypal.png" alt=""></a>
-                                    <a href="#" class="payment-more-option">More payment options</a>
+                                    <!-- <a href="#" class="payment-more-option">More payment options</a> -->
                                 </div>
                             </form>
                         </div>
@@ -127,3 +137,7 @@
         </div>
     </div>
 </div>
+
+<?=$this->section('scripts')?>
+<script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/product-quick-view.js"></script>  
+<?=$this->endSection()?>

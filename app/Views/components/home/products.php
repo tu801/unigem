@@ -27,7 +27,7 @@
                                         <span class="tooltip">Add to cart</span>
                                     </a>
                                     
-                                    <a href="#quick_view" data-bs-toggle="modal" class="box-icon quickview tf-btn-loading">
+                                    <a href="#quick_view" data-bs-toggle="modal" data-product-id="<?=$product->id?>" class="box-icon quickview tf-btn-loading">
                                         <span class="icon icon-view"></span>
                                         <span class="tooltip">Quick View</span>
                                     </a>

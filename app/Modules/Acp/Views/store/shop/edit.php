@@ -66,7 +66,7 @@ $postConfigs = $config->cmsStatus;
                 <div class="card-body">
                     <?php if ($multiLang) : ?>
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
                     <?php endif; ?>
 
