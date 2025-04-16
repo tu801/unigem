@@ -240,7 +240,7 @@ class Post extends Entity {
         } 
         $session = Services::session();
         $priv_cat = model(PostCategoryModel::class)->queryPostPrivCat($this->id, $session->lang->id);
-        $priv_cat->url = base_url(route_to('category', $priv_cat->slug));
+        $priv_cat->url = base_url(route_to('category_page', $priv_cat->slug));
         $this->priv_cat = $priv_cat;
         return $this->priv_cat;
     }
