@@ -2,18 +2,23 @@
 
 namespace Modules\Acp\Controllers\Blog;
 
+use App\Enums\CategoryEnum;
+use App\Models\AttachMetaModel;
 use Modules\Acp\Controllers\AcpController;
 use App\Models\Blog\CategoryContentModel;
-use App\Models\Blog\CategoryModel;
+use Modules\Acp\Models\Blog\CategoryModel;
 
 class Category extends AcpController
 {
+    protected $attachMetaModel;
+
     public function __construct()
     {
         parent::__construct();
         if (empty($this->_model)) {
             $this->_model = model(CategoryModel::class);
         }
+        $this->attachMetaModel = model(AttachMetaModel::class);
     }
 
     public function index($type)
@@ -31,6 +36,15 @@ class Category extends AcpController
         $this->_data['title'] = lang("Category.category_title");
         $postData = $this->request->getPost();
         $getData = $this->request->getGet();
+
+        //get parent category
+        $this->_data['list_parent'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
+            ->where([
+                'lang_id' => $this->currentLang->id,
+                'parent_id' => 0,
+                'cat_type' => $type,
+            ])
+            ->findAll();
 
         if (!isset($type) || !in_array($type, $this->config->cat_type)) return redirect()->route('dashboard')->with('error', lang('Acp.invalid_request'));
         //get Data
@@ -53,20 +67,12 @@ class Category extends AcpController
             $this->_data['action'] = 'deleted';
         } else $this->_data['action'] = 'all';
 
-        $this->_data['data'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-            ->where([
-                'lang_id'  => $this->currentLang->id,
-                'cat_type' => $type,
-            ])->findAll();
+        // $this->_data['data'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
+        //     ->where([
+        //         'lang_id'  => $this->currentLang->id,
+        //         'cat_type' => $type,
+        //     ])->get();
 
-        //get parent
-        $this->_data['list_parent'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-            ->where([
-                'lang_id' => $this->currentLang->id,
-                'parent_id' => 0,
-                'cat_type' => $type,
-            ])
-            ->findAll();
 
         $this->_data['cat_type'] = $type;
         $this->_render('\blog\category\index', $this->_data);
@@ -143,6 +149,22 @@ class Category extends AcpController
                                 ->where('id', $cat)
                                 ->where('lang_id', $this->currentLang->id)
                                 ->first();
+
+        // save attach meta image
+        if (!empty($insertData['cat_image'])) {
+            $metaAttach = model(AttachMetaModel::class);
+            $value      = [
+                'image' => $insertData['cat_image'] ?? '',
+            ];
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$this->currentLang->locale;
+
+            $metaAttach->insertOrUpdate([
+                'mod_name' => $configKey,
+                'mod_id'   => $catItem->id,
+                'mod_type' => 'single',
+                'value'    => json_encode($value),
+            ]);
+        }
 
         $catItem->setSeoMeta($insertData);
 
@@ -243,6 +265,24 @@ class Category extends AcpController
                 return redirect()->back()->withInput()->with('errors', $this->_model->errors());
             }
 
+            // save attach meta image
+            $value = [
+                'image'         => $inputData['cat_image'] ?? '',
+            ];
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$this->currentLang->locale;
+
+            $dataAttach = [
+                'mod_name' => $configKey,
+                'mod_id'   => $idItem,
+                'mod_type' => 'single',
+                'value'    => json_encode($value),
+            ];
+            if (!empty($inputData['attach_meta_id'])) {
+                $dataAttach['id'] = $inputData['attach_meta_id'];
+            }
+
+            $this->attachMetaModel->insertOrUpdate($dataAttach);
+
             //set seo meta
             $inputData['lang_id'] = $this->currentLang->id;
             $data->setSeoMeta($inputData);
@@ -285,7 +325,7 @@ class Category extends AcpController
                 'subject_type' => CategoryModel::class,
             ];
             $this->logAction($logData);
-            if ($this->_model->delete($item->id, (bool) $item->deleted_at)) return redirect()->route('category', ['post'])->with('message', lang('Category.delete_success', [$item->id]));
+            if ($this->_model->delete($item->id, (bool) $item->deleted_at)) return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
 
             else return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));

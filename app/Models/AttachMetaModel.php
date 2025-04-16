@@ -127,6 +127,18 @@ class AttachMetaModel extends Model
                 ->update();
             return $buider->where('id', $id)->get()->getFirstRow();
         }else {
+            $checkMeta = $buider->where('mod_name', $mod_name)
+                ->where('mod_id', $mod_id)
+                ->get()->getFirstRow();
+
+            if (isset($checkMeta->id)) {
+                $buider->set('images', $val)
+                    ->set('updated_at', date('Y-m-d H:i:s'))
+                    ->where('id', $checkMeta->id)
+                    ->update();
+                return $buider->where('id', $checkMeta->id)->get()->getFirstRow();
+            }
+            
             $insertData = [
                 'user_init'  => user_id(),
                 'mod_name'   => $mod_name,

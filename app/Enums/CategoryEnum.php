@@ -20,4 +20,9 @@ class CategoryEnum extends BaseEnum {
      * Category Status
      */
     const CAT_STATUS_PUBLISH = 'publish';
+
+    /**
+     * Category attachment prefix key in table attach_meta
+     */
+    const CAT_ATTACHMENT_PREFIX_KEY = 'cat_image_';
 }

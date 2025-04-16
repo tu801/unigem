@@ -59,6 +59,15 @@ echo $this->section('content') ?>
                         <textarea class="form-control" rows="3" name="description" placeholder="Nhập mô tả"><?= $data->description ?></textarea>
                     </div>
 
+                    <?php if ($cat_type == 'product') :?> 
+                    <div class="form-group">
+                        <input type="hidden" name="attach_meta_id" value="<?= $data->cat_image['attach_meta_id'] ?? '' ?>">
+                        <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" 
+                                    select-img-type="1" input-name="cat_image" return-img="id" 
+                                    img-data="<?= $data->cat_image['image_id'] ?? '' ?>"></config-img>
+                    </div>
+                    <?php endif;?>
+
                     <div class="">
                         <p class="h5">
                         <div class="d-flex justify-content-between align-items-center">
@@ -78,6 +87,7 @@ echo $this->section('content') ?>
                         </div>
                         </p>
                     </div>
+
                     <div class="collapse" id="collapseExample">
                         <div class="card-body">
                             <div class="form-group ">
@@ -139,8 +149,16 @@ echo $this->section('content') ?>
     </div>
 </script>
 
+<?php
+echo view($config->view.'\system\attach\_vGallery');
+echo view($config->view.'\system\attach\_vConfigAttach');
+echo view($config->view.'\system\attach\_vImgSelect');
+?>
+
 <?= $this->endSection() ?>
+
 <?php echo $this->section('pageScripts') ?>
+<script src="<?= base_url($config->scriptsPath)?>/acp/sys/vConfigAttach.js"></script>
 <script>
     $( document ).ready(function() {
         // Track original title to detect changes
@@ -231,6 +249,15 @@ echo $this->section('content') ?>
         }
     };
     const app = Vue.createApp({});
+    app.component('config-img', vConfigAttach);
+    app.component('vgallery', gallery);
+    app.component('vimg-reivew', imgGalleryReview);
+    app.component('vgallery-img', galleryImg);
+    app.component('vimg-infor', imgInfor);
+    app.component('vfileReivew', fileReview);
+    app.component('vimg-select', vFileSelector);
+    app.component('vfile-preivew', filePreview);
+
     app.component('category-slug', categorySlug);
     app.mount('#categoryApp');
 

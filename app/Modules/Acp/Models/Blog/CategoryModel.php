@@ -9,7 +9,6 @@ namespace Modules\Acp\Models\Blog;
 
 use App\Models\Blog\CategoryContentModel;
 use App\Models\Blog\CategoryModel as BaseCategoryModel;
-use App\Entities\Category;
 use App\Models\LangModel;
 
 class CategoryModel extends BaseCategoryModel

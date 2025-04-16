@@ -2,7 +2,7 @@
 echo $this->extend($config->viewLayout);
 echo $this->section('content');?>
 
-<div class="row">
+<div class="row" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>" >
 
     <!--Add New Category-->
     <div class="col-5">
@@ -47,6 +47,10 @@ echo $this->section('content');?>
                     <textarea class="form-control" rows="3" name="description" placeholder="Nhập mô tả"><?= old('description') ?></textarea>
                 </div>
 
+                <?php if ($cat_type == 'product') :?> 
+                <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" select-img-type="1" input-name="cat_image" return-img="id" img-data=""></config-img>
+                <?php endif;?>
+
                 <hr>
 
                 <div class="ml-0">
@@ -81,8 +85,6 @@ echo $this->section('content');?>
                     </div>
                 </div>
 
-
-
             </div>
 
             <div class="card-footer">
@@ -94,7 +96,7 @@ echo $this->section('content');?>
     </div>
 
     <!--List Category-->
-    <div class="col-7" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
+    <div class="col-7" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
 
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -177,13 +179,29 @@ echo $this->section('content');?>
     </div>
 
 </div>
+
+<?php
+echo view($config->view.'\system\attach\_vGallery');
+echo view($config->view.'\system\attach\_vConfigAttach');
+echo view($config->view.'\system\attach\_vImgSelect');
+?>
 <?= $this->endSection() ?>
 
 <?=$this->section('pageScripts') ?>
+<script src="<?= base_url($config->scriptsPath)?>/acp/sys/vConfigAttach.js"></script>
 <!-- Import Category App -->
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/vCategory.js"></script>
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/postWordCount.js"></script>
 <script>
+    catList.component('config-img', vConfigAttach);
+    catList.component('vgallery', gallery);
+    catList.component('vimg-reivew', imgGalleryReview);
+    catList.component('vgallery-img', galleryImg);
+    catList.component('vimg-infor', imgInfor);
+    catList.component('vfileReivew', fileReview);
+    catList.component('vimg-select', vFileSelector);
+    catList.component('vfile-preivew', filePreview);
     const listCatMounted = catList.mount('#listCat');
+
 </script>
 <?= $this->endSection() ?>

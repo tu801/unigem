@@ -6,12 +6,13 @@
 
 namespace App\Entities;
 
+use App\Enums\CategoryEnum;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Entity\Entity;
 use App\Models\AttachMetaModel;
 use App\Models\AttachModel;
 use App\Models\Blog\CategoryContentModel;
-use App\Models\Blog\MetaDataModel;
+use CodeIgniter\I18n\Time;
 
 class Category extends Entity {
 
@@ -31,6 +32,11 @@ class Category extends Entity {
      * @var array
      */
     protected $attach_file = [];
+
+    /**
+     * Category image used for display in Home page
+     */
+    protected $cat_image;
 
     /**
      * get the attached image
@@ -107,5 +113,34 @@ class Category extends Entity {
                 'seo_meta' => json_encode($metaVal)
             ])->update();
         }
+    }
+
+    public function getCatImage()
+    {
+        if (empty($this->id)) {
+            throw new \RuntimeException(lang('Cat.entity_error_request'));
+        }
+
+        $session = Services::session();
+        $key = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$session->lang->locale;
+        $metaAttach = model(AttachMetaModel::class);
+        $attachModel = model(AttachModel::class);
+
+        $attachMeta = $metaAttach->where('mod_name', $key)->where('mod_id', $this->id)->first();
+
+        if ($attachMeta) {
+            $images = json_decode($attachMeta->images);
+
+            $attach = $attachModel->find($images->image);
+            if ($attach) {
+                $mytime = Time::parse($attach->created_at);
+                return [
+                    'image'          => base_url("uploads/attach/".$mytime->format('Y/m').'/'.$attach->file_name),
+                    'image_id'       => $images->image,
+                    'attach_meta_id' => $attachMeta->id,
+                ];
+            }
+        }
+        return null;
     }
 }
