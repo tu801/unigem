@@ -20,6 +20,14 @@ class ThemeOptions
     private $config_group_id = 'theme_options';
     private $_configModel;
 
+    /**
+     * List of input type that store data in json format
+     */
+    private $_dataTypeJsonInputList = [
+        'image',
+        'item_list'
+    ];
+
     public function __construct()
     {
         $this->_configModel = model(ConfigModel::class);
@@ -52,24 +60,17 @@ class ThemeOptions
             $locale
         );
 
-        // list utility_block
+        // list jewelry_block
         $this->getThemeConfigRecord(
-            'utility_block',
-            ThemeOptionEnum::UTILITY_BLOCK,
+            'jewelry_block',
+            ThemeOptionEnum::JEWELRY_BLOCK,
             $locale
         );
 
-        // list top_ranking
+        // list gems_block
         $this->getThemeConfigRecord(
-            'top_ranking',
-            ThemeOptionEnum::TOP_RANKING,
-            $locale
-        );
-
-        // list ads_block
-        $this->getThemeConfigRecord(
-            'ads_block',
-            ThemeOptionEnum::ADS_BLOCK,
+            'gems_block',
+            ThemeOptionEnum::GEMS_BLOCK,
             $locale
         );
 
@@ -146,7 +147,7 @@ class ThemeOptions
                     'title'     => lang('Theme.item_'.$key),
                     'key'       => $configKey,
                     'value'     => '',
-                    'is_json' => ($item['input'] == 'image') ? 1 : 0
+                    'is_json' => (in_array($item['input'], $this->_dataTypeJsonInputList)) ? 1 : 0
                 ];
                 $this->_configModel->insert($newConfig);
                 cache()->delete('_theme_options');
@@ -157,10 +158,14 @@ class ThemeOptions
                     'value' => ''
                 ];
             }
+            // display description text
             if ( isset($item['desc']) && !empty($item['desc'])) {
                 $itemConfig[$key]['desc'] = lang("Theme.item_{$item['desc']}");
             }
 
+            /**
+             * display default data for select input or item_list
+             */
             if ( isset($item['data']) && !empty($item['data']) ) {
                 $itemConfig[$key]['data'] = $this->{$item['data']}();
             }
@@ -195,12 +200,12 @@ class ThemeOptions
     }
 
     /**
-     * Save general config to database
+     * Save general config to database base on the config input type
      * @param $input
      * @param string $locale
      */
     public function saveGeneralConfig($postData, array $config_array, string $locale, $key_prefix = '')
-    { //dd($postData, $config_array);
+    {
         foreach ($config_array as $key => $item) {
             if ( !array_key_exists($key, $postData) && $key != 'active' ) {
                 continue;
@@ -219,6 +224,9 @@ class ThemeOptions
                     break;
                 case 'switch':
                     $configData->value = isset($postData[$key]) ? $postData[$key] : 0;
+                    break;
+                case 'item_list':
+                    $configData->value = isset($postData[$key]) ? json_encode($postData[$key]) : json_encode([]);
                     break;
                 default:
                     $configData->value = $postData[$key];

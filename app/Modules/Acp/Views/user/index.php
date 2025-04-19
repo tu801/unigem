@@ -15,7 +15,7 @@ $frmUrl = (isset($action) && $action == 'deleted') ? route_to('list_user') . '?d
                     <a class="<?= ($action == 'deleted') ? 'badge badge-primary' : '' ?>"
                         href="<?= base_url("{$config->adminSlug}/user?deleted=1") ?>">Deleted</a>
                 </div>
-                <div class="card-tools">
+                <div class="card-tools mt-2">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" placeholder="<?= lang('User.search') ?>" name="username"
                             value="<?= isset($search_title) ? $search_title : '' ?>">
@@ -47,54 +47,55 @@ $frmUrl = (isset($action) && $action == 'deleted') ? route_to('list_user') . '?d
                     <!-- /.float-right -->
                 </div>
 
-                <table id="<?php echo $module . "_" . $method ?>_DataTable"
-                    class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th width="5"><?= lang('ID') ?></th>
-                            <th><?= lang('User.username') ?></th>
-                            <th><?= lang('User.avata') ?></th>
-                            <th><?= lang('User.full_name') ?></th>
-                            <th><?= lang('User.user_group') ?></th>
-                            <th><?= lang('User.created') ?></th>
-                            <th><?= lang('Actions') ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($data as $row) {  ?>
-                        <tr>
-                            <td><?= $row->id ?></td>
-                            <td><a href="<?= base_url("acp/user/profile?user={$row->id}") ?>"><?= $row->username ?></a>
-                            </td>
-                            <td>
-                                <img src="<?= getUserAvatar($row) ?>" class="img-lg img-thumbnail">
-                            </td>
-                            <td><?= $row->meta['fullname'] ?? '' ?></td>
-                            <td><?= (isset($row->groupData) && is_array($row->groupData)) ? $row->groupData['name'] : '' ?>
-                            </td>
-                            <td><?= $row->created_at->toLocalizedString('d/m/Y') ?></td>
-                            <td>
-                                <a class="btn btn-primary btn-sm mb-2" href="<?= route_to("edit_user", $row->id) ?>"><i
-                                        class="fas fa-edit"></i></a>
-                                <?php if ($login_user->inGroup('superadmin', 'admin') && $row->isNotActivated()) : ?>
-                                <a class="btn btn-success btn-sm mb-2" title="Activate User"
-                                    href="<?= route_to("active_user", $row->id) ?>"><i class="fa fa-lock-open"></i></a>
-                                <?php endif; ?>
-                                <?php if ($action == 'all') : ?>
-                                <a class="btn btn-danger btn-sm mb-2 acp_item_del"
-                                    href="<?= route_to("remove_user", $row->id) ?>"><i class="fas fa-trash"></i></a>
-                                <?php elseif ($action == 'deleted' && $login_user->root_user) : ?>
-                                <a class="btn btn-success btn-sm mb-2"
-                                    href="<?= route_to("recover_user", $row->id) ?>"><i class="fa fa-redo"></i></a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php } ?>
+                <div class="row table-responsive">
+                    <table id="<?php echo $module . "_" . $method ?>_DataTable"
+                        class="table table-striped table-bordered dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                <th width="5"><?= lang('ID') ?></th>
+                                <th><?= lang('User.username') ?></th>
+                                <th><?= lang('User.avata') ?></th>
+                                <th><?= lang('User.full_name') ?></th>
+                                <th><?= lang('User.user_group') ?></th>
+                                <th><?= lang('User.created') ?></th>
+                                <th><?= lang('Actions') ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($data as $row) {  ?>
+                            <tr>
+                                <td><?= $row->id ?></td>
+                                <td><a href="<?= base_url("acp/user/profile?user={$row->id}") ?>"><?= $row->username ?></a>
+                                </td>
+                                <td>
+                                    <img src="<?= getUserAvatar($row) ?>" class="img-lg img-thumbnail">
+                                </td>
+                                <td><?= $row->meta['fullname'] ?? '' ?></td>
+                                <td><?= (isset($row->groupData) && is_array($row->groupData)) ? $row->groupData['name'] : '' ?>
+                                </td>
+                                <td><?= $row->created_at->toLocalizedString('d/m/Y') ?></td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm mb-2" href="<?= route_to("edit_user", $row->id) ?>"><i
+                                            class="fas fa-edit"></i></a>
+                                    <?php if ($login_user->inGroup('superadmin', 'admin') && $row->isNotActivated()) : ?>
+                                    <a class="btn btn-success btn-sm mb-2" title="Activate User"
+                                        href="<?= route_to("active_user", $row->id) ?>"><i class="fa fa-lock-open"></i></a>
+                                    <?php endif; ?>
+                                    <?php if ($action == 'all') : ?>
+                                    <a class="btn btn-danger btn-sm mb-2 acp_item_del"
+                                        href="<?= route_to("remove_user", $row->id) ?>"><i class="fas fa-trash"></i></a>
+                                    <?php elseif ($action == 'deleted' && $login_user->root_user) : ?>
+                                    <a class="btn btn-success btn-sm mb-2"
+                                        href="<?= route_to("recover_user", $row->id) ?>"><i class="fa fa-redo"></i></a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php } ?>
 
-                    </tbody>
-                </table>
-
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="card-footer">

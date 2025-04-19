@@ -20,7 +20,7 @@ echo $this->section('content')
                         </div>
                     </div>
 
-                    <div class="card-tools">
+                    <div class="card-tools mt-2">
                         <div class="input-group input-group-sm">
                             <input type="text" value="<?=(isset($search_title))?$search_title:''?>" 
                                 name="name" class="form-control" placeholder="<?=lang('Acp.search')?>">
@@ -33,7 +33,7 @@ echo $this->section('content')
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="card-body table-responsive">
 
                     <table id="<?php echo $controller."_".$method ?>_DataTable" 
                     class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">

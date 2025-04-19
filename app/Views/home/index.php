@@ -6,9 +6,11 @@ echo $this->section('content');
 <?= view($configs->view . '\components\home\slider') ?>
 <!-- //slider -->
 
-<!-- Categories -->
-<?= view($configs->view . '\components\home\categories') ?>
-<!-- //Categories -->
+<!-- Jewel Categories -->
+<?php if (get_theme_config('jewelry_cat_active')):?>
+<?= view($configs->view . '\components\home\jewel_categories', ['currentLang' => $currentLang]) ?>
+<?php endif;?>
+<!-- //Jewel Categories -->
 
 <!-- Products -->
 <?php if ( !empty($productList) ) : ?>
@@ -16,9 +18,11 @@ echo $this->section('content');
 <?php endif; ?>
 <!-- //Products -->
 
-<!-- Collection -->
-<?= view($configs->view. '\components\home\collection')?>
-<!-- //Collection -->
+<!-- Gems Collection -->
+<?php if (get_theme_config('gems_cat_active')):?>
+<?= view($configs->view. '\components\home\gems-collection')?>
+<?php endif;?>
+<!-- //Gems Collection -->
 
 <!-- Marquee -->
 <?= view($configs->view. '\components\home\marquee')?>

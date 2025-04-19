@@ -33,7 +33,7 @@ class CategoryModel extends Model
      * @param  int  $lang_id
      * @return array
      */
-    public function getCategories(string $type, int $lang_id)
+    public function getCategories(string $type, ?int $lang_id)
     {
         if ( isset($lang_id) && $lang_id > 0 ) $this->where('category_content.lang_id', $lang_id);
 

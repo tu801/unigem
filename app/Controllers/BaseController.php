@@ -96,8 +96,6 @@ abstract class BaseController extends Controller
         $this->_data['themeOption'] = $themeOption->getThemeOptions();
 
         $theme = $this->config->theme_name ?? $this->config->sys['default_theme_name'];
-        $this->config->templatePath .= $theme;
-        $this->config->noimg = "{$theme}/".$this->config->noimg;
         $this->config->view = 'App\Views';
         $this->theme = $theme;
 
@@ -114,9 +112,10 @@ abstract class BaseController extends Controller
      */
     public function _render($viewPage, $data){
         $data['configs'] = $this->config;
+        $data['currentLang'] = $this->currentLang;
 
         $themePath = ROOTPATH . "/themes/{$this->theme}/";
-        $renderer  = single_service('renderer', $themePath);
+        $renderer  = single_service('renderer', $this->config->templatePath);
 
         return $renderer
             ->setData($data)

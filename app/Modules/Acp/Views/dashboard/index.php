@@ -60,10 +60,10 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
 
 <!-- ecommerce analytic-->
 <div class="row">
-    <div class="col-6 col-lg-6">
+    <div class="col-md-6 col-lg-6">
         <?= view_cell('EcommerceOverviewCell') ?>
     </div>
-    <div class="col-6 col-lg-6">
+    <div class="col-md-6 col-lg-6">
         <?= view_cell('SaleChartOverTimeCell', ['configs' => $config]) ?>
     </div>
 </div>
@@ -71,7 +71,7 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
 
 <div class="row">
 <?php if ( isset($monthPosts) ) : ?>
-    <div class="col-6">
+    <div class="col-md-6">
         <div class="card card-outline card-primary">
             <div class="card-header border-transparent">
                 <h3 class="card-title">Tin Mới</h3>
@@ -100,7 +100,7 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
                         $i= 0;
                         foreach ($monthPosts as $row) {
                             $i++;
-                            echo view($config->view.'\dashboard\components\_listPostItem', ['num' => $i, 'row' => $row, 'login_user' => $login_user, 'action' => $currentAct]);
+                            echo view($config->view.'\dashboard\components\_listPostItem', ['num' => $i, 'row' => $row, 'login_user' => $login_user]);
                         }
                         ?>
                         </tbody>
@@ -119,8 +119,8 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
 
 <?php
 if ( isset($monthPosts) ) {
-    echo '<div class="col-6">';
-    echo view($config->view.'\dashboard\components\_listProducts', ['products' => $products, 'action' => $currentAct]);
+    echo '<div class="col-md-6">';
+    echo view($config->view.'\dashboard\components\_listProducts', ['products' => $products]);
     echo '</div>';
 }
 ?>

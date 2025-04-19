@@ -50,7 +50,7 @@ class Attach extends AcpController
                 $imgRules = [
                     'file' => [
                         'uploaded[file]',
-                        'mime_in[file,image/jpg,image/jpeg,image/gif,image/png]',
+                        'mime_in[file,'. implode(',', $this->config->uploadMineType) .']',
                         'max_size[file,12048]',
                     ],
                 ];
@@ -135,7 +135,7 @@ class Attach extends AcpController
             $imgRules = [
                 'image' => [
                     'uploaded[images]',
-                    'mime_in[images,image/jpg,image/jpeg,image/gif,image/png]',
+                    'mime_in[images,'. implode(',', $this->config->uploadMineType) .']',
                     'max_size[images,10024]',
                 ],
             ];

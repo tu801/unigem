@@ -14,9 +14,8 @@ final class ThemeOptionEnum extends BaseEnum
         'logo',
         'general',
         'main_slider',
-        'utility_block',
-        'top_ranking',
-        'ads_block',
+        'jewelry_block',
+        'gems_block'
     ];
 
     const LOGO_CONFIG = [
@@ -85,76 +84,38 @@ final class ThemeOptionEnum extends BaseEnum
 
     const MAIN_SLIDER = [
         'main_slider' => [
-            'input' => 'slider',
-            'desc'  => 'slider_image_info'
+            'input' => 'slider'
         ]
     ];
 
-    const UTILITY_BLOCK = [
-        'active' => [
+    // block danh mục trang sức
+    const JEWELRY_BLOCK = [
+        'jewelry_cat_active' => [
             'input' => 'switch',
         ],
-        'ship_title' => [
-            'input' => 'text'
+        'jewelry_cat_list' => [
+            'input'             => 'item_list',
+            'data'              => '__getProductCategories',
+            'desc'              => 'jewelry_cat_info'
         ],
-        'ship_text' => [
-            'input' => 'textarea'
-        ],
-        'money_back_title' => [
-            'input' => 'text'
-        ],
-        'money_back_text' => [
-            'input' => 'textarea'
-        ],
-        'support_title' => [
-            'input' => 'text'
-        ],
-        'support_text' => [
-            'input' => 'textarea'
-        ],
+        
     ];
 
-    const TOP_RANKING = [
-        'top_ranking_active' => [
+    // block danh mục đá quý
+    const GEMS_BLOCK = [
+        'gems_cat_active' => [
             'input' => 'switch',
         ],
-        'first_col' => [
-            'input' => 'dropdown',
-            'desc'  => 'top_ranking_first_col_info',
-            'data'  => '__getProductCategories'
+        'gems_cat_title' => [
+            'input' => 'text',
+            'desc'  => 'gems_cat_title_desc'
         ],
-        'second_col' => [
-            'input' => 'dropdown',
-            'desc'  => 'top_ranking_second_col_info',
-            'data'  => '__getProductCategories'
+        'gems_cat_list' => [
+            'input'             => 'item_list',
+            'data'              => '__getProductCategories',
+            'desc'              => 'gem_cat_info'
         ],
-        'third_col' => [
-            'input' => 'dropdown',
-            'desc'  => 'top_ranking_third_col_info',
-            'data'  => '__getProductCategories'
-        ],
-        'fourth_col' => [
-            'input' => 'dropdown',
-            'desc'  => 'top_ranking_fourth_col_info',
-            'data'  => '__getProductCategories'
-        ],
-        'new_arrivals_active' => [
-            'input' => 'switch',
-            'desc'  => 'new_arrivals_info',
-        ],
-        'recommended_active' => [
-            'input' => 'switch',
-            'desc'  => 'recommended_info',
-        ],
+        
     ];
 
-    const ADS_BLOCK = [
-        'active' => [
-            'input' => 'switch',
-        ],
-        'ads_image' => [
-            'input' => 'image',
-            'desc'  => 'ads_info',
-        ],
-    ];
 }

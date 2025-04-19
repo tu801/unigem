@@ -38,6 +38,20 @@ class Category extends Entity {
      */
     protected $cat_image;
 
+    protected $url;
+
+    public function getUrl(){
+        if (empty($this->id)) {
+            throw new \RuntimeException(lang('Cat.entity_error_request'));
+        }
+
+        if (empty($this->url)) {
+            $this->url = base_url(route_to('category_page', $this->attributes['slug']));
+        }
+        
+        return $this->url;    
+    }
+
     /**
      * get the attached image
      * @return array|bool|mixed|void
@@ -120,6 +134,8 @@ class Category extends Entity {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
+        $config = config('Site');
+        $imageUrl = base_url($config->no_img);
 
         $session = Services::session();
         $key = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$session->lang->locale;
@@ -134,13 +150,22 @@ class Category extends Entity {
             $attach = $attachModel->find($images->image);
             if ($attach) {
                 $mytime = Time::parse($attach->created_at);
+                $attachFile = 'uploads/attach/' . $mytime->format('Y/m').'/'.$attach->file_name;
+                // Remove debugging statement
+                if (file_exists(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $attachFile))) {
+                   $imageUrl = base_url($attachFile);
+                }
+                
                 return [
-                    'image'          => base_url("uploads/attach/".$mytime->format('Y/m').'/'.$attach->file_name),
+                    'image'          => $imageUrl,
                     'image_id'       => $images->image,
                     'attach_meta_id' => $attachMeta->id,
                 ];
             }
         }
-        return null;
+
+        return [
+            'image'          => $imageUrl
+        ];
     }
 }

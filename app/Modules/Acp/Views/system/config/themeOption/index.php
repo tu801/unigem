@@ -80,16 +80,18 @@ echo $this->section('content');
                                                         </div>
                                                     </div>
                                                     <?php
-                                                    if ( isset($item['desc']) && !empty($item['desc']) ) {
-                                                        echo '<span class="help-block">'. $item['desc'] .'</span>';
-                                                    }
+                                                    
                                                     break;
                                                 case 'dropdown' :
                                                     echo form_dropdown($htmlData, $item['data'], $item['value']);
-                                                    if ( isset($item['desc']) && !empty($item['desc']) ) {
-                                                        echo '<span class="help-block">'. $item['desc'] .'</span>';
-                                                    }
                                                     break;
+                                                case 'item_list':
+                                                    echo view($config->view.'\system\config\themeOption\_item_list', ['itemData' => $item, 'itemName' => $key]);
+                                                    
+                                                    break;
+                                            }
+                                            if ( isset($item['desc']) && !empty($item['desc']) ) {
+                                                echo '<span class="help-block">'. $item['desc'] .'</span>';
                                             }
                                             ?>
                                         </div>
@@ -145,4 +147,5 @@ echo view($config->view.'\system\config\themeOption\_slider_selector');
         })
     });
 </script>
+
 <?= $this->endSection() ?>

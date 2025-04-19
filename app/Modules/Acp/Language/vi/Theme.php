@@ -42,32 +42,18 @@ return [
     'slider_image_selector'         => 'Upload ảnh cho Slider',
     'slider_image_info'             => 'Hình slider phải có kích thước tối thiểu là full HD ( 1800x785px )',
 
-    // Utility block
-    'item_ship_title'               => 'Tiêu đề block 1',
-    'item_ship_text'                => 'Nội dung block 1',
-    'item_money_back_title'         => 'Tiêu đề block 2',
-    'item_money_back_text'          => 'Nội dung block 2',
-    'item_support_title'            => 'Tiêu đề block 3',
-    'item_support_text'             => 'Nội dung block 3',
+    // jewelry_cat_list block
+    'config_group_jewelry_block'    => 'Cấu Hình Block danh mục trang sức',
+    'item_jewelry_cat_list'         => 'Danh sách Danh mục',
+    'item_jewelry_cat_info'         => 'Hiển thị danh mục trang sức trên trang chủ',
 
-    // top ranking
-    'item_top_ranking_active'       => 'Hiển thị mục sản phẩm top',
-    'item_new_arrivals_active'      => 'Hiển thị mục sản phẩm mới',
-    'item_recommended_active'       => 'Hiển thị mục sản phẩm đề xuất',
-    'item_first_col'                => 'Cột thứ 1',
-    'item_second_col'               => 'Cột thứ 2',
-    'item_third_col'                => 'Cột thứ 3',
-    'item_fourth_col'               => 'Cột thứ 4',
-    'item_top_ranking_first_col_info' => 'Vui lòng chọn danh mục để thiển thị sản phẩm cho cột thứ 1',
-    'item_top_ranking_second_col_info' => 'Vui lòng chọn danh mục để thiển thị sản phẩm cho cột thứ 2',
-    'item_top_ranking_third_col_info' => 'Vui lòng chọn danh mục để thiển thị sản phẩm cho cột thứ 3',
-    'item_top_ranking_fourth_col_info' => 'Vui lòng chọn danh mục để thiển thị sản phẩm cho cột thứ 4',
-    'item_new_arrivals_info_info'   => 'Mục này sẽ hiển thị những sản phẩm mới được đăng',
-    'item_recommended_info'         => 'Mục này sẽ hiển thị những sản phẩm bán chạy nhất',
+    // gems_cat_list block
+    'config_group_gems_block'       => 'Cấu Hình Block danh mục đá quý',
+    'item_gems_cat_list'            => 'Danh sách Danh mục',
+    'item_gem_cat_info'             => 'Hiển thị 8 danh mục đá quý trên trang chủ',
+    'item_gems_cat_title'           => 'Tiêu Đề',
+    'item_gems_cat_title_desc'      => 'Tiêu đề hiển thị cho block',
 
-    // ads blokc
-    'item_ads_image'                => 'Quảng cáo',
-    'item_ads_info'                 => 'Hình quảng cáo phải có kích thước 1200x290px',
 
     // Error
     'invalid_option_group'          => 'Cấu hình giao diện không hợp lệ',

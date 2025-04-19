@@ -5,7 +5,7 @@ echo $this->section('content');?>
 <div class="row" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>" >
 
     <!--Add New Category-->
-    <div class="col-5">
+    <div class="col-md-5">
         <?= form_open(route_to('add_category', $cat_type)) ?>
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -96,7 +96,7 @@ echo $this->section('content');?>
     </div>
 
     <!--List Category-->
-    <div class="col-7" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
+    <div class="col-md-7" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
 
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -105,7 +105,7 @@ echo $this->section('content');?>
                     <a class="<?= ($action == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("{$config->adminSlug}/category/{$cat_type}?deleted=1") ?>">Deleted</a>
                 </div>
 
-                <div class="card-tools">
+                <div class="card-tools mt-2">
                     <div class="input-group input-group-sm">
                         <input type="text" name="title" class="form-control" placeholder="<?= lang('Category.search') ?>" v-model="searchkey" @keyup="onSearch">
                         <div class="input-group-append">
@@ -119,7 +119,7 @@ echo $this->section('content');?>
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="mailbox-controls">
-                    <div class="input-group col-3">
+                    <div class="input-group col-md-3 mb-2">
                         <select name="action" id="bulk-action-selector-top" class="form-control">
                             <option value="-1">Bulk Actions</option>
                             <option value="mdelete">Delete</option>

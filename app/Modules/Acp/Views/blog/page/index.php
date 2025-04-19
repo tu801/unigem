@@ -4,7 +4,7 @@ echo $this->section('content')
 ?>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-md-12">
         <form method="post" action="<?=route_to('page') ?>" >
             <?=csrf_field()?>
             <div class="card">
@@ -21,7 +21,7 @@ echo $this->section('content')
                         </div>
                     </div>
 
-                    <div class="card-tools">
+                    <div class="card-tools mt-2">
                         <div class="input-group input-group-sm">
                             <input type="text" value="<?=(isset($search_title))?$search_title:''?>" 
                                 name="title" class="form-control" placeholder="<?=lang('Acp.search')?>">
@@ -34,10 +34,10 @@ echo $this->section('content')
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="card-body table-responsive">
 
                     <table id="<?php echo $controller."_".$method ?>_DataTable" 
-                    class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                    class="table table-striped table-bordered">
                         <thead>
                         <tr>
                             <th width="3%">

@@ -38,6 +38,10 @@ class ThemeOptionController extends AcpController
         $this->_render('\system\config\themeOption\index', $this->_data);
     }
 
+    /**
+     * save theme config options
+     * @return mixed
+     */
     public function saveOptions()
     {
         $postData = $this->request->getPost();
@@ -60,24 +64,19 @@ class ThemeOptionController extends AcpController
                     $this->currentLang->locale,
                     'general');
                 break;
-            case 'utility_block':
+            case 'jewelry_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
-                    ThemeOptionEnum::UTILITY_BLOCK,
+                    ThemeOptionEnum::JEWELRY_BLOCK,
                     $this->currentLang->locale);
                 break;
-            case 'top_ranking':
+            case 'gems_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
-                    ThemeOptionEnum::TOP_RANKING,
+                    ThemeOptionEnum::GEMS_BLOCK,
                     $this->currentLang->locale);
                 break;
-            case 'ads_block':
-                $this->themeOptions->saveGeneralConfig(
-                    $postData,
-                    ThemeOptionEnum::ADS_BLOCK,
-                    $this->currentLang->locale);
-                break;
+            
         }
 
         return redirect()->back()->with('message', lang('Config.update_theme_success'));

@@ -20,7 +20,12 @@ class Site extends BaseConfig {
     //--------------------------------------------------------------------
     public $theme_name = "unigem";
     public $viewLayout = 'master';
-    public $templatePath = "themes/";
-    public $noimg = "images/no-image.svg";
+    public $templatePath;
+    public $no_img;
+
+    public function __construct() {
+        $this->templatePath = "themes/{$this->theme_name}/";
+        $this->no_img = $this->templatePath . 'images/no-image.svg';
+    }
 
 }
