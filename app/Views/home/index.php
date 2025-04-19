@@ -25,7 +25,9 @@ echo $this->section('content');
 <!-- //Gems Collection -->
 
 <!-- Marquee -->
+<?php if (get_theme_config('running_text_active')):?>
 <?= view($configs->view. '\components\home\marquee')?>
+<?php endif;?>
 <!-- //Marquee -->
 
 <!-- video-text -->

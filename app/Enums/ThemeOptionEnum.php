@@ -15,6 +15,7 @@ final class ThemeOptionEnum extends BaseEnum
         'general',
         'main_slider',
         'jewelry_block',
+        'running_text_block',
         'gems_block'
     ];
 
@@ -97,6 +98,20 @@ final class ThemeOptionEnum extends BaseEnum
             'input'             => 'item_list',
             'data'              => '__getProductCategories',
             'desc'              => 'jewelry_cat_info'
+        ],
+        
+    ];
+
+    // block chữ chạy
+    const RUNNING_TEXT_BLOCK = [
+        'running_text_active' => [
+            'input' => 'switch',
+        ],
+        'running_text_1' => [
+            'input' => 'text',
+        ],
+        'running_text_2' => [
+            'input' => 'text',
         ],
         
     ];

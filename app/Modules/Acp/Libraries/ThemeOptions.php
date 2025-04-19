@@ -66,6 +66,13 @@ class ThemeOptions
             ThemeOptionEnum::JEWELRY_BLOCK,
             $locale
         );
+        
+        // list running_text_block
+        $this->getThemeConfigRecord(
+            'running_text_block',
+            ThemeOptionEnum::RUNNING_TEXT_BLOCK,
+            $locale
+        );
 
         // list gems_block
         $this->getThemeConfigRecord(

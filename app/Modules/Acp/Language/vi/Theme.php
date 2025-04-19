@@ -44,11 +44,19 @@ return [
 
     // jewelry_cat_list block
     'config_group_jewelry_block'    => 'Cấu Hình Block danh mục trang sức',
+    'item_jewelry_cat_active'       => 'Bật/Tắt',
     'item_jewelry_cat_list'         => 'Danh sách Danh mục',
     'item_jewelry_cat_info'         => 'Hiển thị danh mục trang sức trên trang chủ',
 
+    // running_text_block block
+    'config_group_running_text_block'=> 'Cấu Hình Block Text chạy',
+    'item_running_text_active'       => 'Bật/Tắt',
+    'item_running_text_1'            => 'Text chạy 1',
+    'item_running_text_2'            => 'Text chạy 2',
+
     // gems_cat_list block
     'config_group_gems_block'       => 'Cấu Hình Block danh mục đá quý',
+    'item_gems_cat_active'          => 'Bật/Tắt',
     'item_gems_cat_list'            => 'Danh sách Danh mục',
     'item_gem_cat_info'             => 'Hiển thị 8 danh mục đá quý trên trang chủ',
     'item_gems_cat_title'           => 'Tiêu Đề',
