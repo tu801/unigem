@@ -62,6 +62,18 @@ return [
     'item_gems_cat_title'           => 'Tiêu Đề',
     'item_gems_cat_title_desc'      => 'Tiêu đề hiển thị cho block',
 
+    // design_block block
+    'config_group_design_block'     => 'Cấu Hình Block thiết kế trang sức',
+    'item_design_active'            => 'Bật/Tắt',
+    'item_design_title'             => 'Tiêu Đề',
+    'item_design_title_desc'        => 'Tiêu đề hiển thị cho block',
+    'item_design_sub_title'         => 'Tiêu Đề phụ',
+    'item_design_step_1'            => 'Bước 1',
+    'item_design_step_2'            => 'Bước 2',
+    'item_design_step_3'            => 'Bước 3',
+    'item_design_step_4'            => 'Bước 4',
+    'item_design_intro_video_url'   => 'Video giới thiệu',
+    'item_design_intro_video_desc'  => 'URL Video giới thiệu trang sức',
 
     // Error
     'invalid_option_group'          => 'Cấu hình giao diện không hợp lệ',

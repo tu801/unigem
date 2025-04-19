@@ -29,4 +29,17 @@ return [
     'best_sell_view_all_btn'            => 'Xem tất cả',
 
     'top_news'                          => 'Tin nổi bật',
+
+    // icon box
+    'icon_box_free_ship_title'          => 'Miễn phí vận chuyển',
+    'icon_box_free_ship_desc'           => 'Đơn hàng trên 1 triệu',
+
+    'icon_box_payment_title'            => 'Thanh toán linh hoạt',
+    'icon_box_payment_desc'             => 'Thanh toán khi nhận hàng',
+
+    'icon_box_returns_title'            => 'Hỗ trợ trả hàng trong 14 ngày',
+    'icon_box_returns_desc'             => 'Đổi trả trong 14 ngày',
+
+    'icon_box_support_title'            => 'Hỗ trợ 24/7',
+    'icon_box_support_desc'             => 'Hỗ trợ trực tuyến',
 ];

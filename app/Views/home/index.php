@@ -31,7 +31,9 @@ echo $this->section('content');
 <!-- //Marquee -->
 
 <!-- video-text -->
+<?php if (get_theme_config('design_active')):?>
 <?= view($configs->view. '\components\home\video-text')?>
+<?php endif;?>
 <!-- /video-text -->
 
 <!-- Blogs post -->
@@ -69,13 +71,73 @@ echo $this->section('content');
 
                 </div>
             </div>
+            <?php if ( count($postList) > 3) :?>
             <div class="nav-sw nav-next-slider nav-next-recent box-icon w_46 round"><span class="icon icon-arrow-left"></span></div>
             <div class="nav-sw nav-prev-slider nav-prev-recent box-icon w_46 round"><span class="icon icon-arrow-right"></span></div>
             <div class="sw-dots style-2 sw-pagination-recent justify-content-center"></div>
+            <?php endif;?>
         </div>
     </div>
 </section>
 <?php endif;?>
 <!-- /Blogs post -->
 
+<!-- Icon box -->
+<section class="flat-spacing-1 flat-iconbox wow fadeInUp" data-wow-delay="0s">
+    <div class="container">
+        <div class="wrap-carousel wrap-mobile">
+            <div dir="ltr" class="swiper tf-sw-mobile" data-preview="1" data-space="15">
+                <div class="swiper-wrapper wrap-iconbox">
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-shipping"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_free_ship_title')?></div>
+                                <p><?=lang('Home.icon_box_free_ship_desc')?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-payment fs-22"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_payment_title')?></div>
+                                <p><?=lang('Home.icon_box_payment_desc')?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-return fs-20"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_returns_title')?></div>
+                                <p><?=lang('Home.icon_box_returns_desc')?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-suport"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_support_title')?></div>
+                                <p><?=lang('Home.icon_box_support_desc')?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="sw-dots style-2 sw-pagination-mb justify-content-center"></div>
+        </div>
+    </div>
+</section>
+<!-- /Icon box -->
 <?= $this->endSection() ?>

@@ -16,7 +16,8 @@ final class ThemeOptionEnum extends BaseEnum
         'main_slider',
         'jewelry_block',
         'running_text_block',
-        'gems_block'
+        'gems_block',
+        'design_block',
     ];
 
     const LOGO_CONFIG = [
@@ -131,6 +132,36 @@ final class ThemeOptionEnum extends BaseEnum
             'desc'              => 'gem_cat_info'
         ],
         
+    ];
+    
+    // block thiết kế trang sức
+    const DESIGN_BLOCK = [
+        'design_active' => [
+            'input' => 'switch',
+        ],
+        'design_title' => [
+            'input' => 'text',
+            'desc'  => 'design_title_desc'
+        ],
+        'design_sub_title' => [
+            'input' => 'text',
+        ],
+        'design_step_1' => [
+            'input' => 'text',
+        ],        
+        'design_step_2' => [
+            'input' => 'text',
+        ],        
+        'design_step_3' => [
+            'input' => 'text',
+        ],        
+        'design_step_4' => [
+            'input' => 'text',
+        ],        
+        'design_intro_video_url' => [
+            'input' => 'text',
+            'desc'  => 'design_intro_video_desc'
+        ],        
     ];
 
 }

@@ -82,6 +82,12 @@ class ThemeOptionController extends AcpController
                     ThemeOptionEnum::RUNNING_TEXT_BLOCK,
                     $this->currentLang->locale);
                 break;
+            case 'design_block':
+                $this->themeOptions->saveGeneralConfig(
+                    $postData,
+                    ThemeOptionEnum::DESIGN_BLOCK,
+                    $this->currentLang->locale);
+                break;
             
         }
 

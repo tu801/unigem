@@ -2,29 +2,57 @@
     <div class="container">
         <div class="tf-grid-layout md-col-2 tf-img-video-text">
             <div class="content-wrap bg_orange radius-20">
-                <div class="heading text-white wow fadeInUp" data-wow-delay="0s">How to Use</div>
-                <p class="text-white fs-16 wow fadeInUp" data-wow-delay="0s">EASY USE WITH 4 STEPS</p>
+                <div class="heading text-white wow fadeInUp" data-wow-delay="0s"><?=get_theme_config('design_title')?></div>
+                <p class="text-white fs-16 wow fadeInUp" data-wow-delay="0s"><?=get_theme_config('design_sub_title')?></p>
                 <ul>
                     <li>
                         <div class="number text-white">1</div>
-                        <div class="text text-white">Unscrew cap of 4EVERBTL™ and fill with water. Screw cap back on.</div>
+                        <div class="text text-white"><?=get_theme_config('design_step_1')?></div>
                     </li>
                     <li>
                         <div class="number text-white">2</div>
-                        <div class="text text-white">Peel-off one blister individual seal and place tablet in the palm of your hand.</div>
+                        <div class="text text-white"><?=get_theme_config('design_step_2')?></div>
                     </li>
                     <li>
                         <div class="number text-white">3</div>
-                        <div class="text text-white">Add 3-8 drops of water and mix until tablet is fully dissolved.</div>
+                        <div class="text text-white"><?=get_theme_config('design_step_3')?></div>
                     </li>
                     <li>
                         <div class="number text-white">4</div>
-                        <div class="text text-white">Apply on clean skin like any liquid serum!</div>
+                        <div class="text text-white"><?=get_theme_config('design_step_4')?></div>
                     </li>
                 </ul>
             </div>
             <div class="video-wrap">
-                <video class="radius-20" src="images/slider/video-1.mp4" playsinline metadata controls></video>
+                <?php
+                    $video = get_theme_config('design_intro_video_url');
+                    
+                    function isYoutubeUrl($url) {
+                        return preg_match('/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/', $url);
+                    }
+                    
+                    if (!empty($video)) {
+                        if (isYoutubeUrl($video)) {
+                            // Extract video ID from YouTube URL
+                            preg_match('/^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/', $video, $matches);
+                            $videoId = $matches[2];
+                            ?>
+                            <iframe width="705" height="710" 
+                                src="https://www.youtube.com/embed/<?= $videoId ?>" 
+                                class="radius-20"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                            <?php
+                        } else {
+                            // Assume it's an MP4 file in uploads folder
+                            ?>
+                            <video class="radius-20" src="<?= $video ?>" playsinline metadata controls></video>
+                            <?php
+                        }
+                    }
+                ?>
             </div>
         </div>
     </div>

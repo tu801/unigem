@@ -80,6 +80,13 @@ class ThemeOptions
             ThemeOptionEnum::GEMS_BLOCK,
             $locale
         );
+        
+        // list design_block
+        $this->getThemeConfigRecord(
+            'design_block',
+            ThemeOptionEnum::DESIGN_BLOCK,
+            $locale
+        );
 
         return $this->options;
     }
