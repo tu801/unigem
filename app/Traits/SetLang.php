@@ -7,7 +7,7 @@ use App\Models\LangModel;
 /**
  * Author: tmtuan
  * Created date: 8/10/2023
- * Project: thuthuatonline
+ * Project: Unigem
  **/
 
 trait SetLang {

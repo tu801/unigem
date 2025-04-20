@@ -2,10 +2,10 @@
 /**
  * @author tmtuan
  * created Date: 9/27/2023
- * project: thuthuatonline
+ * project: Unigem
  */
 
-namespace App\Cells\Wigets;
+namespace App\Cells\Widgets;
 
 
 use CodeIgniter\Config\Services;

@@ -14,9 +14,9 @@ echo $this->section('content');
                 <div class="col-12 col-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <?= view_cell('\App\Cells\Wigets\NewPostListCell') ?>
-                            <?= view_cell('\App\Cells\Wigets\CategoryListCell') ?>
-                            <?= view_cell('\App\Cells\Wigets\TagsListCell::postTags') ?>
+                            <?= view_cell('\App\Cells\Widgets\NewPostListCell') ?>
+                            <?= view_cell('\App\Cells\Widgets\CategoryListCell') ?>
+                            <?= view_cell('\App\Cells\Widgets\TagsListCell::postTags') ?>
                         </div>
                     </div>
 
