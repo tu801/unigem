@@ -113,7 +113,18 @@
     <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/main.js"></script>  
     <script type="module" src="<?=base_url($configs->templatePath)?>/assets/js/model-viewer.min.js"></script>
     <script type="module" src="<?=base_url($configs->templatePath)?>/assets/js/zoom.js"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.type-languages').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var redirectUrl = selectedOption.data('href');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
+    </script>
+    
     <?= $this->renderSection('scripts') ?>
 </body>
 </html>

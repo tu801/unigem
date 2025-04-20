@@ -52,6 +52,9 @@ final class ThemeOptionEnum extends BaseEnum
             'input' => 'text',
             'desc'  => 'copyright_desc'
         ],
+        'company_name' => [
+            'input' => 'text',
+        ],
         'hotline' => [
             'input' => 'text',
         ],

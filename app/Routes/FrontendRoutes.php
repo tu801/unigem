@@ -6,6 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('404.html', 'Home::error_404', ['as'=> 'show_error']);
+$routes->get('contact.html', 'Home::contactUs', ['as'=> 'contactUs']);
 
 /**
  * Product

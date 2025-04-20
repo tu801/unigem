@@ -8,6 +8,7 @@ namespace App\Controllers\Blog;
 
 
 use App\Controllers\BaseController;
+use App\Enums\CategoryEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Libraries\SeoMeta\SeoMetaCell;
 use App\Libraries\SeoMeta\SeoMetaEnum;
@@ -59,7 +60,9 @@ class Category extends  BaseController
             BreadCrumbCell::add('Home', base_url());
             BreadCrumbCell::add($item->title, route_to('category_list', $item->slug));
 
-            return $this->_render('blog/category/blog', $this->_data);
+            if ( $item->cat_type == CategoryEnum::CAT_TYPE_PRODUCT ) return $this->_render('product/category/list', $this->_data);
+            else return $this->_render('blog/category/blog', $this->_data);
+            
         } else {
             return $this->_render('errors/404', $this->_data);
         }

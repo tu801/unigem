@@ -36,6 +36,12 @@ abstract class BaseController extends Controller
     protected $customer;
     protected $theme;
     protected $currentLang;
+    protected $page_title;
+
+    /**
+     * Instance of the main Response.
+     *
+     * @var ResponseInterface
     
     /**
      * Instance of the main Request object.
@@ -113,6 +119,7 @@ abstract class BaseController extends Controller
     public function _render($viewPage, $data){
         $data['configs'] = $this->config;
         $data['currentLang'] = $this->currentLang;
+        $data['page_title'] = $this->page_title;
 
         $themePath = ROOTPATH . "/themes/{$this->theme}/";
         $renderer  = single_service('renderer', $this->config->templatePath);

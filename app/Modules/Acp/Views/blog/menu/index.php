@@ -33,41 +33,44 @@ echo $this->section('content');
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <div v-if="loading" class="spinner-border text-danger" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <table v-else id="<?php echo $module."_".$method ?>_DataTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                    <thead>
-                    <tr>
-                        <th width="5%"><?=lang('ID')?></th>
-                        <th width="45%"><?=lang('Menu.menu_name')?></th>
-                        <th width="20%"><?=lang('Menu.menu_created')?></th>
-                        <th width="20%"><?=lang('Menu.menu_status')?></th>
-                        <th width="10%"><?=lang('Actions')?></th>
-                    </tr>
-                    </thead>
-                    <tbody v-if="menuList.length">
-                        <tr v-for="menu in menuList" :key="menu.id">
-                            <td>#{{ menu.id }}</td>
-                            <td v-html="rdTitle(menu)"></td>
-                            <td>{{ menu.created }}</td>
-                            <td v-html="rdStatus(menu)"></td>
-                            <td>
-                                <input type="hidden" id="token" value="<?=csrf_hash()?>" >
-                                <input type="hidden" id="tk_key" value="<?=csrf_token()?>" >
-                                <a class="btn btn-primary btn-sm mb-2 mr-2" :href="rdEditUrl(menu)"><i class="fas fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm mb-2 " @click.prevent="deleteMenu(menu)" title="Move to Trash" href="#"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody v-else>
+                <div class="table-responsive">
+                    <div v-if="loading" class="spinner-border text-danger" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <table v-else id="<?php echo $module."_".$method ?>_DataTable" class="table table-striped table-bordered  nowrap" style="width:100%">
+                        <thead>
                         <tr>
-                            <td colspan="5"><?=lang('Menu.no_menu_data')?></td>
+                            <th width="5%"><?=lang('ID')?></th>
+                            <th width="45%"><?=lang('Menu.menu_name')?></th>
+                            <th width="45%"><?=lang('Menu.menu_location')?></th>
+                            <th width="20%"><?=lang('Menu.menu_created')?></th>
+                            <th width="20%"><?=lang('Menu.menu_status')?></th>
+                            <th width="10%"><?=lang('Actions')?></th>
                         </tr>
-                    </tbody>
+                        </thead>
+                        <tbody v-if="menuList.length">
+                            <tr v-for="menu in menuList" :key="menu.id">
+                                <td>#{{ menu.id }}</td>
+                                <td v-html="rdTitle(menu)"></td>
+                                <td v-html="rdLocations(menu)"></td>
+                                <td>{{ menu.created }}</td>
+                                <td v-html="rdStatus(menu)"></td>
+                                <td>
+                                    <input type="hidden" id="token" value="<?=csrf_hash()?>" >
+                                    <input type="hidden" id="tk_key" value="<?=csrf_token()?>" >
+                                    <a class="btn btn-primary btn-sm mb-2 mr-2" :href="rdEditUrl(menu)"><i class="fas fa-edit"></i></a>
+                                    <a class="btn btn-danger btn-sm mb-2 " @click.prevent="deleteMenu(menu)" title="Move to Trash" href="#"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="6"><?=lang('Menu.no_menu_data')?></td>
+                            </tr>
+                        </tbody>
 
-                </table>
-
+                    </table>
+                </div>
             </div>
 
         </div>

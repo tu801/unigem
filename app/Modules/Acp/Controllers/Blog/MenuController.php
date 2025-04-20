@@ -14,6 +14,7 @@ use Modules\Acp\Controllers\AcpController;
 use App\Models\Blog\CategoryModel;
 use App\Models\Blog\PostModel;
 use App\Models\ConfigModel;
+use Libraries\Collection\Collection;
 use Modules\Acp\Traits\deleteItem;
 
 class MenuController extends AcpController
@@ -319,9 +320,21 @@ class MenuController extends AcpController
 
         $menuData = $this->_model->findAll();
 
+        $all_menu_location = new Collection(model(ConfigModel::class)->getMenuLocation());
+        
         foreach ($menuData as $item) {
+            $selected_locations = json_decode($item->location);
+            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations)  {
+               if ( in_array($locationItem->value, $selected_locations)) {
+                    return [
+                        'location_key' => $locationItem->value,
+                        'location_name' => $locationItem->title,
+                    ];
+               }
+            });
             $date = date_create($item->created_at);
             $item->created = date_format($date, 'd/m/Y');
+            $item->location_list = array_values(array_filter($locationData->toArray()));
         }
         if (empty($menuData)) {
             $response = [

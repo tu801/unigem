@@ -55,4 +55,14 @@ class Home extends BaseController
         $this->_data['postList'] = $postList;
         return $this->_render('home/index', $this->_data);
     }
+
+    public function contactUs() {
+        $this->page_title = lang('Home.contact_us');
+
+        return $this->_render('home/contact', $this->_data);
+    }
+
+    public function error_404(){
+        return $this->_render('errors/404', $this->_data);
+    }
 }
