@@ -23,7 +23,9 @@ class MenuItem extends Entity
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    public function getUrl()
+    protected $display_url;
+
+    public function getDisplayUrl()
     {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Acp.invalid_entity'));
@@ -33,7 +35,7 @@ class MenuItem extends Entity
         switch ($this->attributes['type']) {
             case self::URL_TYPE:
             case self::PAGE_TYPE:
-                return $this->attributes['url'];
+                $this->display_url = $this->attributes['url'];
                 break;
             case self::CAT_TYPE:
                 $catData = model(CategoryModel::class)
@@ -41,16 +43,18 @@ class MenuItem extends Entity
 
                 switch ($catData->cat_type) {
                     case CategoryEnum::CAT_TYPE_PRODUCT:
-                        $catUrl = base_url('product/'.$catData->slug);
+                        $catUrl = base_url(route_to('product_category', $catData->slug));
                         break;
                     case CategoryEnum::CAT_TYPE_POST:
                     default:
-                        $catUrl = base_url($catData->slug);
+                        $catUrl = base_url(route_to('category_page', $catData->slug));
                         break;
                 }
-                return $catUrl;
+                $this->display_url = $catUrl;
                 break;
 
         }
+
+        return $this->display_url;
     }
 }

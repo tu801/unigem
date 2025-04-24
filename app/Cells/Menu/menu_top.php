@@ -10,7 +10,7 @@ if ( isset($main_menu->id) && count($main_menu->menu_items) ) :
                 <a class="item-link  fw-6 fs-14" href="<?=$menuItem->url?>"><?=$menuItem->title?> </a>
                 <div class="sub-menu submenu-default">
                     <ul class="menu-list">
-                        <?php foreach ($menuItem->children as $childItem) : ?>
+                        <?php foreach ($menuItem->children as $childItem) :?>
                             <li><a class="menu-link-text link text_black-2" href="<?=$childItem->display_url?>"> <?=$childItem->title?> </a></li>
                         <?php endforeach; ?>
                     </ul>

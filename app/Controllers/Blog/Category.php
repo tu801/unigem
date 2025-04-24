@@ -39,6 +39,7 @@ class Category extends  BaseController
                 ->where('post_status', 'publish')
                 ->select('post.*,post_content.*');
 
+            $this->page_title = $item->title;
             $this->_data['category'] = $item;
             $this->_data['post_category'] = $postCategory->paginate(6);
             $this->_data['pager'] = $this->_modelPost->pager;
@@ -58,11 +59,11 @@ class Category extends  BaseController
 
             //set breadcrumb
             BreadCrumbCell::add('Home', base_url());
-            BreadCrumbCell::add($item->title, route_to('category_list', $item->slug));
+            BreadCrumbCell::add($item->title, base_url(route_to('category_page', $item->slug)));
 
-            if ( $item->cat_type == CategoryEnum::CAT_TYPE_PRODUCT ) return $this->_render('product/category/list', $this->_data);
-            else return $this->_render('blog/category/blog', $this->_data);
+            if ( $item->cat_type == CategoryEnum::CAT_TYPE_PRODUCT ) return redirect(route_to('product_category', $item->slug));
             
+            return $this->_render('blog/category/blog-grid', $this->_data);
         } else {
             return $this->_render('errors/404', $this->_data);
         }

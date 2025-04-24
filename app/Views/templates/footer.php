@@ -84,11 +84,11 @@
                         <div class="footer-bottom-wrap d-flex gap-20 flex-wrap justify-content-between align-items-center">
                             <div class="footer-menu_item"><?=get_theme_config("general_copyright")?></div>
                             <div class="tf-payment">
-                                <img width="42" src="<?=base_url($configs->templatePath)?>images/payments/visa.png" alt="<?= get_theme_config('general_site_title') ?>">
-                                <img width="42" src="<?=base_url($configs->templatePath)?>images/payments/img-1.png" alt="<?= get_theme_config('general_site_title') ?>">
-                                <img width="42" src="<?=base_url($configs->templatePath)?>images/payments/img-2.png" alt="<?= get_theme_config('general_site_title') ?>">
-                                <img width="42" src="<?=base_url($configs->templatePath)?>images/payments/img-3.png" alt="<?= get_theme_config('general_site_title') ?>">
-                                <img width="42" src="<?=base_url($configs->templatePath)?>images/payments/img-4.png" alt="<?= get_theme_config('general_site_title') ?>">
+                                <img width="42" src="<?=base_url($configs->templatePath)?>assets/images/payments/visa.png" alt="<?= get_theme_config('general_site_title') ?>">
+                                <img width="42" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-1.png" alt="<?= get_theme_config('general_site_title') ?>">
+                                <img width="42" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-2.png" alt="<?= get_theme_config('general_site_title') ?>">
+                                <img width="42" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-3.png" alt="<?= get_theme_config('general_site_title') ?>">
+                                <img width="42" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-4.png" alt="<?= get_theme_config('general_site_title') ?>">
                             </div>
                         </div>
                     </div>
