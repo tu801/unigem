@@ -7,17 +7,17 @@ if ( isset($main_menu->id) && count($main_menu->menu_items) ) :
         if ( count($menuItem->children) ) :
     ?>
             <li class="menu-item position-relative">
-                <a class="item-link  fw-6 fs-14" href="<?=$menuItem->url?>"><?=$menuItem->title?> </a>
+                <a class="item-link  fw-6 fs-14" href="<?=base_url($menuItem->url)?>"><?=$menuItem->title?> </a>
                 <div class="sub-menu submenu-default">
                     <ul class="menu-list">
                         <?php foreach ($menuItem->children as $childItem) :?>
-                            <li><a class="menu-link-text link text_black-2" href="<?=$childItem->display_url?>"> <?=$childItem->title?> </a></li>
+                            <li><a class="menu-link-text link text_black-2" href="<?=base_url($childItem->display_url)?>"> <?=$childItem->title?> </a></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
             </li>
         <?php else: ?>
-            <li class="menu-item"><a class="item-link  fw-6 fs-14" href="<?=$menuItem->url?>"><?=$menuItem->title?></a></li>
+            <li class="menu-item"><a class="item-link  fw-6 fs-14" href="<?=base_url($menuItem->url)?>"><?=$menuItem->title?></a></li>
         <?php endif; ?>
     <?php endforeach; ?>
 </ul>

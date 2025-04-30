@@ -13,8 +13,8 @@ use App\Enums\Post\PostTypeEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Libraries\SeoMeta\SeoMetaCell;
 use App\Libraries\SeoMeta\SeoMetaEnum;
+use App\Models\Blog\TagsModel;
 use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\Blog\TagsModel;
 
 class Post extends BaseController
 {
@@ -123,6 +123,7 @@ class Post extends BaseController
 
             $this->_data['postTags'] = $postTags;
             $this->_data['pager'] = $this->_model->pager;
+            $this->page_title = $item->title;
             return $this->_render('blog/post/tag', $this->_data);
         } else {
             return $this->_render('errors/404', $this->_data);

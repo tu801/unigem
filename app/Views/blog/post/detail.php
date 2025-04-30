@@ -17,7 +17,7 @@ echo $this->section('content');
                                 <ul class="tags-lists justify-content-center">
                                     <?php foreach ($post->categories as $category) : ?>
                                     <li>
-                                        <a href="<?= route_to('category_page', $category['slug'])?>" class="tags-item"><?= $category['title']?></a>
+                                        <a href="<?=base_url(route_to('category_page', $category['slug']))?>" class="tags-item"><?= $category['title']?></a>
                                     </li>
                                     <?php endforeach;?>
                                 </ul>
