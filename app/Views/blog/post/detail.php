@@ -13,25 +13,26 @@ echo $this->section('content');
                         <div class="blog-detail-main">
                             
                             <div class="blog-detail-main-heading">
+                                <?php if ( count($post->categories) ) : ?>
                                 <ul class="tags-lists justify-content-center">
+                                    <?php foreach ($post->categories as $category) : ?>
                                     <li>
-                                        <a href="#" class="tags-item">ACCESSORIES</a>
+                                        <a href="<?= route_to('category_page', $category['slug'])?>" class="tags-item"><?= $category['title']?></a>
                                     </li>
-                                    <li>
-                                        <a href="#" class="tags-item">BAGS</a>
-                                    </li>
+                                    <?php endforeach;?>
                                 </ul>
+                                <?php endif;?>
                                 <div class="title"><?= $post->title ?? '' ?></div>
-                                <div class="meta">by <span>admin</span> on <span>Oct 02</span></div>
-                                <div class="image">
+                                <div class="meta"><?=lang('Site.post_author_meta', [$post->author->username, $post->created_at->format('d/m/Y')])?></div>
+                                <!-- <div class="image">
                                     <img class=" ls-is-cached lazyloaded" data-src="images/blog/blog-detail.jpg" src="images/blog/blog-detail.jpg" alt="">
-                                </div>
+                                </div> -->
                             </div>
-                            <?= $post->content ?? '' ?>
+                            <?=$post->content ?? '' ?>
                         </div>
                     </div>
         
-                    <?= view($configs->view. '\components\blog_sidebar')?>
+                    <?= view($configs->view. '\components\blog_sidebar', ['post' => $post, 'configs' => $configs])?>
 
                 </div>
             </div>

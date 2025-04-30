@@ -37,7 +37,7 @@ echo $this->section('content');
                     <p class="mb_15"><?=lang('Home.company_open_time_desc')?></p>
                 </div>
                 <div>
-                <?=view_cell('\App\Cells\Widgets\SocialLinksCell', null, 60*60, '_social_links_'.$currentLang->locale) ?>
+                <?=view_cell('\App\Cells\Widgets\SocialLinksCell', null, $configs->viewCellCacheTtl, '_social_links_'.$currentLang->locale) ?>
                 </div>
             </div>
             <div class="tf-content-right">

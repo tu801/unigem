@@ -14,13 +14,25 @@ class TagsListCell extends Cell
 {
     protected string $view = 'wg_tags';
     public array $tagsData = [];
+    public $postTags;
 
     public function mount()
     {
-        $this->tagsData = model(TagsModel::class)
+        $tagModel = model(TagsModel::class);
+
+        if (!empty($this->postTags)) {
+            $tagList = [];
+            foreach ($this->postTags as $tag) {
+                $tagList[] = $tagModel->where('slug', $tag)->first();
+            }
+
+            $this->tagsData = $tagList;
+        } else {
+            $this->tagsData = $tagModel
             ->orderBy('RAND()')
             ->get(10)
             ->getResult();
+        }
     }
 
     public function postTags(): string

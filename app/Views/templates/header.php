@@ -14,7 +14,7 @@
                         <img src="<?=get_logo_url($configs)?>" alt="<?= get_theme_config('general_site_title') ?>" class="logo">
                     </a>
                     <nav class="box-navigation text-center">
-                        <?php echo view_cell('\App\Cells\Menu\MenuTopCell', null, 60*60, '_main_menu_'.$currentLang->locale)?>
+                        <?php echo view_cell('\App\Cells\Menu\MenuTopCell', null, $configs->viewCellCacheTtl, '_main_menu_'.$currentLang->locale)?>
                     </nav>
                 </div>
             </div>

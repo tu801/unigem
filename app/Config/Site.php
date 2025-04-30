@@ -23,6 +23,12 @@ class Site extends BaseConfig {
     public $templatePath;
     public $no_img;
 
+    /**
+     * cache time to live for view cell
+     */
+    public $viewCellCacheTtl = 60*60;
+    
+
     public function __construct() {
         $this->templatePath = "themes/{$this->theme_name}/";
         $this->no_img = $this->templatePath . 'images/no-image.svg';

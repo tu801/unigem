@@ -5,14 +5,12 @@
                 <div class="row">
                     <div class="col-xl-3 col-md-6 col-12">
                         <?php 
-                        echo view_cell('\App\Cells\Menu\MenuFooterCell::first', null, 60*60, '_menu_footer_1_'.$currentLang->locale)
-                        // echo view_cell('\App\Cells\Menu\MenuFooterCell::first', null)
+                        echo view_cell('\App\Cells\Menu\MenuFooterCell::first', null, $configs->viewCellCacheTtl, '_menu_footer_1_'.$currentLang->locale)
                         ?>
                     </div>
                     <div class="col-xl-3 col-md-6 col-12">
                         <?php 
-                        echo view_cell('\App\Cells\Menu\MenuFooterCell::second', null, 60*60, '_menu_footer_2_'.$currentLang->locale)
-                        // echo view_cell('\App\Cells\Menu\MenuFooterCell::second', null)
+                        echo view_cell('\App\Cells\Menu\MenuFooterCell::second', null, $configs->viewCellCacheTtl, '_menu_footer_2_'.$currentLang->locale)
                         ?>
                     </div>
                     <div class="col-xl-3 col-md-6 col-12">
@@ -41,7 +39,7 @@
                                 </li>
                                 <li>
                                     <?php
-                                    echo view_cell('\App\Cells\Widgets\SocialLinksCell', null, 60*60, '_social_links_'.$currentLang->locale)
+                                    echo view_cell('\App\Cells\Widgets\SocialLinksCell', null, $configs->viewCellCacheTtl, '_social_links_'.$currentLang->locale)
                                     ?>
                                 </li>
                             </ul>
