@@ -30,7 +30,7 @@ foreach ($categories as $catId) {
                 <li class="nav-tab-item" role="presentation">   
                     <div data-bs-target="#<?=$catTargetId?>" class="<?=$i==1?'active':''?> nav-tab-link" data-bs-toggle="tab">
                         <span class="text fw-8 "><?=$catSlide->title?></span>
-                        <a href="<?=base_url(route_to('category_page', $catSlide->slug))?>" class="icon icon-arrow1-top-left"></a>
+                        <a href="<?=base_url(route_to('product_category', $catSlide->slug))?>" class="icon icon-arrow1-top-left"></a>
                     </div>
                 </li>
                 <?php endforeach ?> 

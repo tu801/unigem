@@ -12,7 +12,7 @@ use CodeIgniter\Config\BaseConfig;
 class Site extends BaseConfig {
 
     public $uploadFolder =  ROOTPATH."uploads".DIRECTORY_SEPARATOR;
-    public $imageThumb = ['height' => 150, 'width' => 150];
+    public $imageThumb = ['height' => 360, 'width' => 550];
     public $scriptsPath = "scripts/";
 
     //--------------------------------------------------------------------
@@ -31,7 +31,7 @@ class Site extends BaseConfig {
 
     public function __construct() {
         $this->templatePath = "themes/{$this->theme_name}/";
-        $this->no_img = $this->templatePath . 'images/no-image.svg';
+        $this->no_img = $this->templatePath . 'assets/images/no-image.svg';
     }
 
 }

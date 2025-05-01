@@ -32,7 +32,7 @@ echo $this->section('content');
                         </div>
                     </div>
         
-                    <?= view($configs->view. '\components\blog_sidebar', ['post' => $post, 'configs' => $configs])?>
+                    <?= view($configs->view. '\components\blog_sidebar', ['post' => $post, 'configs' => $configs, 'currentLang' => $currentLang ])?>
 
                 </div>
             </div>

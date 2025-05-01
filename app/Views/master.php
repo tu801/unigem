@@ -9,15 +9,15 @@
     <meta name="robots" content="noindex, follow" />
 
     <!-- font -->
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/fonts/fonts.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/fonts/fonts.css">
     <!-- Icons -->
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/fonts/font-icons.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/drift-basic.min.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/photoswipe.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/animate.css">
-    <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>/assets/css/styles.css"/>
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/fonts/font-icons.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/css/drift-basic.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/css/photoswipe.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>assets/css/animate.css">
+    <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>assets/css/styles.css"/>
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="<?=get_favicon_url($configs)?>">
@@ -99,20 +99,20 @@
 
     <script src="<?=insert_vue()?>"></script>
     <!-- Javascript -->
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/swiper-bundle.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/carousel.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/count-down.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/bootstrap-select.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/lazysize.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/bootstrap-select.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/drift.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/wow.min.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/multiple-modal.js"></script>
-    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>/assets/js/main.js"></script>  
-    <script type="module" src="<?=base_url($configs->templatePath)?>/assets/js/model-viewer.min.js"></script>
-    <script type="module" src="<?=base_url($configs->templatePath)?>/assets/js/zoom.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/carousel.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/count-down.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/lazysize.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/drift.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/wow.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/multiple-modal.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/main.js"></script>  
+    <script type="module" src="<?=base_url($configs->templatePath)?>assets/js/model-viewer.min.js"></script>
+    <script type="module" src="<?=base_url($configs->templatePath)?>assets/js/zoom.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('.type-languages').on('change', function() {

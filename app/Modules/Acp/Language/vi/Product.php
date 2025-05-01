@@ -48,7 +48,7 @@ return [
     'status_3'                => 'Bản nháp',
     'status_2'                => 'Đợi duyệt',
     'status_1'                => 'Đăng bán',
-    'status_4'                => 'Ngừng bán',
+    'status_4'                => 'Hết hàng',
 
     // message
     'addSuccess'              => "Đã thêm thành công sản phẩm mới #{0}",
