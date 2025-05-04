@@ -249,7 +249,7 @@ class Attach extends AcpController
                 if ( $this->user->id == $item->user_id || $this->user->per === 'root' ) {
                     $this->_model->delete($id);
                     $date=date_create($item->created_at);
-                    $path = '/attach/'.date_format($date, 'Y/m/d');
+                    $path = '/attach/'.date_format($date, 'Y/m');
                     delete_image($item->file_name, $path);
 
                     $response['error'] = 0;

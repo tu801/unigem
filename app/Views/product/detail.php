@@ -11,14 +11,14 @@ echo $this->section('content');
         <div class="row">
             <div class="col-lg-6">
                 <div class="product_view_slider">
-                    <?php if(isset($product->images->images)): foreach ($product->images->images as $item):  ?>
+                    <?php if(isset($product->images->data)): foreach ($product->images->data as $item):  ?>
                         <div class="single_viewslider">
                             <img loading="lazy"  src="<?= base_url($item->full_image) ?>" alt="product">
                         </div>
                     <?php endforeach; endif; ?>
                 </div>
                 <div class="product_viewslid_nav">
-                    <?php if(isset($product->images->images)): foreach ($product->images->images as $item): ?>
+                    <?php if(isset($product->images->data)): foreach ($product->images->data as $item): ?>
                         <div class="single_viewslid_nav">
                             <img loading="lazy"  src="<?= base_url($item->thumb_image) ?>" alt="product">
                         </div>

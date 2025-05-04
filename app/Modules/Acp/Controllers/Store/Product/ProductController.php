@@ -221,6 +221,7 @@ class ProductController extends AcpController
             $response = $this->editProductImage($postData, $image, $item);
             if ( $response instanceof RedirectResponse) return $response;
         }
+        // save product data 
         try {
             $this->db->transBegin();
             if (!$this->_model->update($id, $postData)) {
@@ -235,10 +236,15 @@ class ProductController extends AcpController
                     'att_meta_mod_id'   => $item->id,
                     'att_meta_img'      => $postData['images_product'],
                 ];
-                if (isset($item->images->id)) {
+                if (isset($item->images->meta->id)) {
                     $this->_attachMetaModel->updateMeta($imageProduct, $item->images->id);
                 } else {
                     $this->_attachMetaModel->saveAttachFiles($imageProduct);
+                }
+            } else {
+                // when removeAttachMeta field exist and value > 0, we will delete remove that attach meta record
+                if ( isset($postData['removeAttachMeta']) && $postData['removeAttachMeta'] > 0 ) {
+                    $this->_attachMetaModel->deleteMeta($postData['removeAttachMeta']);
                 }
             }
 

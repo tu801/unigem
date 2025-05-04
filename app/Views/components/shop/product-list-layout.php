@@ -11,7 +11,7 @@
             <?php
             $featureImg = (isset($product->feature_image['thumbnail']) && $product->feature_image['thumbnail'] !== null) ? $product->feature_image['thumbnail'] : base_url($configs->no_img);
             if ( isset($product->images) &&!empty($product->images) ) {
-                $hoverImg = !empty($product->images[0]->product_thumb) ? base_url($product->images[0]->product_thumb) : null;
+                $hoverImg = !empty($product->images->data[0]->product_thumb) ? base_url($product->images->data[0]->product_thumb) : null;
             }
             ?>
             <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="product-img">

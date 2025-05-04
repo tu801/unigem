@@ -47,38 +47,25 @@ class Product extends Entity
             throw new \RuntimeException(lang('Product.product_must_be_created'));
         }
         $metaAttach     = model(AttachMetaModel::class);
-        $shopConfig     = config('Shop');
 
         $images         = $metaAttach->getAttMeta($this->id, 'product_images');
         $imageData      = [];
-        $myTime         = Time::parse($this->attributes['created_at']);
 
         if ( !isset($images->id) ) {
             return null; // no image for this product
         }
         
         foreach ($images->images as $item) {
-            $productThumbName = $shopConfig->productThumbSize['height'].'-'.$shopConfig->productThumbSize['width'].'-'.$item->file_name;
-            $productThumbFile = 'uploads/attach/' . $myTime->format('Y/m').'/thumb/'.$productThumbName;
+            if ( !isset($item->product_thumb) || empty($item->product_thumb) ) $item->product_thumb = create_product_thumb($item); // create thumb if not exists in image attach
 
-            // check if thumb image exist
-            $productThumbFilePath = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $productThumbFile);
-            if ( !file_exists($productThumbFilePath) ) {
-                // create product thumbnail
-                \Config\Services::image()
-                    ->withFile(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $item->full_image))
-                    ->fit($shopConfig->productThumbSize['width'], $shopConfig->productThumbSize['height'], 'center')
-                    ->save($productThumbFilePath);
-                $item->product_thumb = $productThumbFile;
-
-                $imageData[] = $item;
-            } else {
-                $item->product_thumb = $productThumbFile;
-
-                $imageData[] = $item;
-            }
+            $imageData[] = $item;
         }
-        $this->images = $imageData;
+        unset($images->images);
+        $this->images = (object)[
+            'data' => $imageData,
+            'meta' => $images
+        ];
+
         return $this->images;
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Enums\Store\Product\ProductAttachMetaEnum;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\Model;
 
@@ -42,7 +43,7 @@ class AttachMetaModel extends Model
     public function updateMeta($inputData, $id) {
         if ( !isset($inputData['att_meta_type']) || !isset($inputData['att_meta_mod_name'])
             || !isset($inputData['att_meta_mod_id']) || !isset($inputData['att_meta_img'])) return false;
-        $tblPrefix = $this->db->getPrefix();
+        
         $_attach = new AttachModel();
 
         $imagesFiles = explode(';', $inputData['att_meta_img']);
@@ -54,6 +55,12 @@ class AttachMetaModel extends Model
                 $myTime = Time::parse($file->created_at);
                 $file->full_image = 'uploads/attach/'.$myTime->format( 'Y/m')."/{$file->file_name}";
                 $file->thumb_image = 'uploads/attach/'.$myTime->format( 'Y/m')."/thumb/{$file->file_name}";
+
+                // for product images mod
+                if ( $inputData['att_meta_mod_name'] == ProductAttachMetaEnum::MODE_NAME ) {
+                    $file->product_thumb = create_product_thumb($file);
+                }
+
                 $mtVal[] = $file;
             }
         }
@@ -84,6 +91,12 @@ class AttachMetaModel extends Model
                 $myTime = Time::parse($file->created_at);
                 $file->full_image = 'uploads/attach/'.$myTime->format( 'Y/m')."/{$file->file_name}";
                 $file->thumb_image = 'uploads/attach/'.$myTime->format( 'Y/m')."/thumb/{$file->file_name}";
+
+                // for product images mod
+                if ( $inputData['att_meta_mod_name'] == ProductAttachMetaEnum::MODE_NAME ) {
+                    $file->product_thumb = create_product_thumb($file);
+                }
+
                 $mtVal[] = $file;
             }
         }
@@ -151,5 +164,15 @@ class AttachMetaModel extends Model
             $rsId = $this->insert($insertData);
             return $buider->where('id', $rsId)->get()->getFirstRow();
         }
+    }
+
+    /**
+     * delete attach meta record
+     * @param $id Attach meta id
+     * @return void
+     */
+    public function deleteMeta($id) {
+        $builder = $this->db->table($this->table);
+        $builder->where('id', $id)->delete();
     }
 }

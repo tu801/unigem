@@ -59,10 +59,12 @@ echo $this->section('content');
                         </div>
 
                     </div>
-                    <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" img-data="<?php
-                        if (isset($itemData->images->images)) {
+                    <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" 
+                    img-attach-meta-id="<?=$itemData->images->meta->id ?? 0 ?>"
+                    img-data="<?php
+                        if (isset($itemData->images->data)) {
                             $listImage = [];
-                            foreach ($itemData->images->images as $item) {
+                            foreach ($itemData->images->data as $item) {
                                 $listImage[] = $item->id;
                             }
                             echo implode(';', $listImage);

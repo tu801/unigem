@@ -151,7 +151,7 @@ class Category extends Entity {
             if ($attach) {
                 $mytime = Time::parse($attach->created_at);
                 $attachFile = 'uploads/attach/' . $mytime->format('Y/m').'/'.$attach->file_name;
-                // Remove debugging statement
+                // check file exists in path
                 if (file_exists(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $attachFile))) {
                    $imageUrl = base_url($attachFile);
                 }

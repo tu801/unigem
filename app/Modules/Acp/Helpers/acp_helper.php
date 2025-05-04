@@ -164,6 +164,7 @@ if (! function_exists('delete_image')) {
         if (empty($name) ) return;
 
         $config = config('Acp');
+
         $path = str_replace(array('..', '/', ':'), '\\', $path);
         $image_path = ($path !== '') ? $config->uploadPath . "{$path}\\" : $config->uploadPath . "\\";
         $image_thumb_path = $image_path . "thumb\\";
@@ -171,6 +172,14 @@ if (! function_exists('delete_image')) {
         //delete image file
         @unlink($image_path . $name);
         @unlink($image_thumb_path . $name);
+
+        // if shop config image thumb exists then remove it
+        $shopConfig     = config('Shop');
+        if ( isset($shopConfig->productThumbSize) ) {
+            $productThumbName = $shopConfig->productThumbSize['height'].'-'.$shopConfig->productThumbSize['width'].'-'.$name;
+            $productThumbFile = $image_path . "thumb\\" . $productThumbName;
+            @unlink($productThumbFile);
+        }
     }
 }
 

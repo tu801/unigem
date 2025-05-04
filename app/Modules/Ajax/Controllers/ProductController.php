@@ -31,7 +31,7 @@ class ProductController extends AjaxBaseController
         
         $imageData = [];
         if (!empty($productData->images)) {
-            foreach ($productData->images->images as $imageItem) {
+            foreach ($productData->images as $imageItem) {
                 $imageData[] = base_url($imageItem->full_image);
             }
         } else {

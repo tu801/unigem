@@ -1,5 +1,7 @@
 <?php
 
+use CodeIgniter\I18n\Time;
+
 if (!function_exists('vnd_decode')) {
     /**
      * convert VND currency value to number
@@ -77,5 +79,31 @@ if (!function_exists('format_currency')) {
     }
 }
 
+if (!function_exists('create_product_thumb')) {
+    /**
+     * create product thumbnail for attach file
+     * @param object $attachFile
+     * @return string product thumb file url
+     */
+    function create_product_thumb($attachFile) {
+        $shopConfig     = config('Shop');
+        $myTime         = Time::parse($attachFile->created_at);
+        
+        $productThumbName = $shopConfig->productThumbSize['height'].'-'.$shopConfig->productThumbSize['width'].'-'.$attachFile->file_name;
+        $productThumbFile = 'uploads/attach/' . $myTime->format('Y/m').'/thumb/'.$productThumbName;
 
+        // check if thumb image exist
+        $productThumbFilePath = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $productThumbFile);
+        if ( !file_exists($productThumbFilePath) ) {
+            // create product thumbnail
+            \Config\Services::image()
+                ->withFile(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $attachFile->full_image))
+                ->fit($shopConfig->productThumbSize['width'], $shopConfig->productThumbSize['height'], 'center')
+                ->save($productThumbFilePath);
+            return $productThumbFile;
+        } 
+
+        return $productThumbFile;
+    }
+}
 
