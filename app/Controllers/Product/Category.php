@@ -57,9 +57,11 @@ class Category extends BaseController
                     ->where('product.cat_id', $category->id)
                     ->orderBy('product.id DESC');
 
-            
             $this->_data['data']                 = $this->_model->paginate();
             $this->_data['pager']                = $this->_model->pager;
+
+            
+            $this->_data['product_category']     = $this->_categoryModel->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $this->currentLang->id);
 
             //SEOData config
             SeoMetaCell::setCanonical(current_url());

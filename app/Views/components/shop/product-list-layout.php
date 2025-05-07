@@ -59,7 +59,7 @@
                 </a>
                 <!-- <a href="#" class="box-icon wishlist style-3 hover-tooltip"><span class="icon icon-heart"></span> <span class="tooltip">Add to Wishlist</span></a>
                 <a href="#compare" data-bs-toggle="offcanvas" class="box-icon compare style-3 hover-tooltip"><span class="icon icon-compare"></span> <span class="tooltip">Add to Compare</span></a> -->
-                <a href="#quick_view" data-bs-toggle="modal" class="box-icon quickview style-3 hover-tooltip">
+                <a href="#quick_view" data-bs-toggle="modal" data-product-id="<?=$product->id?>" class="box-icon quickview style-3 hover-tooltip">
                     <span class="icon icon-view"></span><span class="tooltip"><?=lang('Product.quick_view')?></span>
                 </a>
             </div>

@@ -25,9 +25,11 @@ return [
     'related_product'                   => 'Sản phẩm cùng loại',
 
     'save_action'                       => 'Lưu',
+    'search_title'                      => 'Tìm kiếm',
     'search_btn'                        => 'Tìm Kiếm',
     'search_box_placeholder'            => 'Tìm sản phẩm',
     'mobile_search_text'                => 'Bạn đang tìm sản phẩm gì?',
+    'search_inspiration_title'          => 'Sản phẩm nổi bật',
 
     'best_sell_product'                 => 'Sản phẩm bán chạy',
     'best_sell_view_all_btn'            => 'Xem tất cả',

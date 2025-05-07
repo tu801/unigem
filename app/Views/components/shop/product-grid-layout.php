@@ -37,7 +37,7 @@
                     <span class="tooltip">Add to Compare</span>
                     <span class="icon icon-check"></span>
                 </a> -->
-                <a href="#quick_view" data-bs-toggle="modal" class="box-icon bg_white quickview tf-btn-loading">
+                <a href="#quick_view" data-bs-toggle="modal" data-product-id="<?=$product->id?>" class="box-icon bg_white quickview tf-btn-loading">
                     <span class="icon icon-view"></span>
                     <span class="tooltip"><?=lang('Product.quick_view')?></span>
                 </a>

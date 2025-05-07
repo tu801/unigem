@@ -2,7 +2,7 @@
     <div class="canvas-wrapper">
         <header class="tf-search-head">
             <div class="title fw-5">
-                Search our site
+                <?=lang('Home.search_title')?>
                 <div class="close">
                     <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
                 </div>
@@ -19,7 +19,7 @@
         <div class="canvas-body p-0">
             <div class="tf-search-content">
                 <div class="tf-cart-hide-has-results">
-                    <div class="tf-col-quicklink">
+                    <!-- <div class="tf-col-quicklink">
                         <div class="tf-search-content-title fw-5">Quick link</div>
                         <ul class="tf-quicklink-list">
                             <li class="tf-quicklink-item">
@@ -35,52 +35,12 @@
                                 <a href="shop-default.html" class="">Accessories</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="tf-col-content">
-                        <div class="tf-search-content-title fw-5">Need some inspiration?</div>
-                        <div class="tf-search-hidden-inner">
-                            <div class="tf-loop-item">
-                                <div class="image">
-                                    <a href="product-detail.html">
-                                        <img src="images/products/white-3.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <a href="product-detail.html">Cotton jersey top</a>
-                                    <div class="tf-product-info-price">
-                                        <div class="compare-at-price">$10.00</div>
-                                        <div class="price-on-sale fw-6">$8.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tf-loop-item">
-                                <div class="image">
-                                    <a href="product-detail.html">
-                                        <img src="images/products/white-2.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <a href="product-detail.html">Mini crossbody bag</a>
-                                    <div class="tf-product-info-price">
-                                        <div class="price fw-6">$18.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tf-loop-item">
-                                <div class="image">
-                                    <a href="product-detail.html">
-                                        <img src="images/products/white-1.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <a href="product-detail.html">Oversized Printed T-shirt</a>
-                                    <div class="tf-product-info-price">
-                                        <div class="price fw-6">$18.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div> -->
+                    
+                    <?php
+                    // echo view_cell('\App\Cells\Product\ProductSaleListCell:canvas_search_items', null, $configs->viewCellCacheTtl,'canvas_search_items_product_sale_list_cell_'.$currentLang->locale);
+                    echo view_cell('\App\Cells\Product\ProductSaleListCell:canvas_search_items', null);
+                    ?>
                 </div>
             </div>
         </div>

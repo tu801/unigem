@@ -27,4 +27,23 @@ class ProductSaleListCell extends Cell
                             ->where('pd_status', ProductStatusEnum::PUBLISH)
                             ->findAll(5);
     }
+
+    public function canvas_search_items() {
+        $session          = Services::session();
+        
+        $this->currentLang = $session->lang;
+        $products = model(ProductModel::class)
+                            ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.price, pdc.price_discount ')
+                            ->join('product_content AS pdc', 'pdc.product_id = product.id')
+                            ->where('pdc.lang_id', $session->lang->id)
+                            ->orderBy('pdc.price_discount DESC')
+                            ->orderBy('product.id DESC')
+                            ->where('pd_status', ProductStatusEnum::PUBLISH)
+                            ->findAll(3);
+
+        return $this->view('canvas_search_items', [
+            'products' => $products,
+            'currentLang' => $session->lang
+        ]);
+    }
 }
