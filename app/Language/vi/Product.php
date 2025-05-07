@@ -8,15 +8,27 @@ return [
     'quantity'                      => 'Số lượng',
     'new_product'                   => 'Sản phẩm mới',
     'see_more'                      => 'Xem thêm',
-    'top_ranking'                   => 'Đánh giá cao',
-    'recommended'                   => 'Để xuất cho bạn',
+    'description'                   => 'Mô tả',
+    'product_info'                  => 'Thông tin sản phẩm',
 
     'pd_size'                       => 'Kích thước',
     'pd_weight'                     => 'Trọng lượng',
     'pd_cut_angle'                  => 'Góc cắt',
 
+    'ask_a_question'                => 'Nhờ tư vấn',
+    'delivery_and_return'           => 'Chính sách đổi trả',
+    'social_share'                  => 'Chia sẻ',
+    'guarantee_safe_checkout'       => 'Guarantee Safe <br> Checkout',
+    'add_to_cart'                   => 'Thêm vào giỏ hàng',
+    'related_products'              => 'Sản phẩm liên quan',
+    'recently_view_products'        => 'Sản phẩm đã xem',
+
     //========================Shop=====================================
     'shop'                          => 'Cửa hàng',
+    'sale_off_products'             => 'Sản phẩm khuyến mãi',
+    'follow_us'                     => 'Theo dõi chúng tôi',
+    'buy_now'                       => 'Mua ngay',
+    'pay_now'                       => 'Thanh toán ngay',
 
     // Product Filter
     'filter'                        => 'Lọc',

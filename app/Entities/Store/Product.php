@@ -46,6 +46,7 @@ class Product extends Entity
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Product.product_must_be_created'));
         }
+        helper('ecom');
         $metaAttach     = model(AttachMetaModel::class);
 
         $images         = $metaAttach->getAttMeta($this->id, 'product_images');

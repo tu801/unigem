@@ -64,4 +64,22 @@ class CategoryModel extends Model
         return $builder->find($id);
     }
 
+    
+    /**
+     * Lấy danh sách product category kèm số lượng sản phẩm
+     * 
+     * @return array
+     */
+    public function getProductCategoriesWithProductCount(int $lang_id)
+    {
+        return $this->select('category.id, category.cat_type, category_content.title, category_content.slug, COUNT(product.id) as count')
+            ->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
+            ->join('product', 'product.cat_id = category.id', 'LEFT')
+            ->where('category.cat_type', 'product')
+            ->where('category.cat_status', 'publish')
+            ->where('category_content.lang_id', $lang_id)
+            ->groupBy('category.id, category_content.title, category_content.slug')
+            ->findAll();
+    }
+    
 }

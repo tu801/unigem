@@ -1,62 +1,11 @@
 <aside class="tf-shop-sidebar wrap-sidebar-mobile">
-    <?php if ( count($product_category) ) :?>
-    <div class="widget-facet wd-categories">
-        <div class="facet-title" data-bs-target="#categories" data-bs-toggle="collapse" aria-expanded="true" aria-controls="categories">
-            <span><?=lang('Product.category')?></span>
-            <span class="icon icon-arrow-up"></span>
-        </div>
-        
-        <div id="categories" class="collapse show">
-            <ul class="list-categoris current-scrollbar mb_36">
-                <?php 
-                foreach ($product_category as $item):
-                    $currentCatSelected = ( isset($currentCat) && $category->slug == $currentCat ) ? 'current' : '';
-                ?>
-                <li class="cate-item <?=$currentCatSelected?> "><a href="#"><span><?=$item->title?></span>&nbsp;<span>(31)</span></a></li>
-                <?php endforeach;?>
-            </ul>
-        </div>
-        
-    </div>
-    <?php endif;?>
+    <?php 
+    echo view_cell('\App\Cells\Product\ProductCategoryListCell', null, $configs->viewCellCacheTtl, 'shop_sidebar_product_category_list_cell_'.$currentLang->locale);
 
-    <div class="widget-facet">
-        <div class="facet-title" data-bs-target="#sale-products" data-bs-toggle="collapse" aria-expanded="true" aria-controls="sale-products">
-            <span>Sale products</span>
-            <span class="icon icon-arrow-up"></span>
-        </div>
-        <div id="sale-products" class="collapse show">
-            <div class="widget-featured-products mb_36">
-                <div class="featured-product-item">
-                    <a href="product-detail.html" class="card-product-wrapper">
-                        <img class="lazyload img-product" data-src="images/products/img-feature-1.png" alt="image-feature">
-                    </a>
-                    <div class="card-product-info">
-                        <a href="#" class="title link">Jersey thong body</a>
-                        <span class="price">$105.95</span>
-                    </div>
-                </div>
-                <div class="featured-product-item">
-                    <a href="product-detail.html" class="card-product-wrapper">
-                        <img class="lazyload img-product" data-src="images/products/img-feature-2.png" alt="image-feature">
-                    </a>
-                    <div class="card-product-info">
-                        <a href="#" class="title link">Lace-trimmed Satin Camisole Top</a>
-                        <span class="price">€24,95</span>
-                    </div>
-                </div>
-                <div class="featured-product-item">
-                    <a href="product-detail.html" class="card-product-wrapper">
-                        <img class="lazyload img-product" data-src="images/products/img-feature-3.png" alt="image-feature">
-                    </a>
-                    <div class="card-product-info">
-                        <a href="#" class="title link">Linen-blend Tank Top</a>
-                        <span class="price">$16.95</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    // echo view_cell('\App\Cells\Product\ProductSaleListCell', null, $configs->viewCellCacheTtl,'shop_sidebar_product_sale_list_cell_'.$currentLang->locale);
+    echo view_cell('\App\Cells\Product\ProductSaleListCell', null);
+    ?>
+    
     <div class="widget-facet">
         <div class="facet-title" data-bs-target="#shipping" data-bs-toggle="collapse" aria-expanded="true" aria-controls="shipping">
             <span>Shipping & Delivery</span>
@@ -100,48 +49,24 @@
             </ul>
         </div>
     </div>
-    <div class="widget-facet">
-        <div class="facet-title" data-bs-target="#gallery" data-bs-toggle="collapse" aria-expanded="true" aria-controls="gallery">
-            <span>Gallery</span>
-            <span class="icon icon-arrow-up"></span>
-        </div>
-        <div id="gallery" class="collapse show">
-            <div class="grid-3 gap-4 mb_36">
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-1.jpg" alt="img-gallery">
-                </a>
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-2.jpg" alt="img-gallery">
-                </a>
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-3.jpg" src="images/shop/gallery/gallery-3.jpg" alt="img-gallery">
-                </a>
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-4.jpg" alt="img-gallery">
-                </a>
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-5.jpg" src="images/shop/gallery/gallery-5.jpg" alt="img-gallery">
-                </a>
-                <a href="product-detail.html" class="item-gallery">
-                    <img class="lazyload" data-src="images/shop/gallery/gallery-6.jpg" src="images/shop/gallery/gallery-6.jpg" alt="img-gallery">
-                </a>
-
-            </div>
-        </div>
-    </div>
+    
+    
     <div class="widget-facet">
         <div class="facet-title" data-bs-target="#follow" data-bs-toggle="collapse" aria-expanded="true" aria-controls="follow">
-            <span>Follow us</span>
+            <span><?=lang('Product.follow_us')?></span>
             <span class="icon icon-arrow-up"></span>
         </div>
         <div id="follow" class="collapse show">
-            <ul class="tf-social-icon d-flex gap-10">
+        <?php
+        echo view_cell('\App\Cells\Widgets\SocialLinksCell', null, $configs->viewCellCacheTtl, '_social_links_'.$currentLang->locale)
+        ?>
+            <!-- <ul class="tf-social-icon d-flex gap-10">
                 <li><a href="#" class="box-icon w_34 round bg_line social-facebook"><i class="icon fs-14 icon-fb"></i></a></li>
                 <li><a href="#" class="box-icon w_34 round bg_line social-twiter"><i class="icon fs-12 icon-Icon-x"></i></a></li>
                 <li><a href="#" class="box-icon w_34 round bg_line social-instagram"><i class="icon fs-14 icon-instagram"></i></a></li>
                 <li><a href="#" class="box-icon w_34 round bg_line social-tiktok"><i class="icon fs-14 icon-tiktok"></i></a></li>
                 <li><a href="#" class="box-icon w_34 round bg_line social-pinterest"><i class="icon fs-14 icon-pinterest-1"></i></a></li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 </aside>

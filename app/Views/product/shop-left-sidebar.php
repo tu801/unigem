@@ -21,7 +21,7 @@ echo $this->section('content');
         <?=$this->include($configs->view. '\components\shop\shop-control-filter') ?>
         
         <div class="tf-row-flex">
-            <?=$this->include($configs->view. '\components\shop\shop-sidebar', ['product_category' => $product_category]) ?>
+            <?=$this->include($configs->view. '\components\shop\shop-sidebar') ?>
             
             <div class="wrapper-control-shop tf-shop-content">
                 <div class="meta-filter-shop">

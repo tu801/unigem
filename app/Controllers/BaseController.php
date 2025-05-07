@@ -57,7 +57,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = ['global', 'theme_config', 'ecom'];
+    protected $helpers = ['global', 'theme_config', 'ecom', 'text'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.

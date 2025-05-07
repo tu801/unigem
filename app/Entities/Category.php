@@ -40,13 +40,24 @@ class Category extends Entity {
 
     protected $url;
 
+    /**
+     * get the category url
+     * @return string
+     */
     public function getUrl(){
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
 
         if (empty($this->url)) {
-            $this->url = base_url(route_to('category_page', $this->attributes['slug']));
+            switch ($this->attributes['cat_type']) {
+                case CategoryEnum::CAT_TYPE_PRODUCT:
+                    $this->url = base_url(route_to('product_category', $this->attributes['slug']));
+                    break;
+                default:
+                    $this->url = base_url(route_to('category_page', $this->attributes['slug']));
+                    break;
+            }
         }
         
         return $this->url;    

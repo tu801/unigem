@@ -26,8 +26,6 @@ class Category extends BaseController
         parent::__construct();
         $this->_model                    = model(ProductModel::class);
         $this->_categoryModel            = model(CategoryModel::class);
-
-        helper('text');
     }
 
     public function list($slug)
@@ -52,14 +50,14 @@ class Category extends BaseController
             }
 
             $this->_model->select('product.*')
-                    ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.price, pdc.price_discount ')
+                    ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
                     ->join('product_content AS pdc', 'pdc.product_id = product.id')
                     ->where('pdc.lang_id', $this->currentLang->id)
                     ->where('product.pd_status', ProductStatusEnum::PUBLISH)
+                    ->where('product.cat_id', $category->id)
                     ->orderBy('product.id DESC');
 
-            $productCategory                     = $this->_categoryModel->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $this->currentLang->id);
-            $this->_data['product_category']     = $productCategory;
+            
             $this->_data['data']                 = $this->_model->paginate();
             $this->_data['pager']                = $this->_model->pager;
 

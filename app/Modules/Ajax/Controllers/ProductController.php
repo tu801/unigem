@@ -21,9 +21,9 @@ class ProductController extends AjaxBaseController
         $this->_checkSpam();
 
         $productData = $this->_model
-                    ->select('product.*, pc.pd_name, pc.pd_slug, pc.pd_weight, pc.pd_size, pc.pd_cut_angle, pc.price, pc.price_discount')
-                    ->join('product_content as pc', 'pc.product_id = product.id')
-                    ->where('pc.lang_id', $this->currentLang->id)
+                    ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount')
+                    ->join('product_content as pdc', 'pdc.product_id = product.id')
+                    ->where('pdc.lang_id', $this->currentLang->id)
                     ->find($productId);
         $product = clone $productData;
         unset($product->images);
@@ -31,7 +31,7 @@ class ProductController extends AjaxBaseController
         
         $imageData = [];
         if (!empty($productData->images)) {
-            foreach ($productData->images as $imageItem) {
+            foreach ($productData->images->data as $imageItem) {
                 $imageData[] = base_url($imageItem->full_image);
             }
         } else {

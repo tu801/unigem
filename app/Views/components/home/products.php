@@ -17,7 +17,7 @@
                     <div class="swiper-slide" lazy="true">
                         <div class="card-product style-brown">
                             <div class="card-product-wrapper rounded-0">
-                                <a href="product-detail.html" class="product-img ">
+                                <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="product-img ">
                                     <img class="lazyload img-product" data-src="<?=$product->feature_image['thumbnail']?>" src="<?=$product->feature_image['thumbnail']?>" alt="<?=$product->pd_name?>">
                                     <img class="lazyload img-hover" data-src="<?=$product->feature_image['thumbnail']?>" src="<?=$product->feature_image['thumbnail']?>" alt="<?=$product->pd_name?>">
                                 </a>
@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="card-product-info">
-                                <a href="product-detail.html" class="title link  text-white"><?=$product->pd_name?></a>
+                                <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="title link  text-white"><?=$product->pd_name?></a>
                                 <span class="price  text-white"><?=format_currency($price)?></span>
                                 
                             </div>
