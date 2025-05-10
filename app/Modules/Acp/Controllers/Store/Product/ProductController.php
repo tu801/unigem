@@ -118,6 +118,11 @@ class ProductController extends AcpController
         $slug                  = clean_url($postData['pd_name']);
         $postData['pd_slug']   = $slug;
         $postData['user_init'] = $this->user->id;
+
+        if ( isset($postData['pd_status']) && $postData['pd_status'] == ProductStatusEnum::PUBLISH ) {
+            $postData['publish_date'] = date('Y-m-d H:i:s');
+        }
+
         $newProduct = new Product($postData);
 
         $image   = $this->request->getFile('image');
@@ -221,6 +226,13 @@ class ProductController extends AcpController
             $response = $this->editProductImage($postData, $image, $item);
             if ( $response instanceof RedirectResponse) return $response;
         }
+
+        if ( isset($postData['pd_status']) && $postData['pd_status'] == ProductStatusEnum::PUBLISH ) {
+            if ( empty($item->publish_date) ) {
+                $postData['publish_date'] = date('Y-m-d H:i:s');
+            }            
+        }
+
         // save product data 
         try {
             $this->db->transBegin();
@@ -237,7 +249,7 @@ class ProductController extends AcpController
                     'att_meta_img'      => $postData['images_product'],
                 ];
                 if (isset($item->images->meta->id)) {
-                    $this->_attachMetaModel->updateMeta($imageProduct, $item->images->id);
+                    $this->_attachMetaModel->updateMeta($imageProduct, $item->images->meta->id);
                 } else {
                     $this->_attachMetaModel->saveAttachFiles($imageProduct);
                 }

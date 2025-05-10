@@ -13,7 +13,7 @@ return [
 
     'pd_size'                       => 'Kích thước',
     'pd_weight'                     => 'Trọng lượng',
-    'pd_cut_angle'                  => 'Góc cắt',
+    'pd_cut_angle'                  => 'Giác cắt',
 
     'ask_a_question'                => 'Nhờ tư vấn',
     'delivery_and_return'           => 'Chính sách đổi trả',

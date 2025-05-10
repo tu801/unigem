@@ -41,6 +41,7 @@ class ShopTables extends Migration
             'pd_image'              => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
             'pd_status'             => ['type' => 'tinyint', 'constraint' => 1, 'default' => 0],
             'minimum'               => ['type' => 'int', 'constraint' => 11, 'default' => 1],
+            'publish_date'          => ['type' => 'datetime', 'null' => true],
             'created_at'            => ['type' => 'datetime', 'null' => true],
             'updated_at'            => ['type' => 'datetime', 'null' => true],
             'deleted_at'            => ['type' => 'datetime', 'null' => true],

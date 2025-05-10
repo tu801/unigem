@@ -26,7 +26,8 @@ class ProductModel extends Model
         'pd_sku',
         'pd_image',
         'pd_status',
-        'minimum'
+        'minimum',
+        'publish_date',
     ];
 
     // Dates

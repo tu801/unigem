@@ -183,13 +183,13 @@ echo $this->section('content'); //dd($product);
                 <div class="tf-sticky-atc-infos">
                     <form class="">
                         <div class="tf-sticky-atc-btns">
-                            <div class="tf-product-info-quantity">
+                            <!-- <div class="tf-product-info-quantity">
                                 <div class="wg-quantity">
                                     <span class="btn-quantity minus-btn">-</span>
                                     <input type="text" name="number" value="1">
                                     <span class="btn-quantity plus-btn">+</span>
                                 </div>
-                            </div>
+                            </div> -->
                             <a href="javascript:void(0);" class="tf-btn btn-fill radius-3 justify-content-center fw-6 fs-14 flex-grow-1 animate-hover-btn btn-add-to-cart">
                                 <span><?=lang('Product.add_to_cart')?>
                             </a>
@@ -340,33 +340,7 @@ if ( isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0 ) {
 <!-- /modal delivery_return -->
 
 <!-- modal share social -->
-<div class="modal modalCentered fade modalDemo tf-product-modal modal-part-content" id="share_social">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="header">
-                <div class="demo-title">Share</div>
-                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
-            </div>
-            <div class="overflow-y-auto">
-                <ul class="tf-social-icon d-flex gap-10">
-                    <li><a href="#" class="box-icon social-facebook bg_line"><i class="icon icon-fb"></i></a></li>
-                    <li><a href="#" class="box-icon social-twiter bg_line"><i class="icon icon-Icon-x"></i></a></li>
-                    <li><a href="#" class="box-icon social-instagram bg_line"><i class="icon icon-instagram"></i></a></li>
-                    <li><a href="#" class="box-icon social-tiktok bg_line"><i class="icon icon-tiktok"></i></a></li>
-                    <li><a href="#" class="box-icon social-pinterest bg_line"><i class="icon icon-pinterest-1"></i></a></li>
-                </ul>
-                <form class="form-share"  method="post" accept-charset="utf-8">
-                    <fieldset>
-                        <input type="text" value="https://themesflat.co/html/ecomus/" tabindex="0" aria-required="true">
-                    </fieldset>
-                    <div class="button-submit">
-                        <button class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn" type="button">Copy</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<?=view($configs->view. '\components\product\social-share', ['shareUrl' => $product->url])?>
 <!-- /modal share social -->
 
 <?= $this->endSection() ?>
