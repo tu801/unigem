@@ -33,15 +33,29 @@ class CategoryModel extends Model
      * @param  int  $lang_id
      * @return array
      */
-    public function getCategories(string $type, ?int $lang_id)
+    public function getCategories(string $type, ?int $lang_id = null)
     {
+        $cacheKey = 'getCategories_' . $type . '_' . $lang_id;
+
+        $catData = cache()->get($cacheKey);
+        if ($catData !== null) {
+            return $catData;
+        }
+
         if ( isset($lang_id) && $lang_id > 0 ) $this->where('category_content.lang_id', $lang_id);
+        else {
+            $lang = session()->lang;
+            $this->where('category_content.lang_id', $lang->id);
+        }
 
-        $this->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
+        $catData = $this->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
             ->where('category.cat_type', $type)
-            ->where('category.cat_status', 'publish');
+            ->where('category.cat_status', 'publish')
+            ->findAll();
 
-        return $this->findAll();
+        cache()->save($cacheKey, $catData, 3600); //save cache for 1 hour
+
+        return $catData;
     }
 
 

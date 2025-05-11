@@ -7,7 +7,7 @@ echo $this->section('content');
         <div class="row">
             <div class="col-12">
                 <div class="image">
-                    <img src="<?=base_url($configs->templatePath)?>images/item/404.svg" alt="">
+                    <img src="<?=base_url($configs->templatePath)?>assets/images/item/404.svg" alt="">
                 </div>
                 <div class="title">
                     <?=lang('Home.404_title')?>

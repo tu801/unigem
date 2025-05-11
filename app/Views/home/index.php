@@ -141,3 +141,80 @@ echo $this->section('content');
 </section>
 <!-- /Icon box -->
 <?= $this->endSection() ?>
+
+<?=$this->section('style') ?>
+<style>
+.video-responsive {
+    position: relative;
+    width: 100%;
+    height: 710px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.video-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+/* iPad Pro */
+@media screen and (max-width: 1024px) {
+    .video-responsive {
+        width: 459px;
+        height: 710px;
+    }
+}
+
+/* iPad Air */
+@media screen and (max-width: 820px) {
+    .video-responsive {
+        width: 357px;
+        height: 710px;
+    }
+}
+
+/* iPad Mini */
+@media screen and (max-width: 768px) {
+    .video-responsive {
+        width: 339px;
+        height: 710px;
+    }
+}
+
+/* iPhone 14 Pro Max */
+@media screen and (max-width: 430px) {
+    .video-responsive {
+        width: 400px;
+        height: 410px;
+    }
+}
+
+/* iPhone 12 Pro */
+@media screen and (max-width: 390px) {
+    .video-responsive {
+        width: 360px;
+        height: 410px;
+    }
+}
+
+/* Samsung Galaxy S20 Ultra */
+@media screen and (max-width: 412px) {
+    .video-responsive {
+        width: 382px;
+        height: 410px;
+    }
+}
+
+/* Samsung Galaxy S8 */
+@media screen and (max-width: 360px) {
+    .video-responsive {
+        width: 330px;
+        height: 410px;
+    }
+}
+</style>
+<?= $this->endSection() ?>

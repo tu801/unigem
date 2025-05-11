@@ -8,7 +8,7 @@ echo $this->section('content');
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="blog-list-main">
+                <div class="blog-list-main pt-1">
                     <div class="list-blog">
                         <div class="blog-detail-main">
                             

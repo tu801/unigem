@@ -28,6 +28,7 @@
             $price = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
             ?>
             <span class="price current-price"><?=format_currency($price, $currentLang->locale )?></span>
+            <span class="published-date d-none"><?=$product->publish_date?></span>
 
             <p class="description"><?=htmlentities(word_limiter($product->pd_description ?? '', 30))?></p>
             <!-- <ul class="list-color-product">

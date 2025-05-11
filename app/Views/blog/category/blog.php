@@ -20,7 +20,7 @@ echo $this->section('content');
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="blog-list-main">
+            <div class="blog-list-main pt-1">
             <?php if(count($post_category) > 0): ?>
                 <div class="list-blog">
                     <?php foreach ($post_category as $item): ?>

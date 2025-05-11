@@ -43,10 +43,10 @@
                 <div class="select-item" data-sort-value="price-high-low">
                     <span class="text-value-item"><?=lang('Product.order_by_price_high_to_low')?></span>
                 </div>
-                <div class="select-item">
+                <div class="select-item" data-sort-value="oldest">
                     <span class="text-value-item"><?=lang('Product.order_by_date_low_to_high')?></span>
                 </div>
-                <div class="select-item">
+                <div class="select-item" data-sort-value="newest">
                     <span class="text-value-item"><?=lang('Product.order_by_date_high_to_low')?></span>
                 </div>
             </div>

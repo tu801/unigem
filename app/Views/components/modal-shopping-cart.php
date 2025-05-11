@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="header">
-                <div class="title fw-5">Shopping cart</div>
+                <div class="title fw-5"><?=lang('Order.shopping_cart_title')?></div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="wrap">
@@ -24,7 +24,7 @@
                     <div class="tf-mini-cart-main">
                         <div class="tf-mini-cart-sroll">
                             <div class="tf-mini-cart-items">
-                                <div class="tf-mini-cart-item">
+                                <!-- <div class="tf-mini-cart-item">
                                     <div class="tf-mini-cart-image">
                                         <a href="product-detail.html">
                                             <img src="images/products/white-2.jpg" alt="">
@@ -62,7 +62,7 @@
                                             <div class="tf-mini-cart-remove">Remove</div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="tf-minicart-recommendations">
                                 <div class="tf-minicart-recommendations-heading">
@@ -71,7 +71,7 @@
                                 </div>
                                 <div dir="ltr" class="swiper tf-cart-slide">
                                     <div class="swiper-wrapper" >
-                                        <div class="swiper-slide">
+                                        <!-- <div class="swiper-slide">
                                             <div class="tf-minicart-recommendations-item">
                                                 <div class="tf-minicart-recommendations-item-image">
                                                     <a href="product-detail.html">
@@ -106,7 +106,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                         <div class="tf-mini-cart-bottom-wrap">
                             <div class="tf-cart-totals-discounts">
                                 <div class="tf-cart-total">Subtotal</div>
-                                <div class="tf-totals-total-value fw-6">$49.99 USD</div>
+                                <div class="tf-totals-total-value fw-6">$0 USD</div>
                             </div>
                             <div class="tf-cart-tax">Taxes and <a href="#">shipping</a> calculated at checkout</div>
                             <div class="tf-mini-cart-line"></div>

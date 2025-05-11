@@ -37,13 +37,15 @@
                             preg_match('/^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/', $video, $matches);
                             $videoId = $matches[2];
                             ?>
-                            <iframe width="705" height="710" 
-                                src="https://www.youtube.com/embed/<?= $videoId ?>" 
-                                class="radius-20"
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
+                            <div class="video-responsive">
+                                <iframe
+                                    src="https://www.youtube.com/embed/<?= $videoId ?>" 
+                                    class="radius-20"
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
                             <?php
                         } else {
                             // Assume it's an MP4 file in uploads folder

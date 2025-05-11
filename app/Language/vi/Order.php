@@ -1,6 +1,6 @@
 <?php
 return [
-    'cart'                    => 'Giỏ hàng',
+    'shopping_cart_title'     => 'Giỏ hàng',
     'checkout'                => 'Thanh toán',
     'process_checkout'        => 'Tiến hành hanh toán',
     'order'                   => 'Đơn hàng',

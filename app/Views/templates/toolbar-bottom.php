@@ -24,7 +24,7 @@
             <div class="toolbar-label">Account</div>
         </a>
     </div>
-    <div class="toolbar-item">
+    <!-- <div class="toolbar-item">
         <a href="wishlist.html">
             <div class="toolbar-icon">
                 <i class="icon-heart"></i>
@@ -32,12 +32,12 @@
             </div>
             <div class="toolbar-label">Wishlist</div>
         </a>
-    </div>
+    </div> -->
     <div class="toolbar-item">
         <a href="#shoppingCart" data-bs-toggle="modal">
             <div class="toolbar-icon">
                 <i class="icon-bag"></i>
-                <div class="toolbar-count">1</div>
+                <div class="toolbar-count">0</div>
             </div>
             <div class="toolbar-label">Cart</div>
         </a>

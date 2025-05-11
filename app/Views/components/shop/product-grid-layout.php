@@ -23,7 +23,7 @@
                 <?php endif ?>
             </a>
             <div class="list-product-btn absolute-2">
-                <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading">
+                <a href="#quick_add" data-bs-toggle="modal" data-product-id="<?=$product->id?>" class="box-icon bg_white quick-add tf-btn-loading">
                     <span class="icon icon-bag"></span>
                     <span class="tooltip"><?=lang('Product.quick_add_to_cart')?></span>
                 </a>
@@ -49,6 +49,7 @@
             $price = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
             ?>
             <span class="price current-price"><?=format_currency($price, $currentLang->locale )?></span>
+            <span class="publish-date d-none"><?=$product->publish_date?></span>
         </div>
     </div>
     <?php endforeach;?>

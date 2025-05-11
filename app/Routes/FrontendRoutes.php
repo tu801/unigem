@@ -13,9 +13,11 @@ $routes->get('contact.html', 'Home::contactUs', ['as'=> 'contactUs']);
  */
 $routes->group('product', ['namespace' => '\App\Controllers\Product'], function ($routes) {
     $routes->get('', 'Product::list',['as' => 'product_shop']);
+    $routes->get('search', 'Product::list', ['as' => 'product_search']);
+    
     $routes->get('([a-zA-Z0-9_-]+)', 'Category::list/$1',['as' => 'product_category']);
     $routes->get('([a-zA-Z0-9_-]+)-(:num).html', 'Product::detail/$1',['as' => 'product_detail']);
-
+    
 });
 
 /**
@@ -69,7 +71,7 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
 
     $routes->group('product',null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');
-        $routes->post('search-products', 'AjaxController::searchProduct');
+        $routes->post('search', 'AjaxController::searchProduct');
     });
     
 });

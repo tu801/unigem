@@ -8,9 +8,9 @@
                 </div>
             </div>
             <div class="tf-search-sticky">
-                <form class="tf-mini-search-frm">
+                <form method="GET" action="<?=base_url(route_to('product_search'))?>" class="tf-mini-search-frm">
                     <fieldset class="text">
-                        <input type="text" placeholder="Search" class="" name="text" tabindex="0" value="" aria-required="true" required="">
+                        <input type="text" placeholder="Search" class="" name="query" tabindex="0" value="" aria-required="true" required="">
                     </fieldset>
                     <button class="" type="submit"><i class="icon-search"></i></button>
                 </form>

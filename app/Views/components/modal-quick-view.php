@@ -10,12 +10,12 @@
                         <div class="swiper-wrapper" >
                             <div class="swiper-slide">
                                 <div class="item">
-                                    <img src="images/products/orange-1.jpg" alt="">
+                                    <!-- <img src="images/products/orange-1.jpg" alt=""> -->
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="item">
-                                    <img src="images/products/pink-1.jpg" alt="">
+                                    <!-- <img src="images/products/pink-1.jpg" alt=""> -->
                                 </div>
                             </div>
                         </div>
