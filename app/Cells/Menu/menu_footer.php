@@ -8,7 +8,7 @@
     <ul class="footer-menu-list tf-collapse-content">
     <?php foreach ($menuData->menu_items as $item) : ?>
         <li>
-            <a href="<?=$item->url?>" class="footer-menu_item"><?=$item->title?></a>
+            <a href="<?=$item->display_url?>" class="footer-menu_item"><?=$item->title?></a>
         </li>
     <?php endforeach; ?>
     </ul>
