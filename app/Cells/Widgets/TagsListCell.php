@@ -37,11 +37,22 @@ class TagsListCell extends Cell
 
     public function postTags(): string
     {
-        $tagsData = model(TagsModel::class)
-            ->where('tag_type', 'post')
-            ->orderBy('RAND()')
-            ->get(10)
-            ->getResult();
+        $tagModel = model(TagsModel::class);
+        
+        if (!empty($this->postTags)) {
+            $tagList = [];
+            foreach ($this->postTags as $tag) {
+                $tagList[] = $tagModel->where('slug', $tag)->first();
+            }
+
+            $tagsData = $tagList;
+        } else {
+            $tagsData = model(TagsModel::class)
+                ->where('tag_type', 'post')
+                ->orderBy('RAND()')
+                ->get(10)
+                ->getResult();
+        }
 
         return $this->view($this->view, ['tagsData' => $tagsData]);
 

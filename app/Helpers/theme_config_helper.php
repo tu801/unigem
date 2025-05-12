@@ -69,7 +69,7 @@ if (!function_exists('get_favicon_url')) {
         if ( isset($logoConfig) ) {
             $url = base_url($logoConfig->full_image);
         } else {
-            $url = base_url($configs->templatePath. '/favicon.ico');
+            $url = base_url($configs->templatePath. 'images/favicon.ico');
         }
 
         return $url;

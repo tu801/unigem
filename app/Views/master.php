@@ -58,11 +58,10 @@
     </div>
 
     <!-- gotop -->
-    <div class="progress-wrap">
-        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
-        </svg>
-    </div>
+    <button id="goTop">
+        <span class="border-progress"></span>
+        <span class="icon icon-arrow-up"></span>
+    </button>
     <!-- /gotop -->
     
     <!-- toolbar-bottom -->
@@ -112,7 +111,7 @@
     <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/multiple-modal.js"></script>
     <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/main.js"></script>  
     <script type="module" src="<?=base_url($configs->templatePath)?>js/model-viewer.min.js"></script>
-    <script type="module" src="<?=base_url($configs->templatePath)?>js/zoom.js"></script>
+    
     <script type="text/javascript">
         $(document).ready(function() {
             $('.type-languages').on('change', function() {

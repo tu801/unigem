@@ -137,7 +137,7 @@ echo $this->section('content'); //dd($product);
                                     </a>
                                     
                                     <div class="w-100">
-                                        <a href="#" class="btns-full"><?=lang('Product.pay_now')?> <img src="<?=base_url($configs->templatePath.'assets/images/payments/paypal-mini.png')?>" alt="<?=$configs->theme_name?>"></a>
+                                        <a href="#" class="btns-full"><?=lang('Product.pay_now')?> <img src="<?=base_url($configs->templatePath.'images/payments/paypal-mini.png')?>" alt="<?=$configs->theme_name?>"></a>
                                         <!-- <a href="#" class="payment-more-option">More payment options</a> -->
                                     </div>
                                 </form>
@@ -370,4 +370,10 @@ if ( isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0 ) {
 }
 </style>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts')?>
+<script src="<?=base_url($configs->templatePath)?>js/photoswipe-lightbox.umd.min.js"></script>
+<script src="<?=base_url($configs->templatePath)?>js/photoswipe.umd.min.js"></script>
+<script type="module" src="<?=base_url($configs->templatePath)?>js/zoom.js"></script>
 <?= $this->endSection() ?>

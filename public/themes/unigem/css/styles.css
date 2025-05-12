@@ -9990,7 +9990,7 @@ header.header-bg {
   border-radius: 10px;
   overflow: hidden;
   z-index: 20;
-  aspect-ratio: 1/1.4;
+  aspect-ratio: 1/1;
 }
 .card-product .card-product-wrapper .sold-out {
   display: flex;
