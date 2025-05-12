@@ -19,6 +19,27 @@ class Product extends Entity
     protected $feature_image = [];
     protected $url;
 
+    protected string $display_price;
+
+    /**
+     * get product display price
+     * @return string
+     */
+    public function getDisplayPrice()
+    {
+        $lang = session()->lang;
+        helper('ecom');
+
+        $price = ($this->attributes['price_discount'] > 0 && $this->attributes['price_discount'] < $this->attributes['price']) ? $this->attributes['price_discount'] : $this->attributes['price'];
+        if ( $price > 0 ) {
+            $this->display_price = format_currency($price, $lang->locale );
+        } else {
+            $this->display_price = lang('Product.contact_price_text'); // contact price
+        }
+
+        return $this->display_price;
+    }
+
     public function getFeatureImage()
     {
         if (empty($this->id)) {

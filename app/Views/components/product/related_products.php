@@ -39,10 +39,7 @@
                             </div>
                             <div class="card-product-info">
                                 <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="title link"><?=$product->pd_name?></a>
-                                <?php
-                                $price = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
-                                ?>
-                                <span class="price"><?=format_currency($price, $currentLang->locale )?></span>
+                                <span class="price"><?=$product->display_price?></span>
                                 
                             </div>
                         </div>

@@ -29,8 +29,8 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                        <h5 class="description-header"><?=(isset($monthPosts) ) ? count($monthPosts):0?></h5>
-                        <span class="description-text">Tin Mới Trong Tháng</span>
+                        <h5 class="description-header"><?=$countMonthPosts?></h5>
+                        <span class="description-text"><?=lang('Acp.posts_in_month')?></span>
                     </div>
                     <!-- /.description-block -->
                 </div>
@@ -38,8 +38,8 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
 
-                        <h5 class="description-header"><?=(isset($pendingPosts))?count($pendingPosts):0?></h5>
-                        <span class="description-text">Tin Chưa được duyệt</span>
+                        <h5 class="description-header"><?=$countMonthProducts?></h5>
+                        <span class="description-text"><?=lang('Acp.products_in_month')?></span>
                     </div>
                     <!-- /.description-block -->
                 </div>
@@ -70,7 +70,7 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
     <!-- ecommerce analytic-->
 
 <div class="row">
-<?php if ( isset($monthPosts) ) : ?>
+<?php if ( isset($recentPosts) ) : ?>
     <div class="col-md-6">
         <div class="card card-outline card-primary">
             <div class="card-header border-transparent">
@@ -98,7 +98,7 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
                         <tbody>
                         <?php
                         $i= 0;
-                        foreach ($monthPosts as $row) {
+                        foreach ($recentPosts as $row) {
                             $i++;
                             echo view($config->view.'\dashboard\components\_listPostItem', ['num' => $i, 'row' => $row, 'login_user' => $login_user]);
                         }
@@ -118,7 +118,7 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
 <?php endif; ?>
 
 <?php
-if ( isset($monthPosts) ) {
+if ( isset($products) ) {
     echo '<div class="col-md-6">';
     echo view($config->view.'\dashboard\components\_listProducts', ['products' => $products]);
     echo '</div>';

@@ -16,7 +16,7 @@
                 </a>
                 <div class="card-product-info">
                     <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="title link"><?=$product->pd_name?></a>
-                    <span class="price"><?=format_currency($product->price_discount, $currentLang->locale )?></span>
+                    <span class="price"><?=$product->display_price?></span>
                 </div>
             </div>
             <?php endforeach;?>

@@ -114,6 +114,6 @@ echo $this->section('content');
 <?= $this->endSection() ?>
 
 <?=$this->section('scripts')?>
-<script type="module" src="<?=base_url($configs->templatePath)?>assets/js/nouislider.min.js"></script>
-<script type="module" src="<?=base_url($configs->templatePath)?>assets/js/shop.js"></script>
+<script type="module" src="<?=base_url($configs->templatePath)?>js/nouislider.min.js"></script>
+<script type="module" src="<?=base_url($configs->templatePath)?>js/shop.js"></script>
 <?= $this->endSection() ?>

@@ -33,6 +33,7 @@ return [
     // Product Filter
     'filter'                        => 'Lọc',
     'price'                         => 'Giá',
+    'contact_price_text'            => 'Liên hệ để biết giá',
     'order_by_a_z'                  => 'Tên sản phẩm, A-Z',
     'order_by_z_a'                  => 'Tên sản phẩm, Z-A',
     'order_by_price_low_to_high'    => 'Giá từ thấp đến cao',

@@ -168,7 +168,7 @@ echo $this->section('content');
                                     id="inputWeight" placeholder="<?= lang('Product.weight') ?>" 
                                     value="<?= $itemData->pd_weight ?? 1  ?>">
                             <div class="input-group-append">
-                                <div class="input-group-text">g &nbsp;<i class="fas fa-weight"></i></div>
+                                <div class="input-group-text"><?=lang('Common.product_weight_unit')?> &nbsp;<i class="fas fa-weight"></i></div>
                             </div>
                         </div>
                     </div>

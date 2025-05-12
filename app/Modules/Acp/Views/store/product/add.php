@@ -117,7 +117,7 @@ echo $this->section('content');
                     <div class="input-group" >
                         <input type="number" name="weight" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
                         <div class="input-group-append">
-                            <div class="input-group-text">g &nbsp;<i class="fas fa-weight"></i></div>
+                            <div class="input-group-text"><?=lang('Common.product_weight_unit')?> &nbsp;<i class="fas fa-weight"></i></div>
                         </div>
                     </div>
                 </div>

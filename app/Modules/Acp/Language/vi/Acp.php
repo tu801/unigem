@@ -5,6 +5,8 @@ return [
     //title
     'title'             => 'Module ACP',
     'title_profile'     => 'Thông tin user',
+    'posts_in_month'    => 'Tin mới trong tháng',
+    'products_in_month' => 'Sản phẩm mới đăng trong tháng',
 
     //language
     'lang'              => 'Ngôn Ngữ',

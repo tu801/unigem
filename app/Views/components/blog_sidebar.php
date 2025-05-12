@@ -1,15 +1,11 @@
 <aside class="tf-section-sidebar wrap-sidebar-mobile">
     <?php 
     echo view_cell('\App\Cells\Widgets\CategoryListCell', null, $configs->viewCellCacheTtl, 'post_sidebar_category_list_cell_'.$currentLang->locale);
-    ?>
 
-    <?php 
     echo view_cell('\App\Cells\Widgets\NewPostListCell', null, $configs->viewCellCacheTtl, 'post_sidebar_new_post_list_cell'.$currentLang->locale);
-    ?>
-    
-    <?php 
+     
     if ( isset($post->tags) && !empty($post->tags)) {
-        echo view_cell('\App\Cells\Widgets\TagsListCell', null, $configs->viewCellCacheTtl, 'post_sidebar_new_post_list_cell'.$currentLang->locale);
+        echo view_cell('\App\Cells\Widgets\TagsListCell', ['postTags' => $post->tags], $configs->viewCellCacheTtl, 'post_sidebar_new_tags_list_cell'.$currentLang->locale);
     }
     ?>
     

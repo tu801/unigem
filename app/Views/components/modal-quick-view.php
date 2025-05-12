@@ -71,5 +71,5 @@
 </div>
 
 <?=$this->section('scripts')?>
-<script type="text/javascript" src="<?=base_url($configs->templatePath)?>assets/js/product-quick-view.js"></script>  
+<script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/product-quick-view.js"></script>  
 <?=$this->endSection()?>

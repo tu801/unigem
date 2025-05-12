@@ -11,9 +11,7 @@
         <div class="hover-sw-nav hover-sw-2">
             <div dir="ltr" class="swiper tf-sw-product-sell wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2" data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
                 <div class="swiper-wrapper">
-                    <?php foreach ($productList as $product) : 
-                        $price = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
-                    ?>
+                    <?php foreach ($productList as $product) : ?>
                     <div class="swiper-slide" lazy="true">
                         <div class="card-product style-brown">
                             <div class="card-product-wrapper rounded-0">
@@ -35,7 +33,7 @@
                             </div>
                             <div class="card-product-info">
                                 <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>" class="title link  text-white"><?=$product->pd_name?></a>
-                                <span class="price  text-white"><?=format_currency($price)?></span>
+                                <span class="price  text-white"><?=$product->display_price?></span>
                                 
                             </div>
                         </div>

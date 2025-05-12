@@ -714,13 +714,10 @@ if ($(".flat-thumbs-testimonial").length > 0) {
   var previewThumbs = $(".tf-thumb-tes").data("preview");
   var spacingThumbs = $(".tf-thumb-tes").data("space");
   var thumbImg = new Swiper(".tf-thumb-tes", {
-    speed: 1000,
+    speed: 500,
 
     spaceBetween: spacingThumbs,
     slidesPerView: previewThumbs,
-    // slidesPerView: 2,
-    freeMode: true,
-    watchSlidesProgress: true,
     breakpoints: {
       768: {
         spaceBetween: spacingThumbs,
@@ -731,16 +728,14 @@ if ($(".flat-thumbs-testimonial").length > 0) {
   var spacingMd = $(".tf-sw-tes-2").data("space-md");
   var spacingLg = $(".tf-sw-tes-2").data("space-lg");
   var swiperThumbs = new Swiper(".tf-sw-tes-2", {
-    speed: 1000,
+    speed: 500,
     slidesPerView: preview,
     spaceBetween: spacingMd,
     navigation: {
       nextEl: ".nav-prev-tes-2",
       prevEl: ".nav-next-tes-2",
     },
-    thumbs: {
-      swiper: thumbImg,
-    },
+   
     pagination: {
       el: ".sw-pagination-tes-2",
       clickable: true,
@@ -751,6 +746,8 @@ if ($(".flat-thumbs-testimonial").length > 0) {
       },
     },
   });
+  thumbImg.controller.control = swiperThumbs;
+  swiperThumbs.controller.control = thumbImg;
 }
 
 if ($(".tf-cart-slide").length > 0) {

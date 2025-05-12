@@ -21,11 +21,18 @@ class Dashboard extends AcpController {
         $this->_data['title']= 'Dash Board';
         $thisMonth = date('m');
 
-
-        $this->_data['monthPosts'] = model(PostModel::class)
-            ->select('post.*,post_content.*')
-            ->join('post_content', 'post_content.post_id = post.id')
+        $this->_data['countMonthPosts'] = model(PostModel::class)
             ->where('Month(created_at)', $thisMonth)
+            ->where('post_type', PostTypeEnum::POST)
+            ->countAllResults();
+
+        $this->_data['countMonthProducts'] = model(ProductModel::class)
+            ->where('Month(created_at)', $thisMonth)
+            ->countAllResults();
+
+        $this->_data['recentPosts'] = model(PostModel::class)
+            ->select('post.*, post_content.*')
+            ->join('post_content', 'post_content.post_id = post.id')
             ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_type', PostTypeEnum::POST)
             ->orderBy('post.id DESC')

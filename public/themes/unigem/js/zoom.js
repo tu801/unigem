@@ -1,7 +1,4 @@
 
-import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
-import PhotoSwipe from './photoswipe.esm.min.js';
-
 if ($(".thumbs-slider").length > 0) {
     var direction = $(".tf-product-media-thumbs").data("direction");
     var thumbs = new Swiper(".tf-product-media-thumbs", {
@@ -76,7 +73,6 @@ if ($(".thumbs-slider").length > 0) {
     });
     updateActiveColorButton(main.activeIndex);
 }
-
 if ($(".thumbs-slider1").length > 0) {
     var direction = $(".tf-product-media-thumbs").data("direction");
     var thumbs = new Swiper(".tf-product-media-thumbs", {
@@ -247,6 +243,22 @@ if ($(".thumbs-slider4").length > 0) {
                 el, {
                 zoomFactor: 2,
                 paneContainer: pane,
+                inlinePane: false,
+                handleTouch: false,
+                hoverBoundingBox: true,
+                containInline: true,
+                }
+            );
+        });
+      }
+      if (matchMedia("only screen and (min-width: 768px)").matches) {
+        var driftAll1 = document.querySelectorAll('.tf-image-zoom1');
+        var pane1 = document.querySelector('.tf-zoom-main1');
+        $(driftAll1).each(function(i, el) {
+            new Drift(
+                el, {
+                zoomFactor: 2,
+                paneContainer: pane1,
                 inlinePane: false,
                 handleTouch: false,
                 hoverBoundingBox: true,

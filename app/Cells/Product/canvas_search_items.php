@@ -19,7 +19,7 @@
                         <div class="compare-at-price"><?=format_currency($product->price, $currentLang->locale )?></div>
                         <div class="price-on-sale fw-6"><?=format_currency($product->price_discount, $currentLang->locale )?></div>
                         <?php else :?>
-                        <div class="price-on-sale fw-6"><?=format_currency($product->price, $currentLang->locale )?></div>
+                        <div class="price-on-sale fw-6"><?=$product->display_price?></div>
                         <?php endif;?>
                     </div>
                 </div>

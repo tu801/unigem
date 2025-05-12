@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // General
+    'product_weight_unit'                => 'ct',
+
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Đăng nhập',
     'cmsFirstTimeChangePassText'        => 'Đổi mật khẩu',

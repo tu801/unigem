@@ -43,8 +43,14 @@ echo $this->section('content'); //dd($product);
                                             <img class="lazyload" data-src="<?= base_url($item->full_image) ?>" src="<?= base_url($item->full_image) ?>" alt="<?= $product->pd_name ?? '' ?>">
                                         </div>
                                     </div>
-                                    <?php endforeach; endif; ?>
-
+                                    <?php 
+                                    endforeach; else: 
+                                        $featureImg = (isset($product->feature_image['thumbnail']) && $product->feature_image['thumbnail'] !== null) ? $product->feature_image['thumbnail'] : base_url($configs->no_img);
+                                    ?>
+                                        <div class="item">
+                                            <img class="lazyload" data-src="<?=$featureImg?>" src="<?=$featureImg?>" alt="<?= $product->pd_name ?? '' ?>">
+                                        </div>
+                                    <?php endif;?>
                                 </div>
                             </div>
                             <div dir="ltr" class="swiper tf-product-media-main" id="gallery-swiper-started">
@@ -56,11 +62,19 @@ echo $this->section('content'); //dd($product);
                                             <img class="tf-image-zoom lazyload" data-zoom="<?= base_url($item->full_image) ?>" data-src="<?= base_url($item->full_image) ?>" src="<?= base_url($item->full_image) ?>" alt="<?= $product->pd_name ?? '' ?>">
                                         </a>
                                     </div>
-                                    <?php endforeach; endif; ?>
+                                    <?php endforeach; else: ?>
+                                        <div class="swiper-slide" data-color="beige">
+                                        <a href="<?=$featureImg?>" target="_blank" class="item" data-pswp-width="770px" data-pswp-height="770px">
+                                            <img class="tf-image-zoom lazyload" data-zoom="<?=$featureImg?>" data-src="<?=$featureImg?>" src="<?=$featureImg?>" alt="<?= $product->pd_name ?? '' ?>">
+                                        </a>
+                                    </div>
+                                    <?php endif;?>
                                     
                                 </div>
+                                <?php if ( isset($product->images->data) && count($product->images->data) > 0 ) : ?>
                                 <div class="swiper-button-next button-style-arrow thumbs-next"></div>
                                 <div class="swiper-button-prev button-style-arrow thumbs-prev"></div>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>
@@ -84,6 +98,8 @@ echo $this->section('content'); //dd($product);
                                 <div class="price-on-sale"><?=format_currency( $product->price_discount, $currentLang->locale )?></div>
                                 <div class="compare-at-price"><?=format_currency( $product->price, $currentLang->locale )?></div>
                                 <div class="badges-on-sale"><span><?= round((($product->price - $product->price_discount) / $product->price) * 100) ?></span>% OFF</div>
+                            <?php elseif ($product->price == 0) :?>
+                                <div class="price-on-sale"><?=lang('Product.contact_price_text')?></div>
                             <?php else:?>
                                 <div class="price-on-sale"><?=format_currency( $product->price, $currentLang->locale )?></div>
                             <?php endif;?>
@@ -96,7 +112,7 @@ echo $this->section('content'); //dd($product);
                             
                             <?php if(!empty($product->pd_weight)): ?>
                             <div class="tf-product-weight">
-                                <p class="fw-6 w-100"><?=lang('Product.pd_weight')?> : <?=$product->pd_weight?></p>
+                                <p class="fw-6 w-100"><?=lang('Product.pd_weight')?> : <?=$product->pd_weight?> &nbsp;<?=lang('Common.product_weight_unit')?></p>
                             </div>
                             <?php endif; ?>
                             <?php if(!empty($product->pd_size)): ?>
@@ -154,11 +170,11 @@ echo $this->section('content'); //dd($product);
                                     <p class="fw-6"><?=lang('Product.guarantee_safe_checkout')?></p>
                                 </div>
                                 <div class="tf-payment">
-                                    <img width="42px" src="<?=base_url($configs->templatePath)?>assets/images/payments/visa.png" alt="">
-                                    <img width="42px" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-1.png" alt="">
-                                    <img width="42px" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-2.png" alt="">
-                                    <img width="42px" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-3.png" alt="">
-                                    <img width="42px" src="<?=base_url($configs->templatePath)?>assets/images/payments/img-4.png" alt="">
+                                    <img width="42px" src="<?=base_url($configs->templatePath)?>images/payments/visa.png" alt="">
+                                    <img width="42px" src="<?=base_url($configs->templatePath)?>images/payments/img-1.png" alt="">
+                                    <img width="42px" src="<?=base_url($configs->templatePath)?>images/payments/img-2.png" alt="">
+                                    <img width="42px" src="<?=base_url($configs->templatePath)?>images/payments/img-3.png" alt="">
+                                    <img width="42px" src="<?=base_url($configs->templatePath)?>images/payments/img-4.png" alt="">
                                 </div>
                             </div>
                         </div>
