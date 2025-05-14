@@ -4,7 +4,7 @@
             <span class="title fw-8  text-white"><?=lang('Home.best_sell_product')?></span>
             <div class="d-flex gap-16 align-items-center box-pagi-arr">
                 <!-- <div class="nav-sw-arrow nav-next-slider type-white nav-next-product"><span class="icon icon-arrow1-left"></span></div> -->
-                <a href="product-style-05.html" class="tf-btn btn-line fs-12 fw-6  btn-line-light"><?=lang('Home.best_sell_view_all_btn')?></a>
+                <a href="<?=route_to('product_shop')?>" class="tf-btn btn-line fs-12 fw-6  btn-line-light"><?=lang('Home.best_sell_view_all_btn')?></a>
                 <!-- <div class="nav-sw-arrow nav-prev-slider type-white nav-prev-product"><span class="icon icon-arrow1-right"></span></div> -->
             </div>   
         </div>

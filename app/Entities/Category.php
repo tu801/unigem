@@ -146,7 +146,8 @@ class Category extends Entity {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
         $config = config('Site');
-        $imageUrl = base_url($config->no_img);
+        $noImgFileName = 'cate'.rand(1,9).'.jpg';
+        $imageUrl = base_url($config->templatePath.'/images/shop/cate/'.$noImgFileName);
 
         $session = Services::session();
         $key = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$session->lang->locale;

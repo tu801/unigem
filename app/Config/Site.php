@@ -31,7 +31,7 @@ class Site extends BaseConfig {
 
     public function __construct() {
         $this->templatePath = "themes/{$this->theme_name}/";
-        $this->no_img = $this->templatePath . 'assets/images/no-image.svg';
+        $this->no_img = $this->templatePath . 'images/no-image.svg';
     }
 
 }

@@ -15,7 +15,7 @@ $catTitle = get_theme_config('gems_cat_title');
     <div class="container">
         <div class="flat-title flex-row justify-content-between align-items-center px-0 wow fadeInUp" data-wow-delay="0s" style="visibility: visible; animation-delay: 0s; animation-name: fadeInUp;">
             <h3 class="title"><?=$catTitle?></h3>
-            <a href="shop-collection-sub.html" class="tf-btn btn-line">View all categories<i class="icon icon-arrow1-top-left"></i></a>
+            <a href="<?=route_to('product_shop')?>" class="tf-btn btn-line"><?=lang('Home.shop_collection')?><i class="icon icon-arrow1-top-left"></i></a>
         </div>
         <div class="hover-sw-nav hover-sw-2">
             <div dir="ltr" class="swiper tf-sw-collection swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden" data-preview="6" data-tablet="3" data-mobile="2" data-space-lg="50" data-space-md="30" data-space="15" data-loop="false" data-auto-play="false">

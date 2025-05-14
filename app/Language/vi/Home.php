@@ -14,6 +14,7 @@ return [
     'wiget_tags_title'                  => 'Tags',
     'read_more'                         => 'Xem thêm',
     'tax_num'                           => 'MST',
+    'shop_collection'                   => 'Xem toàn bộ danh mục',
 
     'sign_up_for_mail'                  => 'Đăng ký nhận thông tin',
     'sign_up_for_mail_desc'             => 'Đăng ký nhận thông tin về các sản phẩm mới nhất, trương trình khuyến mãi và các tin tức mới nhất từ chúng tôi',

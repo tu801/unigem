@@ -15,9 +15,9 @@ $productCategory = model(CategoryModel::class)->getCategories(CategoryEnum::CAT_
                 <?php foreach ($productCategory as $category) : ?>
                 <li class="nav-mb-item">
                     <a href="<?=$category->url?>" class="tf-category-link mb-menu-link">
-                        <!-- <div class="image">
-                            <img src="images/shop/cate/cate1.jpg" alt="">
-                        </div> -->
+                        <div class="image">
+                            <img src="<?=$category->cat_image['image']?>" alt="<?=$category->title?>">
+                        </div>
                         <span><?=$category->title?></span>
                     </a>
                 </li>
