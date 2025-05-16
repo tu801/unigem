@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -36,11 +37,11 @@ class Category extends BaseController
             ->where('category_content.slug', $slug)
             ->where('category.cat_status', 'publish')->first();
 
-        if(isset($category->id)) {
+        if (isset($category->id)) {
             if (isset($getData['category'])) {
                 $this->_model->where('cat_id', $category->id);
                 $this->_data['select_cat'] = $getData['category'];
-            }else {
+            } else {
                 $this->_data['select_cat'] = $category->id;
             }
 
@@ -50,23 +51,23 @@ class Category extends BaseController
             }
 
             $this->_model->select('product.*')
-                    ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
-                    ->join('product_content AS pdc', 'pdc.product_id = product.id')
-                    ->where('pdc.lang_id', $this->currentLang->id)
-                    ->where('product.pd_status', ProductStatusEnum::PUBLISH)
-                    ->where('product.cat_id', $category->id)
-                    ->orderBy('product.id DESC');
+                ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_description, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
+                ->join('product_content AS pdc', 'pdc.product_id = product.id')
+                ->where('pdc.lang_id', $this->currentLang->id)
+                ->where('product.pd_status', ProductStatusEnum::PUBLISH)
+                ->where('product.cat_id', $category->id)
+                ->orderBy('product.id DESC');
 
             $this->_data['data']                 = $this->_model->paginate();
             $this->_data['pager']                = $this->_model->pager;
 
-            
+
             $this->_data['product_category']     = $this->_categoryModel->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $this->currentLang->id);
 
             //SEOData config
             SeoMetaCell::setCanonical(current_url());
             SeoMetaCell::setOgType(SeoMetaEnum::OG_TYPE_PROD);
-            $meta_desc = $category->seo_meta->seo_description ? $category->seo_meta->seo_description : ( $category->description ? $category->description : get_theme_config('general_seo_description'));
+            $meta_desc = $category->seo_meta->seo_description ? $category->seo_meta->seo_description : ($category->description ? $category->description : get_theme_config('general_seo_description'));
             SeoMetaCell::add('meta_desc', $meta_desc);
             SeoMetaCell::add('meta_keywords', $category->seo_meta->seo_keyword ?? get_theme_config('general_seo_keyword'));
             SeoMetaCell::add('og_title', $category->seo_meta->seo_title ?? $category->title);
@@ -82,7 +83,7 @@ class Category extends BaseController
 
             $this->page_title = $category->title;
             return $this->_render('product/shop-left-sidebar', $this->_data);
-        }else{
+        } else {
             return $this->_render('errors/404', $this->_data);
         }
     }

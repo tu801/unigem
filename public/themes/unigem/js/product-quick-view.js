@@ -9,11 +9,15 @@
   var quickViewProduct = function () {
     if ($(".quickview").length) {
       $(".quickview").on("click", function (e) {
+        console.log("clicked test");
         var productId = $(this).data("product-id");
         var quickViewModal = $("#quick_view");
+        var loading = quickViewModal.find(".tmt-spinner");
+        var wraperContent = quickViewModal.find(".tmt-wrap");
 
         // Show loading state
-        $(this).addClass("loading");
+        $(loading).removeClass("d-none");
+        wraperContent.addClass("d-none");
 
         // Fetch product data from API
         $.ajax({
@@ -134,6 +138,10 @@
               quickViewModal
                 .find(".tf-product-info-list > div:last-child a")
                 .attr("href", product.url || "product-detail.html");
+
+              // Hide loading state
+              $(loading).addClass("d-none");
+              wraperContent.removeClass("d-none");
 
               // Show the modal
               quickViewModal.modal("show");

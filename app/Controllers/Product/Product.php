@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -27,7 +28,6 @@ class Product extends BaseController
         parent::__construct();
         $this->_model                    = model(ProductModel::class);
         $this->_categoryModel            = model(CategoryModel::class);
-
     }
 
     public function list()
@@ -37,9 +37,9 @@ class Product extends BaseController
         if (isset($getData['category']) && count($getData['category']) > 0) {
             $catArr = [];
             foreach ($getData['category'] as $cat) {
-                if ( is_int($cat) && $cat > 0 ) $catArr[] = esc($cat);
+                if (is_int($cat) && $cat > 0) $catArr[] = esc($cat);
             }
-            if ( count($catArr) )  $this->_model->whereIn('cat_id', $getData['category']);
+            if (count($catArr))  $this->_model->whereIn('cat_id', $getData['category']);
 
             $this->_data['select_cat'] = $getData['category'];
         }
@@ -50,11 +50,11 @@ class Product extends BaseController
         }
 
         $this->_model
-                ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
-                ->join('product_content AS pdc', 'pdc.product_id = product.id')
-                ->where('pdc.lang_id', $this->currentLang->id)
-                ->where('product.pd_status', ProductStatusEnum::PUBLISH)
-                ->orderBy('product.id DESC');
+            ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_description, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
+            ->join('product_content AS pdc', 'pdc.product_id = product.id')
+            ->where('pdc.lang_id', $this->currentLang->id)
+            ->where('product.pd_status', ProductStatusEnum::PUBLISH)
+            ->orderBy('product.id DESC');
 
         $this->_data['data']                 = $this->_model->paginate();
         $this->_data['pager']                = $this->_model->pager;
@@ -98,17 +98,17 @@ class Product extends BaseController
         $this->_data['product'] = $product;
 
         // handle viewed product
-        if ( empty($viewedProducts) ) {
+        if (empty($viewedProducts)) {
             $viewedProducts = [$product];
-            cache()->save('viewedProducts_'. $userIp, $viewedProducts, 86400); // save cache for 24 hours
+            cache()->save('viewedProducts_' . $userIp, $viewedProducts, 86400); // save cache for 24 hours
         } else {
             $viewedCollection = new Collection($viewedProducts);
             $check = $viewedCollection->find(function ($item) use ($product) {
                 return $item->id == $product->id;
             });
-            if ( !isset($check->id) ) {
+            if (!isset($check->id)) {
                 $viewedProducts[] = $product;
-                cache()->save('viewedProducts_'. $userIp, $viewedProducts, 86400); // save cache for 24 hours
+                cache()->save('viewedProducts_' . $userIp, $viewedProducts, 86400); // save cache for 24 hours
             }
         }
         $this->_data['recentlyViewedProducts'] = $viewedProducts;
@@ -138,7 +138,7 @@ class Product extends BaseController
         //set breadcrumb
         BreadCrumbCell::add('Home', base_url());
         BreadCrumbCell::add(lang('Product.shop'), route_to('product_shop'));
-        BreadCrumbCell::add($product->pd_name, $product->url );
+        BreadCrumbCell::add($product->pd_name, $product->url);
 
         return $this->_render('product/detail', $this->_data);
     }
