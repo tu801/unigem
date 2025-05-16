@@ -24,13 +24,13 @@ class Category extends AcpController
     public function index($type)
     {
         // check permission
-        switch($type) {
+        switch ($type) {
             case 'product':
                 if (!$this->user->inGroup('superadmin', 'admin', 'sale_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-                break; 
+                break;
             case 'post':
                 if (!$this->user->inGroup('superadmin', 'admin', 'content_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-                break; 
+                break;
         }
 
         $this->_data['title'] = lang("Category.category_title");
@@ -129,7 +129,7 @@ class Category extends AcpController
         if (!isset($insertData['slug']) || $insertData['slug'] === '') $insertData['slug'] = clean_url($insertData['title']);
 
         // check slug
-        if($this->_model->checkSlug($insertData['slug'], $this->currentLang->id)) {
+        if ($this->_model->checkSlug($insertData['slug'], $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'slug' =>  lang('Category.slug_is_exist')
             ]);
@@ -146,9 +146,9 @@ class Category extends AcpController
         }
         // Success!
         $catItem = $this->_model->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
-                                ->where('id', $cat)
-                                ->where('lang_id', $this->currentLang->id)
-                                ->first();
+            ->where('id', $cat)
+            ->where('lang_id', $this->currentLang->id)
+            ->first();
 
         // save attach meta image
         if (!empty($insertData['cat_image'])) {
@@ -156,7 +156,7 @@ class Category extends AcpController
             $value      = [
                 'image' => $insertData['cat_image'] ?? '',
             ];
-            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$this->currentLang->locale;
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY . $this->currentLang->locale;
 
             $metaAttach->insertOrUpdate([
                 'mod_name' => $configKey,
@@ -216,9 +216,9 @@ class Category extends AcpController
         $this->_data['title'] = lang('Category.edit_title');
 
         $data = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-                             ->where('id', $idItem)
-                             ->where('lang_id', $this->currentLang->id)
-                             ->first();
+            ->where('id', $idItem)
+            ->where('lang_id', $this->currentLang->id)
+            ->first();
         $this->_model->skipValidation(true);
 
         if (isset($data->id)) {
@@ -248,17 +248,16 @@ class Category extends AcpController
             if (!isset($inputData['home_tab_display'])) $inputData['home_tab_display'] = 0;
             $inputData['cur_lang_id'] = $this->currentLang->id;
             $inputData['id'] = $idItem;
-            
-            if ( isset($inputData['onChangeSlug']) && $inputData['onChangeSlug'] == 'on') {
+
+            if (isset($inputData['onChangeSlug']) && $inputData['onChangeSlug'] == 'on') {
                 $inputData['slug'] = clean_url($inputData['title']);
-                if($this->_model->checkSlug($inputData['slug'], $this->currentLang->id)) {
+                if ($this->_model->checkSlug($inputData['slug'], $this->currentLang->id)) {
                     return redirect()->back()->withInput()->with('errors', [
                         'slug' =>  lang('Category.slug_is_exist')
                     ]);
                 }
-                
             }
-            
+
             $cat = $this->_model->insertOrUpdate($inputData);
             //good then save the new item
             if (!$cat) {
@@ -269,7 +268,7 @@ class Category extends AcpController
             $value = [
                 'image'         => $inputData['cat_image'] ?? '',
             ];
-            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$this->currentLang->locale;
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY . $this->currentLang->locale;
 
             $dataAttach = [
                 'mod_name' => $configKey,
@@ -311,10 +310,10 @@ class Category extends AcpController
     public function remove($idItem)
     {
         $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-                                ->where('id', $idItem)
-                                ->where('lang_id', $this->currentLang->id)
-                                ->withDeleted()
-                                ->find($idItem);
+            ->where('id', $idItem)
+            ->where('lang_id', $this->currentLang->id)
+            ->withDeleted()
+            ->find($idItem);
         if (isset($item->id)) {
             //log Action
             $logData = [
@@ -364,7 +363,6 @@ class Category extends AcpController
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;
                 $cat->status = $this->__transformStatusView($cat->cat_status);
-                
             }
             $response['data'] = $catData;
             $response['error'] = 0;
@@ -427,7 +425,7 @@ class Category extends AcpController
                         $response['text'] = lang('Category.updateSlug_success');
                         $returnData['categoryId'] = $itemId;
                         $returnData['slug'] = $postData['category_slug'];
-                        $returnData['fullSlug'] = base_url(route_to('category_list', $item->slug, $item->id));
+                        $returnData['fullSlug'] = $item->url;
                         $response['postData'] = $returnData;
                     } else {
                         $response['error'] = 1;
@@ -440,17 +438,18 @@ class Category extends AcpController
         return $this->response->setJSON($response);
     }
 
-    private function __transformStatusView($cat_status) {
+    private function __transformStatusView($cat_status)
+    {
         switch ($cat_status) {
             case 'draft':
-                return '<span class="badge badge-secondary">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
-                break; 
+                return '<span class="badge badge-secondary">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
             case 'pending':
-                return '<span class="badge badge-warning">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
-                break; 
+                return '<span class="badge badge-warning">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
             case 'publish':
-                return '<span class="badge badge-success">'. $this->config->cmsStatus['status'][$cat_status] .'</span>';
-                break; 
+                return '<span class="badge badge-success">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
         }
     }
 }

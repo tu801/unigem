@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 18-Oct-20
@@ -14,7 +15,8 @@ use App\Models\AttachModel;
 use App\Models\Blog\CategoryContentModel;
 use CodeIgniter\I18n\Time;
 
-class Category extends Entity {
+class Category extends Entity
+{
 
     /**
      * Define properties that are automatically converted to Time instances.
@@ -44,12 +46,20 @@ class Category extends Entity {
      * get the category url
      * @return string
      */
-    public function getUrl(){
+    public function getUrl()
+    {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
 
         if (empty($this->url)) {
+            // Kiểm tra slug hợp lệ (chỉ chứa a-z, 0-9, dấu gạch ngang, không bắt đầu/kết thúc bằng dấu gạch ngang)
+            $slug = $this->attributes['slug'] ?? '';
+            if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+                $this->url = '#';
+                return $this->url;
+            }
+
             switch ($this->attributes['cat_type']) {
                 case CategoryEnum::CAT_TYPE_PRODUCT:
                     $this->url = base_url(route_to('product_category', $this->attributes['slug']));
@@ -59,20 +69,21 @@ class Category extends Entity {
                     break;
             }
         }
-        
-        return $this->url;    
+
+        return $this->url;
     }
 
     /**
      * get the attached image
      * @return array|bool|mixed|void
      */
-    public function getAttachFile() {
+    public function getAttachFile()
+    {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
 
-        if ( empty($this->attach_file) ) {
+        if (empty($this->attach_file)) {
             $this->attach_file = (new AttachMetaModel())->getAttMeta($this->id, 'category');
         }
         return $this->attach_file;
@@ -83,12 +94,13 @@ class Category extends Entity {
      * @param $postData
      * @return bool
      */
-    public function setAttachFile($postData) {
+    public function setAttachFile($postData)
+    {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
 
-        if ( isset($postData['meta_id']) && $postData['meta_id'] > 0) {
+        if (isset($postData['meta_id']) && $postData['meta_id'] > 0) {
             $result = (new AttachMetaModel())->updateMeta($postData, $postData['meta_id']);
         } else {
             $postData['att_meta_id'] = $this->id;
@@ -97,19 +109,20 @@ class Category extends Entity {
         return $result;
     }
 
-    public function getSeoMeta() {
+    public function getSeoMeta()
+    {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
 
-        if (empty($this->seo_meta)) { 
+        if (empty($this->seo_meta)) {
             $session = Services::session();
             $meta = model(CategoryContentModel::class)->where([
-                    'cat_id'  => $this->id,
-                    'lang_id' => $session->lang->id
-                ])->first();
-                
-            if ( !empty($meta->seo_meta) ) {
+                'cat_id'  => $this->id,
+                'lang_id' => $session->lang->id
+            ])->first();
+
+            if (!empty($meta->seo_meta)) {
                 $this->seo_meta = json_decode($meta->seo_meta);
             } else {
                 $data = json_encode(['seo_keyword' => null, 'seo_description' => null, 'seo_title' => null]);
@@ -146,11 +159,11 @@ class Category extends Entity {
             throw new \RuntimeException(lang('Cat.entity_error_request'));
         }
         $config = config('Site');
-        $noImgFileName = 'cate'.rand(1,9).'.jpg';
-        $imageUrl = base_url($config->templatePath.'/images/shop/cate/'.$noImgFileName);
+        $noImgFileName = 'cate' . rand(1, 9) . '.jpg';
+        $imageUrl = base_url($config->templatePath . '/images/shop/cate/' . $noImgFileName);
 
         $session = Services::session();
-        $key = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY.$session->lang->locale;
+        $key = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY . $session->lang->locale;
         $metaAttach = model(AttachMetaModel::class);
         $attachModel = model(AttachModel::class);
 
@@ -162,12 +175,12 @@ class Category extends Entity {
             $attach = $attachModel->find($images->image);
             if ($attach) {
                 $mytime = Time::parse($attach->created_at);
-                $attachFile = 'uploads/attach/' . $mytime->format('Y/m').'/'.$attach->file_name;
+                $attachFile = 'uploads/attach/' . $mytime->format('Y/m') . '/' . $attach->file_name;
                 // check file exists in path
                 if (file_exists(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $attachFile))) {
-                   $imageUrl = base_url($attachFile);
+                    $imageUrl = base_url($attachFile);
                 }
-                
+
                 return [
                     'image'          => $imageUrl,
                     'image_id'       => $images->image,

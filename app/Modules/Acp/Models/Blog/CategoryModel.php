@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/09/2021
@@ -24,9 +25,9 @@ class CategoryModel extends BaseCategoryModel
         if (isset($input['id']) && $catID = $input['id']) {
             $this->update($catID, $input);
             $_catContent->where('cat_id', $catID)
-                        ->where('lang_id', $input['cur_lang_id'])
-                        ->set($input)
-                        ->update();
+                ->where('lang_id', $input['cur_lang_id'])
+                ->set($input)
+                ->update();
             return true;
         } else {
             $cat             = $this->insert($input);
@@ -44,22 +45,4 @@ class CategoryModel extends BaseCategoryModel
             return $cat;
         }
     }
-
-    /**
-     * Check category slug
-     * @param $slug
-     * @param $langID
-     * @return int|string
-     */
-    public function checkSlug($slug, $langID)
-    {
-        $builder = $this->db->table($this->table);
-        return $builder->join('category_content', 'category_content.cat_id = category.id')
-            ->where([
-                'category_content.lang_id' => $langID,
-                'slug'                     => $slug,
-            ])
-            ->countAllResults();
-    }
-
 }

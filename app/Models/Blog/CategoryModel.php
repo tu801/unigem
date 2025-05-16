@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 13-Apr-2025
@@ -17,7 +18,7 @@ class CategoryModel extends Model
     protected $returnType = Category::class;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = [ 'user_init', 'user_type', 'parent_id', 'cat_type', 'cat_status' ];
+    protected $allowedFields = ['user_init', 'user_type', 'parent_id', 'cat_type', 'cat_status'];
 
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
@@ -42,7 +43,7 @@ class CategoryModel extends Model
             return $catData;
         }
 
-        if ( isset($lang_id) && $lang_id > 0 ) $this->where('category_content.lang_id', $lang_id);
+        if (isset($lang_id) && $lang_id > 0) $this->where('category_content.lang_id', $lang_id);
         else {
             $lang = session()->lang;
             $this->where('category_content.lang_id', $lang->id);
@@ -78,7 +79,7 @@ class CategoryModel extends Model
         return $builder->find($id);
     }
 
-    
+
     /**
      * Lấy danh sách product category kèm số lượng sản phẩm
      * 
@@ -95,5 +96,21 @@ class CategoryModel extends Model
             ->groupBy('category.id, category_content.title, category_content.slug')
             ->findAll();
     }
-    
+
+    /**
+     * Check category slug
+     * @param $slug
+     * @param $langID
+     * @return int|string
+     */
+    public function checkSlug($slug, $langID)
+    {
+        $builder = $this->db->table($this->table);
+        return $builder->join('category_content', 'category_content.cat_id = category.id')
+            ->where([
+                'category_content.lang_id' => $langID,
+                'slug'                     => $slug,
+            ])
+            ->countAllResults();
+    }
 }

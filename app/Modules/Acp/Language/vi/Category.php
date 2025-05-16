@@ -31,6 +31,7 @@ return [
     'slug_required'                 => 'Vui lòng điền đường dẫn cho danh mục',
     'slug_min_length'               => 'URL phải có ít nhất 3 ký tự',
     'slug_invalid'                  => 'Slug URL chỉ bao gồm các chữ cái, số và dấu gạch nối',
+    'slug_is_invalid_text'          => 'Slug URL không hợp lệ. Nó chỉ có thể chứa các ký tự chữ cái, số và dấu gạch nối. Vui lòng kiểm tra lại slug của bạn.',
     'updateSlug_success'            => 'Đã cập nhật thành công URL mới',
 
 ];
