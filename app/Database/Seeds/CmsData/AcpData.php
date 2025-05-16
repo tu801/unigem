@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Database\Seeds\CmsData;
 
 use CodeIgniter\CLI\CLI;
@@ -15,7 +16,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
     {
         $this->userModel = auth()->getProvider();
     }
-    
+
     public function run()
     {
         //insert default user data
@@ -32,16 +33,16 @@ class AcpData extends \CodeIgniter\Database\Seeder
         $_catModel = model(CategoryModel::class);
 
         $catData = [
-            'user_init'         => $user->id??1,
+            'user_init'         => $user->id ?? 1,
             'user_type'         => get_class($this->userModel),
             'parent_id'         => 0,
             'cat_status'        => 'draft',
             'title'             => 'Uncategory',
             'slug'              => 'uncategory',
-            'lang_id'           => $lang->id??1,
+            'lang_id'           => $lang->id ?? 1,
         ];
         $checkCat = $_catModel->checkSlug($catData['slug'], $lang->id);
-        if ( $checkCat == 0 ) { 
+        if ($checkCat == 0) {
             $_catModel->insertOrUpdate($catData);
             CLI::write("- Insert Default Categories ");
         }
@@ -58,7 +59,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
         $_langModel = model(LangModel::class);
         $langData = [
             0 => [
-                'user_init'         => $user->id??1,
+                'user_init'         => $user->id ?? 1,
                 'user_type'         => get_class($_userModel),
                 'name'              => 'Tiếng Việt',
                 'locale'            => 'vi',
@@ -66,10 +67,12 @@ class AcpData extends \CodeIgniter\Database\Seeder
                 'flag'              => 'vn.svg',
                 'order'             => 1,
                 'is_activated'      => 1,
-                'is_default'        => 1
+                'is_default'        => 1,
+                'currency_code'     => 'VND',
+                'currency_symbol'   => '₫',
             ],
             1 => [
-                'user_init'         => $user->id??1,
+                'user_init'         => $user->id ?? 1,
                 'user_type'         => get_class($_userModel),
                 'name'              => 'Tiếng Anh',
                 'locale'            => 'en',
@@ -77,7 +80,9 @@ class AcpData extends \CodeIgniter\Database\Seeder
                 'flag'              => 'us.svg',
                 'order'             => 2,
                 'is_activated'      => 0,
-                'is_default'        => 0
+                'is_default'        => 0,
+                'currency_code'     => 'USD',
+                'currency_symbol'   => '$',
             ],
         ];
 
@@ -88,7 +93,6 @@ class AcpData extends \CodeIgniter\Database\Seeder
         } catch (\Exception $e) {
             log_message('error', '[ERROR] {exception}', ['exception' => $e]);
         }
-        
     }
 
     /**
@@ -99,19 +103,19 @@ class AcpData extends \CodeIgniter\Database\Seeder
         //insert default user data
         CLI::write("----- insert default User Data -----");
 
-        for ($i=0; $i<8; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $userData = $this->generateFakerUser('123123');
-            $userData['username'] = str_replace('.','',$userData['username']);
+            $userData['username'] = str_replace('.', '', $userData['username']);
 
             CLI::write("- Create Users {$userData['username']} | {$userData['email']} ");
             $user = new User($userData);
             $this->userModel->save($user);
             $newUser = $this->userModel->findById($this->userModel->getInsertID());
-            
+
             $this->userModel->addToDefaultGroup($newUser);
             $newUser->forcePasswordReset();
         }
-        
+
         //insert defaut user admin with pw 1234qwer@#$
         $userData = [
             'username'          => 'admin',
@@ -120,7 +124,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
         ];
         $usrCheck = $this->userModel->where('username', 'admin')->first();
         if (!isset($usrCheck->id)) {
-            $this->saveUser($userData,'admin');
+            $this->saveUser($userData, 'admin');
         }
 
         //insert defaut user superadmin with pw 123qwe!@#
@@ -133,21 +137,22 @@ class AcpData extends \CodeIgniter\Database\Seeder
         if (!isset($usrCheck->id)) {
             $this->saveUser($userData, 'superadmin');
         }
-
     }
 
-    private function generateFakerUser($defaultPass = null) {
+    private function generateFakerUser($defaultPass = null)
+    {
         $fakerObject = Factory::create();
-        
+
         return [
             'username'          => $fakerObject->userName(),
             'email'             => $fakerObject->unique()->email(),
             'password'          => $defaultPass,
-            'avatar'            => "https://i.pravatar.cc/400?u=".time(),
+            'avatar'            => "https://i.pravatar.cc/400?u=" . time(),
         ];
     }
 
-    private function saveUser($userData, $group) {
+    private function saveUser($userData, $group)
+    {
         $user = new User($userData);
         CLI::write("- Create Users {$user->username} | {$user->email} ");
         $this->userModel->save($user);

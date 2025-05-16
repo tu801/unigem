@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/24/2021
@@ -19,7 +20,17 @@ class LangModel extends Model
     protected $useSoftDeletes = true;
 
     protected $allowedFields = [
-        'user_init', 'user_type', 'name', 'locale', 'lang_code', 'flag', 'order', 'is_default', 'is_rtl', 'updated_at'
+        'user_init',
+        'user_type',
+        'name',
+        'locale',
+        'lang_code',
+        'flag',
+        'order',
+        'is_default',
+        'is_rtl',
+        'currency_code',
+        'currency_symbol'
     ];
 
     protected $useTimestamps = true;
@@ -35,10 +46,10 @@ class LangModel extends Model
      */
     public function listLang()
     {
-        if ( !$langData = cache('_languages') ) {
-            $langData = $this->select(['id', 'name', 'locale', 'is_default', 'flag'])
-                        ->orderBy('order', 'ASC')
-                        ->findAll();
+        if (!$langData = cache('_languages')) {
+            $langData = $this
+                ->orderBy('order', 'ASC')
+                ->findAll();
 
             foreach ($langData as $item) {
                 $flagIcon = base_url("themes/flag/{$item->flag}");
@@ -56,13 +67,11 @@ class LangModel extends Model
     public function getPrivLang()
     {
         $defaultLang = cache()->get('default_lang');
-        if ( empty($defaultLang) ) {
-            $defaultLang = $this->select(['id', 'name', 'locale', 'is_default', 'flag'])
-                            ->where('is_default', 1)
-                            ->first();
+        if (empty($defaultLang)) {
+            $defaultLang = $this->where('is_default', 1)->first();
             cache()->save('default_lang', $defaultLang, config('Cache')->ttl);
         }
-        
+
         return $defaultLang;
     }
 
@@ -73,7 +82,7 @@ class LangModel extends Model
     public function insertOrUpdate($input)
     {
         $chkLang = $this->where(['locale' => $input['locale'], 'lang_code' => $input['lang_code']])->first();
-        if( !isset($chkLang->id) ) {
+        if (!isset($chkLang->id)) {
             $this->insert($input);
         } else {
             $this->update($chkLang->id, $input);

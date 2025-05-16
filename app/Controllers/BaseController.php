@@ -88,7 +88,7 @@ abstract class BaseController extends Controller
 
         if ($authenticator->loggedIn()) {
             $this->user = $authenticator->getUser();
-            if ( $this->user->user_type == UserTypeEnum::CUSTOMER ) $this->customer = model(CusModel::class)->queryCustomerByUserId($this->user->id)->first();
+            if ($this->user->user_type == UserTypeEnum::CUSTOMER) $this->customer = model(CusModel::class)->queryCustomerByUserId($this->user->id)->first();
         }
     }
 
@@ -105,10 +105,9 @@ abstract class BaseController extends Controller
         $this->config->view = 'App\Views';
         $this->theme = $theme;
 
-        if ( !empty( $viewLayout ) ) {
+        if (!empty($viewLayout)) {
             $this->config->viewLayout = $viewLayout;
         }
-
     }
 
     /**
@@ -116,12 +115,12 @@ abstract class BaseController extends Controller
      * @param $viewPage
      * @param $data
      */
-    public function _render($viewPage, $data){
+    public function _render($viewPage, $data)
+    {
         $data['configs'] = $this->config;
         $data['currentLang'] = $this->currentLang;
         $data['page_title'] = $this->page_title;
 
-        $themePath = ROOTPATH . "/themes/{$this->theme}/";
         $renderer  = single_service('renderer', $this->config->templatePath);
 
         return $renderer

@@ -33,6 +33,10 @@ return [
     // Product Filter
     'filter'                        => 'Lọc',
     'price'                         => 'Giá',
+    'price_from'                    => 'Giá từ',
+    'price_to'                      => 'Giá đến',
+    'in_stock'                      => 'Còn hàng',
+    'out_of_stock'                  => 'Hết hàng',
     'contact_price_text'            => 'Liên hệ để biết giá',
     'order_by_a_z'                  => 'Tên sản phẩm, A-Z',
     'order_by_z_a'                  => 'Tên sản phẩm, Z-A',
@@ -44,9 +48,9 @@ return [
 
     'quick_add_to_cart'             => 'Thêm vào giỏ hàng',
     'quick_view'                    => 'Xem nhanh',
-    
 
-    
+
+
 
 
     // errors

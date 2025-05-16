@@ -1,0 +1,101 @@
+/* CSS tuỳ chỉnh cho filter giá - shop-custom.css */
+.shop-price-filter-box,
+.box-title-price {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.box-title-price {
+  padding: 14px 5px;
+  background: #fafbfc;
+  margin-bottom: 18px;
+}
+.caption-price-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.title-price {
+  min-width: 70px;
+  font-size: 15px;
+  color: #222;
+  font-weight: 500;
+}
+.price-val {
+  font-size: 16px;
+  color: #007bff;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 4px 12px;
+  min-width: 80px;
+  text-align: right;
+}
+@media (max-width: 600px) {
+  .box-title-price {
+    padding: 10px 8px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .caption-price-vertical {
+    gap: 6px;
+  }
+  .price-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+  .title-price {
+    min-width: 60px;
+    font-size: 13px;
+  }
+  .price-val {
+    font-size: 14px;
+    min-width: 60px;
+    padding: 3px 8px;
+  }
+}
+.shop-price-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.shop-price-filter-label {
+  min-width: 60px;
+  font-size: 14px;
+  color: #333;
+}
+.shop-price-filter-input {
+  width: 100px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.shop-price-filter-input:focus {
+  border-color: #007bff;
+}
+@media (max-width: 600px) {
+  .shop-price-filter-box {
+    gap: 6px;
+  }
+  .shop-price-filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .shop-price-filter-input {
+    width: 80px;
+    font-size: 13px;
+  }
+}

@@ -131,6 +131,7 @@ class CmsTables extends Migration
             'is_default'      	=> ['type' => 'tinyint', 'unsigned' => true, 'default' => 0],
             'is_rtl'          	=> ['type' => 'tinyint', 'unsigned' => true, 'default' => 0],
             'currency_code'     => ['type' => 'varchar',  'constraint' => 32, 'null' => true],
+            'currency_symbol'   => ['type' => 'varchar',  'constraint' => 32, 'null' => true],
             'created_at'       	=> ['type' => 'datetime', 'null' => true],
             'updated_at'       	=> ['type' => 'datetime', 'null' => true],
             'deleted_at'       	=> ['type' => 'datetime', 'null' => true],
