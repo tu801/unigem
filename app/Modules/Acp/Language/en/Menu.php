@@ -6,19 +6,19 @@
 return [
     // Title
     'menu_title'                => 'Menu Management',
-    'category_list'             => 'News Categories',
-    'static_url_header'         => 'Static URLs',
+    'category_list'             => 'Category List',
+    'static_url_header'         => 'Static URL',
     'select_menu_to_edit'       => 'Please select a menu to edit:',
     'menu_structure'            => 'Structure',
     'apply'                     => 'Apply',
-    'menu_option'               => 'Choose a Menu',
+    'menu_option'               => 'Select Menu',
 
     'menu_name'                 => 'Menu Name',
     'menu_status'               => 'Status',
     'menu_created'              => 'Created Date',
-    'menu_location'             => 'Display Location',
+    'menu_location'             => 'Display Position',
 
-    // Errors
+    // Error
     'menu_required'             => 'Please enter the menu name',
     'menu_min_length'           => 'Menu name must have at least 2 characters',
     'menu_is_exist'             => 'This menu already exists',
@@ -37,5 +37,4 @@ return [
     'delete_success'            => 'Successfully deleted menu #[{0}]',
     'update_success'            => 'Successfully updated the menu',
     'no_location_config'        => 'No Menu location configuration found! Please contact the website administrator to set up',
-
 ];

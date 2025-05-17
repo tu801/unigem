@@ -28,7 +28,7 @@
         <?php endif; ?>
 
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?= base_url() ?>" class="nav-link">Xem Trang Chủ</a>
+            <a href="<?= base_url() ?>" class="nav-link"><?=lang('Acp.view_frontend')?></a>
         </li>
 
     </ul>
@@ -56,7 +56,7 @@
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <img src="<?= getUserAvatar($login_user) ?>" alt="<?= @$login_user->username ?>"
                     class="img-size-32 mr-2">
-                Chào <?= @$login_user->username ?>
+                    <?=lang('Acp.hi_user_text', [$login_user->username ?? ''])?>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span class="dropdown-item dropdown-header"><?= @$User->fullname ?></span>

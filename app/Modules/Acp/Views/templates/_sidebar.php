@@ -1,7 +1,7 @@
 <!-- Brand Logo -->
-<a href="<?= base_url($config->adminSlug . '/dashboard') ?>" class="brand-link navbar-danger">
+<a href="<?= base_url($config->adminSlug . '/dashboard') ?>" class="brand-link bg-danger">
     <img src="/<?= $config->templatePath ?>assets/img/logo.png" alt="TMT" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">Quản Lý</span>
+    <span class="brand-text font-weight-light"><?=lang('Acp.cms_brand_text')?></span>
 </a>
 
 <!-- Sidebar -->
@@ -106,12 +106,12 @@
             </li>
 
             <!-- order -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-cart-arrow-down"></i>
                     <p><?= lang('Order.page_title') ?></p>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Users -->
             <li class="nav-item has-treeview <?= (in_array($controller, array('user', 'usergroup', 'customercontroller'))) ? "menu-open" : "" ?>">
@@ -131,12 +131,12 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="<?= base_url($config->adminSlug . '/customer/') ?>" class="nav-link <?= (($controller == 'customercontroller') && in_array($method, array('index', 'addCustomer', 'editCustomer', 'detail', 'createCustomerAccount'))) ? "active" : '' ?>">
                             <i class="fas fa-user-tag"></i>
                             <p><?= lang('Acp.customer_manager'); ?></p>
                         </a>
-                    </li>
+                    </li> -->
 
                 </ul>
             </li>

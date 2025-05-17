@@ -10,7 +10,7 @@ return [
     'list_all_post'                 => 'All Posts',
     'list_delete_post'              => 'Deleted Posts',
     'list_user_post'                => 'My Posts',
-    'create_new_slug'               => 'Create New URL from Title',
+    'create_new_slug'               => 'Create new URL from title',
     'custom_meta_title'             => 'Additional Information',
 
     // Post fields
@@ -23,6 +23,11 @@ return [
     'description'                   => 'Short Description',
     'content'                       => 'Content',
     'post_status'                   => 'Status',
+    'post_status_draft'             => 'Draft',
+    'post_status_pending'           => 'Pending Approval',
+    'post_status_publish'           => 'Published',
+
+    'post_position_top'             => 'Top Post',
 
     'author'                        => 'Author',
     'created_view'                  => 'Posted Date',
@@ -34,16 +39,18 @@ return [
 
     'gallery'                       => 'Image Gallery',
 
+    'feature_image_desc'            => 'The featured image must be at least 1400 x 900 pixels',
+
     // Errors
     'title_is_exist'                => 'This title already exists',
-    'min_length'                    => 'Title must have at least 3 characters',
+    'min_length'                    => 'The title must have at least 3 characters',
     'title_required'                => 'Please enter the title',
     'cat_required'                  => 'Please select a post category',
     'content_required'              => 'Please enter the post content',
     'no_item_found'                 => 'No posts found for your request! Please try again',
     'slug_is_exist'                 => 'This URL already exists! Please choose a different URL!',
     'slug_required'                 => 'Please enter a URL for the post',
-    'slug_min_length'               => 'URL must have at least 3 characters',
+    'slug_min_length'               => 'The URL must have at least 3 characters',
     'you_can_not_edit'              => "You don't have permission to edit this post",
 
     'addSuccess'                    => "Successfully added new post #{0}",
@@ -56,7 +63,7 @@ return [
 
     'empty_crawl_url'               => 'Please enter a URL to crawl',
     'crawl_insert_fail'             => 'Failed to create post after crawling! Please try again',
-    'crawl_url_fail'                => 'Couldn\'t retrieve content from the link <br>#{0}',
-    'crawl_content_fail'            => 'Couldn\'t retrieve content from the link. Please try a different link',
-    'slug_can_not_create'           => 'Can\'t create slug with this title',
+    'crawl_url_fail'                => 'Unable to get content from the link <br>#{0}',
+    'crawl_content_fail'            => 'Unable to get content from the link. Please try another link',
+    'slug_can_not_create'           => 'Cannot create slug with this title',
 ];

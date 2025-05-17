@@ -2,6 +2,9 @@
 return [
     'welcome_label'     => 'Website:',
     'welcome_text'      => 'Chào mừng bạn đến với trang quản trị. Hãy bắt đầu quản lý website của bạn',
+    'view_frontend'     => 'Xem trang chủ',
+    'hi_user_text'      => 'Chào, {0}',
+
     //title
     'title'             => 'Module ACP',
     'title_profile'     => 'Thông tin user',
@@ -15,6 +18,7 @@ return [
     'lang_en'           => 'Tiếng Anh',
 
     //ACP Menu
+    'cms_brand_text'   => 'Quản lý CMS',
     'user_manager'      => 'Người dùng',
     'admin_manager'     => 'Nhân viên',
     'system'            => 'Hệ thống',

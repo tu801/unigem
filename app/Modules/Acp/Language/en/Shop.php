@@ -2,28 +2,28 @@
 /**
  * @author tmtuan
  * @github https://github.com/tu801
- * created Date: 10/24/2023
+ * created Date: 05/17/2025
  */
 
 return [
-    'page_title'            => 'Quản lý cửa hàng',
-    'add_title'             => 'Thêm cửa hàng',
-    'edit_title'            => 'Sửa thông tin cửa hàng',
+    'page_title'            => 'Store Management',
+    'add_title'             => 'Add Store',
+    'edit_title'            => 'Edit Store Information',
 
-    'image'                 => 'Ảnh đại diện',
-    'name'                  => 'Tên cửa hàng',
-    'phone'                 => 'Số điện thoại',
-    'address'               => 'Địa chỉ',
+    'image'                 => 'Avatar',
+    'name'                  => 'Store Name',
+    'phone'                 => 'Phone Number',
+    'address'               => 'Address',
 
-    'status_active'         => 'Đang hoạt động',
-    'status_in_active'      => 'Không hoạt động',
+    'status_active'         => 'Active',
+    'status_in_active'      => 'Inactive',
 
     // error message
-    'name_required'         => 'Vui lòng điền tên cửa hàng',
-    'name_is_exist'         => 'Tên cửa hàng đã tồn tại',
-    'phone_required'        => 'Vui lòng điền số điện thoại',
-    'invalid_emtity'        => 'Dữ liệu cửa hàng phải được khởi tạo trước khi truy xuất entity',
+    'name_required'         => 'Please enter the store name',
+    'name_is_exist'         => 'Store name already exists',
+    'phone_required'        => 'Please enter the phone number',
 
     // success message
-    'addSuccess'            => 'Đã tạo thành công cửa hàng #{0}'
+    'addSuccess'            => 'Successfully created store #{0}',
+    'editSuccess'           => 'Successfully updated information for store #{0}',
 ];
