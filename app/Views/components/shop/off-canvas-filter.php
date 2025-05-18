@@ -31,24 +31,25 @@
                 <div class="widget-facet">
                     <div class="facet-title" data-bs-target="#availability" data-bs-toggle="collapse"
                         aria-expanded="true" aria-controls="availability">
-                        <span>Availability</span>
+                        <span><?=lang('Product.product_available')?></span>
                         <span class="icon icon-arrow-up"></span>
                     </div>
                     <div id="availability" class="collapse show">
                         <ul class="tf-filter-group current-scrollbar mb_36">
                             <li class="list-item d-flex gap-12 align-items-center">
-                                <input type="radio" name="availability" class="tf-check" id="inStock">
                                 <label for="inStock"
-                                    class="label"><span><?= lang('Product.in_stock') ?></span>&nbsp;<span>(14)</span></label>
+                                    class="label"><span><a href="<?=base_url(route_to('product_shop'). '?stock-status=in-stock')?>" ><?= lang('Product.in_stock') ?></a></span>
+                                </label>
                             </li>
                             <li class="list-item d-flex gap-12 align-items-center">
-                                <input type="radio" name="availability" class="tf-check" id="outStock">
                                 <label for="outStock"
-                                    class="label"><span><?= lang('Product.out_of_stock') ?></span>&nbsp;<span>(2)</span></label>
+                                    class="label"><span><a href="<?=base_url(route_to('product_shop'). '?stock-status=out-of-stock')?>" ><?= lang('Product.out_of_stock') ?></a></span>
+                                </label>
                             </li>
                         </ul>
                     </div>
                 </div>
+
                 <div class="widget-facet">
                     <div class="facet-title" data-bs-target="#price" data-bs-toggle="collapse" aria-expanded="true"
                         aria-controls="price">

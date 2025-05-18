@@ -45,9 +45,17 @@ class Category extends BaseController
                 $this->_data['select_cat'] = $category->id;
             }
 
-            if (isset($getData['manufacturer'])) {
-                $this->_model->where('manufacture_id', $getData['manufacturer']);
-                $this->_data['select_manufacturer'] = $getData['manufacturer'];
+            $catIn = [];
+            if ( $category->parent_id == 0) {
+                $catIn[] = $category->id;
+                $childs = $this->_categoryModel->where('parent_id', $category->id)->findAll();
+                if (count($childs) > 0) {
+                    foreach ($childs as $child) {
+                        $catIn[] = $child->id;
+                    }
+                }
+            } else {
+                $catIn[] = $category->id;
             }
 
             $this->_model->select('product.*')
@@ -55,7 +63,7 @@ class Category extends BaseController
                 ->join('product_content AS pdc', 'pdc.product_id = product.id')
                 ->where('pdc.lang_id', $this->currentLang->id)
                 ->where('product.pd_status', ProductStatusEnum::PUBLISH)
-                ->where('product.cat_id', $category->id)
+                ->whereIn('product.cat_id', $catIn)
                 ->orderBy('product.id DESC');
 
             $this->_data['data']                 = $this->_model->paginate();

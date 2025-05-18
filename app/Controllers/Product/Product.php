@@ -49,11 +49,21 @@ class Product extends BaseController
             $this->_model->like('pd_name', $q);
         }
 
+        $stockStatus = isset($getData['stock-status']) ? esc($getData['stock-status']) : 'in-stock';
+        switch ($stockStatus) {
+            case 'out-of-stock':
+                $this->_model->where('product.pd_status', ProductStatusEnum::STOP);
+                break;
+            case 'in-stock':
+            default:
+                $this->_model->where('product.pd_status', ProductStatusEnum::PUBLISH);
+                break;
+        }
+
         $this->_model
             ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_description, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
             ->join('product_content AS pdc', 'pdc.product_id = product.id')
             ->where('pdc.lang_id', $this->currentLang->id)
-            ->where('product.pd_status', ProductStatusEnum::PUBLISH)
             ->orderBy('product.id DESC');
 
         $this->_data['data']                 = $this->_model->paginate();

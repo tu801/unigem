@@ -37,7 +37,7 @@ class CategoryModel extends Model
      */
     public function getCategories(string $type, ?int $lang_id = null)
     {
-        $cacheKey = 'getCategories_' . $type . '_' . $lang_id;
+        $cacheKey = CacheKeys::CATEGORY_PREFIX . 'get_' . $type . '_' . $lang_id;
 
         $catData = cache()->get($cacheKey);
         if ($catData !== null) {
@@ -55,7 +55,7 @@ class CategoryModel extends Model
             ->where('category.cat_status', 'publish')
             ->findAll();
 
-        cache()->save($cacheKey, $catData, 3600); //save cache for 1 hour
+        cache()->save($cacheKey, $catData, config('Cache')->ttl);
 
         return $catData;
     }
@@ -85,7 +85,7 @@ class CategoryModel extends Model
         }
         $catData = $builder->find($id);
 
-        cache()->save($cacheKey, $catData, 3600); //save cache for 1 hour
+        cache()->save($cacheKey, $catData, config('Cache')->ttl); 
 
         return $catData;
     }
@@ -98,7 +98,14 @@ class CategoryModel extends Model
      */
     public function getProductCategoriesWithProductCount(int $lang_id)
     {
-        return $this->select('category.id, category.cat_type, category_content.title, category_content.slug, COUNT(product.id) as count')
+        $cacheKey = CacheKeys::CATEGORY_PREFIX . 'product_with_count_'. $lang_id;
+
+        $catData = cache()->get($cacheKey);
+        if ($catData!== null) {
+            return $catData;
+        }
+
+        $catData = $this->select('category.id, category.cat_type, category_content.title, category_content.slug, COUNT(product.id) as count')
             ->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
             ->join('product', 'product.cat_id = category.id', 'LEFT')
             ->where('category.cat_type', 'product')
@@ -106,6 +113,9 @@ class CategoryModel extends Model
             ->where('category_content.lang_id', $lang_id)
             ->groupBy('category.id, category_content.title, category_content.slug')
             ->findAll();
+        cache()->save($cacheKey, $catData, config('Cache')->ttl);
+
+        return $catData;
     }
 
     /**
