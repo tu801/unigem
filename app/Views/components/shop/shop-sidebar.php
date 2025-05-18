@@ -1,6 +1,6 @@
 <aside class="tf-shop-sidebar wrap-sidebar-mobile">
     <?php 
-    echo view_cell('\App\Cells\Product\ProductCategoryListCell', null, $configs->viewCellCacheTtl, 'shop_sidebar_product_category_list_cell_'.$currentLang->locale);
+    echo view_cell('\App\Cells\Product\ProductCategoryListCell');
 
     // echo view_cell('\App\Cells\Product\ProductSaleListCell', null, $configs->viewCellCacheTtl,'shop_sidebar_product_sale_list_cell_'.$currentLang->locale);
     echo view_cell('\App\Cells\Product\ProductSaleListCell', null);

@@ -3,16 +3,21 @@
 use App\Enums\CategoryEnum;
 use App\Models\Blog\CategoryModel;
 
-$productCategory = model(CategoryModel::class)->getCategories(CategoryEnum::CAT_TYPE_PRODUCT);
+// $productCategory = model(CategoryModel::class)->getCategories(CategoryEnum::CAT_TYPE_PRODUCT);
+$productCategory = get_menu('product_toolbar_menu');
 ?>
 
 <div class="offcanvas offcanvas-start canvas-mb toolbar-shop-mobile" id="toolbarShopmb">
     <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
     <div class="mb-canvas-content">
-        <?php if ( isset($productCategory) && count($productCategory) > 0 ): ?>
+        <?php if ( isset($productCategory->id) && count($productCategory->menu_items) > 0 ): ?>
         <div class="mb-body">
             <ul class="nav-ul-mb" id="wrapper-menu-navigation">
-                <?php foreach ($productCategory as $category) : ?>
+                <?php foreach ($productCategory->menu_items as $item) : 
+                    if ( $item->type != 'category' ) continue;
+                    
+                    $category = model(CategoryModel::class)->getById($item->related_id, $currentLang->id);
+                ?>
                 <li class="nav-mb-item">
                     <a href="<?=$category->url?>" class="tf-category-link mb-menu-link">
                         <div class="image">

@@ -16,10 +16,10 @@
                     <div class="col-xl-3 col-md-6 col-12">
                         <div class="footer-col footer-col-3 footer-col-block">
                             <div class="footer-heading footer-heading-desktop">
-                                <h6 class="fs-14 text-uppercase fw-8"><?=lang('Home.footer_contact_info')?></h6>
+                                <h6 class="fs-14 text-uppercase fw-8 font-montserrat"><?=lang('Home.footer_contact_info')?></h6>
                             </div>
                             <div class="footer-heading footer-heading-moblie">
-                                <h6 class="fs-14 text-uppercase fw-8"><?=lang('Home.footer_contact_info')?></h6>
+                                <h6 class="fs-14 text-uppercase fw-8 font-montserrat"><?=lang('Home.footer_contact_info')?></h6>
                             </div>
                             <ul class="footer-menu-list tf-collapse-content">
                                 <li>
@@ -48,10 +48,10 @@
                     <div class="col-xl-3 col-md-6 col-12">
                         <div class="footer-newsletter footer-col-block">
                             <div class="footer-heading footer-heading-desktop">
-                                <h6 class="fs-14 text-uppercase fw-8"><?=lang('Home.sign_up_for_mail')?></h6>
+                                <h6 class="fs-14 text-uppercase fw-8 font-montserrat"><?=lang('Home.sign_up_for_mail')?></h6>
                             </div>
                             <div class="footer-heading footer-heading-moblie">
-                                <h6 class="fs-14 text-uppercase fw-8"><?=lang('Home.sign_up_for_mail')?></h6>
+                                <h6 class="fs-14 text-uppercase fw-8 font-montserrat"><?=lang('Home.sign_up_for_mail')?></h6>
                             </div>
                             <div class="tf-collapse-content">
                                 <div class="footer-menu_item"><?=lang('Home.sign_up_for_mail_desc')?></div>

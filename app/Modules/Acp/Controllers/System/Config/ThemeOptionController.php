@@ -7,7 +7,7 @@
 
 namespace Modules\Acp\Controllers\System\Config;
 
-
+use App\Enums\CacheKeys;
 use Modules\Acp\Controllers\AcpController;
 use App\Enums\ThemeOptionEnum;
 use App\Enums\UploadFolderEnum;
@@ -91,7 +91,7 @@ class ThemeOptionController extends AcpController
         }
 
         // delete cache
-        cache()->delete('_theme_option');
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
         return redirect()->back()->with('message', lang('Config.update_theme_success'));
 
@@ -108,7 +108,7 @@ class ThemeOptionController extends AcpController
         ];
 
         // delete cache
-        cache()->delete('_theme_option');
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
         return $this->response->setJSON($response);
     }
@@ -141,7 +141,7 @@ class ThemeOptionController extends AcpController
         ];
 
         // delete cache
-        cache()->delete('_theme_option');
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
         return $this->response->setJSON($response);
     }

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/animate.css">
     <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>css/styles.css"/>
+    <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>css/custom-styles.css"/>
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="<?=get_favicon_url($configs)?>">

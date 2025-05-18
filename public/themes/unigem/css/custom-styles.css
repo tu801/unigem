@@ -1,0 +1,28 @@
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800&family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;700;800&display=swap");
+
+/* Typography
+-------------------------------------------------------------- */
+.font-young-serif {
+  font-family: "Young Serif", serif;
+}
+
+/* Roboto */
+.font-roboto {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+/* Montserrat */
+.font-montserrat {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+}
+
+/* Open Sans */
+.font-open-sans {
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+/* Helvetica (đã có sẵn) */
+.font-helvetica-serif {
+  font-family: Helvetica, sans-serif;
+}

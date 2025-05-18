@@ -7,6 +7,7 @@
 namespace Modules\Acp\Controllers\Blog;
 
 use App\Entities\MenuItem;
+use App\Enums\CacheKeys;
 use App\Enums\Post\PostTypeEnum;
 use App\Models\Blog\MenuItemsModel;
 use App\Models\Blog\MenuModel;
@@ -70,7 +71,7 @@ class MenuController extends AcpController
         }
 
         // delete cache
-        cache()->deleteMatching('menu_*');
+        cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
         $this->_data['category_list'] = $catList;
         $this->_data['lstMenus'] = $this->_model->findAll();
@@ -139,7 +140,7 @@ class MenuController extends AcpController
             $this->logAction($logData);
 
             // delete cache
-            cache()->deleteMatching('menu_*');
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
@@ -194,7 +195,7 @@ class MenuController extends AcpController
             $this->logAction($logData);
 
             // delete cache
-            cache()->deleteMatching('menu_*');
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
@@ -261,7 +262,7 @@ class MenuController extends AcpController
                 $mess .=  " " . $menuItem->slug;
 
                 // delete cache
-                cache()->deleteMatching('menu_*');
+                cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
                 return redirect()->to("/acp/menu?menu={$menuItem->slug}")->with('message', $mess);
             } else return redirect()->to("/acp/menu?key={$menuItem->slug}");
@@ -311,7 +312,7 @@ class MenuController extends AcpController
                 $this->logAction($logData);
 
                 // delete cache
-                cache()->deleteMatching('menu_*');
+                cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
                 return redirect()->route('edit_menu', [$menu->id])->with('message', lang('Menu.delete_success', [$item->title]));
             } else return redirect()->route('menu')->with('error', lang('Acp.delete_fail'));
@@ -336,22 +337,11 @@ class MenuController extends AcpController
         else $this->_model->where('lang_id', $inputData['lang']->id);
 
         $menuData = $this->_model->findAll();
-
-        $all_menu_location = new Collection(model(ConfigModel::class)->getMenuLocation());
         
         foreach ($menuData as $item) {
-            $selected_locations = json_decode($item->location);
-            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations)  {
-               if ( in_array($locationItem->value, $selected_locations)) {
-                    return [
-                        'location_key' => $locationItem->value,
-                        'location_name' => $locationItem->title,
-                    ];
-               }
-            });
             $date = date_create($item->created_at);
             $item->created = date_format($date, 'd/m/Y');
-            $item->location_list = array_values(array_filter($locationData->toArray()));
+            $item->location_list = $this->_getLocationList($item);
         }
         if (empty($menuData)) {
             $response = [
@@ -365,6 +355,23 @@ class MenuController extends AcpController
             ];
         }
         return $this->response->setJSON($response);
+    }
+
+    private function _getLocationList($menuItem) {
+        $all_menu_location = new Collection(model(ConfigModel::class)->getMenuLocation());
+        if ( !empty($menuItem->location) ) {
+            $selected_locations = json_decode($menuItem->location);
+            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations)  {
+               if ( in_array($locationItem->value, $selected_locations)) {
+                    return [
+                        'location_key' => $locationItem->value,
+                        'location_name' => $locationItem->title,
+                    ];
+               }
+            });
+        }
+
+        return  isset($locationData) ? array_values(array_filter($locationData->toArray())) : [];
     }
 
     /**
@@ -426,10 +433,11 @@ class MenuController extends AcpController
                     ];
                     $this->logAction($logData);
                     // delete cache
-                    cache()->deleteMatching('menu_*');
+                    cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
                     $date = date_create($menuData->created_at);
                     $menuData->created = date_format($date, 'd/m/Y');
+                    $menuData->location_list = $this->_getLocationList($menuData);
                     $response['error'] = 0;
                     $response['message'] = 'Đã thêm thành công menu mới';
                     $response['newItem'] = $menuData;
@@ -496,7 +504,7 @@ class MenuController extends AcpController
                     $this->logAction($logData);
 
                     // delete cache
-                    cache()->deleteMatching('menu_*');
+                    cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
                     $response['error'] = 0;
                     $response['text'] = lang('Menu.update_success');
@@ -578,7 +586,7 @@ class MenuController extends AcpController
             }
 
             // delete cache
-            cache()->deleteMatching('menu_*');
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
             return $this->response->setJSON(['error' => 1, 'message' => $textReturn]);
         } else return $this->response->setJSON(['error' => 0, 'message' => lang('Menu.addSuccess')]);

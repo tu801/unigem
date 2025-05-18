@@ -5,6 +5,7 @@
  */
 namespace App\Traits;
 
+use App\Enums\CacheKeys;
 use App\Models\ConfigModel;
 
 trait SysConfig {
@@ -15,14 +16,20 @@ trait SysConfig {
     public function getConfig() {
 
         $modelConfig = model(ConfigModel::class);
-        $cfData = $modelConfig->findAll();
-        $configs = [];
-        foreach ($cfData as $item){
-            $key = trim($item->group_id).'_'.$item->key;
-            if ( !array_key_exists($key, $configs) ) {
-                $configs[$key] = (isset($item->is_json) && $item->is_json == 1)? json_decode($item->value) : $item->value;
+        $configs = cache()->get(CacheKeys::SYS_CONFIG);
+
+        if ( !$configs ) {
+            $cfData = $modelConfig->findAll();
+            $configs = [];
+            foreach ($cfData as $item){
+                $key = trim($item->group_id).'_'.$item->key;
+                if ( !array_key_exists($key, $configs) ) {
+                    $configs[$key] = (isset($item->is_json) && $item->is_json == 1)? json_decode($item->value) : $item->value;
+                }
             }
+            cache()->save(CacheKeys::SYS_CONFIG, $configs, config('Cache')->ttl);
         }
+        
         $this->config->sys = $configs;
 
         // set max size for image if this config is exist

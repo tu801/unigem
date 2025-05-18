@@ -120,7 +120,7 @@ const menuApp = Vue.createApp({
     },
     rdLocations(item) {
       let html = "";
-      if (item.location_list.length > 0) {
+      if (item.location_list.length > 0 && item.location != null) {
         item.location_list.forEach((location) => {
           html +=
             '<span class="badge badge-info">' +

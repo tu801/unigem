@@ -33,7 +33,7 @@ foreach ($categories as $catId) {
                     <li class="nav-tab-item" role="presentation">
                         <div data-bs-target="#<?= $catTargetId ?>" class="<?= $i == 1 ? 'active' : '' ?> nav-tab-link"
                             data-bs-toggle="tab">
-                            <span class="text fw-8 "><?= $catSlide->title ?></span>
+                            <span class="text fw-8 font-montserrat"><?= $catSlide->title ?></span>
                             <a href="<?= $catSlide->url ?>" class="icon icon-arrow1-top-left"></a>
                         </div>
                     </li>

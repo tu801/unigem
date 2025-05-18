@@ -2,6 +2,7 @@
 
 namespace Modules\Acp\Controllers\Blog;
 
+use App\Enums\CacheKeys;
 use App\Enums\CategoryEnum;
 use App\Models\AttachMetaModel;
 use Modules\Acp\Controllers\AcpController;
@@ -296,6 +297,9 @@ class Category extends AcpController
             ];
             $this->logAction($logData);
 
+            // delete cache
+            $this->_removeCache();
+
             if (isset($inputData['save'])) return redirect()->route('edit_category', [$data->id])->with('message', lang('Acp.edit_Success'));
             else if (isset($inputData['save_exit'])) {
                 $route = base_url($this->_data['module'] . "/category/{$data->cat_type}");
@@ -324,10 +328,19 @@ class Category extends AcpController
                 'subject_type' => CategoryModel::class,
             ];
             $this->logAction($logData);
+
+            // delete cache
+            $this->_removeCache();
+
             if ($this->_model->delete($item->id, (bool) $item->deleted_at)) return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
 
             else return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));
+    }
+
+    private function _removeCache() {
+        cache()->deleteMatching(CacheKeys::CATEGORY_PREFIX . '*');
+        cache()->deleteMatching(CacheKeys::MENU_PREFIX . '*');
     }
 
     //AJAX
@@ -419,6 +432,9 @@ class Category extends AcpController
                         ->where('cat_id', $itemId);
 
                     if ($modelCategoryContent->update(null, $updateArray)) {
+                        // delete cache
+                        $this->_removeCache();
+
                         $this->_model->join('category_content', 'category_content.cat_id = category.id');
                         $item = $this->_model->find($itemId);
                         $response['error'] = 0;

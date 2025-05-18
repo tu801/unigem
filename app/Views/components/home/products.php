@@ -1,7 +1,7 @@
 <section class="flat-spacing-18 bg_brown-3">
     <div class="container">
         <div class="flat-title wow fadeInUp title-upper" data-wow-delay="0s">
-            <span class="title fw-8  text-white"><?=lang('Home.best_sell_product')?></span>
+            <span class="title fw-8 font-montserrat text-white"><?=lang('Home.best_sell_product')?></span>
             <div class="d-flex gap-16 align-items-center box-pagi-arr">
                 <!-- <div class="nav-sw-arrow nav-next-slider type-white nav-next-product"><span class="icon icon-arrow1-left"></span></div> -->
                 <a href="<?=route_to('product_shop')?>" class="tf-btn btn-line fs-12 fw-6  btn-line-light"><?=lang('Home.best_sell_view_all_btn')?></a>

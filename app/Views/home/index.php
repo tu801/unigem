@@ -94,7 +94,7 @@ echo $this->section('content');
                                 <i class="icon-shipping"></i>
                             </div>
                             <div class="content ">
-                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_free_ship_title')?></div>
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14"><?=lang('Home.icon_box_free_ship_title')?></div>
                                 <p><?=lang('Home.icon_box_free_ship_desc')?></p>
                             </div>
                         </div>
@@ -105,7 +105,7 @@ echo $this->section('content');
                                 <i class="icon-payment fs-22"></i>
                             </div>
                             <div class="content ">
-                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_payment_title')?></div>
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14"><?=lang('Home.icon_box_payment_title')?></div>
                                 <p><?=lang('Home.icon_box_payment_desc')?></p>
                             </div>
                         </div>
@@ -116,7 +116,7 @@ echo $this->section('content');
                                 <i class="icon-return fs-20"></i>
                             </div>
                             <div class="content ">
-                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_returns_title')?></div>
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14"><?=lang('Home.icon_box_returns_title')?></div>
                                 <p><?=lang('Home.icon_box_returns_desc')?></p>
                             </div>
                         </div>
@@ -127,7 +127,7 @@ echo $this->section('content');
                                 <i class="icon-suport"></i>
                             </div>
                             <div class="content ">
-                                <div class="title fw-8 text-uppercase fs-14"><?=lang('Home.icon_box_support_title')?></div>
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14"><?=lang('Home.icon_box_support_title')?></div>
                                 <p><?=lang('Home.icon_box_support_desc')?></p>
                             </div>
                         </div>

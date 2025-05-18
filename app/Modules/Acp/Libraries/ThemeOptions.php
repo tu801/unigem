@@ -6,6 +6,7 @@
 
 namespace Modules\Acp\Libraries;
 
+use App\Enums\CacheKeys;
 use CodeIgniter\Config\Services;
 use App\Enums\CategoryEnum;
 use App\Enums\ThemeOptionEnum;
@@ -164,7 +165,7 @@ class ThemeOptions
                     'is_json' => (in_array($item['input'], $this->_dataTypeJsonInputList)) ? 1 : 0
                 ];
                 $this->_configModel->insert($newConfig);
-                cache()->delete('_theme_options');
+                cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
                 $itemConfig[$key] = [
                     'title' => lang('Theme.item_'.$key),
@@ -210,7 +211,7 @@ class ThemeOptions
 
             $this->_configModel->update($configData->id, $configData);
         }
-        cache()->delete('_theme_options');
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
     }
 
     /**
@@ -249,7 +250,7 @@ class ThemeOptions
 
             $this->_configModel->update($configData->id, $configData);
         }
-        cache()->delete('_theme_options');
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
     }
 
     private function getAttachImageData($id)
@@ -265,7 +266,7 @@ class ThemeOptions
      */
     public function getThemeOptions()
     {
-        if ( !$themeOption = cache('_theme_options') ) {
+        if ( !$themeOption = cache()->get(CacheKeys::THEME_OPTION_CONFIG) ) {
             $themeOption = [];
             $configData = $this->_configModel
                 ->where('group_id', $this->config_group_id)
@@ -279,7 +280,7 @@ class ThemeOptions
                 }
             }
 
-            cache()->save('_theme_options', $themeOption, 86400);
+            cache()->save(CacheKeys::THEME_OPTION_CONFIG, $themeOption, 86400);
         }
 
         return $themeOption;

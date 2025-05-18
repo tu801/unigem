@@ -2,6 +2,7 @@
 
 namespace Modules\Acp\Controllers\System\Config;
 
+use App\Enums\CacheKeys;
 use Modules\Acp\Controllers\AcpController;
 use App\Models\AttachModel;
 use App\Models\Blog\PostModel;
@@ -112,7 +113,9 @@ class Config extends AcpController
                     'value' => $cfData
                 ];
                 $this->_model->update($item->id, $updateData);
-                // $this->_model->where('id', $item->id )->delete();
+                
+                // clear cache
+                cache()->delete(CacheKeys::SYS_CONFIG);
             }
             return redirect()->route('config_custom', [$group])
                 ->with('error', lang('Acp.cf_customedit_reset') . ' - ' . $postData['resetCustom']);
@@ -150,8 +153,11 @@ class Config extends AcpController
                 $updateData = [
                     'value' => $cfData
                 ];
-                if (!$this->_model->update($item->id, $updateData))
+                if (!$this->_model->update($item->id, $updateData)){
+                    // clear cache
+                    cache()->delete(CacheKeys::SYS_CONFIG);
                     return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+                }
             } else {
                 $insertData = [
                     'group_id' => $group,
@@ -160,8 +166,11 @@ class Config extends AcpController
                     'value' => $cfData,
                     'is_json' => 1
                 ];
-                if (!$this->_model->insert($insertData))
+                if (!$this->_model->insert($insertData)){
+                    // clear cache
+                    cache()->delete(CacheKeys::SYS_CONFIG);
                     return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+                }
             }
         }
         return redirect()->route('config_custom', [$group])
@@ -231,6 +240,8 @@ class Config extends AcpController
             'subject_type' => ConfigModel::class,
         ];
         $this->logAction($logData);
+        // clear cache
+        cache()->delete(CacheKeys::SYS_CONFIG);
         // Success!
         if (isset($insertData['save'])) return redirect()->route('edit_config', [$item->id])->with('message', lang('Acp.cf_addSuccess', [$item->title]));
         else if (isset($insertData['save_exit'])) return redirect()->route('config')->with('message', lang('Acp.cf_addSuccess', [$item->title]));
@@ -306,6 +317,8 @@ class Config extends AcpController
             'subject_type' => ConfigModel::class,
         ];
         $this->logAction($logData);
+        // clear cache
+        cache()->delete(CacheKeys::SYS_CONFIG);
         // Success!
         if (isset($inputData['save'])) return redirect()->route('config')->with('message', lang('Acp.cf_edit_Success'));
         else if (isset($inputData['save_exit'])) return redirect()->route('config')->with('message', lang('Acp.cf_edit_Success'));
@@ -340,6 +353,9 @@ class Config extends AcpController
             ];
             $this->logAction($logData);
 
+            // clear cache
+            cache()->delete(CacheKeys::SYS_CONFIG);
+
             return redirect()->route('edit_config', [$newItem->id])->with('error', lang('Config.clone_success', [$newItem->key]));
         } else {
             return redirect()->route('config')->with('error', lang('Config.no_config_found'));
@@ -366,6 +382,9 @@ class Config extends AcpController
                     'subject_type' => ConfigModel::class,
                 ];
                 $this->logAction($logData);
+                // clear cache
+                cache()->delete(CacheKeys::SYS_CONFIG);
+
                 return redirect()->route('config')->with('message', lang('Acp.cf_delete_success', [$item->title]));
             } else return redirect()->route('config')->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('config')->with('error', lang('Acp.invalid_request'));
