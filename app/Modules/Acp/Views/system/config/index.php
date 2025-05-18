@@ -40,6 +40,15 @@ $cfGroups = $config->cfGroup; //print_r($configs);exit;
                             <a href="<?=route_to('add_config', $dfGroup) ?>" class="btn btn-normal btn-primary btn-sm" title="Add New Config" >
                                 <i class="fa fa-plus text"></i> <?=lang('Acp.cf_add')?>
                             </a>
+                            <?php if ($login_user->inGroup('superadmin')) : ?>
+                            <a href="<?=route_to('clear_cache') ?>" class="btn btn-normal btn-danger btn-sm ml-2" title="Clear Cache" >
+                                <i class="fas fa-database"></i> <?=lang('Acp.clear_cache')?>
+                            </a>
+
+                            <!-- <a href="<?=route_to('setup-language') ?>" class="btn btn-normal btn-warning btn-sm ml-2" title="Clear Cache" >
+                                <i class="fas fa-language"></i> <?=lang('Acp.setup_lang')?>
+                            </a> -->
+                            <?php endif; ?>
                         </div>
                         <!-- /.btn-group -->
                         <div class="float-right row mb-2">

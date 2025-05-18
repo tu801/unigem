@@ -70,6 +70,10 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('custom/([a-zA-Z0-9_-]+)', 'Config::customAction/$1');
 
         $routes->get('get-custom-attach/', 'Config::getCustomAttachFile/$1');
+
+        $routes->get('clear-cache', static function () {
+            echo command('cache:clear');
+        }, ['as' => 'clear_cache']);
     });
 
     $routes->group('theme-option', ['namespace' => 'Modules\Acp\Controllers\System\Config', 'filter' => 'group:superadmin,admin'], function ($routes) {

@@ -60,6 +60,8 @@ return [
     'ward'              => 'Ward / Commune',
     'select_ward'       => 'Select Ward/Commune',
 
+    'clear_cache'       => 'Delete Cache',
+
     //Meta Data
     'meta_keyword'                  => 'SEO Keywords',
     'meta_description'              => 'SEO Description',

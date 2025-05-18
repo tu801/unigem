@@ -60,6 +60,8 @@ return [
     'ward'              => 'Phường / Xã',
     'select_ward'       => 'Chọn Phường/Xã',
 
+    'clear_cache'       => 'Xoá Cache',
+
     //Meta Data
     'meta_keyword'                  => 'Từ khóa SEO',
     'meta_description'              => 'Mô tả SEO',
