@@ -219,7 +219,7 @@ class Attach extends AcpController
         $this->_model->orderBy('id', 'DESC');
         $uploadData = $this->_model->select(['id', 'file_name', 'file_title', 'created_at'])
                     ->orderBy('id DESC')
-                    ->limit($num_rows, $page)->get()->getResult();
+                    ->limit($num_rows, (int) $page)->get()->getResult();
         $newData = [];
         if ( count($uploadData) > 0 ) {
             foreach ($uploadData as $item ) {
