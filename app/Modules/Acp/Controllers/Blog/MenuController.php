@@ -69,6 +69,9 @@ class MenuController extends AcpController
             ];
         }
 
+        // delete cache
+        cache()->deleteMatching('menu_*');
+
         $this->_data['category_list'] = $catList;
         $this->_data['lstMenus'] = $this->_model->findAll();
         $this->_data['menuItem'] = $menuItem;
@@ -135,6 +138,9 @@ class MenuController extends AcpController
             ];
             $this->logAction($logData);
 
+            // delete cache
+            cache()->deleteMatching('menu_*');
+
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
         }
@@ -186,6 +192,9 @@ class MenuController extends AcpController
                 'subject_type' => MenuItemsModel::class,
             ];
             $this->logAction($logData);
+
+            // delete cache
+            cache()->deleteMatching('menu_*');
 
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
@@ -250,6 +259,10 @@ class MenuController extends AcpController
 
                 $mess = lang('Menu.update_success');
                 $mess .=  " " . $menuItem->slug;
+
+                // delete cache
+                cache()->deleteMatching('menu_*');
+
                 return redirect()->to("/acp/menu?menu={$menuItem->slug}")->with('message', $mess);
             } else return redirect()->to("/acp/menu?key={$menuItem->slug}");
         } else return redirect()->route('menu');
@@ -296,6 +309,10 @@ class MenuController extends AcpController
                     'subject_type' => MenuItemsModel::class,
                 ];
                 $this->logAction($logData);
+
+                // delete cache
+                cache()->deleteMatching('menu_*');
+
                 return redirect()->route('edit_menu', [$menu->id])->with('message', lang('Menu.delete_success', [$item->title]));
             } else return redirect()->route('menu')->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -408,6 +425,9 @@ class MenuController extends AcpController
                         'subject_type' => MenuModel::class,
                     ];
                     $this->logAction($logData);
+                    // delete cache
+                    cache()->deleteMatching('menu_*');
+
                     $date = date_create($menuData->created_at);
                     $menuData->created = date_format($date, 'd/m/Y');
                     $response['error'] = 0;
@@ -474,6 +494,10 @@ class MenuController extends AcpController
                         'subject_type' => MenuModel::class,
                     ];
                     $this->logAction($logData);
+
+                    // delete cache
+                    cache()->deleteMatching('menu_*');
+
                     $response['error'] = 0;
                     $response['text'] = lang('Menu.update_success');
                 } else {
@@ -552,6 +576,10 @@ class MenuController extends AcpController
             foreach ($err as $mes) {
                 $textReturn .= $mes . '<br>';
             }
+
+            // delete cache
+            cache()->deleteMatching('menu_*');
+
             return $this->response->setJSON(['error' => 1, 'message' => $textReturn]);
         } else return $this->response->setJSON(['error' => 0, 'message' => lang('Menu.addSuccess')]);
     }

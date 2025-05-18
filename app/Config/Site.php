@@ -26,7 +26,7 @@ class Site extends BaseConfig {
     /**
      * cache time to live for view cell
      */
-    public $viewCellCacheTtl = 60*60;
+    public $viewCellCacheTtl = 60*60; // 1 hour
     
 
     public function __construct() {

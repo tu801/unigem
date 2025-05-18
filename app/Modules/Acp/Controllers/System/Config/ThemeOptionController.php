@@ -88,8 +88,10 @@ class ThemeOptionController extends AcpController
                     ThemeOptionEnum::DESIGN_BLOCK,
                     $this->currentLang->locale);
                 break;
-            
         }
+
+        // delete cache
+        cache()->delete('_theme_option');
 
         return redirect()->back()->with('message', lang('Config.update_theme_success'));
 
@@ -104,6 +106,10 @@ class ThemeOptionController extends AcpController
             'message' => lang('Config.save_slider_success'),
             'data'    => $data,
         ];
+
+        // delete cache
+        cache()->delete('_theme_option');
+
         return $this->response->setJSON($response);
     }
 
@@ -133,6 +139,9 @@ class ThemeOptionController extends AcpController
             'error' => 0,
             'message' => lang('Config.update_slider_success'),
         ];
+
+        // delete cache
+        cache()->delete('_theme_option');
 
         return $this->response->setJSON($response);
     }

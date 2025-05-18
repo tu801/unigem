@@ -2,7 +2,7 @@
     <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
     <div class="mb-canvas-content">
         <div class="mb-body">
-            <?php echo view_cell('\App\Cells\Menu\MenuTopCell::mobileMenu', null, $configs->viewCellCacheTtl, '_mobile_menu_'.$currentLang->locale)?>
+            <?php echo view_cell('\App\Cells\Menu\MenuTopCell::mobileMenu')?>
 
 
             <div class="mb-other-content">

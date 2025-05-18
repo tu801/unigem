@@ -10,6 +10,7 @@ namespace App\Models\Blog;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Model;
 use App\Entities\Post;
+use App\Enums\Post\PostStatusEnum;
 
 class PostModel extends Model
 {
@@ -47,4 +48,21 @@ class PostModel extends Model
         return $catData->get()->getResultArray();
     }
 
+    /**
+     * Get post by id
+     *
+     * @param int $id
+     * @param int $lang_id
+     * @param string $post_type
+     * @return post object
+     */
+    public function getById(int $id, int $lang_id, $post_type = '')
+    {
+        $builder = $this->join('post_content', 'post_content.post_id = post.id')
+            ->where('post_content.lang_id', $lang_id)
+            ->where('post_status', PostStatusEnum::PUBLISH)
+            ->where('post.post_type', $post_type);
+
+        return $builder->find($id);
+    }
 }

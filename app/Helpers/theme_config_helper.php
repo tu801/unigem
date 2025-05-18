@@ -83,6 +83,12 @@ if (!function_exists('get_menu')) {
         $menuModel = model(\App\Models\Blog\MenuModel::class);
         $menuItemModel = model(\App\Models\Blog\MenuItemsModel::class);
         $lang = session()->lang;
+        $configs = config('Site');
+        
+        $menu = cache()->get("menu_{$location}_{$lang->locale}");
+        if ($menu) {
+            return $menu;
+        }
 
         if ( empty($location) ) {
             $menu = $menuModel
@@ -123,6 +129,7 @@ if (!function_exists('get_menu')) {
         }
 
         $menu->menu_items = $menuItems;
+        cache()->save("menu_{$location}_{$lang->locale}", $menu, $configs->viewCellCacheTtl);
         return $menu;
     }
 }

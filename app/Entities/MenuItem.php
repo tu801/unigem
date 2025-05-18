@@ -11,6 +11,7 @@ namespace App\Entities;
 use CodeIgniter\Entity\Entity;
 use App\Enums\CategoryEnum;
 use App\Models\Blog\CategoryModel;
+use App\Models\Blog\PostModel;
 
 class MenuItem extends Entity
 {
@@ -35,7 +36,13 @@ class MenuItem extends Entity
         switch ($this->attributes['type']) {
             case self::URL_TYPE:
             case self::PAGE_TYPE:
-                $this->display_url = $this->attributes['url'];
+                $page = model(PostModel::class)->getById($this->attributes['related_id'], $lang->id, $this->attributes['type']);
+
+                if ( !isset($page->id) ) {
+                    $this->display_url = $this->attributes['url'];
+                } else {
+                    $this->display_url = base_url(route_to('page_detail', $page->slug, $page->id));
+                }
                 break;
             case self::CAT_TYPE:
                 $catData = model(CategoryModel::class)
