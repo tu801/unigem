@@ -44,17 +44,19 @@ return [
     '404_desc'                          => 'The page you requested is not available. You can return to the homepage or search for another product.',
 
     // icon box
-    'icon_box_free_ship_title'          => 'Free shipping',
-    'icon_box_free_ship_desc'           => 'Orders over 1 million',
+    'icon_box_free_ship_title'          => 'DOMESTIC DELIVERY',
+    'icon_box_free_ship_desc'           => 'Free nationwide shipping',
 
-    'icon_box_payment_title'            => 'Flexible payment',
-    'icon_box_payment_desc'             => 'Pay on delivery',
+    'icon_box_payment_title'            => 'FLEXIBLE PAYMENT',
+    'icon_box_payment_desc'             => 'Various payment methods',
 
-    'icon_box_returns_title'            => '14-day return support',
-    'icon_box_returns_desc'             => 'Return within 14 days',
+    'icon_box_returns_title'            => 'INTERNATIONAL DELIVERY',
+    'icon_box_returns_desc'             => 'DHL, FedEx, UPS',
 
     'icon_box_support_title'            => '24/7 support',
     'icon_box_support_desc'             => 'Online support',
+
+    'shipping_and_delivery_title'       => 'Shipping & Delivery',
 
     // Contact Page
     

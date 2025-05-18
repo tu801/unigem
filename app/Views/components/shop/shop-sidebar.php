@@ -8,7 +8,7 @@
     
     <div class="widget-facet">
         <div class="facet-title" data-bs-target="#shipping" data-bs-toggle="collapse" aria-expanded="true" aria-controls="shipping">
-            <span>Shipping & Delivery</span>
+            <span><?=lang('Home.shipping_and_delivery_title')?></span>
             <span class="icon icon-arrow-up"></span>
         </div>
         <div id="shipping" class="collapse show">
@@ -20,8 +20,8 @@
                         </svg>
                     </div>
                     <div class="iconbox-content">
-                        <h4 class="iconbox-title">Free shipping</h4>
-                        <p class="iconbox-desc">Free iconbox for all US order</p>
+                        <h4 class="iconbox-title"><?=lang('Home.icon_box_free_ship_title')?></h4>
+                        <p class="iconbox-desc"><?=lang('Home.icon_box_free_ship_desc')?></p>
                     </div>
                 </li>
                 <li class="iconbox-item">
@@ -31,8 +31,8 @@
                         </svg>
                     </div>
                     <div class="iconbox-content">
-                        <h4 class="iconbox-title">Premium Support</h4>
-                        <p class="iconbox-desc">Support 24 hours a day</p>
+                        <h4 class="iconbox-title"><?=lang('Home.icon_box_payment_title')?></h4>
+                        <p class="iconbox-desc"><?=lang('Home.icon_box_payment_desc')?></p>
                     </div>
                 </li>
                 <li class="iconbox-item">
@@ -42,8 +42,8 @@
                         </svg>
                     </div>
                     <div class="iconbox-content">
-                        <h4 class="iconbox-title">30 Days Return</h4>
-                        <p class="iconbox-desc">You have 30 days to return</p>
+                        <h4 class="iconbox-title"><?=lang('Home.icon_box_support_title')?></h4>
+                        <p class="iconbox-desc"><?=lang('Home.icon_box_support_desc')?></p>
                     </div>
                 </li>
             </ul>

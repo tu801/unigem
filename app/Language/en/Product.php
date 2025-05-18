@@ -16,12 +16,37 @@ return [
     'pd_cut_angle'                  => 'Cut angle',
 
     'ask_a_question'                => 'Request consultation',
-    'delivery_and_return'           => 'Return policy',
+    'return_policy'                 => 'Return policy',
+    'warranty_policy'               => 'Warranty policy',
     'social_share'                  => 'Share',
     'guarantee_safe_checkout'       => 'Guarantee Safe <br> Checkout',
     'add_to_cart'                   => 'Add to cart',
     'related_products'              => 'Related products',
     'recently_view_products'        => 'Recently viewed products',
+
+    //======================== warranty and return policy modal =======
+    'warranty_and_return_policy_modal_title'    => 'Warranty & Return Policy',
+
+    'warranty_policy_des'                       => '
+    <p class="text-paragraph">UNIGEM provides free lifetime ultrasonic cleaning and polishing services for products.</p>
+    <p class="text-paragraph">Products are warranted for lost stones and free replating within 12 months from the date of purchase.</p>
+    ',
+
+    'return_policy_des'                        => '
+    <p class="text-paragraph">Each natural gemstone is unique, just as each of us is one of a kind. They possess both unique aesthetic value and suitable feng shui energy for each individual.</p>
+    <p class="text-paragraph">UNIGEM commits to selling only 100% new, unused gemstones, ensuring the freshest and most positive energy for the owner.</p>
+
+    <p class="text-paragraph">Natural gemstones are priceless assets, collectible, and can be passed down for many years. Their value increases over time due to their rarity and uniqueness. Therefore, UNIGEM does not apply a return policy for natural gemstone products.</p>
+
+    <p class="text-paragraph">However, UNIGEM is always ready to provide lifetime jewelry maintenance and support design changes upon customer request.</p>
+    ',
+
+    'support_title'                           => 'Support',
+    'support_des'                             => '
+    <p class="text-paragraph">For more details, please contact:</p>
+    <p class="text-paragraph">Email: {0}</p>
+    <p class="text-paragraph">Hotline: {1}</p>
+    ',
 
     //========================Shop=====================================
     'shop'                          => 'Shop',
@@ -45,7 +70,7 @@ return [
     'order_by_date_low_to_high'     => 'Date posted, Old - New',
     'order_by_date_high_to_low'     => 'Date posted, New - Old',
 
-    'quick_add_to_cart'             => 'Quick add to cart',
+    'quick_add_to_cart'             => 'Add to cart',
     'quick_view'                    => 'Quick view',
 
     // errors
