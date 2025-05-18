@@ -27,12 +27,11 @@ echo $this->section('content');
                             <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input type="number" name="price" 
-                                           step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                    <input type="number" name="price" step="any" 
                                            class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
                                            id="inputPrice" 
                                            placeholder="<?= lang('Product.pd_price') ?>" 
-                                           value="<?= ($currentLang->locale == 'en') ? number_format($itemData->price, 2) : floor((float)$itemData->price) ?>">
+                                           value="<?= ($currentLang->locale == 'en') ? $itemData->price : floor((float)$itemData->price) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -46,11 +45,10 @@ echo $this->section('content');
                                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
                                 </label>
                                 <div class="input-group">
-                                    <input  type="number" name="price_discount" 
-                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                    <input  type="number" name="price_discount" step="any" 
                                             class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
                                             id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" 
-                                            value="<?= ($currentLang->locale == 'en') ? number_format($itemData->price_discount, 2) : floor((float)$itemData->price_discount) ?>">
+                                            value="<?= ($currentLang->locale == 'en') ? $itemData->price_discount : floor((float)$itemData->price_discount) ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -164,9 +162,9 @@ echo $this->section('content');
                         <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
                         <div class="input-group" >
                             <input type="number" name="pd_weight" step="any" 
-                                    class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" 
+                                    class="form-control" 
                                     id="inputWeight" placeholder="<?= lang('Product.weight') ?>" 
-                                    value="<?= $itemData->pd_weight ?? 1  ?>">
+                                    value="<?= $itemData->pd_weight ?? old('pd_weight')  ?>">
                             <div class="input-group-append">
                                 <div class="input-group-text"><?=lang('Common.product_weight_unit')?> &nbsp;<i class="fas fa-weight"></i></div>
                             </div>

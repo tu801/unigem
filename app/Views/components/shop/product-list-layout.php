@@ -29,7 +29,7 @@
                     <span class="price current-price"><?= $product->display_price ?></span>
                     <span class="published-date d-none"><?= $product->publish_date ?></span>
 
-                    <p class="description"><?= word_limiter($product->pd_description ?? '', 30) ?></p>
+                    <p class="description"><?= htmlentities(word_limiter($product->pd_description ?? '', 30)) ?></p>
 
                     <div class="list-product-btn">
                         <a href="#quick_add" data-bs-toggle="modal" class="box-icon quick-add style-3 hover-tooltip">

@@ -132,6 +132,7 @@ class ProductController extends AcpController
             $newProduct->pd_image = $response;
         }
 
+        // save product data
         try {
             $this->db->transBegin();
 

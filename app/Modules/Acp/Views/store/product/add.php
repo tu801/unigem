@@ -28,12 +28,11 @@ echo $this->section('content');
                             <div class="form-group">
                                 <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <input  type="number" name="price" 
-                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                    <input  type="number" name="price" step="any" 
                                             class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" 
                                             id="inputPrice" 
                                             placeholder="<?= lang('Product.pd_price') ?>" 
-                                            value="<?= ($currentLang->locale == 'en') ? (old('price') ?? 0) : floor((float)(old('price') ?? 0)) ?>">
+                                            value="<?= old('price') ?? 0 ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -47,12 +46,11 @@ echo $this->section('content');
                                     <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
                                 </label>
                                 <div class="input-group">
-                                    <input  type="number" name="price_discount" 
-                                            step="<?= ($currentLang->locale == 'en') ? '0.01' : '1' ?>" 
+                                    <input  type="number" name="price_discount" step="any" 
                                             class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" 
                                             id="inputPriceDiscount" 
                                             placeholder="<?= lang('Product.pd_price_discount') ?>" 
-                                            value="<?= ($currentLang->locale == 'en') ? (old('price_discount') ?? 0) : floor((float)(old('price_discount') ?? 0)) ?>">
+                                            value="<?= old('price_discount') ?? 0 ?>">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><?=lang('Acp.currency_sign')?></span>
                                     </div>
@@ -73,6 +71,7 @@ echo $this->section('content');
                         <label><?= lang('Product.product_info') ?> <span class="text-danger">*</span></label>
                         <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" id="tmteditor" name="product_info"><?= old('product_info') ?></textarea>
                     </div>
+                    
                 </div>
             </div>
             <div class="card card-outline card-primary">
@@ -88,61 +87,61 @@ echo $this->section('content');
         </div>
 
         <div class="col-md-3">
-        <div class="card card-outline card-primary">
-            <div class="card-body">
-                <div class="form-group ">
-                    <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
-                </div>
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
+                    </div>
 
-                <div class="form-group">
-                    <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
-                    <select class="custom-select form-control" name="pd_status">
-                        <?php foreach (ProductStatusEnum::toArray() as $item): ?>
-                            <option value="<?= $item ?>" <?= old('cat_id') == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
+                        <select class="custom-select form-control" name="pd_status">
+                            <?php foreach (ProductStatusEnum::toArray() as $item): ?>
+                                <option value="<?= $item ?>" <?= old('cat_id') == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
-                    <select class="custom-select form-control" name="cat_id">
-                        <?php foreach ($product_category as $item): ?>
-                            <option value="<?= $item->cat_id ?>" <?= old('cat_id') == $item->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
+                        <select class="custom-select form-control" name="cat_id">
+                            <?php foreach ($product_category as $item): ?>
+                                <option value="<?= $item->cat_id ?>" <?= old('cat_id') == $item->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="inputWeight"><?= lang('Product.weight') ?></label>
-                    <div class="input-group" >
-                        <input type="number" name="weight" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('weight') ?? 1 ?>">
-                        <div class="input-group-append">
-                            <div class="input-group-text"><?=lang('Common.product_weight_unit')?> &nbsp;<i class="fas fa-weight"></i></div>
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.weight') ?></label>
+                        <div class="input-group" >
+                            <input type="number" name="pd_weight" step="any" class="form-control" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= old('pd_weight') ?? 1 ?>">
+                            <div class="input-group-append">
+                                <div class="input-group-text"><?=lang('Common.product_weight_unit')?> &nbsp;<i class="fas fa-weight"></i></div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="inputWeight"><?= lang('Product.size') ?></label>
-                    <div class="input-group" >
-                        <input type="text" name="size" class="form-control" id="inputSize" placeholder="<?= lang('Product.size') ?>" value="<?= old('size') ?? 1 ?>">
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.size') ?></label>
+                        <div class="input-group" >
+                            <input type="text" name="pd_size" class="form-control" id="inputSize" placeholder="<?= lang('Product.size') ?>" value="<?= old('pd_size') ?? 1 ?>">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
-                    <div class="input-group" >
-                        <input type="text" name="cut_angle" class="form-control" id="inputCutAngle" placeholder="<?= lang('Product.cut_angle') ?>" value="<?= old('cut_angle') ?? 1 ?>">
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
+                        <div class="input-group" >
+                            <input type="text" name="pd_cut_angle" class="form-control" id="inputCutAngle" placeholder="<?= lang('Product.cut_angle') ?>" value="<?= old('pd_cut_angle') ?? 1 ?>">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group ">
-                    <label><?= lang('Product.pd_tags') ?></label>
-                    <vposttags :limitlength="2"></vposttags>
-                </div>
+                    <div class="form-group ">
+                        <label><?= lang('Product.pd_tags') ?></label>
+                        <vposttags :limitlength="2"></vposttags>
+                    </div>
 
+                </div>
             </div>
-        </div>
         
             <div class="card card-outline card-primary">
                 <div class="card-body">
@@ -159,6 +158,7 @@ echo view($config->view.'\components\_vFeatureImg');
 echo view($config->view.'\system\attach\_vGallery');
 echo view($config->view.'\system\attach\_vConfigAttach');
 echo view($config->view.'\blog\post\_vPostTags');
+
 ?>
 <?= $this->endSection() ?>
 <?= $this->section('pageScripts') ?>

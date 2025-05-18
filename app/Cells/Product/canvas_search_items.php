@@ -16,8 +16,8 @@
                     <a href="<?= base_url(route_to('product_detail', $product->pd_slug, $product->id)) ?>"><?=$product->pd_name?></a>
                     <div class="tf-product-info-price">
                         <?php if ( $product->price_discount > 0 && $product->price_discount < $product->price) :?>
-                        <div class="compare-at-price"><?=format_currency($product->price, $currentLang->locale )?></div>
-                        <div class="price-on-sale fw-6"><?=format_currency($product->price_discount, $currentLang->locale )?></div>
+                        <div class="compare-at-price"><?=format_currency($product->price)?></div>
+                        <div class="price-on-sale fw-6"><?=format_currency($product->price_discount)?></div>
                         <?php else :?>
                         <div class="price-on-sale fw-6"><?=$product->display_price?></div>
                         <?php endif;?>

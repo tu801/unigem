@@ -66,11 +66,11 @@ if (!function_exists('format_currency')) {
      * @param bool $suffixes
      * @return string
      */
-    function format_currency($number, $currentLang=null, $suffixes=false) {
-        // Handle when $currentLang is a string (locale directly passed)
-        $locale = is_string($currentLang) ? $currentLang : (is_object($currentLang) && isset($currentLang->locale) ? $currentLang->locale : 'vi');
+    function format_currency($number) {
+        $lang = session()->lang;
+        $suffixes = $lang->currency_symbol;
         
-        if ($locale == "en") {
+        if ($lang->locale == "en") {
             return usd_encode($number, $suffixes);
         }
         

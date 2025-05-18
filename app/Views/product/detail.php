@@ -95,13 +95,13 @@ echo $this->section('content');
                             </div> -->
                             <div class="tf-product-info-price">
                             <?php if ($product->price_discount > 0 && $product->price_discount < $product->price) : ?>
-                                <div class="price-on-sale"><?=format_currency( $product->price_discount, $currentLang->locale )?></div>
-                                <div class="compare-at-price"><?=format_currency( $product->price, $currentLang->locale )?></div>
+                                <div class="price-on-sale"><?=format_currency( $product->price_discount)?></div>
+                                <div class="compare-at-price"><?=format_currency( $product->price)?></div>
                                 <div class="badges-on-sale"><span><?= round((($product->price - $product->price_discount) / $product->price) * 100) ?></span>% OFF</div>
                             <?php elseif ($product->price == 0) :?>
                                 <div class="price-on-sale"><?=lang('Product.contact_price_text')?></div>
                             <?php else:?>
-                                <div class="price-on-sale"><?=format_currency( $product->price, $currentLang->locale )?></div>
+                                <div class="price-on-sale"><?=format_currency( $product->price)?></div>
                             <?php endif;?>
 
                             </div>
@@ -133,7 +133,7 @@ echo $this->section('content');
                                 ?>
                                     <a href="javascript:void(0);" class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn btn-add-to-cart">
                                         <span><?=lang('Product.buy_now')?> -&nbsp;</span>
-                                        <span class="tf-qty-price total-price"><?=format_currency($price, $currentLang->locale )?></span>
+                                        <span class="tf-qty-price total-price"><?=format_currency($price)?></span>
                                     </a>
                                     
                                     <!-- <div class="w-100">
