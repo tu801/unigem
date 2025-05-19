@@ -1,13 +1,19 @@
 /**
+ * Vuejs - modal gallery for select, upload images and then attach file to editor
+ *
+ * att-type="tmteditor" - the ID of textarea to insert image
  * @author tmtuan
  * created Date: 10/20/2021
  * project: basic_cms
- * Vuejs - modal gallery for select, upload images and then push to editor
+ *
  */
 
-const galleryImg = {
+/**
+ * list image item in modal
+ */
+const contentGalleryImgItem = {
   props: ["attItem", "imgindex"],
-  template: "#vgalleryImg-template",
+  template: "#galleryImgItem-tpl",
 
   methods: {
     showImageInfo(img) {
@@ -96,9 +102,13 @@ const galleryImg = {
   },
 };
 
-const imgInfor = {
+/**
+ * attach file component
+ * show file info when user click on image
+ */
+const attachFileInfor = {
   props: ["imgData", "cardstt"],
-  template: "#vImgInfor-template",
+  template: "#vAttachFileInfor-tpl",
   methods: {
     hideCard() {
       this.$emit("hide-card-info");
@@ -117,9 +127,13 @@ const imgInfor = {
   },
 };
 
-const imgGalleryReview = {
+/**
+ * attach file component
+ * selected image preview before attach
+ */
+const attachFilePreview = {
   props: ["images", "attType"],
-  template: "#vImageReview-template",
+  template: "#vAttachFilePreview-tpl",
   methods: {
     imageUrl(img) {
       if (this.attType == "single") {
@@ -135,9 +149,9 @@ const imgGalleryReview = {
   },
 };
 
-const fileReview = {
+const uploadPreview = {
   props: ["images"],
-  template: "#vFileReview-template",
+  template: "#vUploadPreview-tpl",
   methods: {
     imageUrl(img) {
       let url = URL.createObjectURL(img);
@@ -150,16 +164,18 @@ const fileReview = {
   },
 };
 
-//add vue upload galery
-const gallery = {
-  name: "vgallery",
+/**
+ * vuejs content modal gallery
+ */
+const contentGallery = {
+  name: "content-gallery",
   components: {
-    "vgallery-img": galleryImg,
-    "vimg-infor": imgInfor,
-    "vimg-reivew": imgGalleryReview,
-    "vfile-reivew": fileReview,
+    "gallery-img-item": contentGalleryImgItem,
+    "attach-file-info": attachFileInfor,
+    "attach-file-preview": attachFilePreview,
+    "file-upload-preview": uploadPreview,
   },
-  template: "#vgallery-template",
+  template: "#v-content-gallery",
   props: ["attType", "selecteditem"],
   data() {
     return {

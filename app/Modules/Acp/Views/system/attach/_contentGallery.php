@@ -1,16 +1,18 @@
 <?php
+
 /**
+ * modal gallery for select, upload images and then attach file to editor
+ * att-type="tmteditor" - the ID of textarea to insert image
+ * 
  * Created by: tmtuan
  * Email: tmtuan801@gmail.com
- * Date: 10-Feb-20
- * Time: 7:18 PM
  */
 
 ?>
-<script type="text/x-template" id="vgallery-template">
+<script type="text/x-template" id="v-content-gallery">
     <div>
         <transition name="modal">
-            <div class="modal fade modal-attach" id="vGalleryModal" >
+            <div class="modal fade modal-attach" id="vContentGalleryModal" >
                 <div class="modal-dialog" style="width: 95%">
                     <div class="modal-content" >
 
@@ -30,8 +32,8 @@
                                             </div>
 
                                             <!--loop the image in vue object-->
-                                            <vgallery-img v-for="(attItem, index) in allUploadData" :key="attItem.id" :imgindex="index" @show-image-info="showInfo"
-                                                          @dell-img="removeImg" :attItem="attItem"></vgallery-img>
+                                            <gallery-img-item v-for="(attItem, index) in allUploadData" :key="attItem.id" :imgindex="index" @show-image-info="showInfo"
+                                                          @dell-img="removeImg" :attItem="attItem"></gallery-img-item>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +63,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <vfile-reivew v-if="demofile" :error="uploaderror" :images="files" @remove-file-upload="unsetFile" ></vfile-reivew>
+                                                <file-upload-preview v-if="demofile" :error="uploaderror" :images="files" @remove-file-upload="unsetFile" ></file-upload-preview>
                                             </div>
                                         </div>
                                         <div class="card-footer">
@@ -72,8 +74,8 @@
                                     </div>
 
                                     <!--show img info-->
-                                    <vimg-infor v-if="vimgInfo.id > 0" :summernote="<?=isset($summernote)?$summernote:0?>" :imgData="vimgInfo" :cardstt="cardimgstt"
-                                                @hide-card-info="removeCard" @set-selected-img="setSelectedFile" ></vimg-infor>
+                                    <attach-file-info v-if="vimgInfo.id > 0" :summernote="<?= isset($summernote) ? $summernote : 0 ?>" :imgData="vimgInfo" :cardstt="cardimgstt"
+                                                @hide-card-info="removeCard" @set-selected-img="setSelectedFile" ></attach-file-info>
 
                                 </div>
                             </div>
@@ -86,7 +88,7 @@
     </div>
 </script>
 
-<script type="text/x-template" id="vgalleryImg-template">
+<script type="text/x-template" id="galleryImgItem-tpl">
     <div class="col-md-2 text-center" :id="imgItemClass"
          :key="attItem.id" >
         <img :src="vImgSource" @click="showImageInfo(attItem)" class="img-fluid img-thumbnail" style="padding-bottom: 5px;">
@@ -97,17 +99,14 @@
     </div>
 </script>
 
-<script type="text/x-template" id="vImgInfor-template">
+<script type="text/x-template" id="vAttachFileInfor-tpl">
     <div class="card card-primary" id="tmt-att-info" v-if="cardstt == 1" >
-
         <div class="card-header with-border">
             <h3 class="card-title">Chi tiết File đính kèm</h3>
             <div class="card-tools">
-
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                 </button>
-
                 <button type="button" class="btn btn-tool" @click="hideCard" ><i class="fas fa-times"></i>
                 </button>
             </div>
@@ -132,7 +131,7 @@
 </script>
 
 
-<script type="text/x-template" id="vImageReview-template">
+<script type="text/x-template" id="vAttachFilePreview-tpl">
     <div class="row text-center" >
         <div class="tmt-att-single-files"  v-if="attType == 'single'">
             <img class="img-thumbnail" :src="imageUrl(images)">
@@ -151,7 +150,7 @@
     </div>
 </script>
 
-<script type="text/x-template" id="vFileReview-template">
+<script type="text/x-template" id="vUploadPreview-tpl">
     <div class="row text-center" >
         <div v-if="images" class="row">
             <div class="tmt-att-files" v-for="(img, index) in images">
@@ -162,4 +161,4 @@
     </div>
 </script>
 
-<script src="<?= base_url($config->scriptsPath)?>/acp/components/vModalGallery.js"></script>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/components/vContentGallery.js"></script>
