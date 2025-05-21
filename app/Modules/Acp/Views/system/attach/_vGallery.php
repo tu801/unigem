@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by: tmtuan
  * Email: tmtuan801@gmail.com
@@ -9,7 +10,7 @@
 ?>
 
 <!--vuejs modal-->
-<vgallery v-if="showModal" @close="showModal = false" ></vgallery>
+<vgallery v-if="showModal" @close="showModal = false"></vgallery>
 
 <script type="text/x-template" id="vgallery-template">
     <transition name="modal">
@@ -27,6 +28,9 @@
                         <div class="row">
                             <div class="col-8 img-list" id="tmt-list-attach">
                                 <div class='row tmt-attach' id='tmtallAttItemGroup'>
+                                    <div v-if="loading" class="loader-wrapper" >
+                                        <div class="loader"></div>
+                                    </div>
                                     <!--loop the image in vue object-->
                                     <vgallery-img v-for="(attItem, index) in allUploadData" :key="attItem.id" :imgindex="index" @show-image-info="showInfo"
                                                   @dell-img="removeImg" :attItem="attItem"></vgallery-img>
@@ -62,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <input type="hidden" id="vinpModName" name="mod_name" value="<?=$controller ?>">
+                                        <input type="hidden" id="vinpModName" name="mod_name" value="<?= $controller ?>">
                                         <input type="hidden" id="vinpModId" name="mod_id" value="0">
                                         <button type="button" @click.prevent="submitFile" class="btn btn-primary float-right">Upload</button>
                                     </div>
