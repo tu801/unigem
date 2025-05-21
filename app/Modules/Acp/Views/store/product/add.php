@@ -11,7 +11,6 @@ echo $this->section('content');
         <div class="col-md-9">
             <div class="card card-outline card-primary">
                 <div class="card-body pad">
-
                     <div class="form-group">
                         <label for="inputProductName"><?= lang('Product.pd_name') ?> <span
                                 class="text-danger">*</span></label>
@@ -29,7 +28,6 @@ echo $this->section('content');
                             id="inputProductName" placeholder="<?= lang('Product.pd_sku') ?>"
                             value="<?= old('pd_sku') ?>">
                     </div>
-
 
                     <div class="row">
                         <div class="col-12 col-md-6">
@@ -90,7 +88,6 @@ echo $this->section('content');
                             <content-gallery v-if="showContentGalleryModal" @close="showContentGalleryModal = false"
                                 :selecteditem="selectedImg" @show-file="setAttachFiles" @remove-file="deleteUploadFile"
                                 @close-modal="hideContentGallery" att-type="tmteditor"></content-gallery>
-
                         </div>
                     </div>
 
