@@ -59,9 +59,14 @@
                             <form class="">
 
                                 <div class="w-100">
-                                    <a href="#" class="btns-full"><?= lang('Product.pay_now') ?> <img
+                                    <a href="#" class="btns-full">
+                                        <span><?= lang('Product.buy_now') ?> -&nbsp;</span>
+                                        <span class="tf-qty-price total-price"></span>
+
+                                        <!-- <img
                                             src="<?= base_url($configs->templatePath . 'images/payments/paypal-mini.png') ?>"
-                                            alt="<?= $configs->theme_name ?>"></a>
+                                            alt="<?= $configs->theme_name ?>">-->
+                                    </a>
                                     <!-- <a href="#" class="payment-more-option">More payment options</a> -->
                                 </div>
                             </form>

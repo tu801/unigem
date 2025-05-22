@@ -134,6 +134,11 @@
                 });
               }
 
+              // Update product price
+              quickViewModal
+                .find(".tf-qty-price.total-price")
+                .text(product.display_price);
+
               // Update "View full details" link
               quickViewModal
                 .find(".tf-product-info-list > div:last-child a")
