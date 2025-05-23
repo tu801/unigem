@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 11/9/2023
@@ -38,7 +39,7 @@ class MenuItem extends Entity
             case self::PAGE_TYPE:
                 $page = model(PostModel::class)->getById($this->attributes['related_id'], $lang->id, $this->attributes['type']);
 
-                if ( !isset($page->id) ) {
+                if (!isset($page->id)) {
                     $this->display_url = $this->attributes['url'];
                 } else {
                     $this->display_url = base_url(route_to('page_detail', $page->slug, $page->id));
@@ -47,6 +48,11 @@ class MenuItem extends Entity
             case self::CAT_TYPE:
                 $catData = model(CategoryModel::class)
                     ->getById($this->attributes['related_id'], $lang->id);
+
+                if (!isset($catData->id)) {
+                    $this->display_url = '#';
+                    break;
+                }
 
                 switch ($catData->cat_type) {
                     case CategoryEnum::CAT_TYPE_PRODUCT:
@@ -59,7 +65,6 @@ class MenuItem extends Entity
                 }
                 $this->display_url = $catUrl;
                 break;
-
         }
 
         return $this->display_url;
