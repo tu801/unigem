@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 8/13/2023
@@ -37,12 +38,13 @@ class ThemeOptions
 
         foreach ($configOptions as $configItem) {
             $this->options[$configItem] = [
-                'title' => lang('Theme.config_group_'.$configItem)
+                'title' => lang('Theme.config_group_' . $configItem)
             ];
         }
     }
 
-    public function getOptionGroups() {
+    public function getOptionGroups()
+    {
         $locale = Services::language()->getLocale();
 
         $this->getLogoItemConfig();
@@ -67,7 +69,7 @@ class ThemeOptions
             ThemeOptionEnum::JEWELRY_BLOCK,
             $locale
         );
-        
+
         // list running_text_block
         $this->getThemeConfigRecord(
             'running_text_block',
@@ -81,7 +83,7 @@ class ThemeOptions
             ThemeOptionEnum::GEMS_BLOCK,
             $locale
         );
-        
+
         // list design_block
         $this->getThemeConfigRecord(
             'design_block',
@@ -101,20 +103,19 @@ class ThemeOptions
 
         foreach (ThemeOptionEnum::LOGO_CONFIG as $key => $input) {
             $configData = $this->_configModel->where('group_id', $this->config_group_id)
-                        ->where('key', $key)
-                        ->first();
+                ->where('key', $key)
+                ->first();
 
-            if (isset( $configData->id) ) {
+            if (isset($configData->id)) {
                 $logoConfig[$key] = [
-                    'title' => lang('Theme.item_'.$key),
+                    'title' => lang('Theme.item_' . $key),
                     'input' => $input['input'],
                     'value' => $configData->value
                 ];
-
             } else {
                 $newConfig = [
                     'group_id'  => $this->config_group_id,
-                    'title'     => lang('Theme.item_'.$key),
+                    'title'     => lang('Theme.item_' . $key),
                     'key'       => $key,
                     'value'     => '',
                     'is_json' => ($input['input'] == 'image') ? 1 : 0
@@ -122,7 +123,7 @@ class ThemeOptions
                 $this->_configModel->insert($newConfig);
 
                 $logoConfig[$key] = [
-                    'title' => lang('Theme.item_'.$key),
+                    'title' => lang('Theme.item_' . $key),
                     'input' => $input['input'],
                     'value' => '',
                 ];
@@ -139,9 +140,9 @@ class ThemeOptions
      * @param string $locale - current locate
      * @param string $key_prefix - prefix key for the config
      */
-    public function getThemeConfigRecord($group, array $config_array, string $locale, $key_prefix = '' )
+    public function getThemeConfigRecord($group, array $config_array, string $locale, $key_prefix = '')
     {
-        if ( !isset($config_array) || empty($config_array) ) return;
+        if (!isset($config_array) || empty($config_array)) return;
 
         foreach ($config_array as $key => $item) {
             $configKey = !empty($key_prefix) ? "{$key_prefix}_{$key}_{$locale}" : "{$key}_{$locale}";
@@ -150,16 +151,16 @@ class ThemeOptions
                 ->where('key', $configKey)
                 ->first();
 
-            if (isset( $configData->id) ) {
+            if (isset($configData->id)) {
                 $itemConfig[$key] = [
-                    'title' => lang('Theme.item_'.$key),
+                    'title' => lang('Theme.item_' . $key),
                     'input' => $item['input'],
                     'value' => $configData->value
                 ];
             } else {
                 $newConfig = [
                     'group_id'  => $this->config_group_id,
-                    'title'     => lang('Theme.item_'.$key),
+                    'title'     => lang('Theme.item_' . $key),
                     'key'       => $configKey,
                     'value'     => '',
                     'is_json' => (in_array($item['input'], $this->_dataTypeJsonInputList)) ? 1 : 0
@@ -168,20 +169,20 @@ class ThemeOptions
                 cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
                 $itemConfig[$key] = [
-                    'title' => lang('Theme.item_'.$key),
+                    'title' => lang('Theme.item_' . $key),
                     'input' => $item['input'],
                     'value' => ''
                 ];
             }
             // display description text
-            if ( isset($item['desc']) && !empty($item['desc'])) {
+            if (isset($item['desc']) && !empty($item['desc'])) {
                 $itemConfig[$key]['desc'] = lang("Theme.item_{$item['desc']}");
             }
 
             /**
              * display default data for select input or item_list
              */
-            if ( isset($item['data']) && !empty($item['data']) ) {
+            if (isset($item['data']) && !empty($item['data'])) {
                 $itemConfig[$key]['data'] = $this->{$item['data']}();
             }
         }
@@ -197,7 +198,7 @@ class ThemeOptions
     public function saveLogoConfig($input)
     {
         foreach (ThemeOptionEnum::LOGO_CONFIG as $key => $item) {
-            if ( !array_key_exists($key, $input) ) {
+            if (!array_key_exists($key, $input)) {
                 continue;
             }
 
@@ -222,10 +223,6 @@ class ThemeOptions
     public function saveGeneralConfig($postData, array $config_array, string $locale, $key_prefix = '')
     {
         foreach ($config_array as $key => $item) {
-            if ( !array_key_exists($key, $postData) && $key != 'active' ) {
-                continue;
-            }
-
             $configKey = !empty($key_prefix) ? "{$key_prefix}_{$key}_{$locale}" : "{$key}_{$locale}";
             $configData = $this->_configModel
                 ->where('group_id', $this->config_group_id)
@@ -248,7 +245,7 @@ class ThemeOptions
                     break;
             }
 
-            $this->_configModel->update($configData->id, $configData);
+            $this->_configModel->update($configData->id, $configData, $this->config_group_id);
         }
         cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
     }
@@ -266,14 +263,14 @@ class ThemeOptions
      */
     public function getThemeOptions()
     {
-        if ( !$themeOption = cache()->get(CacheKeys::THEME_OPTION_CONFIG) ) {
+        if (!$themeOption = cache()->get(CacheKeys::THEME_OPTION_CONFIG)) {
             $themeOption = [];
             $configData = $this->_configModel
                 ->where('group_id', $this->config_group_id)
                 ->findAll();
 
             foreach ($configData as $item) {
-                if ( $item->is_json == 1 ) {
+                if ($item->is_json == 1) {
                     $themeOption[$item->key] = json_decode($item->value);
                 } else {
                     $themeOption[$item->key] = $item->value;
@@ -287,11 +284,49 @@ class ThemeOptions
     }
 
     //================================main Slider===================================
+    public function createMainSlider($input, string $locale)
+    {
+        $attachMetaModel = model(AttachMetaModel::class);
+        $value = [
+            'image'         => $input['image'] ?? '',
+            'title_small'   => $input['title_small'] ?? '',
+            'title_big'     => $input['title_big'] ?? '',
+            'slider_detail' => $input['slider_detail'] ?? '',
+            'slider_url'    => $input['slider_url'] ?? '',
+            'slider_button' => $input['slider_button'] ?? '',
+        ];
+
+        $configKey = "main_slider_{$locale}";
+        $configData = $this->_configModel->where('group_id', $this->config_group_id)
+            ->where('key', $configKey)
+            ->first();
+
+        $attachMetaModel->insert([
+            'id'       => $input['id'] ?? null,
+            'mod_name' => $configKey,
+            'mod_id'   => $configData->id,
+            'mod_type' => 'single',
+            'images'    => json_encode($value),
+        ]);
+
+        $newId = $attachMetaModel->getInsertID();
+
+        $sliderList = !empty($configData->value) ? json_decode($configData->value, true) : [];
+        if (!in_array($newId, $sliderList)) {
+            $sliderList[] = $newId;
+        }
+        $configData->value = json_encode($sliderList);
+        $this->_configModel->update($configData->id, $configData);
+
+        $value['id'] = $newId;
+        return $value;
+    }
+
     public function saveMainSlider($input, string $locale)
     {
         $metaAttach = model(AttachMetaModel::class);
         $value = [
-            'image'         => $input['image']?? '',
+            'image'         => $input['image'] ?? '',
             'title_small'   => $input['title_small'] ?? '',
             'title_big'     => $input['title_big'] ?? '',
             'slider_detail' => $input['slider_detail'] ?? '',
@@ -312,16 +347,7 @@ class ThemeOptions
             'value'    => json_encode($value),
         ]);
 
-        $id = $item->id;
-
-        $sliderList = !empty($configData->value) ? json_decode($configData->value, true) : [];
-        if (!in_array($id, $sliderList)) {
-            $sliderList[] = $id;
-        }
-        $configData->value = json_encode(array_values($sliderList));
-        $this->_configModel->update($configData->id, $configData);
-
-        $value['id'] = $id;
+        $value['id'] = $item->id;
         return $value;
     }
 
@@ -373,13 +399,14 @@ class ThemeOptions
     //================================custom functions===================================
 
     /**
-    * @return array
-    */
-    public function __getProductCategories(){
+     * @return array
+     */
+    public function __getProductCategories()
+    {
         $session = session();
         $catData = model(CategoryModel::class)->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $session->lang->id);
         $responseData = [];
-        if ( !empty($catData) ) {
+        if (!empty($catData)) {
             foreach ($catData as $item) {
                 $responseData[$item->id] = $item->title;
             }

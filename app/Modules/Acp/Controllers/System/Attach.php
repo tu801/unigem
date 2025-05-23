@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Acp\Controllers\System;
 
 use App\Models\AttachModel;
@@ -13,22 +14,23 @@ class Attach extends AcpController
         if (empty($this->_model)) {
             $this->_model = model(AttachModel::class);
         }
-
     }
 
     //AJAX
-    public function ajxListImg(){
+    public function ajxListImg()
+    {
         $response = array();
         $getData = $this->request->getGet();
 
-        if ( empty($getData) || !isset($getData['mod_name']) ) {
+        if (empty($getData) || !isset($getData['mod_name'])) {
             $response['code'] = 1;
             $response['text'] = "Invalid Request!!";
         } else {
             $this->_data['mod_name'] = $getData['mod_name'];
             $this->_data['mod_id'] = $getData['mod_id'];
             $this->_data['modelAttatch'] = $this->_model;
-            echo $this->_render('\attach\listGallery', $this->_data); exit;
+            echo $this->_render('\attach\listGallery', $this->_data);
+            exit;
         }
 
         return $this->response->setJSON($response);
@@ -40,29 +42,30 @@ class Attach extends AcpController
      * @return \CodeIgniter\HTTP\Response
      * @throws \ReflectionException
      */
-    public function ajxTinyMceUpl(){
-        if ( !isset($this->user->id) ) return $this->response->setJSON(['error' => 1, 'errMess' => "Invalid Credential"]);
+    public function ajxTinyMceUpl()
+    {
+        if (!isset($this->user->id)) return $this->response->setJSON(['error' => 1, 'errMess' => "Invalid Credential"]);
 
-        if(isset($_FILES['file'])){
+        if (isset($_FILES['file'])) {
             //check upload image is select?
             if (isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
                 $image   = $this->request->getFile('file');
                 $imgRules = [
                     'file' => [
                         'uploaded[file]',
-                        'mime_in[file,'. implode(',', $this->config->uploadMineType) .']',
+                        'mime_in[file,' . implode(',', $this->config->uploadMineType) . ']',
                         'max_size[file,12048]',
                     ],
                 ];
                 $file_title = $image->getName();
-                $tempName = str_replace($image->getClientExtension(), '', $image->getName()) ;
+                $tempName = str_replace($image->getClientExtension(), '', $image->getName());
                 $info = [
-                    'file_name' => time()."-".clean_url($tempName).'.'.$image->getClientExtension(),
-                    'sub_folder' => "{$this->_data['controller']}/".date('Y/m')
+                    'file_name' => time() . "-" . clean_url($tempName) . '.' . $image->getClientExtension(),
+                    'sub_folder' => "{$this->_data['controller']}/" . date('Y/m')
                 ];
 
                 //validate image before upload
-                if ( ! $this->validate($imgRules) ) {
+                if (! $this->validate($imgRules)) {
                     //return error
                     return $this->response->setJSON(['error' => 1, 'errMess' => $this->validator->getError('file')]);
                 } else {
@@ -71,19 +74,17 @@ class Attach extends AcpController
                         return $this->response->setJSON(['error' => 1, 'errMess' => $image->getError()]);
                     } else {
                         $file_name = $info['file_name'];
-                        $folderName = ( isset($info['sub_folder']) && $info['sub_folder'] !== '' ) ? $info['sub_folder'] : '' ;
+                        $folderName = (isset($info['sub_folder']) && $info['sub_folder'] !== '') ? $info['sub_folder'] : '';
 
-                        if ( !$image->move(WRITEPATH . $this->config->uploadFolder.'/'.$folderName, $file_name, true) ) {
+                        if (!$image->move(WRITEPATH . $this->config->uploadFolder . '/' . $folderName, $file_name, true)) {
                             //return move file error
                             return $this->response->setJSON(['error' => 1, 'errMess' =>  $image->getError()]);
                         } else {
-                            $imgPath = "{$folderName}/{$file_name}";
-
                             //create thumb
                             $imgThumb = [
                                 'file_name' => $info['file_name'],
-                                'original_image' => WRITEPATH . $this->config->uploadFolder.'/'.$info['sub_folder']."/{$info['file_name']}",
-                                'path' => WRITEPATH . $this->config->uploadFolder.'/'.$info['sub_folder']."/thumb"
+                                'original_image' => WRITEPATH . $this->config->uploadFolder . '/' . $info['sub_folder'] . "/{$info['file_name']}",
+                                'path' => WRITEPATH . $this->config->uploadFolder . '/' . $info['sub_folder'] . "/thumb"
                             ];
                             create_thumb($imgThumb);
 
@@ -92,24 +93,21 @@ class Attach extends AcpController
                                 'user_id' => $this->user->id,
                                 'user_type' => UserModel::class,
                                 'file_name' => $info['file_name'],
-                                'file_title' => $file_title
+                                'file_title' => $file_title,
+                                'file_type' => $image->getClientExtension()
                             ];
 
-                            if (! $this->_model->insert($insertData) ) {
+                            if (! $this->_model->insert($insertData)) {
                                 //insert fail
                                 delete_image($info['file_name'], $info['sub_folder']);
                                 return $this->response->setJSON(['error' => 1, 'errMess' => $this->_model->errors()]);
-                            } else {//upload success
+                            } else { //upload success
                                 return $this->response->setJSON(['location' => base_url("uploads/{$info['sub_folder']}/{$info['file_name']}")]);
                             }
                         }
-
                     }
-
                 }
-
             }
-
         } else {
             //return error
             return $this->response->setJSON(['error' => 1, 'errMess' => "Vui lòng chọn ảnh"]);
@@ -117,12 +115,13 @@ class Attach extends AcpController
     }
 
     //vuejs upload image 
-    public function ajxGalleryUpload(){
+    public function ajxGalleryUpload()
+    {
         $response = array();
         $postData = $this->request->getPost();
 
         //prepare to upload
-        if(!isset($_FILES['images'])){
+        if (!isset($_FILES['images'])) {
             //get error
             $response['code'] = 1;
             $response['text'] = "Vui lòng chọn ảnh";
@@ -135,22 +134,22 @@ class Attach extends AcpController
             $imgRules = [
                 'image' => [
                     'uploaded[images]',
-                    'mime_in[images,'. implode(',', $this->config->uploadMineType) .']',
+                    'mime_in[images,' . implode(',', $this->config->uploadMineType) . ']',
                     'max_size[images,10024]',
                 ],
             ];
 
-            if ( isset($postData['title']) && $postData['title'] !== '' ) $tempName = $postData['title'];
+            if (isset($postData['title']) && $postData['title'] !== '') $tempName = $postData['title'];
             else {
-                $tempName = str_replace($image->getClientExtension(), '', $image->getName()) ;
+                $tempName = pathinfo($image->getName(), PATHINFO_FILENAME);
             }
             $info = [
-                'file_name' => time()."-".clean_url($tempName).'.'.$image->getClientExtension(),
-                'sub_folder' => "{$this->_data['controller']}/".date('Y/m')
+                'file_name' => time() . "-" . clean_url($tempName) . '.' . $image->getClientExtension(),
+                'sub_folder' => "{$this->_data['controller']}/" . date('Y/m')
             ];
 
             //validate image before upload
-            if ( ! $this->validate($imgRules) ) {
+            if (! $this->validate($imgRules)) {
                 //get error
                 $response['code'] = 1;
                 $response['text'] = $this->validator->getError('image');
@@ -159,9 +158,9 @@ class Attach extends AcpController
                     $response['code'] = 1;
                     $response['text'] = $image->getError();
                 } else {
-                    $folderName = ( isset($info['sub_folder']) && $info['sub_folder'] !== '' ) ? $info['sub_folder'] : '' ;
+                    $folderName = (isset($info['sub_folder']) && $info['sub_folder'] !== '') ? $info['sub_folder'] : '';
 
-                    if ( !$image->move(WRITEPATH . $this->config->uploadFolder.'/'.$folderName, $info['file_name'], true) ) {
+                    if (!$image->move(WRITEPATH . $this->config->uploadFolder . '/' . $folderName, $info['file_name'], true)) {
                         //get move file error
                         $response['code'] = 1;
                         $response['text'] = $image->getError();
@@ -169,8 +168,8 @@ class Attach extends AcpController
                         //create thumb
                         $imgThumb = [
                             'file_name' => $info['file_name'],
-                            'original_image' => WRITEPATH . $this->config->uploadFolder.'/'.$info['sub_folder']."/{$info['file_name']}",
-                            'path' => WRITEPATH . $this->config->uploadFolder.'/'.$info['sub_folder']."/thumb"
+                            'original_image' => WRITEPATH . $this->config->uploadFolder . '/' . $info['sub_folder'] . "/{$info['file_name']}",
+                            'path' => WRITEPATH . $this->config->uploadFolder . '/' . $info['sub_folder'] . "/thumb"
                         ];
                         create_thumb($imgThumb);
 
@@ -179,54 +178,53 @@ class Attach extends AcpController
                             'user_id' => $this->user->id,
                             'user_type' => UserModel::class,
                             'file_name' => $info['file_name'],
-                            'file_title' => ( isset($postData['title']) && $postData['title'] !== '' ) ? $postData['title'] : $info['file_name']
+                            'file_title' => (isset($postData['title']) && $postData['title'] !== '') ? $postData['title'] : $info['file_name'],
+                            'file_type' => $image->getClientExtension()
                         ];
 
-                        if (! $this->_model->insert($insertData) ) { //insert fail
+                        if (! $this->_model->insert($insertData)) { //insert fail
                             $response['code'] = 1;
                             $response['text'] = "Fail to save Image!! Please try again later!";
                             delete_image($info['file_name'], $info['sub_folder']);
                         } else {
                             $response['code'] = 0;
 
-                            $attData = $this->_model->getWhere(['user_id' => $this->user->id, 'file_name'=> $info['file_name']])->getFirstRow();
+                            $attData = $this->_model->getWhere(['user_id' => $this->user->id, 'file_name' => $info['file_name']])->getFirstRow();
                             $this->_model->convertValue($attData);
 
                             $response['imgData'] = $attData;
                             $response['text'] = "Đã upload thành công";
                         }
                     }
-
                 }
-
             }
-
         }
 
         return $this->response->setJSON($response);
     }
 
     //get all the upload data
-    public function getUploadData(){
+    public function getUploadData()
+    {
         $response = array();
         $getData = $this->request->getGet();
         $num_rows = 50;
-        $page = $getData['page']??0;
+        $page = $getData['page'] ?? 0;
 
-        if ( isset($getData['mod_name']) && $getData['mod_name'] !== '' ) $this->_model->where('mod_name', $getData['mod_name']);
-        if ( isset($getData['user']) && $getData['user'] > 0 ) $this->_model->where('user_id', $getData['user']);
+        if (isset($getData['mod_name']) && $getData['mod_name'] !== '') $this->_model->where('mod_name', $getData['mod_name']);
+        if (isset($getData['user']) && $getData['user'] > 0) $this->_model->where('user_id', $getData['user']);
 
         $this->_model->orderBy('id', 'DESC');
         $uploadData = $this->_model->select(['id', 'file_name', 'file_title', 'created_at'])
-                    ->orderBy('id DESC')
-                    ->limit($num_rows, (int) $page)->get()->getResult();
+            ->orderBy('id DESC')
+            ->limit($num_rows, (int) $page)->get()->getResult();
         $newData = [];
-        if ( count($uploadData) > 0 ) {
-            foreach ($uploadData as $item ) {
+        if (count($uploadData) > 0) {
+            foreach ($uploadData as $item) {
                 $this->_model->convertValue($item);
                 $newData[] = $item;
             }
-            $response['page'] =$page+$num_rows;
+            $response['page'] = $page + $num_rows;
         }
 
         //echo "<pre>";print_r($newData);exit;
@@ -236,20 +234,20 @@ class Attach extends AcpController
     }
 
     //delete image
-    public function ajxDeleteItem($id){
+    public function ajxDeleteItem($id)
+    {
         $response = [];
 
-        if($id){
+        if ($id) {
             $item = $this->_model->find($id);
-            if ( !isset($item->id) || empty($item->id) ) {
+            if (!isset($item->id) || empty($item->id)) {
                 $response['error'] = 1;
                 $response['text'] = lang('Acp.item_not_found');
-
             } else {
-                if ( $this->user->id == $item->user_id || $this->user->per === 'root' ) {
+                if ($this->user->id == $item->user_id || $this->user->per === 'root') {
                     $this->_model->delete($id);
-                    $date=date_create($item->created_at);
-                    $path = '/attach/'.date_format($date, 'Y/m');
+                    $date = date_create($item->created_at);
+                    $path = '/attach/' . date_format($date, 'Y/m');
                     delete_image($item->file_name, $path);
 
                     $response['error'] = 0;
@@ -260,13 +258,11 @@ class Attach extends AcpController
                     $response['text'] = lang('Acp.no_permission');
                 }
             }
-
-        }else{
+        } else {
             $response['error'] = 1;
             $response['text'] = lang('Acp.invalid_request');
         }
 
         return $this->response->setJSON($response);
     }
-
 }

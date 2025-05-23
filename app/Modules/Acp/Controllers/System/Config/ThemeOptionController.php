@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/20/2021
@@ -25,13 +26,14 @@ class ThemeOptionController extends AcpController
 
         $this->themeOptions = new ThemeOptions();
 
-        if ( empty($this->_model)) {
+        if (empty($this->_model)) {
             $this->_model = model(ConfigModel::class);
         }
     }
 
-    public function index() {
-        $this->_data['title']= lang("Config.theme_option_title");
+    public function index()
+    {
+        $this->_data['title'] = lang("Config.theme_option_title");
 
         $optData = $this->themeOptions->getOptionGroups();
         $this->_data['cfData'] = $optData;
@@ -45,11 +47,11 @@ class ThemeOptionController extends AcpController
     public function saveOptions()
     {
         $postData = $this->request->getPost();
-        if ( !isset($postData['option_group']) || empty($postData['option_group']) ) {
+        if (!isset($postData['option_group']) || empty($postData['option_group'])) {
             return redirect()->back()->with('error', lang('Acp.invalid_request'));
         }
 
-        if ( !in_array($postData['option_group'], ThemeOptionEnum::CONFIG_GROUP)) {
+        if (!in_array($postData['option_group'], ThemeOptionEnum::CONFIG_GROUP)) {
             return redirect()->back()->with('error', lang('Theme.invalid_option_group'));
         }
 
@@ -62,31 +64,36 @@ class ThemeOptionController extends AcpController
                     $postData,
                     ThemeOptionEnum::GENERAL_CONFIGS,
                     $this->currentLang->locale,
-                    'general');
+                    'general'
+                );
                 break;
             case 'jewelry_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::JEWELRY_BLOCK,
-                    $this->currentLang->locale);
+                    $this->currentLang->locale
+                );
                 break;
             case 'gems_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::GEMS_BLOCK,
-                    $this->currentLang->locale);
+                    $this->currentLang->locale
+                );
                 break;
             case 'running_text_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::RUNNING_TEXT_BLOCK,
-                    $this->currentLang->locale);
+                    $this->currentLang->locale
+                );
                 break;
             case 'design_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::DESIGN_BLOCK,
-                    $this->currentLang->locale);
+                    $this->currentLang->locale
+                );
                 break;
         }
 
@@ -94,7 +101,22 @@ class ThemeOptionController extends AcpController
         cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
         return redirect()->back()->with('message', lang('Config.update_theme_success'));
+    }
 
+    public function createSlider()
+    {
+        $postData = $this->request->getPost();
+        $data = $this->themeOptions->createMainSlider($postData, $this->currentLang->locale);
+        $response = [
+            'error'   => 0,
+            'message' => lang('Config.save_slider_success'),
+            'data'    => $data,
+        ];
+
+        // delete cache
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
+
+        return $this->response->setJSON($response);
     }
 
     public function saveSlider()
@@ -129,8 +151,8 @@ class ThemeOptionController extends AcpController
 
         $modelAttach     = model(AttachModel::class);
         $item = $modelAttach->find($postData['image']['id']);
-        if ( isset($item->id) ) {
-            delete_image($item->file_name, '/' . UploadFolderEnum::ATTACH . '/'.date_format(date_create($item->created_at), 'Y/m'));
+        if (isset($item->id)) {
+            delete_image($item->file_name, '/' . UploadFolderEnum::ATTACH . '/' . date_format(date_create($item->created_at), 'Y/m'));
             $modelAttach->delete($item->id);
         }
 

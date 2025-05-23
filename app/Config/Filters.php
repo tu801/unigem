@@ -134,5 +134,9 @@ class Filters extends BaseFilters
 
         $this->filters['session']   = ['before' => [$adminArea, $adminArea . '/*']];
         $this->filters['admin']     = ['before' => [$adminArea, $adminArea . '/*']];
+
+        if (getenv('CI_ENVIRONMENT') !== 'production') {
+            unset($this->globals['before'][0]);
+        }
     }
 }
