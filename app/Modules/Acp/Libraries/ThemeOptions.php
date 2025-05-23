@@ -222,12 +222,7 @@ class ThemeOptions
      */
     public function saveGeneralConfig($postData, array $config_array, string $locale, $key_prefix = '')
     {
-        dd($config_array);
         foreach ($config_array as $key => $item) {
-            if (!array_key_exists($key, $postData) && $key != 'active') {
-                continue;
-            }
-
             $configKey = !empty($key_prefix) ? "{$key_prefix}_{$key}_{$locale}" : "{$key}_{$locale}";
             $configData = $this->_configModel
                 ->where('group_id', $this->config_group_id)
@@ -250,7 +245,7 @@ class ThemeOptions
                     break;
             }
 
-            $this->_configModel->update($configData->id, $configData);
+            $this->_configModel->update($configData->id, $configData, $this->config_group_id);
         }
         cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
     }
