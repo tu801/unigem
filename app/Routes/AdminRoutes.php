@@ -80,6 +80,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('/', 'ThemeOptionController::index', ['as' => 'theme-option']);
         $routes->post('/', 'ThemeOptionController::saveOptions');
 
+        $routes->post('create-slider', 'ThemeOptionController::createSlider', ['as' => 'create-slider']);
         $routes->post('save-slider', 'ThemeOptionController::saveSlider', ['as' => 'save-slider']);
         $routes->get('get-slider', 'ThemeOptionController::getSlider');
         $routes->post('delete-slider', 'ThemeOptionController::deleteSlider');
