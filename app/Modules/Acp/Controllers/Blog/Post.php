@@ -90,10 +90,9 @@ class Post extends AcpController
      * Display Add Post Page
      */
     public function add()
-    { //$this->cachePage(30);
+    {
         $this->_data['title'] = lang('Post.title_add');
 
-        //$this->_data['modelCategory'] = $this->_modelCategory;
         $this->_render('\blog\post\add', $this->_data);
     }
 
@@ -325,6 +324,55 @@ class Post extends AcpController
         return ['validRules' => $imgRules, 'errMess' => $imgErrMess];
     }
 
+    public function permanentDeletePost()
+    {
+        $postData = $this->request->getPost();
+        if (!isset($postData['id']) || empty($postData['id'])) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_request')
+            ]);
+        }
+
+        $item = $this->_model->withDeleted()->find($postData['id']);
+        if (!isset($item->id) || empty($item)) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_item_found')
+            ]);
+        }
+
+        if ((isset($item->user_init) && $item->user_init != $this->user->id) || !$this->user->inGroup('superadmin', 'admin')) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_permission')
+            ]);
+        }
+
+        if ($this->_model->deletePost($item, true)) {
+            if (method_exists(__CLASS__, 'logAction')) {
+                $prop = method_exists(get_class($item), 'toArray') ? $item->toArray() : (array)$item;
+                $logData = [
+                    'title' => 'Permanent Delete Post',
+                    'description' => lang('Acp.delete_success', [$item->id]),
+                    'properties' => $prop,
+                    'subject_id' => $item->id,
+                    'subject_type' => get_class($this->_model),
+                ];
+                $this->logAction($logData);
+            }
+            return $this->response->setJSON([
+                'error' => 0,
+                'message' => lang('Acp.delete_success', [$item->id])
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'error' => 1,
+            'message' => lang('Acp.delete_fail')
+        ]);
+    }
+    
 
     //AJAX FUNCTIONS
 

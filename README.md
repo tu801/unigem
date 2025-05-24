@@ -11,7 +11,15 @@ Hệ thống quản lý bán hàng ecommerce
 
 Clone dự án từ git
 
-Sau đó chạy lệnh `composer install` để cài các package cần thiết.
+Sau đó chạy lệnh sau để cài các package cần thiết.
+
+```bash
+# local install
+composer install
+
+# production install
+composer install --no-dev --optimize-autoloader
+```
 
 Chạy lệnh `composer update` bất kì khi nào cần update package mới
 

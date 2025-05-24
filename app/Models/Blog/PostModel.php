@@ -11,6 +11,8 @@ use CodeIgniter\Config\Services;
 use CodeIgniter\Model;
 use App\Entities\Post;
 use App\Enums\Post\PostStatusEnum;
+use App\Enums\UploadFolderEnum;
+use CodeIgniter\I18n\Time;
 
 class PostModel extends Model
 {
@@ -64,5 +66,39 @@ class PostModel extends Model
             ->where('post.post_type', $post_type);
 
         return $builder->find($id);
+    }
+
+    /**
+     * Delete post and related data such as post content, post category, post image
+     * If isPermanentDelete = true, delete post permanently
+     *
+     * @param $post
+     * @param $isPermanentDelete
+     * @return bool
+     */
+    public function deletePost($post, $isPermanentDelete) {
+        if ( !$isPermanentDelete ) {
+            return $this->delete($post->id);
+        }
+
+        //delete post content
+        $postContentModel = model(PostContentModel::class);
+        $postContentData = $postContentModel->where('post_id', $post->id)->findAll();
+
+        $myTime = Time::parse($post->created_at);
+        $postSubFolder = UploadFolderEnum::POST . '/' . $myTime->format( 'Y/m');
+        if ($postContentData) {
+            foreach ($postContentData as $value) {
+                $postContentModel->delete($value->ct_id);
+
+                delete_image($value->image, $postSubFolder);
+            }
+        }
+        //delete post category
+        $postCategoryBuilder = $this->db->table('post_categories');
+        $postCategoryBuilder->where('post_id', $post->id);
+        $postCategoryBuilder->delete();
+
+        return $this->delete($post->id, true);
     }
 }
