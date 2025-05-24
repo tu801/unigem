@@ -28,6 +28,10 @@
                 class="title link"><?= $product->pd_name ?></a>
             <span class="price current-price"><?= $product->display_price ?></span>
             <span class="published-date d-none"><?= $product->publish_date ?></span>
+            <?php 
+            $sortPrice = ( $product->price_discount > 0 && $product->price_discount < $product->price)? $product->price_discount : $product->price;
+            ?>
+            <span class="d-none sort-price"><?= $sortPrice ?></span>
 
             <p class="description"><?= strip_tags(word_limiter($product->pd_description ?? '', 30)) ?></p>
 

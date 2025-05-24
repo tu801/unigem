@@ -42,6 +42,10 @@
                         class="title link"><?= $product->pd_name ?></a>
                     <span class="price current-price"><?= $product->display_price ?></span>
                     <span class="publish-date d-none"><?= $product->publish_date ?></span>
+                    <?php 
+                    $sortPrice = ( $product->price_discount > 0 && $product->price_discount < $product->price)? $product->price_discount : $product->price;
+                    ?>
+                    <span class="d-none sort-price"><?= $sortPrice ?></span>
                 </div>
             </div>
         <?php endforeach; ?>
