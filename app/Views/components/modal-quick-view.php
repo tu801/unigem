@@ -72,8 +72,10 @@
                             </form>
                         </div>
                         <div>
-                            <a href="product-detail.html" class="tf-btn fw-6 btn-line">View full details<i
-                                    class="icon icon-arrow1-top-left"></i></a>
+                            <a href="product-detail.html" class="tf-btn fw-6 btn-line">
+                                <?= lang('Product.see_more')?>
+                                <i class="icon icon-arrow1-top-left"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
