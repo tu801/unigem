@@ -79,8 +79,11 @@ echo $this->section('content')
                                 </td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2"  href="<?=route_to("edit_page", $row->id)?>"><i class="fas fa-edit"></i></a>
-                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-delete="<?=route_to("remove_page")?>"
-                                       data-id="<?=$row->id?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
+                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" 
+                                        data-delete="<?=route_to("permanent_delete_page")?>" data-id="<?=$row->id?>" 
+                                       data-delete-message="Bạn có chắc chắn muốn thực hiện hành động này? Việc này sẽ xoá hoàn toàn item này và không thể khôi phục lại được." >
+                                       <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php }

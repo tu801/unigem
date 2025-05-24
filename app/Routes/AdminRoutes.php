@@ -155,6 +155,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('ajxEditSlug/(:num)', 'Post::ajxEditSlug/$1');
 
         $routes->post('delete', 'Post::ajxRemove', ['as' => 'delete_post']);
+        $routes->post('permanent-delete-post', 'Post::permanentDeletePost', ['as' => 'permanent_delete_post']);
         $routes->get('recover/(:num)', 'Post::recover/$1', ['as' => 'recover_post']);
 
         $routes->get('ajxreview/(:num)', 'Post::ajxreview/$1', ['as' => 'ajxreview_post']);
@@ -184,6 +185,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('edit/(:num)', 'Page::editPage/$1', ['as' => 'edit_page']);
         $routes->post('edit/(:num)', 'Page::editPageAction/$1');
 
+        $routes->post('permanent-delete-page', 'Page::permanentDeletePage', ['as' => 'permanent_delete_page']);
         $routes->post('remove', 'Page::ajxRemove/$1', ['as' => 'remove_page']);
     });
 

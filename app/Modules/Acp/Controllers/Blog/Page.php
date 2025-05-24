@@ -15,6 +15,7 @@ use App\Models\Blog\PostContentModel;
 use Modules\Acp\Models\Blog\PostModel;
 use App\Models\LangModel;
 use Modules\Acp\Traits\deleteItem;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class Page extends AcpController {
     use deleteItem;
@@ -35,6 +36,21 @@ class Page extends AcpController {
     public function index() {
         $this->_data['title']= lang("Post.page_title");
         $postData = $this->request->getPost();
+        $getData = $this->request->getGet(); 
+
+        switch ($getData['listtype'] ?? '') {
+            case 'deleted':
+                $this->_model->onlyDeleted();
+                $this->_data['listtype'] = 'deleted';
+                break;
+            case 'user':
+                $this->_model->where("user_init", $this->user->id);
+                $this->_data['listtype'] = 'user';
+                break;
+            default:
+                $this->_data['listtype'] = 'all';
+                break;
+        }
 
         if ( isset($postData) && !empty($postData) ) {
             if ( !empty($postData['sel']) ) {
@@ -212,6 +228,54 @@ class Page extends AcpController {
             else if ( isset($postData['save_addnew']) ) return redirect()->route('add_page')->with('message', lang('Post.editSuccess', [$item->title]));
 
         } else return redirect()->route('post')->with('error', lang('Acp.invalid_request'));
+    }
+
+    public function permanentDeletePage() {
+        $postData = $this->request->getPost();
+        if (!isset($postData['id']) || empty($postData['id'])) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_request')
+            ]);
+        }
+
+        $item = $this->_model->withDeleted()->find($postData['id']);
+        if (!isset($item->id) || empty($item)) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_item_found')
+            ]);
+        }
+
+        if ((isset($item->user_init) && $item->user_init != $this->user->id) || !$this->user->inGroup('superadmin', 'admin')) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_permission')
+            ]);
+        }
+
+        if ($this->_model->deletePost($item, true)) {
+            if (method_exists(__CLASS__, 'logAction')) {
+                $prop = method_exists(get_class($item), 'toArray') ? $item->toArray() : (array)$item;
+                $logData = [
+                    'title' => 'Permanent Delete Post',
+                    'description' => lang('Acp.delete_success', [$item->id]),
+                    'properties' => $prop,
+                    'subject_id' => $item->id,
+                    'subject_type' => get_class($this->_model),
+                ];
+                $this->logAction($logData);
+            }
+            return $this->response->setJSON([
+                'error' => 0,
+                'message' => lang('Acp.delete_success', [$item->id])
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'error' => 1,
+            'message' => lang('Acp.delete_fail')
+        ]);
     }
 
     private function _validRules()

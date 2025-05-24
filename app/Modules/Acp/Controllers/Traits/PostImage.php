@@ -87,7 +87,7 @@ trait PostImage {
         $imgErrMess = [
             'image' => [
                 'mime_in' => lang('Acp.invalid_image_file_type'),
-                'max_size' => lang('Acp.image_to_large'),
+                'max_size' => lang('Acp.image_to_large', [$this->config->sys['default_max_size']]),
             ]
         ];
         return ['validRules' => $imgRules, 'errMess' => $imgErrMess];
