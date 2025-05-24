@@ -15,7 +15,7 @@ return [
     'pd_weight'                     => 'Trọng lượng',
     'pd_cut_angle'                  => 'Giác cắt',
 
-    'product_available'            => 'Sản phẩm có sẵn',
+    'product_available'             => 'Sản phẩm có sẵn',
     'ask_a_question'                => 'Nhờ tư vấn',
     'return_policy'                 => 'Chính sách thu đổi',
     'warranty_policy'               => 'Chính sách bảo hành',

@@ -40,7 +40,7 @@ echo $this->section('content');
                                         id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>"
                                         value="<?= old('price') ?? 0 ?>">
                                     <div class="input-group-append">
-                                        <span class="input-group-text"><?= lang('Acp.currency_sign') ?></span>
+                                        <span class="input-group-text"><?= $currentLang->currency_symbol ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ echo $this->section('content');
                                         id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>"
                                         value="<?= old('price_discount') ?? 0 ?>">
                                     <div class="input-group-append">
-                                        <span class="input-group-text"><?= lang('Acp.currency_sign') ?></span>
+                                        <span class="input-group-text"><?= $currentLang->currency_symbol ?></span>
                                     </div>
                                 </div>
                             </div>
