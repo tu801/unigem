@@ -56,3 +56,15 @@ echo $this->section('content');
 </div>
 <!-- /sidebarmobile -->
 <?= $this->endSection() ?>
+
+<?=$this->section('style')?>
+<style>
+.blog-detail-main h2 {
+    font-size: 25px !important;
+}
+.blog-detail-main h3 {
+    font-size: 20px !important;
+}
+</style>
+
+<?=$this->endSection()?>
