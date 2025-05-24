@@ -233,7 +233,7 @@ echo $this->section('content');
                     </ul>
                     <div class="widget-content-tab">
                         <div class="widget-content-inner active">
-                            <div class="">
+                            <div class="product-detail">
                                 <?= $product->product_info?? ''?>
                             </div>
                         </div>
@@ -356,6 +356,15 @@ if ( isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0 ) {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+.product-detail h1 {
+    font-size: 30px !important;
+}
+.product-detail h2 {
+    font-size: 25px !important;
+}
+.product-detail h3 {
+    font-size: 20px !important;
 }
 </style>
 
