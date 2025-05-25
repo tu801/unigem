@@ -43,16 +43,6 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('remove/(:num)', 'User::remove/$1', ['as' => 'remove_user', 'filter' => 'group:superadmin,admin']);
     });
 
-    //permission routes
-    $routes->group('permission', ['namespace' => 'Modules\Acp\Controllers\System'], function ($routes) {
-        $routes->get('/', 'Permission::index', ['as' => 'permissions']);
-        $routes->get('list-pers', 'Permission::vlist_permissions');
-        $routes->get('per-groups', 'Permission::vpermissions_groups');
-        $routes->post('update/(:num)', 'Permission::ajaxUpdate/$1');
-        $routes->post('create', 'Permission::ajaxCreate');
-        $routes->post('del-permission', 'Permission::ajxRemove', ['as' => 'removePermission']);
-    });
-
     //config controller
     $routes->group('config', ['namespace' => 'Modules\Acp\Controllers\System\Config', 'filter' => 'group:superadmin,admin'], function ($routes) {
         $routes->get('/', 'Config::index', ['as' => 'config']);
@@ -165,7 +155,6 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('get-post-by-url', 'Post::crawlPostAction');
     });
 
-
     //Tags routes
     $routes->group('tags', ['namespace' => 'Modules\Acp\Controllers\Blog'], function ($routes) {
         $routes->get('get-data', 'Tags::getData');
@@ -204,13 +193,19 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('search-product', 'ProductController::ajaxSearchProduct', ['as' => 'search_product']);
     });
 
-
     // shop routes
     $routes->group('shop', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
         $routes->match(['get', 'post'], '/', 'ShopController::index', ['as' => 'list_shop']);
         $routes->match(['get', 'post'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
         $routes->match(['get', 'post'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
+    });
+
+    // contact routes
+    $routes->group('contact', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
+        $routes->match(['get', 'post'], '/', 'ContactController::index', ['as' => 'list_contact']);
+        $routes->match(['get', 'post'], 'add', 'ContactController::addContact', ['as' => 'add_contact']);
+        $routes->match(['get', 'post'], 'edit/(:num)', 'ContactController::editContact/$1', ['as' => 'edit_contact']);
     });
 
     // ajax routes

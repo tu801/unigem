@@ -15,5 +15,5 @@ class ContactEnum extends BaseEnum
 
     const STATUS_NEW = 'new';
     const STATUS_READ = 'read';
-    const STATUS_REPLIED = 'replied';
+    const STATUS_RESOLVE = 'resolve';
 }

@@ -1,4 +1,7 @@
 <?php
+
+use App\Enums\ContactEnum;
+
 echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
@@ -49,38 +52,47 @@ echo $this->section('content');
             <div class="tf-content-right">
                 <h5 class="mb_20"><?= lang('Home.contact_form_title') ?></h5>
                 <p class="mb_24"><?= lang('Home.contact_form_desc') ?></p>
+
                 <div>
-                    <form class="form-contact" id="contactform" action="./contact/contact-process.php" method="post">
+                <?php if (session()->has('errors')) : ?>
+                    <ul class="alert alert-danger alert-dismissible text-danger">
+                    <?php foreach (session('errors') as $error) : ?>
+                        <li><?= $error ?></li>
+                    <?php endforeach ?>
+                    </ul>
+                <?php endif ?>
+                <?php if (session()->has('message')) : ?>
+                    <div class="alert alert-success">
+                        <?= session('message') ?>
+                    </div>
+                <?php endif ?>
+                </div>
+                <div>
+                    <form class="form-contact" id="contactForm" action="<?=base_url(route_to('contactUs'))?>" method="post">
                         <?= csrf_field() ?>
                         <div class="d-flex gap-15 mb_15">
                             <fieldset class="w-100">
-                                <input type="text" name="fullname" id="name" required
+                                <input type="text" name="fullname" id="name" value="<?= old('fullname')?>"
                                     placeholder="<?= lang('Home.contact_name') ?>" />
                             </fieldset>
                             <fieldset class="w-100">
-                                <input type="email" name="email" id="email" required
+                                <input type="email" name="email" id="email" value="<?= old('email')?>"
                                     placeholder="<?= lang('Home.contact_email') ?>" />
                             </fieldset>
                         </div>
                         <div class="d-flex mb_15">
                             <div class="select-custom w-100">
                                 <select class="tf-select w-100" name="subject">
-                                    <option value="" data-provinces="[]">---</option>
-                                    <option value="Australia"
-                                        data-provinces="[['Australian Capital Territory','Australian Capital Territory'],['New South Wales','New South Wales'],['Northern Territory','Northern Territory'],['Queensland','Queensland'],['South Australia','South Australia'],['Tasmania','Tasmania'],['Victoria','Victoria'],['Western Australia','Western Australia']]">
-                                        Australia</option>
-                                    <option value="Austria" data-provinces="[]">Austria</option>
-                                    <option value="Belgium" data-provinces="[]">Belgium</option>
-                                    <option value="Canada"
-                                        data-provinces="[['Alberta','Alberta'],['British Columbia','British Columbia'],['Manitoba','Manitoba'],['New Brunswick','New Brunswick'],['Newfoundland and Labrador','Newfoundland and Labrador'],['Northwest Territories','Northwest Territories'],['Nova Scotia','Nova Scotia'],['Nunavut','Nunavut'],['Ontario','Ontario'],['Prince Edward Island','Prince Edward Island'],['Quebec','Quebec'],['Saskatchewan','Saskatchewan'],['Yukon','Yukon']]">
-                                        Canada</option>
-
+                                    <option value="">-- <?=lang('Home.select_subject')?> --</option>
+                                    <?php foreach ( ContactEnum::CONTACT_SUBJECT_LIST as $key ) : ?>
+                                    <option value="<?=$key?>" <?= old('subject') == $key ? "selected" : "" ?> ><?=lang('Home.subject_'.$key)?></option>
+                                    <?php endforeach;?>
                                 </select>
                             </div>
                         </div>
                         <div class="mb_15">
-                            <textarea placeholder="Message" name="message" id="message" required cols="30"
-                                rows="10"></textarea>
+                            <textarea placeholder="Message" name="message" id="message" cols="30"
+                                rows="10"><?=old('message')?></textarea>
                         </div>
                         <div class="send-wrap">
                             <button type="submit"
@@ -94,3 +106,45 @@ echo $this->section('content');
 </section>
 <!-- /form -->
 <?= $this->endSection() ?>
+
+<?= $this->section('scripts')?>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#contactForm').validate({
+        rules: {
+            fullname: {
+                required: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            subject: {
+                required: true
+            },
+            message: {
+                required: true
+            }
+        },
+        messages: {
+            fullname: "<?=lang('Home.contact_fullname_required')?>",
+            email: {
+                required: "<?=lang('Home.contact_email_required')?>",
+                email: "<?=lang('Home.contact_email_invalid')?>" 
+            },
+            subject: "<?=lang('Home.contact_subject_required')?>",
+            message: "<?=lang('Home.contact_message_required')?>"
+        },
+        errorElement: 'label',
+        errorClass: 'error text-danger',
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+})
+</script>
+<?= $this->endSection()?>
