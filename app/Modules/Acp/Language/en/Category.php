@@ -33,4 +33,6 @@ return [
     'slug_invalid'                  => 'Slug URL can only contain letters, numbers, and hyphens',
     'slug_is_invalid_text'          => 'Invalid slug URL. It can only contain letters, numbers, and hyphens. Please check your slug again.',
     'updateSlug_success'            => 'Successfully updated the new URL',
+    'error_delete_cat_has_child'    => 'You cannot delete a category that has subcategories. Please delete all subcategories first.',
+    'cat_parent_not_found'          => 'Parent category not found',
 ];

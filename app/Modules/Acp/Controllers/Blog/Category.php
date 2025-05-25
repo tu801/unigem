@@ -311,14 +311,24 @@ class Category extends AcpController
     /**
      * Remove a category
      */
-    public function remove($idItem)
+    public function removeCat($idItem)
     {
         $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
             ->where('id', $idItem)
             ->where('lang_id', $this->currentLang->id)
             ->withDeleted()
-            ->find($idItem);
-        if (isset($item->id)) {
+            ->find($idItem); 
+        if (!isset($item->id)) {
+            return redirect()->route('category', ['post'])->with('error', lang('Acp.no_item_found'));
+        }
+        
+        // check cat item is parent
+        $childCat = $this->_model->where('parent_id', $item->id)->findAll();
+        if (count($childCat) > 0) {
+            return redirect()->route('category', ['post'])->with('error', lang('Category.error_delete_cat_has_child'));
+        }dd($item);
+
+        if ($this->_model->delete($item->id, (bool) $item->deleted_at)) {
             //log Action
             $logData = [
                 'title' => 'Delete Category',
@@ -332,10 +342,10 @@ class Category extends AcpController
             // delete cache
             $this->_removeCache();
 
-            if ($this->_model->delete($item->id, (bool) $item->deleted_at)) return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
-
-            else return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
-        } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));
+            return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
+        }
+        return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
+        
     }
 
     private function _removeCache() {
@@ -371,7 +381,10 @@ class Category extends AcpController
                         ->join('category_content', 'category_content.cat_id = category.id')
                         ->where('lang_id', $this->currentLang->id)
                         ->find($cat->parent_id);
-                    $cat->parent = $parent;
+                    if ( isset($parent->id) &&!empty($parent) ) $cat->parent = $parent;
+                    else {
+                        $cat->parent_not_found_message = lang('Category.cat_parent_not_found');
+                    }
                 }
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;

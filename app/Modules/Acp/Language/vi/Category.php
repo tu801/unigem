@@ -33,4 +33,6 @@ return [
     'slug_invalid'                  => 'Slug URL chỉ bao gồm các chữ cái, số và dấu gạch nối',
     'slug_is_invalid_text'          => 'Slug URL không hợp lệ. Nó chỉ có thể chứa các ký tự chữ cái, số và dấu gạch nối. Vui lòng kiểm tra lại slug của bạn.',
     'updateSlug_success'            => 'Đã cập nhật thành công URL mới',
+    'error_delete_cat_has_child'    => 'Danh mục này có danh mục con. Bạn không thể xóa danh mục này! Vui lòng xóa danh mục con trước khi xóa danh mục này',
+    'cat_parent_not_found'          => 'Danh mục cha không tồn tại',
 ];

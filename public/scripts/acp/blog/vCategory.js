@@ -22,12 +22,19 @@ const catList = Vue.createApp({
       return bkUrl + "/category/edit/" + cat.id;
     },
     catParent(cat) {
-      if (cat.parent_id > 0) return cat.parent.title;
-      else return "";
+      if (cat.parent_id > 0) {
+        if (cat.parent === undefined || cat.parent === null) {
+          return (
+            '<span class="text-danger"><i class="fas fa-exclamation-triangle"></i></span> ' +
+              cat.parent_not_found_message ?? ""
+          );
+        }
+        return cat.parent.title;
+      } else return "";
     },
     delCat(id) {
       var url = bkUrl + "/category/remove/" + id;
-
+      console.log("remove cat: ", url);
       Swal.fire({
         title: "Bạn có chắc chắn muốn xóa danh mục này??",
         showDenyButton: false,
@@ -75,7 +82,6 @@ const catList = Vue.createApp({
         actionParam = "?deleted=1";
 
       var url = bkUrl + "/category/list-cat/" + catType + actionParam;
-      console.log("Y:", url);
 
       this.cat_type = catType;
 
