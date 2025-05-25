@@ -156,7 +156,7 @@ echo $this->section('content');?>
                                     </div>
                                 </td>
                                 <td><a :href="renderEditUrl(cat)">{{ cat.title }}</a></td>
-                                <td>{{ catParent(cat) }}</td>
+                                <td v-html="catParent(cat)"></td>
                                 <td>{{ cat.slug }}</td>
                                 <td v-html="cat.status"></td>
                                 <td>
