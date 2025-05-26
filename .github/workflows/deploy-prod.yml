@@ -16,5 +16,5 @@ jobs:
           key: ${{ secrets.PROD_SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www/unigem-dev/src
+            cd /var/www/unigem/src
             git pull origin master
