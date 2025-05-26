@@ -2,31 +2,20 @@
 echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
-    <!-- breadcrumbs -->
+<section class="page-404-wrap">
     <div class="container">
-        <div class="breadcrumbs">
-            <a href="<?= base_url() ?>"><i class="las la-home"></i></a>
-            <a href="#" class="active">404</a>
-        </div>
-    </div>
-
-    <!-- 404 page -->
-    <div class="section_padding_b">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-7 col-lg-9">
-                    <div class="page_nfwrap">
-                        <div class="page_nfimg">
-                            <img loading="lazy"  src="<?=base_url($configs->templatePath)?>/assets/images/svg/404.svg" class="w-100" alt="page not found">
-                        </div>
-                        <div class="page_nfcont text-center mt-5">
-                            <h4 class="mb-4"><?= lang('Home.page_not_available') ?></h4>
-                            <a href="<?= base_url() ?>" class="default_btn small rounded"><?= lang('Home.back_to_home') ?></a>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="image">
+                    <img src="<?=base_url($configs->templatePath)?>images/item/404.svg" alt="">
                 </div>
+                <div class="title">
+                    <?=lang('Home.404_title')?>
+                </div>
+                <p><?=lang('Home.404_desc')?></p>
+                <a href="<?=base_url(route_to('product_shop'))?>" class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Shop now</a>
             </div>
         </div>
     </div>
-
+</section>
 <?= $this->endSection() ?>

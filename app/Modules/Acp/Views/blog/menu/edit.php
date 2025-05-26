@@ -99,7 +99,7 @@ echo $this->section('content') ?>
 
                                             <?php
                                             //get child menu
-                                            $childs = model(\Modules\Acp\Models\Blog\MenuModel::class)->getChild($row, $menuItem);
+                                            $childs = model(\App\Models\Blog\MenuModel::class)->getChild($row, $menuItem);
                                             echo $childs;
                                             ?>
                                         </li>

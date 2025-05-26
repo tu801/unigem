@@ -8,7 +8,7 @@
 namespace App\Controllers;
 
 
-use Modules\Acp\Models\LangModel;
+use App\Models\LangModel;
 
 class Language extends BaseController
 {

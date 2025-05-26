@@ -1,13 +1,12 @@
 <?php
 namespace Modules\Acp\Controllers;
 
-use Config\Modules;
+use App\Models\User\UserModel;
 use Modules\Acp\Controllers\Traits\itemDelete;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Enums\UserTypeEnum;
-use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\Store\Product\ProductModel;
-use Modules\Acp\Models\User\UserModel;
+use App\Enums\Post\PostTypeEnum;
+use App\Enums\UserTypeEnum;
+use App\Models\Blog\PostModel;
+use App\Models\Store\Product\ProductModel;
 
 class Dashboard extends AcpController {
     use itemDelete;
@@ -22,18 +21,27 @@ class Dashboard extends AcpController {
         $this->_data['title']= 'Dash Board';
         $thisMonth = date('m');
 
-
-        $this->_data['monthPosts'] = model(PostModel::class)
-            ->select('post.*,post_content.*')
-            ->join('post_content', 'post_content.post_id = post.id')
+        $this->_data['countMonthPosts'] = model(PostModel::class)
             ->where('Month(created_at)', $thisMonth)
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_type', PostTypeEnum::POST)
+            ->countAllResults();
+
+        $this->_data['countMonthProducts'] = model(ProductModel::class)
+            ->where('Month(created_at)', $thisMonth)
+            ->countAllResults();
+
+        $this->_data['recentPosts'] = model(PostModel::class)
+            ->select('post.*, post_content.*')
+            ->join('post_content', 'post_content.post_id = post.id')
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_type', PostTypeEnum::POST)
             ->orderBy('post.id DESC')
             ->findAll(10);
 
         $this->_data['products'] = model(ProductModel::class)
-            ->select('product.*')
+            ->select('product.*, pdc.pd_name ')
+            ->join('product_content AS pdc', 'pdc.product_id = product.id')
+            ->where('pdc.lang_id', $this->currentLang->id)
             ->orderBy('product.id DESC')
             ->findAll(10);
 

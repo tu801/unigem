@@ -2,12 +2,12 @@
 namespace App\Traits;
 
 use CodeIgniter\Config\Services;
-use Modules\Acp\Models\LangModel;
+use App\Models\LangModel;
 
 /**
  * Author: tmtuan
  * Created date: 8/10/2023
- * Project: thuthuatonline
+ * Project: Unigem
  **/
 
 trait SetLang {
@@ -21,18 +21,16 @@ trait SetLang {
 
         if ($session->lang) {
             $language->setLocale($session->lang->locale);
-            $this->_data['curLang'] = $session->lang;
+            $this->currentLang = $session->lang;
         }
         else {
             //get default lang
-            $defLang = model(LangModel::class)
-                ->select('id, name, locale, flag, is_default')
-                ->where('is_default', 1)->first();
+            $defLang = model(LangModel::class)->getPrivLang();
 
             $lang = $defLang->locale ?? config('App')->defaultLocale;
             $language->setLocale($lang);
             $session->set('lang', $defLang);
-            $this->_data['curLang'] = $defLang;
+            $this->currentLang = $defLang;
         }
     }
 
@@ -41,7 +39,11 @@ trait SetLang {
      */
     public function checkMultilang()
     {
-        $count = model(LangModel::class)->countAll();
+        $count = cache()->get('lang_count');
+        if (empty($count)) {
+            $count = model(LangModel::class)->countAll();
+            cache()->save('lang_count', $count, config('Cache')->ttl);
+        }
 
         $this->_data['multiLang'] = $count > 1 ? true : false;
     }

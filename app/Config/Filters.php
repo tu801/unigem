@@ -2,26 +2,28 @@
 
 namespace Config;
 
-use App\Filters\GroupPermission;
-use CodeIgniter\Config\BaseConfig;
+use App\Filters\AdminFilter;
+use CodeIgniter\Config\Filters as BaseFilters;
+use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
+use CodeIgniter\Filters\ForceHTTPS;
 use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
+use CodeIgniter\Filters\PageCache;
+use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
-use Modules\Auth\Filters\AdminFilter;
-use Modules\Auth\Filters\LoginFilter;
-use Modules\Auth\Filters\PermissionFilter;
-use Modules\Auth\Filters\RoleFilter;
 
-class Filters extends BaseConfig
+class Filters extends BaseFilters
 {
     /**
      * Configures aliases for Filter classes to
      * make reading things nicer and simpler.
      *
-     * @var array<string, string>
-     * @phpstan-var array<string, class-string>
+     * @var array<string, class-string|list<class-string>>
+     *
+     * [filter_name => classname]
+     * or [filter_name => [classname1, classname2, ...]]
      */
     public array $aliases = [
         'csrf'          => CSRF::class,
@@ -29,30 +31,63 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'login'         => LoginFilter::class,
-        'role'          => RoleFilter::class,
-        'permission'    => PermissionFilter::class,
-        'admin'         => AdminFilter::class,
-        'userGroupPer'  => GroupPermission::class,
+        'cors'          => Cors::class,
+        'forcehttps'    => ForceHTTPS::class,
+        'pagecache'     => PageCache::class,
+        'performance'   => PerformanceMetrics::class,
+        'session'       => \CodeIgniter\Shield\Filters\SessionAuth::class,
+        'tokens'        => \CodeIgniter\Shield\Filters\TokenAuth::class,
+        'hmac'          => \CodeIgniter\Shield\Filters\HmacAuth::class,
+        'chain'         => \CodeIgniter\Shield\Filters\ChainAuth::class,
+        'auth-rates'    => \CodeIgniter\Shield\Filters\AuthRates::class,
+        'group'         => \CodeIgniter\Shield\Filters\GroupFilter::class,
+        'permission'    => \CodeIgniter\Shield\Filters\PermissionFilter::class,
+        'force-reset'   => \CodeIgniter\Shield\Filters\ForcePasswordResetFilter::class,
+        'jwt'           => \CodeIgniter\Shield\Filters\JWTAuth::class,
+        'admin'         => AdminFilter::class
+    ];
+
+    /**
+     * List of special required filters.
+     *
+     * The filters listed here are special. They are applied before and after
+     * other kinds of filters, and always applied even if a route does not exist.
+     *
+     * Filters set by default provide framework functionality. If removed,
+     * those functions will no longer work.
+     *
+     * @see https://codeigniter.com/user_guide/incoming/filters.html#provided-filters
+     *
+     * @var array{before: list<string>, after: list<string>}
+     */
+    public array $required = [
+        'before' => [
+            'forcehttps', // Force Global Secure Requests
+            'pagecache',  // Web Page Caching
+        ],
+        'after' => [
+            'pagecache',   // Web Page Caching
+            'performance', // Performance Metrics
+            'toolbar',     // Debug Toolbar
+        ],
     ];
 
     /**
      * List of filter aliases that are always
      * applied before and after every request.
      *
-     * @var array<string, array<string, array<string, string>>>|array<string, array<string>>
-     * @phpstan-var array<string, list<string>>|array<string, array<string, array<string, string>>>
+     * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
      */
     public array $globals = [
         'before' => [
             // 'honeypot',
-             'csrf',
+            'csrf',
             // 'invalidchars',
+            'force-reset' => ['except' => ['login*', 'register', 'auth/a/*', 'change-password', 'reset-password', 'logout']]
         ],
         'after' => [
-            'toolbar',
             // 'honeypot',
-             'secureheaders',
+            // 'secureheaders',
         ],
     ];
 
@@ -61,11 +96,13 @@ class Filters extends BaseConfig
      * particular HTTP method (GET, POST, etc.).
      *
      * Example:
-     * 'post' => ['foo', 'bar']
+     * 'POST' => ['foo', 'bar']
      *
      * If you use this, you should disable auto-routing because auto-routing
      * permits any HTTP method to access a controller. Accessing the controller
      * with a method you don't expect could bypass the filter.
+     *
+     * @var array<string, list<string>>
      */
     public array $methods = [];
 
@@ -75,16 +112,31 @@ class Filters extends BaseConfig
      *
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
+     *
+     * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth-rates' => [
+            'before' => [
+                'login*',
+                'register',
+                'auth/*'
+            ]
+        ]
+    ];
 
     /**
      * Filters constructor.
      */
     public function __construct()
     {
-        $this->filters['login'] = ['before' => [ADMIN_AREA, ADMIN_AREA.'/*']];
-        $this->filters['admin'] = ['before' => [ADMIN_AREA, ADMIN_AREA.'/*']];
-        $this->filters['userGroupPer'] = ['before' => [ADMIN_AREA, ADMIN_AREA.'/*']];
+        $adminArea =  config('Acp')->adminSlug;
+
+        $this->filters['session']   = ['before' => [$adminArea, $adminArea . '/*']];
+        $this->filters['admin']     = ['before' => [$adminArea, $adminArea . '/*']];
+
+        if (getenv('CI_ENVIRONMENT') !== 'production') {
+            unset($this->globals['before'][0]);
+        }
     }
 }

@@ -2,7 +2,6 @@
 /**
  * @author tmtuan
  * created Date: 10/20/2023
- * Project: Unigem
  */
 
 use CodeIgniter\Config\Services;
@@ -39,7 +38,7 @@ if (!function_exists('get_slider_config')) {
 
     function get_slider_config()
     {
-        $locale      = $language = Services::language()->getLocale();
+        $locale      = Services::language()->getLocale();
         $themeOption = new ThemeOptions();
         return $themeOption->getMainSlider($locale);
     }
@@ -54,7 +53,7 @@ if (!function_exists('get_logo_url')) {
         if ( isset($logoConfig) ) {
             $url = base_url($logoConfig->full_image);
         } else {
-            $url = base_url($configs->templatePath. '/asset/images/logo-viet-my.png');
+            $url = base_url($configs->templatePath. '/unigem-logo.png');
         }
 
         return $url;
@@ -70,7 +69,7 @@ if (!function_exists('get_favicon_url')) {
         if ( isset($logoConfig) ) {
             $url = base_url($logoConfig->full_image);
         } else {
-            $url = base_url($configs->templatePath. '/asset/images/favicon.png');
+            $url = base_url($configs->templatePath. 'images/favicon.ico');
         }
 
         return $url;
@@ -81,17 +80,26 @@ if (!function_exists('get_menu')) {
 
     function get_menu($location = null)
     {
-        $menuModel = model(\Modules\Acp\Models\Blog\MenuModel::class);
-        $menuItemModel = model(\Modules\Acp\Models\Blog\MenuItemsModel::class);
+        $menuModel = model(\App\Models\Blog\MenuModel::class);
+        $menuItemModel = model(\App\Models\Blog\MenuItemsModel::class);
+        $lang = session()->lang;
+        $configs = config('Site');
+        
+        $menu = cache()->get("menu_{$location}_{$lang->locale}");
+        if ($menu) {
+            return $menu;
+        }
 
         if ( empty($location) ) {
             $menu = $menuModel
                 ->where('status', 'publish')
+                ->where('lang_id', $lang->id)
                 ->where('location', null)
                 ->first();
         } else {
             $menu = $menuModel
                 ->like(['location' => "%{$location}%"])
+                ->where('lang_id', $lang->id)
                 ->where('status', 'publish')
                 ->first();
         }
@@ -121,6 +129,39 @@ if (!function_exists('get_menu')) {
         }
 
         $menu->menu_items = $menuItems;
+        cache()->save("menu_{$location}_{$lang->locale}", $menu, $configs->viewCellCacheTtl);
         return $menu;
+    }
+}
+
+if (!function_exists('get_social_links')) {
+    /**
+     * Returns all of the social links
+     *
+     * @return array
+     */
+    function get_social_links()
+    {
+        $socialConfigLinks = [
+           'general_facebook_link',
+           'general_youtube_link',
+           'general_tiktok_link',
+           'general_instagram_link',
+           'general_twitter_x_link', 
+           'general_pinterest_link', 
+        ];
+
+        $socialLinks = [];
+
+        $locale      = Services::language()->getLocale();
+        $themeOption = new ThemeOptions();
+        $optionData = $themeOption->getThemeOptions();
+
+        foreach ($socialConfigLinks as $key) {
+            $optionKey = $key . '_' . $locale;
+            $socialLinks[$key] = $optionData[$optionKey] ?? null;
+        }
+
+        return array_filter($socialLinks);
     }
 }

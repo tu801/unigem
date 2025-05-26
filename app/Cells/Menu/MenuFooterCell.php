@@ -14,7 +14,8 @@ class MenuFooterCell extends Cell
 
         if ( isset($menuData->id) ) {
             return $this->view($this->view, [
-                'menuData' => $menuData
+                'menuData' => $menuData,
+                'position_class' => 'footer-col-1'
             ]);
         } else {
             return '';
@@ -27,7 +28,8 @@ class MenuFooterCell extends Cell
 
         if ( isset($menuData->id) ) {
             return $this->view($this->view, [
-                'menuData' => $menuData
+                'menuData' => $menuData,
+                'position_class' => 'footer-col-2'
             ]);
         } else {
             return '';

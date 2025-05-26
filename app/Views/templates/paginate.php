@@ -1,25 +1,25 @@
 <?php $pager->setSurroundCount(4) ?>
-<div class="pagination_wrp d-flex align-items-center justify-content-center mt-4">
-    <?php if ($pager->hasPrevious()) : ?>
-            <a href="<?= $pager->getPrevious() ?>">
-                <div class="single_paginat">
-                    <i class="las la-long-arrow-alt-left"></i>
-                </div>
-            </a>
-    <?php endif ?>
-    <?php foreach ($pager->links() as $link) : ?>
-            <a href="<?= $link['uri'] ?>">
-                <div class="single_paginat <?= $link['active'] ? 'active' : '' ?>">
-                    <?= $link['title'] ?>
-                </div>
-            </a>
-    <?php endforeach ?>
+<ul class="wg-pagination">
+<?php if ($pager->hasPrevious()) : ?>
+    <li>
+        <a href="<?= $pager->getPrevious() ?>" class="pagination-item animate-hover-btn"><i class="icon-arrow-left"></i></a>
+    </li>
+<?php endif ?>
+<?php foreach ($pager->links() as $link) : ?>
+    <?php if ($link['active']) :?>
+    <li class="active">
+        <div class="pagination-item"><?= $link['title'] ?></div>
+    </li>
+    <?php else: ?>
+    <li>
+        <a href="<?= $link['uri'] ?>" class="pagination-item animate-hover-btn"><?= $link['title'] ?></a>
+    </li>
+    <?php endif?>
+<?php endforeach ?>
 
-    <?php if ($pager->hasNext()) : ?>
-        <a href="<?= $pager->getNext() ?>">
-            <div class="single_paginat">
-                <i class="las la-long-arrow-alt-right"></i>
-            </div>
-        </a>
-    <?php endif ?>
-</div>
+<?php if ($pager->hasNext()) : ?>
+    <li>
+        <a href="<?= $pager->getNext() ?>" class="pagination-item animate-hover-btn"><i class="icon-arrow-right"></i></a>
+    </li>
+<?php endif ?>
+</ul>

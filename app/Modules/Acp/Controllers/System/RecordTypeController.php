@@ -7,7 +7,7 @@
 namespace Modules\Acp\Controllers\System;
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\RecordTypeModel;
+use App\Models\RecordTypeModel;
 use Modules\Acp\Traits\deleteItem;
 
 class RecordTypeController extends AcpController {

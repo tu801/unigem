@@ -64,7 +64,7 @@ echo $this->section('content');
                         <select class="form-control" name="status">
                             <?php
                             $selectedItem = old('status') ?? '';
-                            foreach (\Modules\Acp\Enums\Store\ShopEnum::STATUS as $key => $val) :
+                            foreach (\App\Enums\Store\ShopEnum::STATUS as $key => $val) :
                                 $selected = $selectedItem == $val ? 'selected' : '';
                                 ?>
                                 <option value='<?= $val ?>' <?=$selected?> ><?= lang('Shop.status_'.$key) ?></option>

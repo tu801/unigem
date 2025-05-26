@@ -23,6 +23,11 @@ return [
     'description'                   => 'Mô tả ngắn',
     'content'                       => 'Nội dung',
     'post_status'                   => 'Trạng thái',
+    'post_status_draft'             => 'Bản nháp',
+    'post_status_pending'           => 'Chờ duyệt',
+    'post_status_publish'           => 'Xuất bản',
+
+    'post_position_top'             => 'Tin Top',
 
     'author'                        => 'Người đăng',
     'created_view'                  => 'Ngày đăng',
@@ -33,6 +38,8 @@ return [
     'meta_description'              => 'Mô tả thẻ Meta',
 
     'gallery'                       => 'Gallery Ảnh',
+
+    'feature_image_desc'            => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 1400 x 900pixel',
 
     //Error
     'title_is_exist'                => 'Tiêu đề này đã tồn tại',

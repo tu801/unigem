@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/20/2021
@@ -7,13 +8,13 @@
 
 namespace Modules\Acp\Controllers\System\Config;
 
-
+use App\Enums\CacheKeys;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Enums\ThemeOptionEnum;
-use Modules\Acp\Enums\UploadFolderEnum;
+use App\Enums\ThemeOptionEnum;
+use App\Enums\UploadFolderEnum;
 use Modules\Acp\Libraries\ThemeOptions;
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\ConfigModel;
+use App\Models\AttachModel;
+use App\Models\ConfigModel;
 
 class ThemeOptionController extends AcpController
 {
@@ -25,29 +26,32 @@ class ThemeOptionController extends AcpController
 
         $this->themeOptions = new ThemeOptions();
 
-        if ( empty($this->_model)) {
+        if (empty($this->_model)) {
             $this->_model = model(ConfigModel::class);
         }
     }
 
-    public function index() {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-        $this->_data['title']= lang("Config.theme_option_title");
+    public function index()
+    {
+        $this->_data['title'] = lang("Config.theme_option_title");
 
         $optData = $this->themeOptions->getOptionGroups();
         $this->_data['cfData'] = $optData;
         $this->_render('\system\config\themeOption\index', $this->_data);
     }
 
+    /**
+     * save theme config options
+     * @return mixed
+     */
     public function saveOptions()
     {
         $postData = $this->request->getPost();
-        if ( !isset($postData['option_group']) || empty($postData['option_group']) ) {
+        if (!isset($postData['option_group']) || empty($postData['option_group'])) {
             return redirect()->back()->with('error', lang('Acp.invalid_request'));
         }
 
-        if ( !in_array($postData['option_group'], ThemeOptionEnum::CONFIG_GROUP)) {
+        if (!in_array($postData['option_group'], ThemeOptionEnum::CONFIG_GROUP)) {
             return redirect()->back()->with('error', lang('Theme.invalid_option_group'));
         }
 
@@ -59,48 +63,81 @@ class ThemeOptionController extends AcpController
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
                     ThemeOptionEnum::GENERAL_CONFIGS,
-                    $this->_data['curLang']->locale,
-                    'general');
+                    $this->currentLang->locale,
+                    'general'
+                );
                 break;
-            case 'utility_block':
+            case 'jewelry_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
-                    ThemeOptionEnum::UTILITY_BLOCK,
-                    $this->_data['curLang']->locale);
+                    ThemeOptionEnum::JEWELRY_BLOCK,
+                    $this->currentLang->locale
+                );
                 break;
-            case 'top_ranking':
+            case 'gems_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
-                    ThemeOptionEnum::TOP_RANKING,
-                    $this->_data['curLang']->locale);
+                    ThemeOptionEnum::GEMS_BLOCK,
+                    $this->currentLang->locale
+                );
                 break;
-            case 'ads_block':
+            case 'running_text_block':
                 $this->themeOptions->saveGeneralConfig(
                     $postData,
-                    ThemeOptionEnum::ADS_BLOCK,
-                    $this->_data['curLang']->locale);
+                    ThemeOptionEnum::RUNNING_TEXT_BLOCK,
+                    $this->currentLang->locale
+                );
+                break;
+            case 'design_block':
+                $this->themeOptions->saveGeneralConfig(
+                    $postData,
+                    ThemeOptionEnum::DESIGN_BLOCK,
+                    $this->currentLang->locale
+                );
                 break;
         }
 
-        return redirect()->back()->with('message', lang('Config.update_theme_success'));
+        // delete cache
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
+        return redirect()->back()->with('message', lang('Config.update_theme_success'));
     }
 
-    public function saveSlider()
+    public function createSlider()
     {
         $postData = $this->request->getPost();
-        $data = $this->themeOptions->saveMainSlider($postData, $this->_data['curLang']->locale);
+        $data = $this->themeOptions->createMainSlider($postData, $this->currentLang->locale);
         $response = [
             'error'   => 0,
             'message' => lang('Config.save_slider_success'),
             'data'    => $data,
         ];
+
+        // delete cache
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
+
+        return $this->response->setJSON($response);
+    }
+
+    public function saveSlider()
+    {
+        $postData = $this->request->getPost();
+        $data = $this->themeOptions->saveMainSlider($postData, $this->currentLang->locale);
+        $response = [
+            'error'   => 0,
+            'message' => lang('Config.save_slider_success'),
+            'data'    => $data,
+        ];
+
+        // delete cache
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
+
         return $this->response->setJSON($response);
     }
 
     public function getSlider()
     {
-        $data = $this->themeOptions->getMainSlider($this->_data['curLang']->locale);
+        $data = $this->themeOptions->getMainSlider($this->currentLang->locale);
         $response = [
             'error' => 0,
             'data'  => $data,
@@ -114,16 +151,19 @@ class ThemeOptionController extends AcpController
 
         $modelAttach     = model(AttachModel::class);
         $item = $modelAttach->find($postData['image']['id']);
-        if ( isset($item->id) ) {
-            delete_image($item->file_name, '/' . UploadFolderEnum::ATTACH . '/'.date_format(date_create($item->created_at), 'Y/m'));
+        if (isset($item->id)) {
+            delete_image($item->file_name, '/' . UploadFolderEnum::ATTACH . '/' . date_format(date_create($item->created_at), 'Y/m'));
             $modelAttach->delete($item->id);
         }
 
-        $this->themeOptions->deleteMainSlider($postData, $this->_data['curLang']->locale);
+        $this->themeOptions->deleteMainSlider($postData, $this->currentLang->locale);
         $response = [
             'error' => 0,
             'message' => lang('Config.update_slider_success'),
         ];
+
+        // delete cache
+        cache()->delete(CacheKeys::THEME_OPTION_CONFIG);
 
         return $this->response->setJSON($response);
     }

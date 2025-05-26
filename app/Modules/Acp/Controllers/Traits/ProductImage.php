@@ -2,7 +2,7 @@
 namespace Modules\Acp\Controllers\Traits;
 
 use CodeIgniter\I18n\Time;
-use Modules\Acp\Enums\UploadFolderEnum;
+use App\Enums\UploadFolderEnum;
 
 trait ProductImage {
 
@@ -14,6 +14,7 @@ trait ProductImage {
      */
     public function uploadProductImage($postData, $image)
     {
+        $shopConfigs = config('Shop');
         $info = [
             'file_name' => clean_url($postData['pd_name']).'-'.time().'.'.$image->getClientExtension(),
             'sub_folder' => UploadFolderEnum::PRODUCT . '/' . date('Y/m')
@@ -27,7 +28,7 @@ trait ProductImage {
                 'original_image' => $this->config->uploadFolder.'/'.$info['sub_folder']."/{$info['file_name']}",
                 'path' => $this->config->uploadFolder.'/'.$info['sub_folder']."/thumb"
             ];
-            create_thumb($imgThumb);
+            create_thumb($imgThumb, $shopConfigs->productThumbSize);
             return $info['file_name'];
         } else {
             return redirect()->back()->withInput()->with('errors', $imgPath['error']);
@@ -65,7 +66,7 @@ trait ProductImage {
      */
     public function getUploadRule()
     {
-        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png';
+        $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png,image/webp';
         $maxUploadSize = ( isset($this->config->sys['default_max_size']) && $this->config->sys['default_max_size'] > 0 )
             ? $this->config->sys['default_max_size'] * 1024
             : 2048;

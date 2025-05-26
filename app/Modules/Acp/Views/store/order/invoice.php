@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Acp\Enums\Store\Order\EDeliveryType;
+use App\Enums\Store\Order\EDeliveryType;
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');

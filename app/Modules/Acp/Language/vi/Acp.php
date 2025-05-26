@@ -1,9 +1,15 @@
 <?php
 return [
-    'welcom'            => 'Website:',
+    'welcome_label'     => 'Website:',
+    'welcome_text'      => 'Chào mừng bạn đến với trang quản trị. Hãy bắt đầu quản lý website của bạn',
+    'view_frontend'     => 'Xem trang chủ',
+    'hi_user_text'      => 'Chào, {0}',
+
     //title
     'title'             => 'Module ACP',
     'title_profile'     => 'Thông tin user',
+    'posts_in_month'    => 'Tin mới trong tháng',
+    'products_in_month' => 'Sản phẩm mới đăng trong tháng',
 
     //language
     'lang'              => 'Ngôn Ngữ',
@@ -12,6 +18,7 @@ return [
     'lang_en'           => 'Tiếng Anh',
 
     //ACP Menu
+    'cms_brand_text'   => 'Quản lý CMS',
     'user_manager'      => 'Người dùng',
     'admin_manager'     => 'Nhân viên',
     'system'            => 'Hệ thống',
@@ -53,10 +60,14 @@ return [
     'ward'              => 'Phường / Xã',
     'select_ward'       => 'Chọn Phường/Xã',
 
+    'clear_cache'       => 'Xoá Cache',
+
     //Meta Data
     'meta_keyword'                  => 'Từ khóa SEO',
     'meta_description'              => 'Mô tả SEO',
     'meta_desc_left'                => 'Số kí tự còn lại:',
+
+    'currency_sign'                 => 'VND',
 
     //Error
     'invalid_request'           => 'Yêu cầu bị lỗi! Vui lòng thử lại sau',

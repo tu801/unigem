@@ -2,14 +2,16 @@
 
 namespace Modules\Acp\Controllers\Blog;
 
+use App\Enums\CacheKeys;
+use App\Enums\CategoryEnum;
+use App\Models\AttachMetaModel;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\Blog\CategoryContentModel;
+use App\Models\Blog\CategoryContentModel;
 use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Traits\SystemLog;
 
 class Category extends AcpController
 {
-    use SystemLog;
+    protected $attachMetaModel;
 
     public function __construct()
     {
@@ -17,14 +19,33 @@ class Category extends AcpController
         if (empty($this->_model)) {
             $this->_model = model(CategoryModel::class);
         }
+        $this->attachMetaModel = model(AttachMetaModel::class);
     }
 
     public function index($type)
     {
+        // check permission
+        switch ($type) {
+            case 'product':
+                if (!$this->user->inGroup('superadmin', 'admin', 'sale_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                break;
+            case 'post':
+                if (!$this->user->inGroup('superadmin', 'admin', 'content_manager')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+                break;
+        }
 
         $this->_data['title'] = lang("Category.category_title");
         $postData = $this->request->getPost();
         $getData = $this->request->getGet();
+
+        //get parent category
+        $this->_data['list_parent'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
+            ->where([
+                'lang_id' => $this->currentLang->id,
+                'parent_id' => 0,
+                'cat_type' => $type,
+            ])
+            ->findAll();
 
         if (!isset($type) || !in_array($type, $this->config->cat_type)) return redirect()->route('dashboard')->with('error', lang('Acp.invalid_request'));
         //get Data
@@ -47,20 +68,12 @@ class Category extends AcpController
             $this->_data['action'] = 'deleted';
         } else $this->_data['action'] = 'all';
 
-        $this->_data['data'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-            ->where([
-                'lang_id'  => $this->_data['curLang']->id,
-                'cat_type' => $type,
-            ])->findAll();
+        // $this->_data['data'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
+        //     ->where([
+        //         'lang_id'  => $this->currentLang->id,
+        //         'cat_type' => $type,
+        //     ])->get();
 
-        //get parent
-        $this->_data['list_parent'] = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-            ->where([
-                'lang_id' => $this->_data['curLang']->id,
-                'parent_id' => 0,
-                'cat_type' => $type,
-            ])
-            ->findAll();
 
         $this->_data['cat_type'] = $type;
         $this->_render('\blog\category\index', $this->_data);
@@ -101,8 +114,11 @@ class Category extends AcpController
         ];
 
         if (isset($insertData['slug']) && $insertData['slug'] !== '') {
-            $rules['slug'] = 'is_unique[category_content.slug]';
-            $errMess['slug'] = ['is_unique' => lang('Category.slug_is_exist')];
+            $rules['slug'] = 'is_unique[category_content.slug]|alpha_dash';
+            $errMess['slug'] = [
+                'is_unique' => lang('Category.slug_is_exist'),
+                'alpha_dash' => lang('Category.slug_invalid')
+            ];
         }
 
         //validate the input
@@ -114,25 +130,42 @@ class Category extends AcpController
         if (!isset($insertData['slug']) || $insertData['slug'] === '') $insertData['slug'] = clean_url($insertData['title']);
 
         // check slug
-        if($this->_model->checkSlug($insertData['slug'], $this->_data['curLang']->id)) {
+        if ($this->_model->checkSlug($insertData['slug'], $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'slug' =>  lang('Category.slug_is_exist')
             ]);
         }
 
-        $insertData['cat_type'] = $type;
-        $insertData['user_init'] = $this->user->id;
-        $insertData['user_type'] = $this->user->model_class;
-        $insertData['lang_id']   = $this->_data['curLang']->id;
+        $insertData['cat_type']     = $type;
+        $insertData['user_init']    = $this->user->id;
+        $insertData['user_type']    = $this->user->model_class;
+        $insertData['lang_id']      = $this->currentLang->id;
+        $insertData['user_type']    = config('Auth')->userProvider;
         $cat = $this->_model->insertOrUpdate($insertData);
         if (!$cat) {
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
         // Success!
         $catItem = $this->_model->join('category_content', 'category_content.cat_id = category.id', 'LEFT')
-                                ->where('id', $cat)
-                                ->where('lang_id', $this->_data['curLang']->id)
-                                ->first();
+            ->where('id', $cat)
+            ->where('lang_id', $this->currentLang->id)
+            ->first();
+
+        // save attach meta image
+        if (!empty($insertData['cat_image'])) {
+            $metaAttach = model(AttachMetaModel::class);
+            $value      = [
+                'image' => $insertData['cat_image'] ?? '',
+            ];
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY . $this->currentLang->locale;
+
+            $metaAttach->insertOrUpdate([
+                'mod_name' => $configKey,
+                'mod_id'   => $catItem->id,
+                'mod_type' => 'single',
+                'value'    => json_encode($value),
+            ]);
+        }
 
         $catItem->setSeoMeta($insertData);
 
@@ -158,14 +191,14 @@ class Category extends AcpController
         $this->_data['title'] = lang('Category.edit_title');
         $cat = $this->_model
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->withDeleted()
             ->find($idItem);
 
         if (isset($cat->id)) {
             $this->_data['list_parent'] = $this->_model
                 ->join('category_content', 'category_content.cat_id = category.id')
-                ->where('lang_id', $this->_data['curLang']->id)
+                ->where('lang_id', $this->currentLang->id)
                 ->where(['parent_id' => 0, 'category.cat_type' => $cat->cat_type])
                 ->findAll();
             $this->_data['data'] = $cat;
@@ -184,9 +217,9 @@ class Category extends AcpController
         $this->_data['title'] = lang('Category.edit_title');
 
         $data = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-                             ->where('id', $idItem)
-                             ->where('lang_id', $this->_data['curLang']->id)
-                             ->first();
+            ->where('id', $idItem)
+            ->where('lang_id', $this->currentLang->id)
+            ->first();
         $this->_model->skipValidation(true);
 
         if (isset($data->id)) {
@@ -214,16 +247,44 @@ class Category extends AcpController
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
             }
             if (!isset($inputData['home_tab_display'])) $inputData['home_tab_display'] = 0;
-            $inputData['cur_lang_id'] = $this->_data['curLang']->id;
+            $inputData['cur_lang_id'] = $this->currentLang->id;
             $inputData['id'] = $idItem;
+
+            if (isset($inputData['onChangeSlug']) && $inputData['onChangeSlug'] == 'on') {
+                $inputData['slug'] = clean_url($inputData['title']);
+                if ($this->_model->checkSlug($inputData['slug'], $this->currentLang->id)) {
+                    return redirect()->back()->withInput()->with('errors', [
+                        'slug' =>  lang('Category.slug_is_exist')
+                    ]);
+                }
+            }
+
             $cat = $this->_model->insertOrUpdate($inputData);
             //good then save the new item
             if (!$cat) {
                 return redirect()->back()->withInput()->with('errors', $this->_model->errors());
             }
 
+            // save attach meta image
+            $value = [
+                'image'         => $inputData['cat_image'] ?? '',
+            ];
+            $configKey  = CategoryEnum::CAT_ATTACHMENT_PREFIX_KEY . $this->currentLang->locale;
+
+            $dataAttach = [
+                'mod_name' => $configKey,
+                'mod_id'   => $idItem,
+                'mod_type' => 'single',
+                'value'    => json_encode($value),
+            ];
+            if (!empty($inputData['attach_meta_id'])) {
+                $dataAttach['id'] = $inputData['attach_meta_id'];
+            }
+
+            $this->attachMetaModel->insertOrUpdate($dataAttach);
+
             //set seo meta
-            $inputData['lang_id'] = $this->_data['curLang']->id;
+            $inputData['lang_id'] = $this->currentLang->id;
             $data->setSeoMeta($inputData);
 
             //log Action
@@ -236,11 +297,13 @@ class Category extends AcpController
             ];
             $this->logAction($logData);
 
-            if (isset($inputData['save'])) return redirect()->route('category', [$data->cat_type])->with('message', lang('Acp.edit_Success'));
+            // delete cache
+            $this->_removeCache();
+
+            if (isset($inputData['save'])) return redirect()->route('edit_category', [$data->id])->with('message', lang('Acp.edit_Success'));
             else if (isset($inputData['save_exit'])) {
                 $route = base_url($this->_data['module'] . "/category/{$data->cat_type}");
                 return redirect()->to($route)->with('message', lang('Acp.edit_Success'));
-                //return redirect()->route('category', [$data->cat_type])->with('message', lang('Acp.edit_Success'));
             }
         } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));
     }
@@ -248,14 +311,24 @@ class Category extends AcpController
     /**
      * Remove a category
      */
-    public function remove($idItem)
+    public function removeCat($idItem)
     {
         $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
-                                ->where('id', $idItem)
-                                ->where('lang_id', $this->_data['curLang']->id)
-                                ->withDeleted()
-                                ->find($idItem);
-        if (isset($item->id)) {
+            ->where('id', $idItem)
+            ->where('lang_id', $this->currentLang->id)
+            ->withDeleted()
+            ->find($idItem); 
+        if (!isset($item->id)) {
+            return redirect()->route('category', ['post'])->with('error', lang('Acp.no_item_found'));
+        }
+        
+        // check cat item is parent
+        $childCat = $this->_model->where('parent_id', $item->id)->findAll();
+        if (count($childCat) > 0) {
+            return redirect()->route('category', ['post'])->with('error', lang('Category.error_delete_cat_has_child'));
+        }dd($item);
+
+        if ($this->_model->delete($item->id, (bool) $item->deleted_at)) {
             //log Action
             $logData = [
                 'title' => 'Delete Category',
@@ -265,10 +338,19 @@ class Category extends AcpController
                 'subject_type' => CategoryModel::class,
             ];
             $this->logAction($logData);
-            if ($this->_model->delete($item->id, (bool) $item->deleted_at)) return redirect()->route('category', ['post'])->with('message', lang('Category.delete_success', [$item->id]));
 
-            else return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
-        } else return redirect()->route('category', ['post'])->with('error', lang('Acp.invalid_request'));
+            // delete cache
+            $this->_removeCache();
+
+            return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
+        }
+        return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
+        
+    }
+
+    private function _removeCache() {
+        cache()->deleteMatching(CacheKeys::CATEGORY_PREFIX . '*');
+        cache()->deleteMatching(CacheKeys::MENU_PREFIX . '*');
     }
 
     //AJAX
@@ -283,10 +365,10 @@ class Category extends AcpController
             $this->_model->like('title', $key);
         }
 
-        $catSelect = 'category.id, parent_id, title, slug, description, seo_meta';
+        $catSelect = 'category.id, category.cat_status, parent_id, title, slug, description, seo_meta';
         $this->_model->select($catSelect)
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->where('cat_type', $type ?? 'post');
 
         if (isset($input['deleted']) && $input['deleted'] == 1) $catData = $this->_model->onlyDeleted()->findAll();
@@ -297,12 +379,16 @@ class Category extends AcpController
                 if ($cat->parent_id > 0) {
                     $parent = $this->_model->select($catSelect)
                         ->join('category_content', 'category_content.cat_id = category.id')
-                        ->where('lang_id', $this->_data['curLang']->id)
+                        ->where('lang_id', $this->currentLang->id)
                         ->find($cat->parent_id);
-                    $cat->parent = $parent;
+                    if ( isset($parent->id) &&!empty($parent) ) $cat->parent = $parent;
+                    else {
+                        $cat->parent_not_found_message = lang('Category.cat_parent_not_found');
+                    }
                 }
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;
+                $cat->status = $this->__transformStatusView($cat->cat_status);
             }
             $response['data'] = $catData;
             $response['error'] = 0;
@@ -355,17 +441,20 @@ class Category extends AcpController
                         'slug' => $postData['category_slug']
                     );
                     $modelCategoryContent = model(CategoryContentModel::class);
-                    $modelCategoryContent->where('category_content.lang_id', $this->_data['curLang']->id)
+                    $modelCategoryContent->where('category_content.lang_id', $this->currentLang->id)
                         ->where('cat_id', $itemId);
 
                     if ($modelCategoryContent->update(null, $updateArray)) {
+                        // delete cache
+                        $this->_removeCache();
+
                         $this->_model->join('category_content', 'category_content.cat_id = category.id');
                         $item = $this->_model->find($itemId);
                         $response['error'] = 0;
                         $response['text'] = lang('Category.updateSlug_success');
                         $returnData['categoryId'] = $itemId;
                         $returnData['slug'] = $postData['category_slug'];
-                        $returnData['fullSlug'] = base_url(route_to('category_list', $item->slug, $item->id));
+                        $returnData['fullSlug'] = $item->url;
                         $response['postData'] = $returnData;
                     } else {
                         $response['error'] = 1;
@@ -376,5 +465,20 @@ class Category extends AcpController
         }
 
         return $this->response->setJSON($response);
+    }
+
+    private function __transformStatusView($cat_status)
+    {
+        switch ($cat_status) {
+            case 'draft':
+                return '<span class="badge badge-secondary">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
+            case 'pending':
+                return '<span class="badge badge-warning">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
+            case 'publish':
+                return '<span class="badge badge-success">' . $this->config->cmsStatus['status'][$cat_status] . '</span>';
+                break;
+        }
     }
 }

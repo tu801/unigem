@@ -29,4 +29,12 @@ class BreadCrumbCell extends Cell
             'total' => $total
         ]);
     }
+
+    public function product(){
+        $total = count(self::$breadcrumbs);
+        return $this->view('product_bread_crumb', [
+            'breadcrumbs' => self::$breadcrumbs,
+            'total' => $total
+        ]);
+    }
 }

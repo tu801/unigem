@@ -1,15 +1,23 @@
-<div class="container">
-    <div class="breadcrumbs">
-        <?php //dd($breadcrumbs);
-        for ($i = 0; $i <= $total-1; $i++) {
-            if ( $i == 0 ) {
-                echo '<a href="'.$breadcrumbs[$i]['href'].'"><i class="las la-home"></i></a>';
-            } elseif ( $i == $total - 1 ) {
-                echo '<a href="'.$breadcrumbs[$i]['href'].'" class="active">'.$breadcrumbs[$i]['title'].'</a>';
-            } else {
-                echo '<a href="'.$breadcrumbs[$i]['href'].'" >'.$breadcrumbs[$i]['title'].'</a>';
-            }
+<ul class="breadcrumbs d-flex align-items-center justify-content-center">
+    <?php
+    $count = count($breadcrumbs);
+    $output = '';
+    foreach ($breadcrumbs as $index => $item) {
+        if ($index < $count - 1) {
+            // Render link cho tất cả các item trừ item cuối cùng
+            $output .= '<li>';
+            $output .= '<a href="' . esc($item['href']) . '">' . esc($item['title']) . '</a>';
+            $output .= '</li>';
+            $output .= '<li>';
+            $output .= '<i class="icon-arrow-right"></i>';
+            $output .= '</li>';
+        } else {
+            // Render text cho item cuối cùng (không có link)
+            $output .= '<li>';
+            $output .= esc($item['title']);
+            $output .= '</li>';
         }
-        ?>
-    </div>
-</div>
+    }
+    echo $output;
+    ?>
+</ul>

@@ -4,7 +4,7 @@ echo $this->section('content')
 ?>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-md-12">
         <form method="post" action="<?=route_to('page') ?>" >
             <?=csrf_field()?>
             <div class="card">
@@ -21,7 +21,7 @@ echo $this->section('content')
                         </div>
                     </div>
 
-                    <div class="card-tools">
+                    <div class="card-tools mt-2">
                         <div class="input-group input-group-sm">
                             <input type="text" value="<?=(isset($search_title))?$search_title:''?>" 
                                 name="title" class="form-control" placeholder="<?=lang('Acp.search')?>">
@@ -34,10 +34,10 @@ echo $this->section('content')
                     </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body">
+                <div class="card-body table-responsive">
 
                     <table id="<?php echo $controller."_".$method ?>_DataTable" 
-                    class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                    class="table table-striped table-bordered">
                         <thead>
                         <tr>
                             <th width="3%">
@@ -79,8 +79,11 @@ echo $this->section('content')
                                 </td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2"  href="<?=route_to("edit_page", $row->id)?>"><i class="fas fa-edit"></i></a>
-                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-delete="<?=route_to("remove_page")?>"
-                                       data-id="<?=$row->id?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
+                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" 
+                                        data-delete="<?=route_to("permanent_delete_page")?>" data-id="<?=$row->id?>" 
+                                       data-delete-message="Bạn có chắc chắn muốn thực hiện hành động này? Việc này sẽ xoá hoàn toàn item này và không thể khôi phục lại được." >
+                                       <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php }

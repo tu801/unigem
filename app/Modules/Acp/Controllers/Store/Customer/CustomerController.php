@@ -2,7 +2,7 @@
 /**
  * Author: tmtuan
  * Created date: 8/19/2023
- * Project: nha-khoa-viet-my
+ * Project: unigem
  **/
 
 namespace Modules\Acp\Controllers\Store\Customer;
@@ -15,21 +15,19 @@ use Config\Database;
 use Libraries\Collection\Collection;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\CustomerAvatar;
-use Modules\Acp\Entities\User;
-use Modules\Acp\Enums\Store\CustomerActiveEnum;
-use Modules\Acp\Enums\UserTypeEnum;
-use Modules\Acp\Models\Store\Customer\CustomerModel;
-use Modules\Acp\Models\Store\DistrictModel;
-use Modules\Acp\Models\Store\ProvinceModel;
-use Modules\Acp\Models\Store\WardModel;
-use Modules\Acp\Models\User\UserModel;
+use App\Entities\User;
+use App\Enums\Store\CustomerActiveEnum;
+use App\Enums\UserTypeEnum;
+use App\Models\Store\Customer\CustomerModel;
+use App\Models\Store\DistrictModel;
+use App\Models\Store\ProvinceModel;
+use App\Models\Store\WardModel;
+use App\Models\User\UserModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class CustomerController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
     use CustomerAvatar;
 
     protected $db;
@@ -163,7 +161,7 @@ class CustomerController extends AcpController
 
     public function editAction($cus_id)
     {
-        if ( !$this->user->can($this->currentAct) ) {
+        if ( !$this->user->inGroup('superadmin', 'admin') ) {
             return redirect()->route('customer')->with('error', lang('Acp.no_permission'));
         }
 
@@ -265,7 +263,7 @@ class CustomerController extends AcpController
     public function generateCustomer()
     {
         //check permission
-        if (!$this->user->can('root')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+        if (!$this->user->inGroup('superadmin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
         $total = $this->_model->countAll();
         $provinces = model(ProvinceModel::class)->findAll();

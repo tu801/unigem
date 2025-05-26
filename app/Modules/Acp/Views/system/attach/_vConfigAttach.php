@@ -67,6 +67,7 @@
             <div class="card-body pt-3 pb-2">
                 <div class="row col-12">
                     <button @click.prevent="showGallery" class="btn btn-primary mb-2" >Select Images</button>
+                    <input v-if="selectedImg.length === 0" type="hidden" name="removeAttachMeta" :value="imgAttachMetaId">
                 </div>
 
                 <div class="row col-12" v-if="imgDesc">
@@ -76,8 +77,6 @@
                 <vgallery v-if="showModal" @close="showModal = false" 
                     :selecteditem="selectedImg" @show-file="setAttachFiles" @remove-file="deleteUploadFile" 
                     :att-type="selectImgType" @close-modal="hideGallery" ></vgallery>
-                
-                    
                     
             </div>
         </div>

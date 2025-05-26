@@ -8,7 +8,8 @@ class Acp extends BaseConfig
 {
     public $uploadPath =  WRITEPATH . "uploads" . DIRECTORY_SEPARATOR;
     public $uploadFolder =  "uploads";
-    public $imageThumb = ['height' => 433, 'width' => 770];
+    public $imageThumb = ['height' => 360, 'width' => 550];
+    public $uploadMineType = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
     public $adminSlug = ADMIN_AREA;
 
     //--------------------------------------------------------------------
@@ -86,13 +87,6 @@ class Acp extends BaseConfig
     //--------------------------------------------------------------------
     // Post
     //--------------------------------------------------------------------
-    public $postCf = [
-        'post_position' => [
-            'hot' => 'Tin Nóng',
-            'top' => 'Tin Top'
-        ],
-    ];
-
     public $post_seo_meta = [
         'seo_title' => ['title' => 'seo_title', 'input' => 'text'],
         'seo_description' => ['title' => 'seo_description', 'input' => 'textarea'],

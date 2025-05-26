@@ -12,14 +12,26 @@ use CodeIgniter\Config\BaseConfig;
 class Site extends BaseConfig {
 
     public $uploadFolder =  ROOTPATH."uploads".DIRECTORY_SEPARATOR;
-    public $imageThumb = ['height' => 150, 'width' => 150];
+    public $imageThumb = ['height' => 360, 'width' => 550];
     public $scriptsPath = "scripts/";
 
     //--------------------------------------------------------------------
     // Layout for the views to extend
     //--------------------------------------------------------------------
+    public $theme_name = "unigem";
     public $viewLayout = 'master';
-    public $templatePath = "themes/";
-    public $noimg = "images/no-image.svg";
+    public $templatePath;
+    public $no_img;
+
+    /**
+     * cache time to live for view cell
+     */
+    public $viewCellCacheTtl = 60*60; // 1 hour
+    
+
+    public function __construct() {
+        $this->templatePath = "themes/{$this->theme_name}/";
+        $this->no_img = $this->templatePath . 'images/no-image.svg';
+    }
 
 }

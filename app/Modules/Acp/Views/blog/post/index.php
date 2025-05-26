@@ -1,6 +1,5 @@
 <?php
 echo $this->extend($config->viewLayout);
-$postConfigs = $config->postCf;
 echo $this->section('content')
 ?>
 
@@ -10,14 +9,12 @@ echo $this->section('content')
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=user") ?>"><?= lang('Post.list_user_post') ?></a> |
-                        <?php if (in_array($login_user->gid, [1, 2])) : ?>
-                            <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=all") ?>"><?= lang('Post.list_all_post') ?></a> |
-                        <?php endif; ?>
+                        <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=all") ?>"><?= lang('Post.list_all_post') ?></a> |
+                        <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=user") ?>"><?= lang('Post.list_user_post') ?></a> | 
                         <a class="<?= ($listtype == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/post?listtype=deleted") ?>"><?= lang('Post.list_delete_post') ?></a>
                     </div>
 
-                    <div class="card-tools">
+                    <div class="card-tools mt-2">
                         <div class="input-group input-group-sm">
                             <input name="listtype" id="listtype" value="<?= $listtype ?? 'user'; ?>" class="form-control" type="hidden" />
                             <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="title" class="form-control" placeholder="Search Post">
@@ -31,24 +28,25 @@ echo $this->section('content')
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <div class="mailbox-controls mb-2 ml-0 pl-0 mr-0 pr-0">
-
-                        <div class="btn-group">
-                            <a href="<?= route_to('add_post') ?>" class="btn btn-normal btn-primary btn-sm" title="Add New Post">
-                                <i class="fa fa-plus text"></i> <?= lang('Post.title_add') ?>
-                            </a>
-                            <button type="submit" name="mdelete" class="btn btn-default btn-sm ml-2"><i class="far fa-trash-alt"></i></button>
+                    <div class="row">
+                        <div class="col-md-8 mb-2">
+                            <div class="btn-group">
+                                <a href="<?= route_to('add_post') ?>" class="btn btn-normal btn-primary btn-sm" title="Add New Post">
+                                    <i class="fa fa-plus text"></i> <?= lang('Post.title_add') ?>
+                                </a>
+                                <button type="submit" name="mdelete" class="btn btn-default btn-sm ml-2"><i class="far fa-trash-alt"></i></button>
+                            </div>
+                            <!-- /.btn-group -->
                         </div>
-                        <!-- /.btn-group -->
 
-                        <div class="float-right col-4 mr-0 pr-0">
+                        <div class="float-right col-md-4 mr-0 pr-0">
                             <div class="row">
-                                <div class="col-sm-5">
+                                <div class="col-md-5">
                                     <?php
-                                    $catModel = new Modules\Acp\Models\Blog\CategoryModel();
+                                    $catModel = new App\Models\Blog\CategoryModel();
                                     $catData = $catModel->where('cat_type', 'post')
                                         ->join('category_content', 'category_content.cat_id = category.id')
-                                        ->where('lang_id', $curLang->id)
+                                        ->where('lang_id', $currentLang->id)
                                         ->findAll();
                                     ?>
                                     <div id="chkCategory" class="form-group">
@@ -63,7 +61,7 @@ echo $this->section('content')
                                     </div>
                                 </div>
 
-                                <div class="col-sm-7">
+                                <div class="col-md-7">
                                     <div class="form-group">
                                         <div class="input-group">
                                             <select class="custom-select form-control" name="post_status">
@@ -88,6 +86,7 @@ echo $this->section('content')
                         <!-- /.float-right -->
                     </div>
 
+                    <div class="row table-responsive">
                     <table id="<?php echo $controller . "_" . $method ?>_DataTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
@@ -160,6 +159,11 @@ echo $this->section('content')
                                                    data-delete="<?= route_to("delete_post") ?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
                                             <?php else : ?>
                                                 <a class="btn btn-primary btn-sm mb-2" title="Recover Item" href="<?= route_to("recover_post", $row->id) ?>"><i class="fas fa-reply"></i></a>
+                                                <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Permanent Delete Item" 
+                                                    data-delete-message="Bạn có chắc chắn muốn thực hiện hành động này? Việc này sẽ xoá hoàn toàn item này và không thể khôi phục lại được."
+                                                    data-delete="<?= route_to("permanent_delete_post", $row->id)?>" data-id="<?=$row->id?>" >
+                                                    <i class="fas fa-times"></i>
+                                                </a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -171,6 +175,7 @@ echo $this->section('content')
                             <?php endif; ?>
                         </tbody>
                     </table>
+                    </div>
 
                 </div>
 

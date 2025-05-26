@@ -2,7 +2,7 @@
 /**
  * @author tmtuan
  * created Date: 8/25/2023
- * project: nha-khoa-viet-my
+ * project: unigem
  */
 ?>
 
@@ -35,7 +35,7 @@
                                         <label><?= lang('Theme.slider_title_small') ?></label>
                                         <input class="form-control" v-model="form[index].title_small" name="title_small" type="text">
                                     </div>
-                                    <div class="form-group d-none">
+                                    <div class="form-group">
                                         <label><?= lang('Theme.slider_title_big') ?></label>
                                         <input class="form-control" v-model="form[index].title_big" name="title_big" type="text">
                                     </div>

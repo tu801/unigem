@@ -1,6 +1,8 @@
 <?php
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
+
+$siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_site_name']) ) ? $config->sys['default_site_name'] : getenv('app.site_name');
 ?>
 
 <div class="row">
@@ -9,10 +11,10 @@ echo $this->section('content');
             <div class="row">
                 <div class="col-12">
                     <h4>
-                        <i class="fas fa-globe"></i> <?=lang('Acp.welcom')?> <?=$config->sys['default_site_name']??''?>
+                        <i class="fas fa-globe"></i> <?=lang('Acp.welcome_label')?> <?=$siteName?>
                         <small class="float-right">Hôm nay là: <?=date('d/m/Y')?></small>
                     </h4>
-                    <small>Chào mừng bạn đến với trang quản trị. Hãy bắt đầu quản lý website của bạn</small>
+                    <small><?=lang('Acp.welcome_text')?></small>
                 </div>
                 <!-- /.col -->
             </div>
@@ -20,17 +22,15 @@ echo $this->section('content');
             <div class="row">
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                        <a class="btn btn-primary btn-sm " href="<?=route_to('add_post')?>" >
-                            New Post</a>
-
+                        <a class="btn btn-primary btn-sm " href="<?=route_to('add_post')?>" >New Post</a>
                     </div>
                     <!-- /.description-block -->
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                        <h5 class="description-header"><?=(isset($monthPosts) ) ? count($monthPosts):0?></h5>
-                        <span class="description-text">Tin Mới Trong Tháng</span>
+                        <h5 class="description-header"><?=$countMonthPosts?></h5>
+                        <span class="description-text"><?=lang('Acp.posts_in_month')?></span>
                     </div>
                     <!-- /.description-block -->
                 </div>
@@ -38,8 +38,8 @@ echo $this->section('content');
                 <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
 
-                        <h5 class="description-header"><?=(isset($pendingPosts))?count($pendingPosts):0?></h5>
-                        <span class="description-text">Tin Chưa được duyệt</span>
+                        <h5 class="description-header"><?=$countMonthProducts?></h5>
+                        <span class="description-text"><?=lang('Acp.products_in_month')?></span>
                     </div>
                     <!-- /.description-block -->
                 </div>
@@ -60,18 +60,18 @@ echo $this->section('content');
 
 <!-- ecommerce analytic-->
 <div class="row">
-    <div class="col-6 col-lg-6">
+    <div class="col-md-6 col-lg-6">
         <?= view_cell('EcommerceOverviewCell') ?>
     </div>
-    <div class="col-6 col-lg-6">
+    <div class="col-md-6 col-lg-6">
         <?= view_cell('SaleChartOverTimeCell', ['configs' => $config]) ?>
     </div>
 </div>
     <!-- ecommerce analytic-->
 
 <div class="row">
-<?php if ( isset($monthPosts) ) : ?>
-    <div class="col-6">
+<?php if ( isset($recentPosts) ) : ?>
+    <div class="col-md-6">
         <div class="card card-outline card-primary">
             <div class="card-header border-transparent">
                 <h3 class="card-title">Tin Mới</h3>
@@ -98,9 +98,9 @@ echo $this->section('content');
                         <tbody>
                         <?php
                         $i= 0;
-                        foreach ($monthPosts as $row) {
+                        foreach ($recentPosts as $row) {
                             $i++;
-                            echo view($config->view.'\dashboard\components\_listPostItem', ['num' => $i, 'row' => $row, 'login_user' => $login_user, 'action' => $currentAct]);
+                            echo view($config->view.'\dashboard\components\_listPostItem', ['num' => $i, 'row' => $row, 'login_user' => $login_user]);
                         }
                         ?>
                         </tbody>
@@ -118,9 +118,9 @@ echo $this->section('content');
 <?php endif; ?>
 
 <?php
-if ( isset($monthPosts) ) {
-    echo '<div class="col-6">';
-    echo view($config->view.'\dashboard\components\_listProducts', ['products' => $products, 'action' => $currentAct]);
+if ( isset($products) ) {
+    echo '<div class="col-md-6">';
+    echo view($config->view.'\dashboard\components\_listProducts', ['products' => $products]);
     echo '</div>';
 }
 ?>

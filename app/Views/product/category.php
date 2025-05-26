@@ -27,13 +27,7 @@ echo $this->section('content');
                         <div class="shop_filter">
                             <h4 class="filter_title"><?= lang('Product.brand') ?></h4>
                             <div class="filter_list">
-                                <?php foreach ($product_manufacturer as $item): ?>
-                                    <div class="custom_check d-flex align-items-center">
-                                        <input type="checkbox" name="manufacturer" class="check_inp" value="<?= $item->manufacturer_id ?>" hidden id="bnd-<?= $item->manufacturer_id ?>" <?= isset($select_manufacturer) && $item->manufacturer_id == $select_manufacturer ? 'checked' : '' ?>>
-                                        <label for="bnd-<?= $item->manufacturer_id ?>"><?= $item->manufacture_name ?></label>
-                                    </div>
-                                <?php endforeach; ?>
-
+                                
                             </div>
                         </div>
                         <div class="shop_filter border-bottom-0 pb-0 mb-0">

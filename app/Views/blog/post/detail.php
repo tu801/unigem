@@ -2,36 +2,69 @@
 echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
-<!-- breadcrumbs -->
-<?php echo view_cell('App\Libraries\BreadCrumb\BreadCrumbCell') ?>
-    <div class="shop_bycat section_padding_b">
-        <div class="container">
-            <h2 class="section_title_3 text-center"><?= $post->title ?? '' ?></h2>
-            <div class="row gx-2 gy-2">
-                <div class="col-12 col-md-9 post">
-                    <?= $post->content ?? '' ?>
-                </div>
-                <div class="col-12 col-md-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <?= view_cell('\App\Cells\Wigets\NewPostListCell') ?>
-                            <?= view_cell('\App\Cells\Wigets\CategoryListCell') ?>
-                            <?= view_cell('\App\Cells\Wigets\TagsListCell::postTags') ?>
+
+<!-- blog-list -->
+<div class="blog-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="blog-list-main pt-1">
+                    <div class="list-blog">
+                        <div class="blog-detail-main">
+                            
+                            <div class="blog-detail-main-heading">
+                                <?php if ( count($post->categories) ) : ?>
+                                <ul class="tags-lists justify-content-center">
+                                    <?php foreach ($post->categories as $category) : ?>
+                                    <li>
+                                        <a href="<?=base_url(route_to('category_page', $category['slug']))?>" class="tags-item"><?= $category['title']?></a>
+                                    </li>
+                                    <?php endforeach;?>
+                                </ul>
+                                <?php endif;?>
+                                <div class="title"><?= $post->title ?? '' ?></div>
+                                <div class="meta"><?=lang('Site.post_author_meta', [$post->author->username, $post->created_at->format('d/m/Y')])?></div>
+                                <!-- <div class="image">
+                                    <img class=" ls-is-cached lazyloaded" data-src="images/blog/blog-detail.jpg" src="images/blog/blog-detail.jpg" alt="">
+                                </div> -->
+                            </div>
+                            <?=$post->content ?? '' ?>
                         </div>
                     </div>
+        
+                    <?= view($configs->view. '\components\blog_sidebar', ['post' => $post, 'configs' => $configs, 'currentLang' => $currentLang ])?>
 
                 </div>
-
             </div>
         </div>
     </div>
+</div>
+<div class="btn-sidebar-mobile">
+    <button data-bs-toggle="offcanvas" data-bs-target="#sidebarmobile" aria-controls="offcanvasRight"><i class="icon-open"></i></button>
+</div>
+<!-- /blog-list -->
+
+
+<!-- sidebarmobile -->
+<div class="offcanvas offcanvas-end canvas-mb" id="sidebarmobile">
+    <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
+    <div class="mb-canvas-content">
+        <div class="sidebar-mobile-append tf-section-sidebar">
+
+        </div>
+    </div>       
+</div>
+<!-- /sidebarmobile -->
 <?= $this->endSection() ?>
-<?php
-echo $this->section('style');
-?>
+
+<?=$this->section('style')?>
 <style>
-    .post img {
-        width: 100%;
-    }
+.blog-detail-main h2 {
+    font-size: 25px !important;
+}
+.blog-detail-main h3 {
+    font-size: 20px !important;
+}
 </style>
-<?= $this->endSection() ?>
+
+<?=$this->endSection()?>

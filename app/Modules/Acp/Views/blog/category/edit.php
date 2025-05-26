@@ -8,7 +8,7 @@ echo $this->section('content') ?>
         <!-- form start -->
         <form id="<?= $module ?>Form" method="post" class="form-horizontal" enctype="multipart/form-data">
             <?= csrf_field() ?>
-            <div class="card card-primary" >
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title"><?php echo lang('Category.edit_title') ?></h3>
                 </div>
@@ -17,10 +17,24 @@ echo $this->section('content') ?>
 
                     <div class="form-group">
                         <label for="categoryTitle"><?= lang('Category.title') ?></label>
-                        <input type="text" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>" id="categoryTitle" name="title" value="<?= $data->title ?>" placeholder="<?= lang('Category.title') ?>">
+                        <input type="text" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>"
+                            id="categoryTitle" name="title" value="<?= $data->title ?>"
+                            placeholder="<?= lang('Category.title') ?>">
+                        <div id="updateSlugOption" style="display: none; margin-top: 10px;" class="form-check">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="onChangeSlug"
+                                    name="onChangeSlug">
+                                <label for="onChangeSlug"
+                                    class="custom-control-label"><?= lang('Category.change_slug') ?></label>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <category-slug full-slug="<?= base_url(route_to('category_list', $data->slug, $data->id)) ?>" slug="<?= $data->slug ?>" label="<?= lang('Category.slug') ?>" category-id="<?= $data->id ?>" token="<?= csrf_hash() ?>" tkname="<?= csrf_token() ?>"></category-slug>
+                        <category-slug full-slug="<?= $data->url ?>" slug="<?= $data->slug ?>"
+                            label="<?= lang('Category.slug') ?>" category-id="<?= $data->id ?>"
+                            token="<?= csrf_hash() ?>" tkname="<?= csrf_token() ?>">
+                        </category-slug>
                     </div>
 
                     <div class="form-group">
@@ -42,25 +56,39 @@ echo $this->section('content') ?>
                         <label><?= lang('Category.cat_status') ?></label>
                         <select class="form-control" name="cat_status">
                             <?php foreach ($config->cmsStatus['status'] as $key => $title) : ?>
-                                <option <?= $data->cat_status == $key ? 'selected' : '' ?> value='<?= $key ?>'><?= $title ?></option>
+                                <option <?= $data->cat_status == $key ? 'selected' : '' ?> value='<?= $key ?>'><?= $title ?>
+                                </option>
                             <?php endforeach;    ?>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label><?= lang('Category.description') ?></label>
-                        <textarea class="form-control" rows="3" name="description" placeholder="Nhập mô tả"><?= $data->description ?></textarea>
+                        <textarea class="form-control" rows="3" name="description"
+                            placeholder="Nhập mô tả"><?= $data->description ?></textarea>
                     </div>
+
+                    <?php if ($cat_type == 'product') : ?>
+                        <div class="form-group">
+                            <input type="hidden" name="attach_meta_id"
+                                value="<?= $data->cat_image['attach_meta_id'] ?? '' ?>">
+                            <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" select-img-type="1"
+                                input-name="cat_image" return-img="id" img-data="<?= $data->cat_image['image_id'] ?? '' ?>">
+                            </config-img>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="">
                         <p class="h5">
                         <div class="d-flex justify-content-between align-items-center">
                             <b><?= lang('Acp.search_engine_optimize'); ?></b>
-                            <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample"
+                                aria-expanded="false" aria-controls="collapseExample">
                                 <?= lang('Acp.edit_seo_meta'); ?>
                             </a>
                         </div>
-                        <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;"></div>
+                        <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;">
+                        </div>
                         <br />
                         <div>
                             <span style="color:#1a0dab;"><?= $data->title ?></span>
@@ -71,21 +99,27 @@ echo $this->section('content') ?>
                         </div>
                         </p>
                     </div>
+
                     <div class="collapse" id="collapseExample">
                         <div class="card-body">
                             <div class="form-group ">
-                                <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="title_word_left">70</span>
-                                <input id="title_word_count" type="text" class="form-control" name="seo_title" value="<?= $data->seo_meta->seo_title ?? '' ?>">
+                                <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span
+                                    id="title_word_left">70</span>
+                                <input id="title_word_count" type="text" class="form-control" name="seo_title"
+                                    value="<?= $data->seo_meta->seo_title ?? '' ?>">
                             </div>
 
                             <div class="form-group ">
                                 <label><?= lang('Post.meta_keyword') ?></label>
-                                <textarea class="form-control" name="seo_keyword"><?= $data->seo_meta->seo_keyword ?? '' ?></textarea>
+                                <textarea class="form-control"
+                                    name="seo_keyword"><?= $data->seo_meta->seo_keyword ?? '' ?></textarea>
                             </div>
 
                             <div class="form-group ">
-                                <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="word_left">300</span>
-                                <textarea id="word_count" class="form-control" name="seo_description"><?= $data->seo_meta->seo_description ?? '' ?></textarea>
+                                <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?>
+                                <span id="word_left">300</span>
+                                <textarea id="word_count" class="form-control"
+                                    name="seo_description"><?= $data->seo_meta->seo_description ?? '' ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -94,8 +128,10 @@ echo $this->section('content') ?>
                 <div class="card-footer">
                     <div class="col-sm-12 col-sm-offset-2">
                         <button class="btn btn-primary mr-1" name="save" type="submit"><?= lang('Acp.save') ?></button>
-                        <button class="btn btn-primary mr-1" name="save_exit" type="submit"><?= lang('Acp.save_exit') ?></button>
-                        <a href="<?= route_to('category', $data->cat_type) ?>" class="btn btn-danger" type="reset"><?= lang('Acp.cancel') ?></a>
+                        <button class="btn btn-primary mr-1" name="save_exit"
+                            type="submit"><?= lang('Acp.save_exit') ?></button>
+                        <a href="<?= route_to('category', $data->cat_type) ?>" class="btn btn-danger"
+                            type="reset"><?= lang('Acp.cancel') ?></a>
                     </div>
                 </div>
             </div>
@@ -107,7 +143,7 @@ echo $this->section('content') ?>
 </div>
 
 <script type="text/x-template" id="vcategory-slug">
-    <div>
+    <div>   
         <div class="form-group ">
             <label>{{ label }}</label>
             <div class="row" v-if="showSlug">
@@ -116,12 +152,12 @@ echo $this->section('content') ?>
                 </div>
                 <div class="col-sm-1" >
                     <a class="btn btn-sm btn-danger" @click.prevent="edit()" href="#"
-                       postID="<?=$data->id?>" categorySlug="<?=$data->slug?>" >Edit</a>
+                       postID="<?= $data->id ?>" categorySlug="<?= $data->slug ?>" >Edit</a>
                 </div>
             </div>
             <div class="row" v-else>
                 <div class="col-lg-10 col-sm-9">
-                    <code style="width:30%"><?=base_url()?></code><input class="form-control d-inline-block" style="width:70%" type="text" v-model="newSlug">
+                    <code style="width:30%"><?= base_url() ?></code><input :class="['form-control', 'd-inline-block', showError ? 'is-invalid' : '']"  style="width:70%" type="text" v-model="newSlug">
                 </div>
                 <div class="col-lg-2 col-sm-3" >
                     <button class="btn btn-sm btn-success mr-1" type="button" @click="saveSlug" >Save</button>
@@ -132,17 +168,55 @@ echo $this->section('content') ?>
     </div>
 </script>
 
+<?php
+echo view($config->view . '\system\attach\_vGallery');
+echo view($config->view . '\system\attach\_vConfigAttach');
+echo view($config->view . '\system\attach\_vImgSelect');
+?>
+
 <?= $this->endSection() ?>
+
 <?php echo $this->section('pageScripts') ?>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/sys/vConfigAttach.js"></script>
 <script>
+    $(document).ready(function() {
+        // Track original title to detect changes
+        const originalTitle = document.getElementById('categoryTitle').value;
+
+        // Show update slug option when title changes
+        $('#categoryTitle').on('keyup', function() {
+            if (this.value.length > 1) {
+                const titleChanged = this.value !== originalTitle;
+                if (titleChanged) {
+                    document.getElementById('updateSlugOption').style.display = titleChanged ? 'block' :
+                        'none';
+                    document.getElementById('onChangeSlug').checked = true;
+                }
+            }
+        });
+    });
+
+
     const categorySlug = {
-        props:['slug', 'fullSlug', 'label', 'categoryId', 'token', 'tkname'],
+        props: ['slug', 'fullSlug', 'label', 'categoryId', 'token', 'tkname'],
         template: "#vcategory-slug",
-        data: function () {
+        data: function() {
             return {
                 showSlug: true,
                 newSlug: '',
                 newUrl: '',
+                showError: false,
+            }
+        },
+        mounted() {
+            // Store reference to this component for access from outside Vue
+            slugComponent = this;
+            console.log('mounted');
+            if (this.fullSlug === '#') {
+                SwalAlert.fire({
+                    icon: 'error',
+                    title: '<?= lang('Category.slug_is_invalid_text') ?>',
+                });
             }
         },
         methods: {
@@ -151,14 +225,26 @@ echo $this->section('content') ?>
                 this.newSlug = this.slug;
             },
             saveSlug() {
-                if ( this.newSlug == '' ) {
+                if (this.newSlug == '') {
                     SwalAlert.fire({
                         icon: 'error',
-                        title: 'Vui lòng nhập vào url',
+                        title: '<?= lang('Category.slug_required') ?>',
                     });
                     return false;
                 } else {
-                    var url = base_url+"/acp/category/ajxEditSlug/"+this.categoryId;
+                    // Check if the slug is valid
+                    var regex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+                    if (!regex.test(this.newSlug)) {
+                        this.showError = true;
+                        SwalAlert.fire({
+                            icon: 'error',
+                            title: '<?= lang('Category.slug_invalid') ?>',
+                        });
+                        return false;
+                    }
+
+                    this.showError = false;
+                    var url = base_url + "/acp/category/ajxEditSlug/" + this.categoryId;
                     data = new FormData();
                     data.append("category_slug", this.newSlug);
                     data.append(this.tkname, this.token);
@@ -170,8 +256,8 @@ echo $this->section('content') ?>
                         contentType: false,
                         processData: false,
                         type: "POST",
-                        success: function (response) {
-                            if ( response.error == 0 ) {
+                        success: function(response) {
+                            if (response.error == 0) {
                                 this.showSlug = true;
                                 this.newUrl = response.postData.fullSlug;
                                 this.newSlug = response.postData.slug;
@@ -189,8 +275,8 @@ echo $this->section('content') ?>
                             }
 
                         }.bind(this),
-                        error: function (jqXHR, textStatus, errorThrow) {
-                            console.log(textStatus+' '+errorThrow);
+                        error: function(jqXHR, textStatus, errorThrow) {
+                            console.log(textStatus + ' ' + errorThrow);
                         }
                     })
                 }
@@ -200,14 +286,22 @@ echo $this->section('content') ?>
                 this.showSlug = true;
             },
             renderPostUrl() {
-                if ( this.newSlug == '' ) return this.fullSlug;
+                if (this.newSlug == '') return this.fullSlug;
                 else return this.newUrl;
             }
         }
     };
     const app = Vue.createApp({});
+    app.component('config-img', vConfigAttach);
+    app.component('vgallery', gallery);
+    app.component('vimg-reivew', imgGalleryReview);
+    app.component('vgallery-img', galleryImg);
+    app.component('vimg-infor', imgInfor);
+    app.component('vfileReivew', fileReview);
+    app.component('vimg-select', vFileSelector);
+    app.component('vfile-preivew', filePreview);
+
     app.component('category-slug', categorySlug);
     app.mount('#categoryApp');
-
 </script>
 <?= $this->endSection() ?>

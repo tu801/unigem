@@ -15,7 +15,7 @@ trait itemDelete {
 
         if ( isset($item->id) ) {
             if ( isset($item->user_id) ) {
-                if (  $this->user->id == $item->user_id || $this->user->can($this->currentAct) ) {
+                if (  $this->user->id == $item->user_id || $this->user->inGroup('superadmin', 'admin') ) {
                     if ($this->_model->delete($item->id)) return redirect()->back()->with('message', lang('Acp.delete_success', [$item->id]));
                     else return redirect()->back()->with('error', lang('Acp.delete_fail'));
                 } else {

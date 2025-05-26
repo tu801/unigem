@@ -1,8 +1,6 @@
 #-------------------------
 # Operating Specific Junk Files
 #-------------------------
-# Window symbolic link
-public/uploads
 
 # OS X
 .DS_Store
@@ -59,11 +57,15 @@ writable/logs/*
 writable/session/*
 !writable/session/index.html
 
+public/uploads
 writable/uploads/*
 !writable/uploads/index.html
 
 writable/debugbar/*
-!writable/debugbar/.gitkeep
+!writable/debugbar/index.html
+
+writable/**/*.db
+writable/**/*.sqlite
 
 php_errors.log
 
@@ -71,9 +73,6 @@ php_errors.log
 # User Guide Temp Files
 #-------------------------
 user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
 
 #-------------------------
 # Test Files
@@ -87,6 +86,7 @@ phpunit
 # Composer
 #-------------------------
 vendor/
+composer.lock
 
 #-------------------------
 # IDE / Development Files
@@ -126,5 +126,5 @@ nb-configuration.xml
 
 /results/
 /phpunit*.xml
-/.phpunit.*.cache
 
+/.php-cs-fixer.php

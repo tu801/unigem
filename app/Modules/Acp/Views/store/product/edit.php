@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
@@ -13,85 +13,94 @@ echo $this->section('content');
                 <div class="card-body pad">
 
                     <div class="form-group">
-                        <label for="inputProductName"><?= lang('Product.pd_name') ?> <span class="text-danger">*</span></label>
-                        <input type="text" name="pd_name" class="form-control <?= session('errors.pd_name') ? 'is-invalid' : '' ?>" id="inputProductName" placeholder="<?= lang('Product.pd_name') ?>" value="<?= $itemData->pd_name  ?>">
+                        <label for="inputProductName"><?= lang('Product.pd_name') ?> <span
+                                class="text-danger">*</span></label>
+                        <input type="text" name="pd_name"
+                            class="form-control <?= session('errors.pd_name') ? 'is-invalid' : '' ?>"
+                            id="inputProductName" placeholder="<?= lang('Product.pd_name') ?>"
+                            value="<?= $itemData->pd_name  ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="inputProductName"><?= lang('Product.pd_sku') ?> <span class="text-danger">*</span></label>
-                        <input type="text" name="pd_sku" class="form-control <?= session('errors.pd_sku') ? 'is-invalid' : '' ?>" id="inputProductName" placeholder="<?= lang('Product.pd_sku') ?>" value="<?= $itemData->pd_sku  ?>">
+                        <label for="inputProductName"><?= lang('Product.pd_sku') ?> <span
+                                class="text-danger">*</span></label>
+                        <input type="text" name="pd_sku"
+                            class="form-control <?= session('errors.pd_sku') ? 'is-invalid' : '' ?>"
+                            id="inputProductName" placeholder="<?= lang('Product.pd_sku') ?>"
+                            value="<?= $itemData->pd_sku  ?>">
                     </div>
 
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="inputOriginPrice"><?= lang('Product.pd_origin_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="origin_price" class="form-control <?= session('errors.origin_price') ? 'is-invalid' : '' ?>" id="inputOriginPrice" placeholder="<?= lang('Product.pd_origin_price') ?>" value="<?= $itemData->origin_price ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputPrice"><?= lang('Product.pd_price') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="price" class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>" id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>" value="<?= $itemData->price  ?>">
+                                <label for="inputPrice"><?= lang('Product.pd_price') ?> <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="number" name="price" step="any"
+                                        class="form-control <?= session('errors.price') ? 'is-invalid' : '' ?>"
+                                        id="inputPrice" placeholder="<?= lang('Product.pd_price') ?>"
+                                        value="<?= ($currentLang->locale == 'en') ? $itemData->price : floor((float)$itemData->price) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?= $currentLang->currency_symbol ?></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="inputPriceDiscount"><?= lang('Product.pd_price_discount') ?>
                                     <span class="text-danger">*</span> &nbsp;
-                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Product.pd_price_discount_tooltip')?>"></i>
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                                        title="<?= lang('Product.pd_price_discount_tooltip') ?>"></i>
                                 </label>
-                                <input type="number" name="price_discount" class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>" id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>" value="<?= $itemData->price_discount ?>">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputMinimum"><?= lang('Product.minimum') ?> <span class="text-danger">*</span></label>
-                                <input type="number" name="minimum" class="form-control <?= session('errors.minimum') ? 'is-invalid' : '' ?>" id="inputMinimum" placeholder="<?= lang('Product.minimum') ?>" value="<?= $itemData->minimum ?>">
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputWeight"><?= lang('Product.weight') ?> <span class="text-danger">*</span></label>
-                                <div class="input-group" >
-                                    <input type="number" name="weight" step="any" class="form-control <?= session('errors.weight') ? 'is-invalid' : '' ?>" id="inputWeight" placeholder="<?= lang('Product.weight') ?>" value="<?= $itemData->product_meta['weight'] ?? 0  ?>">
-                                    <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                        <div class="input-group-text">kg &nbsp;<i class="fas fa-weight"></i></div>
+                                <div class="input-group">
+                                    <input type="number" name="price_discount" step="any"
+                                        class="form-control <?= session('errors.price_discount') ? 'is-invalid' : '' ?>"
+                                        id="inputPriceDiscount" placeholder="<?= lang('Product.pd_price_discount') ?>"
+                                        value="<?= ($currentLang->locale == 'en') ? $itemData->price_discount : floor((float)$itemData->price_discount) ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><?= $currentLang->currency_symbol ?></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inputProductManufacture"><?= lang('Product.pd_manufacture') ?> <span class="text-danger">*</span></label>
-                                <select class="custom-select form-control" name="manufacture_id">
-                                    <?php foreach ($product_manufacturer as $item): ?>
-                                        <option value="<?= $item->manufacturer_id ?>" <?= $item->manufacturer_id == $itemData->manufacturer_id ? 'selected' : ''  ?> ><?= $item->manufacture_name ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
                     </div>
-                    <config-img  img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2" input-name="images_product" return-img="id" img-data="<?php
-                        if (isset($itemData->images->images)) {
-                            $listImage = [];
-                            foreach ($itemData->images->images as $item) {
-                                $listImage[] = $item->id;
-                            }
-                            echo implode(';', $listImage);
-                        }
-                    ?>"></config-img>
+                    <config-img img-desc="<?= lang('Product.pd_image_other') ?>" select-img-type="2"
+                        input-name="images_product" return-img="id"
+                        img-attach-meta-id="<?= $itemData->images->meta->id ?? 0 ?>" img-data="<?php
+                                                                                                if (isset($itemData->images->data)) {
+                                                                                                    $listImage = [];
+                                                                                                    foreach ($itemData->images->data as $item) {
+                                                                                                        $listImage[] = $item->id;
+                                                                                                    }
+                                                                                                    echo implode(';', $listImage);
+                                                                                                }
+                                                                                                ?>"></config-img>
 
                     <div class="form-group">
                         <label><?= lang('Product.description') ?> </label>
-                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>" id="description-editor" name="description"><?= $itemData->product_meta['description'] ?? '' ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.description') ? 'is-invalid' : '' ?>"
+                            id="description-editor"
+                            name="pd_description"><?= $itemData->pd_description ?? '' ?></textarea>
                     </div>
 
                     <div class="form-group">
                         <label><?= lang('Product.product_info') ?> </label>
-                        <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>" id="tmteditor" name="product_info"><?= $itemData->product_meta['product_info'] ?? '' ?></textarea>
+                        <textarea rows="5" class="textarea <?= session('errors.product_info') ? 'is-invalid' : '' ?>"
+                            id="tmteditor" name="product_info"><?= $itemData->product_info ?? '' ?></textarea>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="col-sm-12">
+                            <div class="row mb-2">
+                                <button @click.prevent="showContentGallery" class="btn btn-primary"
+                                    id="showContentGallery">Gallery</button>
+                            </div>
+                            <content-gallery v-if="showContentGalleryModal" @close="showContentGalleryModal = false"
+                                :selecteditem="selectedImg" @show-file="setAttachFiles" @remove-file="deleteUploadFile"
+                                @close-modal="hideContentGallery" att-type="tmteditor"></content-gallery>
+                        </div>
                     </div>
 
                 </div>
@@ -101,11 +110,13 @@ echo $this->section('content');
                     <p class="h5">
                     <div class="d-flex justify-content-between align-items-center">
                         <b><?= lang('Acp.search_engine_optimize'); ?></b>
-                        <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">
                             <?= lang('Acp.edit_seo_meta'); ?>
                         </a>
                     </div>
-                    <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;"></div>
+                    <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;">
+                    </div>
                     <br />
                     <div>
                         <span style="color:#1a0dab;"><?= $itemData->pd_name ?></span>
@@ -119,17 +130,22 @@ echo $this->section('content');
                 <div class="collapse" id="collapseExample">
                     <div class="card-body">
                         <div class="form-group ">
-                            <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="title_word_left">70</span>
-                            <input id="title_word_count" class="form-control" name="seo_title" value="<?=$itemData->product_meta['seo_title'] ?? '' ?>" />
+                            <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span
+                                id="title_word_left">70</span>
+                            <input id="title_word_count" class="form-control" name="seo_title"
+                                value="<?= $itemData->product_meta['seo_title'] ?? '' ?>" />
                         </div>
                         <div class="form-group ">
                             <label><?= lang('Post.meta_keyword') ?></label>
-                            <textarea class="form-control" name="seo_keyword"><?= $itemData->product_meta['seo_keyword'] ?? '' ?></textarea>
+                            <textarea class="form-control"
+                                name="seo_keyword"><?= $itemData->product_meta['seo_keyword'] ?? '' ?></textarea>
                         </div>
 
                         <div class="form-group ">
-                            <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="word_left">300</span>
-                            <textarea id="word_count" class="form-control" name="seo_description"><?= $itemData->product_meta['seo_description'] ?? '' ?></textarea>
+                            <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?>
+                            <span id="word_left">300</span>
+                            <textarea id="word_count" class="form-control"
+                                name="seo_description"><?= $itemData->product_meta['seo_description'] ?? '' ?></textarea>
                         </div>
 
                     </div>
@@ -138,9 +154,12 @@ echo $this->section('content');
                 <div class="card-body">
                     <input type="hidden" name="mod_id" id="inpModId" value="<?= $itemData->id ?>">
                     <input type="hidden" name="mod_name" id="inpModName" value="product">
-                    <button class="btn btn-primary mr-2" id="postSave" name="save" type="submit"><?= lang('Acp.save') ?> (F2)</button>
-                    <button class="btn btn-primary mr-2" id="postSaveExit" name="save_exit" type="submit"><?= lang('Acp.save_exit') ?> (F7)</button>
-                    <button class="btn btn-primary" name="save_addnew" type="submit"><?= lang('Acp.save_addnew') ?></button>
+                    <button class="btn btn-primary mr-2" id="postSave" name="save" type="submit"><?= lang('Acp.save') ?>
+                        (F2)</button>
+                    <button class="btn btn-primary mr-2" id="postSaveExit" name="save_exit"
+                        type="submit"><?= lang('Acp.save_exit') ?> (F7)</button>
+                    <button class="btn btn-primary" name="save_addnew"
+                        type="submit"><?= lang('Acp.save_addnew') ?></button>
                     <a href="<?= route_to('post') ?>" class="btn btn-default" type="reset"><?= lang('Acp.cancel') ?></a>
                 </div>
             </div>
@@ -149,29 +168,77 @@ echo $this->section('content');
         <div class="col-md-3">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <feature-img img-desc="<?= lang('Product.avatar_size') ?>" demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>" img-title="<?= lang('Product.image') ?>"></feature-img>
-
-
-                    <div class="form-group">
-                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span class="text-danger">*</span></label>
-                        <select class="custom-select form-control" name="cat_id">
-                            <?php foreach ($product_category as $item): ?>
-                                <option value="<?= $item->cat_id ?>" <?= $item->cat_id == $itemData->cat_id ? 'selected' : ''  ?> ><?= $item->title ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="form-group ">
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info ">
+                                <?= $currentLang->name  ?></span> </label>
                     </div>
+
                     <div class="form-group">
-                        <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span class="text-danger">*</span></label>
+                        <label for="inputProductStatus"><?= lang('Product.pd_status') ?> <span
+                                class="text-danger">*</span></label>
                         <select class="custom-select form-control" name="pd_status">
                             <?php foreach (ProductStatusEnum::toArray() as $item): ?>
-                                <option value="<?= $item ?>" <?= $itemData->pd_status == $item ? 'selected' : ''  ?> ><?= lang("Product.status_{$item}") ?></option>
+                            <option value="<?= $item ?>" <?= $itemData->pd_status == $item ? 'selected' : ''  ?>>
+                                <?= lang("Product.status_{$item}") ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="inputProductCategory"><?= lang('Product.pd_category') ?> <span
+                                class="text-danger">*</span></label>
+                        <select class="custom-select form-control" name="cat_id">
+                            <?php foreach ($product_category as $item): ?>
+                            <option value="<?= $item->cat_id ?>"
+                                <?= $item->cat_id == $itemData->cat_id ? 'selected' : ''  ?>><?= $item->title ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.weight') ?> <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="number" name="pd_weight" step="any" class="form-control" id="inputWeight"
+                                placeholder="<?= lang('Product.weight') ?>"
+                                value="<?= $itemData->pd_weight ?? old('pd_weight')  ?>">
+                            <div class="input-group-append">
+                                <div class="input-group-text"><?= lang('Common.product_weight_unit') ?> &nbsp;<i
+                                        class="fas fa-weight"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.size') ?></label>
+                        <div class="input-group">
+                            <input type="text" name="pd_size" class="form-control" id="inputSize"
+                                placeholder="<?= lang('Product.size') ?>" value="<?= $itemData->pd_size ?? 1 ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWeight"><?= lang('Product.cut_angle') ?></label>
+                        <div class="input-group">
+                            <input type="text" name="pd_cut_angle" class="form-control" id="inputCutAngle"
+                                placeholder="<?= lang('Product.cut_angle') ?>"
+                                value="<?= $itemData->pd_cut_angle ?? 1 ?>">
+                        </div>
+                    </div>
+
                     <div class="form-group ">
                         <label><?= lang('Product.pd_tags') ?></label>
                         <vposttags :limitlength="2"></vposttags>
                     </div>
+                </div>
+            </div>
+
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <feature-img img-desc="<?= lang('Product.avatar_size') ?>"
+                        demo="<?= (!empty($itemData->feature_image)) ? $itemData->feature_image['thumbnail'] : '' ?>"
+                        img-title="<?= lang('Product.image') ?>"></feature-img>
                 </div>
             </div>
 
@@ -180,25 +247,53 @@ echo $this->section('content');
     </div>
 </form>
 <?php
-echo view($config->view.'\components\_vFeatureImg');
-echo view($config->view.'\system\attach\_vGallery');
-echo view($config->view.'\system\attach\_vConfigAttach');
-echo view($config->view.'\blog\post\_vPostTags');
+echo view($config->view . '\components\_vFeatureImg');
+echo view($config->view . '\system\attach\_vGallery');
+echo view($config->view . '\system\attach\_vConfigAttach');
+echo view($config->view . '\blog\post\_vPostTags');
+//vuejs content gallery
+echo view($config->view . '\system\attach\_contentGallery');
 ?>
 <?= $this->endSection() ?>
 <?= $this->section('pageScripts') ?>
-<script src="<?= base_url($config->scriptsPath)?>/acp/sys/vConfigAttach.js"></script>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/sys/vConfigAttach.js"></script>
 <script type="text/javascript">
-    const themeApp = Vue.createApp({});
-    themeApp.component('config-img', vConfigAttach);
-    themeApp.component('feature-img', featureImg);
-    themeApp.component('vgallery', gallery);
-    themeApp.component('vimg-reivew', imgGalleryReview);
-    themeApp.component('vgallery-img', galleryImg);
-    themeApp.component('vimg-infor', imgInfor);
-    themeApp.component('vfileReivew', fileReview);
-    themeApp.component('vposttags', posttags);
-    themeApp.mount('#productApp');
+const themeApp = Vue.createApp({
+    data() {
+        return {
+            showContentGalleryModal: false,
+            selectedImg: [],
+        }
+    },
+    methods: {
+        showContentGallery() {
+            this.showContentGalleryModal = true;
+            this.$nextTick(function() {
+                $("#vContentGalleryModal").modal("show");
+            });
+        },
+        hideContentGallery() {
+            this.showContentGalleryModal = false;
+            $("#vContentGalleryModal").modal("hide");
+        },
+        setAttachFiles() {
+            console.log('setAttachFiles');
+        },
+        deleteUploadFile() {
+            console.log('deleteUploadFile');
+        }
+    }
+});
+themeApp.component('config-img', vConfigAttach);
+themeApp.component('feature-img', featureImg);
+themeApp.component('vgallery', gallery);
+themeApp.component('vimg-reivew', imgGalleryReview);
+themeApp.component('vgallery-img', galleryImg);
+themeApp.component('vimg-infor', imgInfor);
+themeApp.component('vfileReivew', fileReview);
+themeApp.component('vposttags', posttags);
+themeApp.component('content-gallery', contentGallery);
+themeApp.mount('#productApp');
 </script>
 <script src="<?= base_url("{$config->scriptsPath}/tinymce/tinymce.min.js") ?>"></script>
 <script src="<?= base_url("{$config->scriptsPath}/tinymce/jquery.tinymce.min.js") ?>"></script>

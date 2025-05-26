@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -9,31 +10,23 @@ namespace App\Controllers\Product;
 
 
 use App\Controllers\BaseController;
+use App\Enums\CategoryEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Libraries\SeoMeta\SeoMetaCell;
 use App\Libraries\SeoMeta\SeoMetaEnum;
-use Modules\Acp\Enums\CategoryEnum;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Store\Product\ProductManufacturer;
-use Modules\Acp\Models\Store\Product\ProductMetaModel;
-use Modules\Acp\Models\Store\Product\ProductModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\Store\Product\ProductModel;
 
 class Category extends BaseController
 {
-
-    private $_productMetaModel;
     private $_categoryModel;
-    private $_productManufacturerModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->_model                    = model(ProductModel::class);
-        $this->_productManufacturerModel = model(ProductManufacturer::class);
         $this->_categoryModel            = model(CategoryModel::class);
-        $this->_productMetaModel         = model(ProductMetaModel::class);
-
     }
 
     public function list($slug)
@@ -44,31 +37,45 @@ class Category extends BaseController
             ->where('category_content.slug', $slug)
             ->where('category.cat_status', 'publish')->first();
 
-        if(isset($category->id)) {
+        if (isset($category->id)) {
             if (isset($getData['category'])) {
                 $this->_model->where('cat_id', $category->id);
                 $this->_data['select_cat'] = $getData['category'];
-            }else {
+            } else {
                 $this->_data['select_cat'] = $category->id;
             }
 
-            if (isset($getData['manufacturer'])) {
-                $this->_model->where('manufacture_id', $getData['manufacturer']);
-                $this->_data['select_manufacturer'] = $getData['manufacturer'];
+            $catIn = [];
+            if ( $category->parent_id == 0) {
+                $catIn[] = $category->id;
+                $childs = $this->_categoryModel->where('parent_id', $category->id)->findAll();
+                if (count($childs) > 0) {
+                    foreach ($childs as $child) {
+                        $catIn[] = $child->id;
+                    }
+                }
+            } else {
+                $catIn[] = $category->id;
             }
 
-            $this->_model->select('product.*')->orderBy('product.id DESC');
+            $this->_model->select('product.*')
+                ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_description, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount ')
+                ->join('product_content AS pdc', 'pdc.product_id = product.id')
+                ->where('pdc.lang_id', $this->currentLang->id)
+                ->where('product.pd_status', ProductStatusEnum::PUBLISH)
+                ->whereIn('product.cat_id', $catIn)
+                ->orderBy('product.id DESC');
 
-            $productCategory                     = $this->_categoryModel->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $this->_data['curLang']->id);
-            $this->_data['product_category']     = $productCategory;
-            $this->_data['product_manufacturer'] = $this->_productManufacturerModel->findAll();
             $this->_data['data']                 = $this->_model->paginate();
             $this->_data['pager']                = $this->_model->pager;
+
+
+            $this->_data['product_category']     = $this->_categoryModel->getCategories(CategoryEnum::CAT_TYPE_PRODUCT, $this->currentLang->id);
 
             //SEOData config
             SeoMetaCell::setCanonical(current_url());
             SeoMetaCell::setOgType(SeoMetaEnum::OG_TYPE_PROD);
-            $meta_desc = $category->seo_meta->seo_description ? $category->seo_meta->seo_description : ( $category->description ? $category->description : get_theme_config('general_seo_description'));
+            $meta_desc = $category->seo_meta->seo_description ? $category->seo_meta->seo_description : ($category->description ? $category->description : get_theme_config('general_seo_description'));
             SeoMetaCell::add('meta_desc', $meta_desc);
             SeoMetaCell::add('meta_keywords', $category->seo_meta->seo_keyword ?? get_theme_config('general_seo_keyword'));
             SeoMetaCell::add('og_title', $category->seo_meta->seo_title ?? $category->title);
@@ -82,8 +89,9 @@ class Category extends BaseController
             BreadCrumbCell::add('Home', base_url());
             BreadCrumbCell::add($category->title, route_to('product_category', $category->slug));
 
-            return $this->_render('product/category', $this->_data);
-        }else{
+            $this->page_title = $category->title;
+            return $this->_render('product/shop-left-sidebar', $this->_data);
+        } else {
             return $this->_render('errors/404', $this->_data);
         }
     }

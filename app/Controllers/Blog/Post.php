@@ -2,19 +2,19 @@
 /**
  * @author tmtuan
  * created Date: 10/20/2023
- * Project: Unigem
+ * project: tuanthoamedia
  */
 
 namespace App\Controllers\Blog;
 
 
 use App\Controllers\BaseController;
+use App\Enums\Post\PostTypeEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Libraries\SeoMeta\SeoMetaCell;
 use App\Libraries\SeoMeta\SeoMetaEnum;
-use Modules\Acp\Enums\PostTypeEnum;
+use App\Models\Blog\TagsModel;
 use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\Blog\TagsModel;
 
 class Post extends BaseController
 {
@@ -28,7 +28,7 @@ class Post extends BaseController
     public function detail($slug)
     {
         $this->_model->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_status', 'publish')
             ->where('slug', $slug);
 
@@ -61,7 +61,7 @@ class Post extends BaseController
     public function pageDetail($slug)
     {
         $this->_model->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_status', 'publish')
             ->where('slug', $slug);
 
@@ -115,7 +115,7 @@ class Post extends BaseController
             SeoMetaCell::add('og_image', base_url($og_img_data->full_image));
 
             $postTags = $this->_model->join('post_content', 'post_content.post_id = post.id')
-                ->where('post_content.lang_id', $this->_data['curLang']->id)
+                ->where('post_content.lang_id', $this->currentLang->id)
                 ->where('post_status', 'publish')
                 ->where('post_type', PostTypeEnum::POST)
                 ->like('post_content.tags', "%{$item->slug}%")
@@ -123,6 +123,7 @@ class Post extends BaseController
 
             $this->_data['postTags'] = $postTags;
             $this->_data['pager'] = $this->_model->pager;
+            $this->page_title = $item->title;
             return $this->_render('blog/post/tag', $this->_data);
         } else {
             return $this->_render('errors/404', $this->_data);

@@ -1,6 +1,6 @@
 <?php
 
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
@@ -11,17 +11,15 @@ echo $this->section('content');
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
+                            <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=all") ?>"><?= lang('Product.list_all_product') ?></a> |
                             <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=user") ?>"><?= lang('Product.list_user_product') ?></a> |
-                            <?php if (in_array($login_user->gid, [1, 2])) : ?>
-                                <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=all") ?>"><?= lang('Product.list_all_product') ?></a> |
-                            <?php endif; ?>
                             <a class="<?= ($listtype == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/product?listtype=deleted") ?>"><?= lang('Product.list_delete_product') ?></a>
                         </div>
 
-                        <div class="card-tools">
+                        <div class="card-tools mt-2">
                             <div class="input-group input-group-sm">
                                 <input name="listtype" id="listtype" value="<?= $listtype ?? 'user'; ?>" class="form-control" type="hidden" />
-                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm Sản phẩm">
+                                <input type="text" value="<?= (isset($search_title)) ? $search_title : '' ?>" name="pd_name" class="form-control" placeholder="Tìm tên sản phẩm">
                                 <div class="input-group-append">
                                     <button name="search" class="btn btn-primary">
                                         <i class="fas fa-search"></i>
@@ -32,19 +30,19 @@ echo $this->section('content');
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="mailbox-controls mb-2 ml-0 pl-0 mr-0 pr-0">
-
-                            <div class="btn-group">
-                                <a href="<?= route_to('add_product') ?>" class="btn btn-normal btn-primary btn-sm" title="<?= lang('Product.title_add') ?>">
-                                    <i class="fa fa-plus text"></i> <?= lang('Product.title_add') ?>
-                                </a>
-                                <button type="submit" name="mdelete" class="btn btn-danger btn-sm ml-2"><i class="far fa-trash-alt"></i></button>
+                        <div class="row">
+                            <div class="col-md-8 mb-2">
+                                <div class="btn-group">
+                                    <a href="<?= route_to('add_product') ?>" class="btn btn-normal btn-primary btn-sm" title="<?= lang('Product.title_add') ?>">
+                                        <i class="fa fa-plus text"></i> <?= lang('Product.title_add') ?>
+                                    </a>
+                                    <button type="submit" name="mdelete" class="btn btn-danger btn-sm ml-2"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                                <!-- /.btn-group -->
                             </div>
-                            <!-- /.btn-group -->
-
-                            <div class="float-right col-4 mr-0 pr-0">
+                            <div class="col-md-4 mr-0 pr-0">
                                 <div class="row">
-                                    <div class="col-sm-5">
+                                    <div class="col-md-5">
                                         <div id="chkCategory" class="form-group">
                                             <select class="custom-select form-control" name="category">
                                                 <option value=""><?= lang('Product.pd_category') ?></option>
@@ -57,7 +55,7 @@ echo $this->section('content');
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-7">
+                                    <div class="col-md-7">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <select class="custom-select form-control" name="pd_status">
@@ -82,80 +80,85 @@ echo $this->section('content');
                             <!-- /.float-right -->
                         </div>
 
-                        <table id="<?php echo $controller . "_" . $method ?>_DataTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-                            <thead>
-                            <tr>
-                                <th width="2%">
-                                    <div class="icheck-primary">
-                                        <input type="checkbox" value="" id="post_check">
-                                        <label for="post_check"></label>
-                                    </div>
-                                </th>
-                                <th width="35%"><?= lang('Product.pd_name') ?></th>
-                                <th><?= lang('Product.image') ?></th>
-                                <th><?= lang('Product.pd_sku') ?></th>
-                                <th><?= lang('Product.pd_category') ?></th>
-                                <th><?= lang('Product.pd_status') ?></th>
-                                <th><?= lang('Actions') ?></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            if (isset($data) && count($data) > 0) :
-                                foreach ($data as $row) {
-                                    $img = (isset($row->feature_image['thumbnail']) && $row->feature_image['thumbnail'] !== null) ? $row->feature_image['thumbnail'] : base_url($config->noimg);
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <div class="icheck-primary">
-                                                <input type="checkbox" value="<?= $row->id ?>" name="sel[]" id="post_<?= $row->id ?>">
-                                                <label for="post_<?= $row->id ?>"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a href="<?= route_to("edit_product", $row->id) ?>"><?= $row->pd_name ?></a>
-                                        </td>
-                                        <td>
-                                            <img src="<?= $img ?>" class="img-responsive img-thumbnail" style="max-width:150px">
-                                        </td>
-                                        <td>
-                                            <?= $row->pd_sku ?? "" ?>
-                                        </td>
-                                        <td> <?= $row->category->title ?? '' ?></td>
-                                        <td class="todo-list">
-                                            <?php
-                                            switch ($row->pd_status) {
-                                                case ProductStatusEnum::PUBLISH:
-                                                    echo '<span class="badge badge-info">' . lang('Product.status_'.$row->pd_status) . '</span>';
-                                                    break;
-                                                case ProductStatusEnum::PENDING :
-                                                    echo '<span class="badge badge-warning">' . lang('Product.status_'.$row->pd_status) . '</span>';
-                                                    break;
-                                                case ProductStatusEnum::DRAFT :
-                                                    echo '<span class="badge badge-primary">' . lang('Product.status_'.$row->pd_status). '</span>';
-                                                    break;
-                                            }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm mb-2" href="<?= route_to("edit_product", $row->id) ?>"><i class="fas fa-edit"></i></a>
-                                            <?php if ($listtype !== 'deleted') : ?>
-                                                <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-id="<?=$row->id?>"
-                                                   data-delete="<?= route_to("remove_product") ?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
-                                            <?php else : ?>
-                                                <a class="btn btn-primary btn-sm mb-2" title="Recover Item" href="<?= route_to("recover_product", $row->id) ?>"><i class="fas fa-reply"></i></a>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php }
-                            else : ?>
+                        <div class="row table-responsive">
+                            <table id="<?php echo $controller . "_" . $method ?>_DataTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+                                <thead>
                                 <tr>
-                                    <td colspan="8"><?= lang('Acp.no_item_found') ?></td>
+                                    <th width="2%">
+                                        <div class="icheck-primary">
+                                            <input type="checkbox" value="" id="post_check">
+                                            <label for="post_check"></label>
+                                        </div>
+                                    </th>
+                                    <th width="35%"><?= lang('Product.pd_name') ?></th>
+                                    <th><?= lang('Product.image') ?></th>
+                                    <th><?= lang('Product.pd_sku') ?></th>
+                                    <th><?= lang('Product.pd_category') ?></th>
+                                    <th><?= lang('Product.pd_status') ?></th>
+                                    <th><?= lang('Actions') ?></th>
                                 </tr>
-                            <?php endif; ?>
-                            </tbody>
-                        </table>
-
+                                </thead>
+                                <tbody>
+                                <?php
+                                if (isset($data) && count($data) > 0) :
+                                    foreach ($data as $row) {
+                                        $img = (isset($row->feature_image['thumbnail']) && $row->feature_image['thumbnail'] !== null) ? $row->feature_image['thumbnail'] : base_url($config->noimg);
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <div class="icheck-primary">
+                                                    <input type="checkbox" value="<?= $row->id ?>" name="sel[]" id="post_<?= $row->id ?>">
+                                                    <label for="post_<?= $row->id ?>"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="<?= route_to("edit_product", $row->id) ?>"><?= $row->pd_name ?></a>
+                                                <?php
+                                                $price = ($row->price_discount > 0 && $row->price_discount < $row->price) ? $row->price_discount : $row->price;
+                                                ?>
+                                                <p><i class="fas fa-cart-plus fa-lg mr-2"></i>&nbsp;<?=lang('Product.pd_price')?>: <?=format_currency($price)?></p>
+                                            </td>
+                                            <td>
+                                                <img src="<?= $img ?>" class="img-responsive img-thumbnail" style="max-width:150px">
+                                            </td>
+                                            <td>
+                                                <?= $row->pd_sku ?? "" ?>
+                                            </td>
+                                            <td> <?= $row->category->title ?? '' ?></td>
+                                            <td class="todo-list">
+                                                <?php
+                                                switch ($row->pd_status) {
+                                                    case ProductStatusEnum::PUBLISH:
+                                                        echo '<span class="badge badge-success">' . lang('Product.status_'.$row->pd_status) . '</span>';
+                                                        break;
+                                                    case ProductStatusEnum::PENDING :
+                                                        echo '<span class="badge badge-warning">' . lang('Product.status_'.$row->pd_status) . '</span>';
+                                                        break;
+                                                    case ProductStatusEnum::DRAFT :
+                                                        echo '<span class="badge badge-secondary">' . lang('Product.status_'.$row->pd_status). '</span>';
+                                                        break;
+                                                }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary btn-sm mb-2" href="<?= route_to("edit_product", $row->id) ?>"><i class="fas fa-edit"></i></a>
+                                                <?php if ($listtype !== 'deleted') : ?>
+                                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-id="<?=$row->id?>"
+                                                    data-delete="<?= route_to("remove_product") ?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
+                                                <?php else : ?>
+                                                    <a class="btn btn-primary btn-sm mb-2" title="Recover Item" href="<?= route_to("recover_product", $row->id) ?>"><i class="fas fa-reply"></i></a>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php }
+                                else : ?>
+                                    <tr>
+                                        <td colspan="8"><?= lang('Acp.no_item_found') ?></td>
+                                    </tr>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div class="card-footer">
@@ -178,6 +181,9 @@ echo $this->section('content');
             dataType: "json",
             success: function (response) {
                 if( response.error === 1 ) {
+                    // Store value in localStorage when category is empty
+                    localStorage.setItem('product_category_is_empty', '1');
+                    
                     Swal.fire({
                         icon: 'error',
                         text: response.message,

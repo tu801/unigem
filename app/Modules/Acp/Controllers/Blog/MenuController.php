@@ -6,22 +6,21 @@
 
 namespace Modules\Acp\Controllers\Blog;
 
-use Modules\Acp\Entities\MenuItem;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\MenuItemsModel;
-use Modules\Acp\Models\Blog\MenuModel;
+use App\Entities\MenuItem;
+use App\Enums\CacheKeys;
+use App\Enums\Post\PostTypeEnum;
+use App\Models\Blog\MenuItemsModel;
+use App\Models\Blog\MenuModel;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Blog\PostModel;
-use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\LangModel;
+use App\Models\Blog\CategoryModel;
+use App\Models\Blog\PostModel;
+use App\Models\ConfigModel;
+use Libraries\Collection\Collection;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class MenuController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
 
     protected $_menuItemsModel;
     protected $_categoryModel;
@@ -40,7 +39,7 @@ class MenuController extends AcpController
     {
         $this->_data['title'] = lang("Menu.menu_title");
         $this->_data['data'] = $this->_model
-                            ->where('lang_id', $this->_data['curLang']->id)
+                            ->where('lang_id', $this->currentLang->id)
                             ->findAll();
         $this->_render('\blog\menu\index', $this->_data);
     }
@@ -55,7 +54,7 @@ class MenuController extends AcpController
         $catList = [];
         if (isset($this->config->catGroup)) {
             foreach ($this->config->catGroup as $key => $val) {
-                $catData = $this->_categoryModel->getCategories($key, $this->_data['curLang']->id);
+                $catData = $this->_categoryModel->getCategories($key, $this->currentLang->id);
 
                 $catList[$key] = [
                     'title' => $val,
@@ -70,6 +69,9 @@ class MenuController extends AcpController
                     ->findAll()
             ];
         }
+
+        // delete cache
+        cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
         $this->_data['category_list'] = $catList;
         $this->_data['lstMenus'] = $this->_model->findAll();
@@ -90,13 +92,10 @@ class MenuController extends AcpController
      */
     public function addMenuItem($catId)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $catData = $this->_categoryModel
             ->select('category.*, category_content.title, category_content.slug')
             ->join('category_content', 'category_content.cat_id = category.id')
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->find($catId);
         if (!isset($catData->id)) return redirect()->back()->with('error', lang('Acp.invalid_request'));
 
@@ -140,6 +139,9 @@ class MenuController extends AcpController
             ];
             $this->logAction($logData);
 
+            // delete cache
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
         }
@@ -147,16 +149,13 @@ class MenuController extends AcpController
 
     public function addPageItem($pageId)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $key = $this->request->getGet('key');
         $menuData = $this->_model->find($key);
 
         $pageData = model(PostModel::class)
             ->select('post.*, post_content.title')
             ->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->find($pageId);
 
         if (!isset($pageData->id) || !isset($menuData->id)) return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -194,6 +193,9 @@ class MenuController extends AcpController
                 'subject_type' => MenuItemsModel::class,
             ];
             $this->logAction($logData);
+
+            // delete cache
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
 
             if (!$menu) return redirect()->back("menu")->with('errors', $this->_model->errors());
             else return redirect()->back()->with('message', lang('Menu.addSuccess'));
@@ -258,6 +260,10 @@ class MenuController extends AcpController
 
                 $mess = lang('Menu.update_success');
                 $mess .=  " " . $menuItem->slug;
+
+                // delete cache
+                cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
                 return redirect()->to("/acp/menu?menu={$menuItem->slug}")->with('message', $mess);
             } else return redirect()->to("/acp/menu?key={$menuItem->slug}");
         } else return redirect()->route('menu');
@@ -286,9 +292,6 @@ class MenuController extends AcpController
      */
     public function removeItem($idItem)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission_request'));
-
         $item = $this->_menuItemsModel->find($idItem);
         $key = $this->request->getGet('key');
         if (!isset($key) || $key === '') return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -307,6 +310,10 @@ class MenuController extends AcpController
                     'subject_type' => MenuItemsModel::class,
                 ];
                 $this->logAction($logData);
+
+                // delete cache
+                cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
                 return redirect()->route('edit_menu', [$menu->id])->with('message', lang('Menu.delete_success', [$item->title]));
             } else return redirect()->route('menu')->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
@@ -326,14 +333,15 @@ class MenuController extends AcpController
 
         if (isset($inputData['name']) && !empty($inputData['name'])) $this->_model->like('name', $inputData['name']);
 
-        if (!isset($inputData['lang'])) $this->_model->where('lang_id', $this->_data['curLang']->id);
+        if (!isset($inputData['lang'])) $this->_model->where('lang_id', $this->currentLang->id);
         else $this->_model->where('lang_id', $inputData['lang']->id);
 
         $menuData = $this->_model->findAll();
-
+        
         foreach ($menuData as $item) {
             $date = date_create($item->created_at);
             $item->created = date_format($date, 'd/m/Y');
+            $item->location_list = $this->_getLocationList($item);
         }
         if (empty($menuData)) {
             $response = [
@@ -349,6 +357,23 @@ class MenuController extends AcpController
         return $this->response->setJSON($response);
     }
 
+    private function _getLocationList($menuItem) {
+        $all_menu_location = new Collection(model(ConfigModel::class)->getMenuLocation());
+        if ( !empty($menuItem->location) ) {
+            $selected_locations = json_decode($menuItem->location);
+            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations)  {
+               if ( in_array($locationItem->value, $selected_locations)) {
+                    return [
+                        'location_key' => $locationItem->value,
+                        'location_name' => $locationItem->title,
+                    ];
+               }
+            });
+        }
+
+        return  isset($locationData) ? array_values(array_filter($locationData->toArray())) : [];
+    }
+
     /**
      * Add new menu
      * @return \CodeIgniter\HTTP\ResponseInterface
@@ -357,7 +382,7 @@ class MenuController extends AcpController
     {
         $response = [];
         //check permission
-        if (!$this->user->can('root')) {
+        if (!$this->user->inGroup('superadmin', 'admin')) {
             $response = [
                 'error' => 1,
                 'message' => lang('Acp.no_permission_request')
@@ -386,7 +411,7 @@ class MenuController extends AcpController
                 $response['message'] = $textReturn;
             } else {
                 if ( !isset($postData['lang_id']) || empty($postData['lang_id']) || $postData['lang_id'] == 0 ) {
-                    $postData['lang_id'] = $this->_data['curLang']->id;
+                    $postData['lang_id'] = $this->currentLang->id;
                 }
 
                 $postData['slug'] = clean_url($postData['name']);
@@ -407,8 +432,12 @@ class MenuController extends AcpController
                         'subject_type' => MenuModel::class,
                     ];
                     $this->logAction($logData);
+                    // delete cache
+                    cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
                     $date = date_create($menuData->created_at);
                     $menuData->created = date_format($date, 'd/m/Y');
+                    $menuData->location_list = $this->_getLocationList($menuData);
                     $response['error'] = 0;
                     $response['message'] = 'Đã thêm thành công menu mới';
                     $response['newItem'] = $menuData;
@@ -473,6 +502,10 @@ class MenuController extends AcpController
                         'subject_type' => MenuModel::class,
                     ];
                     $this->logAction($logData);
+
+                    // delete cache
+                    cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
                     $response['error'] = 0;
                     $response['text'] = lang('Menu.update_success');
                 } else {
@@ -492,9 +525,6 @@ class MenuController extends AcpController
      */
     public function addUrlAjx()
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return $this->response->setJSON(['error' => 1, 'message' => lang('Acp.no_permission_request')]);
-
         $postData = $this->request->getPost();
 
         $rules = [
@@ -554,6 +584,10 @@ class MenuController extends AcpController
             foreach ($err as $mes) {
                 $textReturn .= $mes . '<br>';
             }
+
+            // delete cache
+            cache()->deleteMatching(CacheKeys::MENU_PREFIX);
+
             return $this->response->setJSON(['error' => 1, 'message' => $textReturn]);
         } else return $this->response->setJSON(['error' => 0, 'message' => lang('Menu.addSuccess')]);
     }
@@ -572,7 +606,7 @@ class MenuController extends AcpController
             ->join('post_content', 'post_content.post_id = post.id')
             ->where('post_type', PostTypeEnum::PAGE)
             ->where('post_status', 'publish')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->findAll();
 
         foreach ($pages as $item) {

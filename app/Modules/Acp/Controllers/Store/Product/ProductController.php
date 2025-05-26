@@ -13,34 +13,30 @@ use CodeIgniter\HTTP\RedirectResponse;
 use Config\Database;
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\ProductImage;
-use Modules\Acp\Entities\Product;
-use Modules\Acp\Enums\Store\Product\ProductAttachMetaEnum;
-use Modules\Acp\Enums\Store\Product\ProductStatusEnum;
-use Modules\Acp\Models\AttachMetaModel;
-use Modules\Acp\Models\Blog\CategoryModel;
-use Modules\Acp\Models\Store\Product\ProductManufacturer;
-use Modules\Acp\Models\Store\Product\ProductMetaModel;
+use App\Entities\Store\Product;
+use App\Enums\Store\Product\ProductAttachMetaEnum;
+use App\Enums\Store\Product\ProductStatusEnum;
+use App\Models\AttachMetaModel;
+use App\Models\Blog\CategoryModel;
+use Modules\Acp\Models\Store\Product\ProductContentModel;
 use Modules\Acp\Models\Store\Product\ProductModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class ProductController extends AcpController
 {
-    use ProductImage, SystemLog, deleteItem;
-    protected $_productManufacturerModel;
+    use ProductImage, deleteItem;
     protected $_categoryModel;
     protected $_attachMetaModel;
-    protected $_productMetaModel;
+    protected $_productContentModel;
     protected $db;
 
     public function __construct()
     {
         parent::__construct();
         $this->_model                    = model(ProductModel::class);
-        $this->_productManufacturerModel = model(ProductManufacturer::class);
         $this->_categoryModel            = model(CategoryModel::class);
         $this->_attachMetaModel          = model(AttachMetaModel::class);
-        $this->_productMetaModel         = model(ProductMetaModel::class);
+        $this->_productContentModel      = model(ProductContentModel::class);
         $this->db                        = Database::connect(); //Load database connection
 
     }
@@ -49,23 +45,18 @@ class ProductController extends AcpController
     {
         $getData = $this->request->getGet();
 
-        if (isset($getData['listtype'])) {
-            switch ($getData['listtype']) {
-                case 'all':
-                    $this->_data['listtype'] = 'all';
-                    break;
-                case 'deleted':
-                    $this->_model->onlyDeleted();
-                    $this->_data['listtype'] = 'deleted';
-                    break;
-                case 'user':
-                    $this->_model->where("user_init", $this->user->id);
-                    $this->_data['listtype'] = 'user';
-                    break;
-            }
-        } else {
-            $this->_model->where("user_init", $this->user->id);
-            $this->_data['listtype'] = 'user';
+        switch ($getData['listtype']?? '') {
+            case 'deleted':
+                $this->_model->onlyDeleted();
+                $this->_data['listtype'] = 'deleted';
+                break;
+            case 'user':
+                $this->_model->where("user_init", $this->user->id);
+                $this->_data['listtype'] = 'user';
+                break;
+            default:
+                $this->_data['listtype'] = 'all';
+                break;
         }
 
         if (isset($getData['search'])) {
@@ -81,8 +72,7 @@ class ProductController extends AcpController
         }
 
         if (isset($getData['category']) && $getData['category'] > 0) {
-            $this->_model->join('category_content', "category_content.cat_id = {$getData['category']}")
-                    ->where('category_content.lang_id', $this->_data['curLang']->id);
+            $this->_model->where('product.cat_id', $getData['category']);
             $this->_data['select_cat'] = $getData['category'];
         }
         if (isset($getData['pd_status']) && $getData['pd_status'] !== '') {
@@ -91,10 +81,12 @@ class ProductController extends AcpController
         }
 
         //get Data
-        $this->_model
-            ->select('product.*')->orderBy('product.id DESC');
-        $productCategory                 = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_category'] = $productCategory;
+        $this->_model->select('product.*, product_content.*')
+            ->join('product_content', 'product_content.product_id = product.id')
+            ->where('product_content.lang_id', $this->currentLang->id)
+            ->orderBy('product.id DESC');
+
+        $this->_data['product_category'] = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['data']             = $this->_model->paginate();
         $this->_data['pager']            = $this->_model->pager;
         $this->_data['title']            = lang("Product.product_title");
@@ -103,10 +95,7 @@ class ProductController extends AcpController
 
     public function addProduct()
     {
-        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
-        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_manufacturer'] = $productManufacturer;
-        $this->_data['product_category']     = $productCategory;
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['title']                = lang("Product.title_add");
         $this->_render('\store\product\add', $this->_data);
     }
@@ -117,7 +106,7 @@ class ProductController extends AcpController
 
         // Validate here first, since some things wrong
         $rules = array_merge([
-            'pd_name' => 'required|min_length[3]|is_unique[product.pd_name]|checkProductSlugExist',
+            'pd_name' => 'required|min_length[3]|checkProductNameExist|checkProductSlugExist',
         ], $this->ruleValidate());
 
         $errMess = $this->messageValidate();
@@ -129,8 +118,12 @@ class ProductController extends AcpController
         $slug                  = clean_url($postData['pd_name']);
         $postData['pd_slug']   = $slug;
         $postData['user_init'] = $this->user->id;
+
+        if ( isset($postData['pd_status']) && $postData['pd_status'] == ProductStatusEnum::PUBLISH ) {
+            $postData['publish_date'] = date('Y-m-d H:i:s');
+        }
+
         $newProduct = new Product($postData);
-        if (!empty($postData['tagcloud']))  $newProduct->pd_tags = json_encode($postData['tagcloud']);
 
         $image   = $this->request->getFile('image');
         if ($image->getName()) {
@@ -139,6 +132,7 @@ class ProductController extends AcpController
             $newProduct->pd_image = $response;
         }
 
+        // save product data
         try {
             $this->db->transBegin();
 
@@ -158,8 +152,8 @@ class ProductController extends AcpController
                 ]);
             }
 
-            // save meta data
-            $this->_productMetaModel->saveCustomMeta($id, $postData);
+            // save product content data
+            $this->_productContentModel->createProductContent($id, $postData);
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
@@ -169,29 +163,31 @@ class ProductController extends AcpController
         //log Action
         $logData = [
             'title'        => 'Add Product',
-            'description'  => "#{$this->user->username} đã thêm post #{$item->pd_name}",
-            'properties'   => $item->toArray(),
+            'description'  => "#{$this->user->username} đã thêm product #{$postData['pd_name']}",
+            'properties'   => $postData,
             'subject_id'   => $item->id,
             'subject_type' => ProductModel::class,
         ];
         $this->logAction($logData);
 
-        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.addSuccess', [$item->pd_name]));
-        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.addSuccess', [$item->pd_name]));
-        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.addSuccess', [$item->pd_name]));
+        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.addSuccess', [$postData['pd_name']]));
+        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.addSuccess', [$postData['pd_name']]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.addSuccess', [$postData['pd_name']]));
     }
 
     public function editProduct($id)
     {
-        $item = $this->_model->find($id);
-
+        $item = $this->_model
+        ->select('product.*, product_content.*')
+        ->join('product_content', 'product_content.product_id  = product.id')
+        ->where('product_content.lang_id', $this->currentLang->id)
+        ->find($id);
+        
         if (!isset($item->id)) {
             return redirect()->route('product')->with('error', lang('Product.no_item_found'));
         }
-        $productManufacturer                 = $this->_productManufacturerModel->where('status', ProductStatusEnum::PUBLISH)->findAll();
-        $productCategory                     = $this->_categoryModel->getCategories('product', $this->_data['curLang']->id);
-        $this->_data['product_manufacturer'] = $productManufacturer;
-        $this->_data['product_category']     = $productCategory;
+        
+        $this->_data['product_category']     = $this->_categoryModel->getCategories('product', $this->currentLang->id);
         $this->_data['itemData']             = $item;
         $this->_data['title']                = lang("Product.title_edit");
         $this->_render('\store\product\edit', $this->_data);
@@ -199,28 +195,30 @@ class ProductController extends AcpController
 
     public function editProductAction($id)
     {
-        $item = $this->_model->find($id);
-
+        $item = $this->_model
+                    ->select('product.*, product_content.*')
+                    ->join('product_content', 'product_content.product_id  = product.id')
+                    ->where('product_content.lang_id', $this->currentLang->id)
+                    ->find($id);
         if (!isset($item->id)) {
             return redirect()->route('product')->with('error', lang('Product.no_item_found'));
         }
+
         $postData = $this->request->getPost();
 
         // Validate here first, since some things wrong
         $rules = array_merge([
-            'pd_name' => 'required|min_length[3]|is_unique[product.pd_name,id,'.$id.']|checkProductSlugExist['.$id.']',
+            'pd_name' => 'required|min_length[3]|checkProductNameExist['.$item->pd_ct_id.']|checkProductSlugExist['.$item->pd_ct_id.']',
         ], $this->ruleValidate());
 
         $errMess =$this->messageValidate();
 
         //validate the input
-        if (!$this->validate($rules, $errMess)) {
+        if (!$this->validate($rules, $errMess)) { dd($this->db->getLastQuery());
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $slug                  = clean_url($postData['pd_name']);
-        $postData['pd_slug']   = $slug;
-        $postData['user_edit'] = $this->user->id;
+        $postData['pd_slug']   = clean_url($postData['pd_name']);
 
         if (!empty($postData['tagcloud']))  $postData['pd_tags'] = json_encode($postData['tagcloud']);
 
@@ -229,14 +227,19 @@ class ProductController extends AcpController
             $response = $this->editProductImage($postData, $image, $item);
             if ( $response instanceof RedirectResponse) return $response;
         }
+
+        if ( isset($postData['pd_status']) && $postData['pd_status'] == ProductStatusEnum::PUBLISH ) {
+            if ( empty($item->publish_date) ) {
+                $postData['publish_date'] = date('Y-m-d H:i:s');
+            }            
+        }
+
+        // save product data 
         try {
             $this->db->transBegin();
-
             if (!$this->_model->update($id, $postData)) {
                 return redirect()->back()->withInput()->with('errors', $this->_model->errors());
             }
-
-            $item = $this->_model->find($id);
 
             // save gallery image
             if (!empty($postData['images_product'])) {
@@ -246,15 +249,24 @@ class ProductController extends AcpController
                     'att_meta_mod_id'   => $item->id,
                     'att_meta_img'      => $postData['images_product'],
                 ];
-                if (isset($item->images->id)) {
-                    $this->_attachMetaModel->updateMeta($imageProduct, $item->images->id);
+                if (isset($item->images->meta->id)) {
+                    $this->_attachMetaModel->updateMeta($imageProduct, $item->images->meta->id);
                 } else {
                     $this->_attachMetaModel->saveAttachFiles($imageProduct);
                 }
+            } else {
+                // when removeAttachMeta field exist and value > 0, we will delete remove that attach meta record
+                if ( isset($postData['removeAttachMeta']) && $postData['removeAttachMeta'] > 0 ) {
+                    $this->_attachMetaModel->deleteMeta($postData['removeAttachMeta']);
+                }
             }
 
-            // save meta data
-            $this->_productMetaModel->saveCustomMeta($id, $postData);
+            // save product content data
+            $this->_productContentModel
+                ->where('product_id', $item->id)
+                ->where('lang_id', $this->currentLang->id)
+                ->update(null, $postData);
+
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
@@ -263,30 +275,30 @@ class ProductController extends AcpController
         //log Action
         $logData = [
             'title'        => 'edit Product',
-            'description'  => "#{$this->user->username} đã sửa post #{$item->pd_name}",
+            'description'  => "#{$this->user->username} đã sửa product #{$postData['pd_name']}",
             'properties'   => $item->toArray(),
             'subject_id'   => $item->id,
             'subject_type' => ProductModel::class,
         ];
         $this->logAction($logData);
 
-        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.editSuccess', [$item->pd_name]));
-        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.editSuccess', [$item->pd_name]));
-        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.editSuccess', [$item->pd_name]));
+        if (isset($postData['save'])) return redirect()->route('edit_product', [$item->id])->with('message', lang('Product.editSuccess', [$postData['pd_name']]));
+        else if (isset($postData['save_exit'])) return redirect()->route('product')->with('message', lang('Product.editSuccess', [$postData['pd_name']]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_product')->with('message', lang('Product.editSuccess', [$postData['pd_name']]));
     }
 
+    /**
+     * add product valid rules
+     */
     private function ruleValidate(){
         return [
             'cat_id'         => 'required',
             'pd_sku'         => 'required',
             'pd_tags'        => 'permit_empty',
-            'manufacture_id' => 'required',
-            'origin_price'   => 'required|numeric',
             'price'          => 'required|numeric',
             'price_discount' => 'required|numeric',
             'pd_status'      => 'required',
-            'minimum'        => 'required|numeric',
-            'weight'         => 'required|numeric',
+            'product_info'   => 'required',
         ];
     }
 
@@ -297,10 +309,10 @@ class ProductController extends AcpController
                 'required' => lang('Product.cat_id_required'),
             ],
             'pd_name'        => [
-                'required'   => lang('Product.pd_name_required'),
-                'min_length' => lang('Product.pd_name_min_length'),
-                'is_unique'  => lang('Product.pd_name_is_unique'),
-                'checkProductSlugExist'  => lang('Product.pd_name_is_not_create_slug'),
+                'required'                  => lang('Product.pd_name_required'),
+                'min_length'                => lang('Product.pd_name_min_length'),
+                'checkProductNameExist'     => lang('Product.pd_name_is_unique'),
+                'checkProductSlugExist'     => lang('Product.pd_name_is_not_create_slug'),
             ],
             'pd_sku'         => [
                 'required' => lang('Product.pd_sku_required'),

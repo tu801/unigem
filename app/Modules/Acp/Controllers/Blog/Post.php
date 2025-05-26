@@ -9,15 +9,14 @@ namespace Modules\Acp\Controllers\Blog;
 
 use Modules\Acp\Controllers\AcpController;
 use Modules\Acp\Controllers\Traits\PostImage;
-use Modules\Acp\Enums\PostTypeEnum;
-use Modules\Acp\Models\Blog\PostContentModel;
+use App\Enums\Post\PostTypeEnum;
+use App\Models\Blog\PostContentModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use Modules\Acp\Models\Blog\PostModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class Post extends AcpController
 {
-    use SystemLog;
     use deleteItem;
     use PostImage;
 
@@ -32,26 +31,22 @@ class Post extends AcpController
     public function index()
     {
         $this->_data['title'] = lang("Post.post_title");
-        $getData = $this->request->getGet(); //print_r($postData);exit;
-
-        if (isset($getData['listtype'])) {
-            switch ($getData['listtype']) {
-                case 'all':
-                    $this->_data['listtype'] = 'all';
-                    break;
-                case 'deleted':
-                    $this->_model->onlyDeleted();
-                    $this->_data['listtype'] = 'deleted';
-                    break;
-                case 'user':
-                    $this->_model->where("user_init", $this->user->id);
-                    $this->_data['listtype'] = 'user';
-                    break;
-            }
-        } else {
-            $this->_model->where("user_init", $this->user->id);
-            $this->_data['listtype'] = 'user';
+        $getData = $this->request->getGet(); 
+        
+        switch ($getData['listtype'] ?? '') {
+            case 'deleted':
+                $this->_model->onlyDeleted();
+                $this->_data['listtype'] = 'deleted';
+                break;
+            case 'user':
+                $this->_model->where("user_init", $this->user->id);
+                $this->_data['listtype'] = 'user';
+                break;
+            default:
+                $this->_data['listtype'] = 'all';
+                break;
         }
+
         $this->_model->where('post_type', 'post');
 
         if (isset($getData['search'])) {
@@ -68,7 +63,7 @@ class Post extends AcpController
         if (isset($getData['category']) && $getData['category'] > 0) {
             $this->_model->join('post_categories', "post_categories.post_id = post.id")
                         ->join('category_content', "category_content.cat_id = {$getData['category']}")
-                        ->where('category_content.lang_id', $this->_data['curLang']->id)
+                        ->where('category_content.lang_id', $this->currentLang->id)
                         ->where("post_categories.cat_id = {$getData['category']}");
             $this->_data['select_cat'] = $getData['category'];
         }
@@ -81,7 +76,7 @@ class Post extends AcpController
         $this->_model
             ->select('post.*,post_content.*')
             ->join('post_content', 'post_content.post_id = post.id')
-            ->where('post_content.lang_id', $this->_data['curLang']->id)
+            ->where('post_content.lang_id', $this->currentLang->id)
             ->where('post_type', PostTypeEnum::POST)
             ->orderBy('post.id DESC');
 
@@ -95,10 +90,9 @@ class Post extends AcpController
      * Display Add Post Page
      */
     public function add()
-    { //$this->cachePage(30);
+    {
         $this->_data['title'] = lang('Post.title_add');
 
-        //$this->_data['modelCategory'] = $this->_modelCategory;
         $this->_render('\blog\post\add', $this->_data);
     }
 
@@ -133,7 +127,7 @@ class Post extends AcpController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         $slug = clean_url($postData['title']);
-        if ($this->_model->checkSlug($slug, $this->_data['curLang']->id)) {
+        if ($this->_model->checkSlug($slug, $this->currentLang->id)) {
             return redirect()->back()->withInput()->with('errors', [
                 'title' =>  lang('Post.slug_can_not_create')
             ]);
@@ -141,7 +135,7 @@ class Post extends AcpController
 
         //good then save the new post
         $postData['slug'] = $slug;
-        $newPost = new \Modules\Acp\Entities\Post($postData);
+        $newPost = new \App\Entities\Post($postData);
 
         if ($newPost->post_status === 'publish') $newPost->publish_date = date('Y-m-d H:i:s');
         if (isset($postData['tagcloud']) && !empty($postData['tagcloud']))  $newPost->tags = json_encode($postData['tagcloud']);
@@ -160,9 +154,9 @@ class Post extends AcpController
 
         // Success!
         $item = $this->_model->join('post_content', 'post_content.post_id = post.id', 'LEFT')
-            ->where('slug', $newPost->slug)->where('lang_id', $this->_data['curLang']->id)->first();
+            ->where('slug', $newPost->slug)->where('lang_id', $this->currentLang->id)->first();
         //add seo meta
-        $postData['lang_id'] = $this->_data['curLang']->id;
+        $postData['lang_id'] = $this->currentLang->id;
         $item->setSeoMeta($postData);
         //add category
         foreach ($postData['categories'] as $catId) {
@@ -195,7 +189,7 @@ class Post extends AcpController
     {
         $this->_data['title'] = lang('Post.edit_title');
         $this->_model->join('post_content', 'post_content.post_id = post.id')
-                     ->where('post_content.lang_id', $this->_data['curLang']->id);
+                     ->where('post_content.lang_id', $this->currentLang->id);
         $item = $this->_model->find($itemID);
         if (isset($item->id)) {
             // $this->_model->convertData($item);
@@ -213,10 +207,13 @@ class Post extends AcpController
     public function editAction($itemID = 0)
     {
         $this->_data['title'] = lang('Post.edit_title');
-        $item = $this->_model->find($itemID);
+        $item = $this->_model
+            ->join('post_content', 'post_content.post_id = post.id')
+            ->where('post_content.lang_id', $this->currentLang->id)
+            ->find($itemID);
 
         if ($this->user->id !== $item->user_id) {
-            if (!$this->user->can($this->currentAct)) {
+            if (!$this->user->inGroup('admin', 'superadmin', 'content_manager')) {
                 return redirect()->route('post')->with('error', lang('Post.you_can_not_edit'));
             }
         }
@@ -259,7 +256,7 @@ class Post extends AcpController
             if (isset($postData['createSlug'])) {
                 $postData['slug'] = clean_url($postData['title']);
 
-                if ($this->_model->checkSlug($postData['slug'], $this->_data['curLang']->id)) {
+                if ($this->_model->checkSlug($postData['slug'], $this->currentLang->id)) {
                     return redirect()->back()->withInput()->with('errors', [
                         'title' => lang('Post.slug_can_not_create')
                     ]);
@@ -276,7 +273,7 @@ class Post extends AcpController
             }
             $modelPostContent = model(PostContentModel::class);
             $modelPostContent->where('post_id', $itemID)
-                    ->where('post_content.lang_id', $this->_data['curLang']->id)
+                    ->where('post_content.lang_id', $this->currentLang->id)
                     ->update(null, $postData);
 
             // Success!
@@ -286,7 +283,7 @@ class Post extends AcpController
                 if ($cat == $postData['cat_is_primary']) $this->_model->addCategories($item->id, $cat, 1);
                 else $this->_model->addCategories($item->id, $cat);
             }
-            $postData['lang_id'] = $this->_data['curLang']->id;
+            $postData['lang_id'] = $this->currentLang->id;
             $item->setSeoMeta($postData);
 
             //log Action
@@ -299,9 +296,9 @@ class Post extends AcpController
             ];
             $this->logAction($logData);
 
-            if (isset($postData['save'])) return redirect()->route('edit_post', [$item->id])->with('message', lang('Post.editSuccess', [$item->title]));
-            else if (isset($postData['save_exit'])) return redirect()->route('post')->with('message', lang('Post.editSuccess', [$item->title]));
-            else if (isset($postData['save_addnew'])) return redirect()->route('add_post')->with('message', lang('Post.editSuccess', [$item->title]));
+            if (isset($postData['save'])) return redirect()->route('edit_post', [$item->id])->with('message', lang('Post.editSuccess', [$postData['title']]));
+            else if (isset($postData['save_exit'])) return redirect()->route('post')->with('message', lang('Post.editSuccess', [$postData['title']]));
+            else if (isset($postData['save_addnew'])) return redirect()->route('add_post')->with('message', lang('Post.editSuccess', [$postData['title']]));
         } else return redirect()->route('post')->with('error', lang('Acp.invalid_request'));
     }
 
@@ -327,6 +324,55 @@ class Post extends AcpController
         return ['validRules' => $imgRules, 'errMess' => $imgErrMess];
     }
 
+    public function permanentDeletePost()
+    {
+        $postData = $this->request->getPost();
+        if (!isset($postData['id']) || empty($postData['id'])) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_request')
+            ]);
+        }
+
+        $item = $this->_model->withDeleted()->find($postData['id']);
+        if (!isset($item->id) || empty($item)) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_item_found')
+            ]);
+        }
+
+        if ((isset($item->user_init) && $item->user_init != $this->user->id) || !$this->user->inGroup('superadmin', 'admin')) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.no_permission')
+            ]);
+        }
+
+        if ($this->_model->deletePost($item, true)) {
+            if (method_exists(__CLASS__, 'logAction')) {
+                $prop = method_exists(get_class($item), 'toArray') ? $item->toArray() : (array)$item;
+                $logData = [
+                    'title' => 'Permanent Delete Post',
+                    'description' => lang('Acp.delete_success', [$item->id]),
+                    'properties' => $prop,
+                    'subject_id' => $item->id,
+                    'subject_type' => get_class($this->_model),
+                ];
+                $this->logAction($logData);
+            }
+            return $this->response->setJSON([
+                'error' => 0,
+                'message' => lang('Acp.delete_success', [$item->id])
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'error' => 1,
+            'message' => lang('Acp.delete_fail')
+        ]);
+    }
+    
 
     //AJAX FUNCTIONS
 
@@ -375,7 +421,7 @@ class Post extends AcpController
                         'slug' => $postData['post_slug']
                     );
                     $modelPostContent = model(PostContentModel::class);
-                    $modelPostContent->where('post_content.lang_id', $this->_data['curLang']->id)
+                    $modelPostContent->where('post_content.lang_id', $this->currentLang->id)
                                      ->where('post_id', $itemId);
                     if ($modelPostContent->update(null, $updateArray)) {
                         $this->_model->join('post_content', 'post_content.post_id = post.id');

@@ -66,7 +66,7 @@ $postConfigs = $config->cmsStatus;
                 <div class="card-body">
                     <?php if ($multiLang) : ?>
                     <div class="form-group ">
-                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $curLang->name  ?></span> </label>
+                        <label><?= lang('Acp.lang') ?>: <span class="badge badge-info "> <?= $currentLang->name  ?></span> </label>
                     </div>
                     <?php endif; ?>
 
@@ -74,7 +74,7 @@ $postConfigs = $config->cmsStatus;
                         <label><?= lang('Post.post_status') ?></label>
                         <select class="form-control" name="status">
                             <?php
-                            foreach (\Modules\Acp\Enums\Store\ShopEnum::STATUS as $key => $val) :
+                            foreach (\App\Enums\Store\ShopEnum::STATUS as $key => $val) :
                                 $sel = ($val == $itemData->status) ? 'selected' : '';
                             ?>
                                 <option <?= $sel ?> value='<?= $val ?>'><?= lang('Shop.status_'.$key) ?></option>

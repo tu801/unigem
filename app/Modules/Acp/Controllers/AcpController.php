@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Acp\Controllers;
 
 /**
@@ -6,37 +7,39 @@ namespace Modules\Acp\Controllers;
  */
 
 use App\Traits\SetLang;
+use App\Traits\SysConfig;
+use App\Traits\SystemLog;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Controller;
-use Modules\Acp\Models\LangModel;
-use Modules\Acp\Traits\SysConfig;
+use App\Models\LangModel;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 
 class AcpController extends Controller
 {
-    use SysConfig;
-    use SetLang;
+    use SysConfig, SetLang, SystemLog;
 
     protected $_layout = "layout";
     protected $_data = [];
     protected $_model;
     protected $config;
     protected $user;
+    protected $router;
+    protected $currentLang;
 
     /**
      * @var int
      */
     protected $maxSizeImage;
 
-	/**
-	 * An array of helpers to be loaded automatically upon
-	 * class instantiation. These helpers will be available
-	 * to all other controllers that extend BaseController.
-	 *
-	 * @var array
-	 */
-	protected $helpers = ['auth', 'form', 'acp', 'global'];
+    /**
+     * An array of helpers to be loaded automatically upon
+     * class instantiation. These helpers will be available
+     * to all other controllers that extend BaseController.
+     *
+     * @var array
+     */
+    protected $helpers = ['auth', 'form', 'acp', 'global', 'user', 'ecom'];
 
     /**
      * Instance of the main Request object.
@@ -45,49 +48,50 @@ class AcpController extends Controller
      */
     protected $request;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct()
+    /**
+     * Constructor.
+     */
+    public function __construct()
     {
         helper($this->helpers);
-        $this->user = user();
+        $this->user = auth()->user();
     }
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
-	{
-		// Do Not Edit This Line
-		parent::initController($request, $response, $logger);
+    {
+        // Do Not Edit This Line
+        parent::initController($request, $response, $logger);
 
         $this->router = Services::router();
         $this->_setLang();
         $this->checkMultilang();
 
-		//load Config
+        //load Config
         $this->config = config('Acp');
         $this->getConfig();
 
         $this->_data['layout'] = $this->_layout; //echo "<pre>".$this->router->controllerName();  exit;
         $this->_data['module'] = ADMIN_AREA;
-        $controller = $this->router->controllerName(); $controller = explode('\\', $controller);
+        $controller = $this->router->controllerName();
+        $controller = explode('\\', $controller);
         $this->_data['controller'] = strtolower(end($controller));
         $this->_data['method'] = $this->router->methodName();
-        $this->currentAct = $this->_data['module'].'/'.$this->_data['controller'].'/'.$this->_data['method'];
-	}
+    }
 
     /**
      * Setup view params and then render view
      * @param $viewPage
      * @param $data
      */
-	public function _render($viewPage, $data){
-	    $data['config'] = $this->config;
-	    $data['login_user'] = $this->user;
-        $data['currentAct'] = $this->currentAct;
-	    $data['adminSlug'] = $this->_data['module'];
-	    $data['language'] = model(LangModel::class)->listLang();
+    public function _render($viewPage, $data)
+    {
+        $data['config'] = $this->config;
+        $data['login_user'] = $this->user;
+        $data['adminSlug'] = $this->_data['module'];
+        $data['language'] = model(LangModel::class)->listLang();
+        $data['currentLang'] = $this->currentLang;
 
-        echo view($this->config->view.$viewPage, $data);
+        echo view($this->config->view . $viewPage, $data);
     }
 
     /**
@@ -97,21 +101,20 @@ class AcpController extends Controller
      * @param array $info
      * @return array
      */
-    public function upload_image($image, $validRules, $info = []){
+    public function upload_image($image, $validRules, $info = [])
+    {
         $imgPath = '';
 
         $validated = $this->validate($validRules['validRules'], $validRules['errMess']);
-        if (! $validated)
-        {
+        if (! $validated) {
             return ['error' => $this->validator->getErrors(), 'success' => false];
         } else {
             if (! $image->isValid()) return ['error' => $image->getErrorString() . '(' . $image->getError() . ')', 'success' => false];
 
             $file_name = $info['file_name'] ?? $image->getRandomName(); //exit($this->config->uploadFolder);
-            $folderName = ( isset($info['sub_folder']) && $info['sub_folder'] !== '' ) ? $info['sub_folder'] : '' ;
+            $folderName = (isset($info['sub_folder']) && $info['sub_folder'] !== '') ? $info['sub_folder'] : '';
 
-            if ( !$image->move($this->config->uploadPath.$folderName, $file_name, true) )
-            {
+            if (!$image->move($this->config->uploadPath . $folderName, $file_name, true)) {
                 return ['error' => $image->getError(), 'success' => false];
             } else {
                 $imgPath = "{$folderName}/{$file_name}";
@@ -127,21 +130,20 @@ class AcpController extends Controller
      * @param array $info
      * @return array
      */
-    public function store_file($file, $validRules, $info = []){
+    public function store_file($file, $validRules, $info = [])
+    {
         $imgPath = '';
 
         $validated = $this->validate($validRules['validRules'], $validRules['errMess']);
-        if (! $validated)
-        {
+        if (! $validated) {
             return ['error' => $this->validator->getErrors(), 'success' => false];
         } else {
             if (! $file->isValid()) return ['error' => $file->getErrorString() . '(' . $file->getError() . ')', 'success' => false];
 
             $file_name = $info['file_name'] ?? $file->getRandomName(); //exit($this->config->uploadFolder);
-            $folderName = ( isset($info['sub_folder']) && $info['sub_folder'] !== '' ) ? $info['sub_folder'] : '' ;
+            $folderName = (isset($info['sub_folder']) && $info['sub_folder'] !== '') ? $info['sub_folder'] : '';
 
-            if ( !$file->move($this->config->uploadPath.$folderName, $file_name, true) )
-            {
+            if (!$file->move($this->config->uploadPath . $folderName, $file_name, true)) {
                 return ['error' => $file->getError(), 'success' => false];
             } else {
                 $imgPath = "{$folderName}/{$file_name}";
@@ -157,7 +159,7 @@ class AcpController extends Controller
     public function _getDefaultUploadRule()
     {
         $mineType = $this->config->sys['default_mime_type'] ?? 'image,image/jpg,image/jpeg,image/gif,image/png';
-        $maxUploadSize = ( isset($this->config->sys['default_max_size']) && $this->config->sys['default_max_size'] > 0 )
+        $maxUploadSize = (isset($this->config->sys['default_max_size']) && $this->config->sys['default_max_size'] > 0)
             ? $this->config->sys['default_max_size'] * 1024
             : 2048;
 
@@ -176,5 +178,4 @@ class AcpController extends Controller
         ];
         return ['validRules' => $imgRules, 'errMess' => $imgErrMess];
     }
-
 }

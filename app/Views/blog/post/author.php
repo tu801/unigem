@@ -12,7 +12,7 @@ echo $this->section('content');
                         <div class="media">
                             <div class="thumbnail">
                                 <a href="#">
-                                    <img src="<?=base_url($configs->templatePath)?>/images/post-images/author/author-b1.png" alt="Author Images">
+                                    <img src="<?=base_url($configs->templatePath)?>images/post-images/author/author-b1.png" alt="Author Images">
                                 </a>
                             </div>
                             <div class="media-body">
@@ -53,7 +53,7 @@ echo $this->section('content');
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
                             <a href="post-details.html">
-                                <img src="<?=base_url($configs->templatePath)?>/images/post-images/post-list-01.jpg" alt="Post Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/post-images/post-list-01.jpg" alt="Post Images">
                             </a>
                             <a class="video-popup icon-color-secondary size-medium position-top-center" href="post-details.html"><span class="play-icon"></span></a>
                         </div>
@@ -100,7 +100,7 @@ echo $this->section('content');
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
                             <a href="post-details.html">
-                                <img src="<?=base_url($configs->templatePath)?>/images/post-images/post-list-02.jpg" alt="Post Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/post-images/post-list-02.jpg" alt="Post Images">
                             </a>
                         </div>
                         <div class="post-content">
@@ -146,7 +146,7 @@ echo $this->section('content');
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
                             <a href="post-details.html">
-                                <img src="<?=base_url($configs->templatePath)?>/images/post-images/post-list-03.jpg" alt="Post Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/post-images/post-list-03.jpg" alt="Post Images">
                             </a>
                         </div>
                         <div class="post-content">
@@ -192,7 +192,7 @@ echo $this->section('content');
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
                             <a href="post-details.html">
-                                <img src="<?=base_url($configs->templatePath)?>/images/post-images/post-list-04.jpg" alt="Post Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/post-images/post-list-04.jpg" alt="Post Images">
                             </a>
                         </div>
                         <div class="post-content">
@@ -238,7 +238,7 @@ echo $this->section('content');
                     <div class="content-block post-list-view mt--30">
                         <div class="post-thumbnail">
                             <a href="post-details.html">
-                                <img src="<?=base_url($configs->templatePath)?>/images/post-images/post-list-05.jpg" alt="Post Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/post-images/post-list-05.jpg" alt="Post Images">
                             </a>
                         </div>
                         <div class="post-content">
@@ -291,7 +291,7 @@ echo $this->section('content');
                                 <li class="cat-item">
                                     <a href="#" class="inner">
                                         <div class="thumbnail">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/post-images/category-image-01.jpg" alt="">
+                                            <img src="<?=base_url($configs->templatePath)?>images/post-images/category-image-01.jpg" alt="">
                                         </div>
                                         <div class="content">
                                             <h5 class="title">Tech</h5>
@@ -301,7 +301,7 @@ echo $this->section('content');
                                 <li class="cat-item">
                                     <a href="#" class="inner">
                                         <div class="thumbnail">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/post-images/category-image-02.jpg" alt="">
+                                            <img src="<?=base_url($configs->templatePath)?>images/post-images/category-image-02.jpg" alt="">
                                         </div>
                                         <div class="content">
                                             <h5 class="title">Style</h5>
@@ -311,7 +311,7 @@ echo $this->section('content');
                                 <li class="cat-item">
                                     <a href="#" class="inner">
                                         <div class="thumbnail">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/post-images/category-image-03.jpg" alt="">
+                                            <img src="<?=base_url($configs->templatePath)?>images/post-images/category-image-03.jpg" alt="">
                                         </div>
                                         <div class="content">
                                             <h5 class="title">Travel</h5>
@@ -321,7 +321,7 @@ echo $this->section('content');
                                 <li class="cat-item">
                                     <a href="#" class="inner">
                                         <div class="thumbnail">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/post-images/category-image-04.jpg" alt="">
+                                            <img src="<?=base_url($configs->templatePath)?>images/post-images/category-image-04.jpg" alt="">
                                         </div>
                                         <div class="content">
                                             <h5 class="title">Food</h5>
@@ -354,7 +354,7 @@ echo $this->section('content');
                                 <div class="content-block post-medium mb--20">
                                     <div class="post-thumbnail">
                                         <a href="post-details.html">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/small-images/blog-sm-01.jpg" alt="Post Images">
+                                            <img src="<?=base_url($configs->templatePath)?>images/small-images/blog-sm-01.jpg" alt="Post Images">
                                         </a>
                                     </div>
                                     <div class="post-content">
@@ -374,7 +374,7 @@ echo $this->section('content');
                                 <div class="content-block post-medium mb--20">
                                     <div class="post-thumbnail">
                                         <a href="post-details.html">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/small-images/blog-sm-02.jpg" alt="Post Images">
+                                            <img src="<?=base_url($configs->templatePath)?>images/small-images/blog-sm-02.jpg" alt="Post Images">
                                         </a>
                                     </div>
                                     <div class="post-content">
@@ -394,7 +394,7 @@ echo $this->section('content');
                                 <div class="content-block post-medium mb--20">
                                     <div class="post-thumbnail">
                                         <a href="post-details.html">
-                                            <img src="<?=base_url($configs->templatePath)?>/images/small-images/blog-sm-03.jpg" alt="Post Images">
+                                            <img src="<?=base_url($configs->templatePath)?>images/small-images/blog-sm-03.jpg" alt="Post Images">
                                         </a>
                                     </div>
                                     <div class="post-content">
@@ -438,32 +438,32 @@ echo $this->section('content');
                             <ul class="instagram-post-list-wrapper">
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-01.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-01.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-02.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-02.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-03.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-03.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-04.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-04.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-05.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-05.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                                 <li class="instagram-post-list">
                                     <a href="#">
-                                        <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-06.jpg" alt="Instagram Images">
+                                        <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-06.jpg" alt="Instagram Images">
                                     </a>
                                 </li>
                             </ul>
@@ -495,37 +495,37 @@ echo $this->section('content');
                     <ul class="instagram-post-list">
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-01.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-01.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-02.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-02.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-03.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-03.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-04.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-04.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-05.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-05.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>
                         <li class="single-post">
                             <a href="#">
-                                <img src="<?=base_url($configs->templatePath)?>/images/small-images/instagram-md-06.jpg" alt="Instagram Images">
+                                <img src="<?=base_url($configs->templatePath)?>images/small-images/instagram-md-06.jpg" alt="Instagram Images">
                                 <span class="instagram-button"><i class="fab fa-instagram"></i></span>
                             </a>
                         </li>

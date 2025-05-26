@@ -8,8 +8,8 @@
 namespace App\Validations;
 
 
-use Modules\Acp\Enums\Store\ShopEnum;
-use Modules\Acp\Models\ConfigModel;
+use App\Enums\Store\ShopEnum;
+use App\Models\ConfigModel;
 
 class ShippingFeeConfigValidation
 {

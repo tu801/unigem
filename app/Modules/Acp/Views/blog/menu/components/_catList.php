@@ -33,7 +33,7 @@ foreach ($category_list  as $key => $catItem ) : ?>
                 $checkCat = false;
                 //check if current cat exist in menu
                 if ( isset($menuItem->id)  ) {
-                    $checkCat = model(\Modules\Acp\Models\Blog\MenuItemsModel::class)->checkCatExistInMenu( $row->id, $menuItem->id);
+                    $checkCat = model(\App\Models\Blog\MenuItemsModel::class)->checkCatExistInMenu( $row->id, $menuItem->id);
                 }
                 $parent_data = '';
 

@@ -2,19 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Models\CusModel;
 use App\Traits\SetLang;
-use CodeIgniter\Config\Services;
+use App\Traits\SysConfig;
+use App\Traits\SystemLog;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Enums\UserTypeEnum;
 use Modules\Acp\Libraries\ThemeOptions;
-use Modules\Acp\Traits\SysConfig;
-use Modules\Acp\Traits\SystemLog;
 use Psr\Log\LoggerInterface;
-use Config\Database;
 
 /**
  * Class BaseController
@@ -28,9 +26,7 @@ use Config\Database;
  */
 abstract class BaseController extends Controller
 {
-    use SysConfig;
-    use SetLang;
-    use SystemLog;
+    use SetLang, SystemLog, SysConfig;
 
     protected $_data = [];
     protected $_model;
@@ -38,13 +34,15 @@ abstract class BaseController extends Controller
     protected $db;
     protected $user;
     protected $customer;
+    protected $theme;
+    protected $currentLang;
+    protected $page_title;
 
     /**
-     * The name of the current theme.
-     * Must be within /themes directory.
-     */
-    protected string $theme = 'default';
-
+     * Instance of the main Response.
+     *
+     * @var ResponseInterface
+    
     /**
      * Instance of the main Request object.
      *
@@ -57,9 +55,9 @@ abstract class BaseController extends Controller
      * class instantiation. These helpers will be available
      * to all other controllers that extend BaseController.
      *
-     * @var array
+     * @var list<string>
      */
-    protected $helpers = ['text', 'global', 'theme_config', 'auth'];
+    protected $helpers = ['global', 'theme_config', 'ecom', 'text'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -67,23 +65,11 @@ abstract class BaseController extends Controller
      */
     // protected $session;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
+        $this->db = db_connect();
         helper($this->helpers);
-
-        $this->db               = Database::connect(); //Load database connection
         $this->config           = config('Site');
-        $this->getConfig();
-        $this->_setupThem();
-        $this->_setLang();
-
-        if (logged_in()) {
-            $this->user = user();
-            $this->customer = model(CusModel::class)->queryCustomerByUserId($this->user->id)->first();
-        }
     }
 
     /**
@@ -93,12 +79,35 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
+        $authenticator = auth('session')->getAuthenticator();
 
-        $router = Services::router();
+        // Preload any models, libraries, etc, here.
+        $this->getConfig();
+        $this->_setupTheme();
+        $this->_setLang();
 
-        $controller = $router->controllerName(); $controller = explode('\\', $controller);
-        $this->_data['controller'] = strtolower(end($controller));
-        $this->_data['method'] = $router->methodName();
+        if ($authenticator->loggedIn()) {
+            $this->user = $authenticator->getUser();
+            if ($this->user->user_type == UserTypeEnum::CUSTOMER) $this->customer = model(CusModel::class)->queryCustomerByUserId($this->user->id)->first();
+        }
+    }
+
+    /**
+     * setup theme options and set view path
+     * @return void
+     */
+    private function _setupTheme($viewLayout = null)
+    {
+        $themeOption = new ThemeOptions();
+        $this->_data['themeOption'] = $themeOption->getThemeOptions();
+
+        $theme = $this->config->theme_name ?? $this->config->sys['default_theme_name'];
+        $this->config->view = 'App\Views';
+        $this->theme = $theme;
+
+        if (!empty($viewLayout)) {
+            $this->config->viewLayout = $viewLayout;
+        }
     }
 
     /**
@@ -106,42 +115,16 @@ abstract class BaseController extends Controller
      * @param $viewPage
      * @param $data
      */
-    public function _render($viewPage, $data){
+    public function _render($viewPage, $data)
+    {
         $data['configs'] = $this->config;
+        $data['currentLang'] = $this->currentLang;
+        $data['page_title'] = $this->page_title;
 
-        $themePath = ROOTPATH . "/themes/{$this->theme}/";
-        $renderer  = single_service('renderer', $themePath);
+        $renderer  = single_service('renderer', $this->config->templatePath);
 
         return $renderer
             ->setData($data)
             ->render($viewPage);
-    }
-
-    private function _setupThem($viewLayout = null)
-    {
-        $themeOption = new ThemeOptions();
-        $this->_data['themeOption'] = $themeOption->getThemeOptions();
-
-        $theme = $this->config->sys['default_theme_name'] ?? 'default';
-        $this->config->templatePath .= $theme;
-        $this->config->noimg = "{$theme}/".$this->config->noimg;
-        $this->config->view = 'App\Views';
-        $this->theme = $theme;
-
-        if ( !empty( $viewLayout ) ) {
-            $this->config->viewLayout = $viewLayout;
-        }
-
-    }
-
-    public function _checkThrottler()
-    {
-        $throttler = service('throttler');
-
-        if ($throttler->check(md5($this->request->getIPAddress()), 4, MINUTE) === false) {
-            return service('response')
-                ->setStatusCode(429)
-                ->setBody(lang('AuthCustomer.tooManyRequests', [$throttler->getTokentime()]));
-        }
     }
 }

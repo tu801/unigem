@@ -2,126 +2,231 @@
 echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
-    <!-- hero area -->
-    <?= $this->include($configs->view . '\layouts\_hero_area') ?>
+<!-- slider -->
+<?= view($configs->view . '\components\home\slider') ?>
+<!-- //slider -->
 
-    <?php if (get_theme_config('active')):?>
-    <!-- features area -->
-    <section class="features_area  section_padding">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-10">
-                    <div class="row justify-content-center gx-2 gx-md-4">
-                        <div class="col-sm-4 mb-3 mb-sm-0">
-                            <div
-                                    class="single_feature d-flex flex-column flex-sm-row align-items-center justify-content-center">
-                                <div class="feature_icon">
-                                    <img loading="lazy"  src="<?=base_url($configs->templatePath)?>/assets/images/svg/delivery-van.svg" alt="icon">
+<!-- Jewel Categories -->
+<?php if (get_theme_config('jewelry_cat_active')): ?>
+<?= view($configs->view . '\components\home\jewel_categories', ['currentLang' => $currentLang]) ?>
+<?php endif; ?>
+<!-- //Jewel Categories -->
 
-                                </div>
-                                <div class="feature_content">
-                                    <h4><?= get_theme_config('ship_title') ?? '' ?></h4>
-                                    <p><?= get_theme_config('ship_text') ?? '' ?></p>
+<!-- Products -->
+<?php if (!empty($productList)) : ?>
+<?= view($configs->view . '\components\home\products', ['productList' => $productList]) ?>
+<?php endif; ?>
+<!-- //Products -->
+
+<!-- Gems Collection -->
+<?php if (get_theme_config('gems_cat_active')): ?>
+<?= view($configs->view . '\components\home\gems-collection', ['currentLang' => $currentLang]) ?>
+<?php endif; ?>
+<!-- //Gems Collection -->
+
+<!-- Marquee -->
+<?php if (get_theme_config('running_text_active')): ?>
+<?= view($configs->view . '\components\home\marquee') ?>
+<?php endif; ?>
+<!-- //Marquee -->
+
+<!-- video-text -->
+<?php if (get_theme_config('design_active')): ?>
+<?= view($configs->view . '\components\home\video-text') ?>
+<?php endif; ?>
+<!-- /video-text -->
+
+<!-- Blogs post -->
+<?php if (!empty($postList)) : ?>
+<section class="flat-spacing-14">
+    <div class="container">
+        <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+            <span class="title"><?= lang('Home.top_news') ?></span>
+        </div>
+        <div class="hover-sw-nav view-default hover-sw-3">
+            <div dir="ltr" class="swiper tf-sw-recent" data-preview="3" data-tablet="2" data-mobile="1"
+                data-space-lg="30" data-space-md="30" data-space="15" data-pagination="1" data-pagination-md="1"
+                data-pagination-lg="1">
+                <div class="swiper-wrapper">
+                    <?php foreach ($postList as $key => $post) : ?>
+                    <div class="swiper-slide" lazy="true">
+                        <div class="blog-article-item wow fadeInUp" data-wow-delay="0s">
+                            <div class="article-thumb rounded-0">
+                                <a href="<?= $post->url ?>">
+                                    <img class="lazyload" data-src="<?= $post->images['thumbnail'] ?>"
+                                        src="<?= $post->images['thumbnail'] ?>" alt="<?= $post->title ?? '' ?>">
+                                </a>
+                                <div class="article-label">
+                                    <a href="<?= $post->priv_cat->url ?>"
+                                        class="tf-btn btn-sm btn-fill animate-hover-btn"><?= $post->priv_cat->title ?></a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4 mb-3 mb-sm-0">
-                            <div
-                                    class="single_feature d-flex flex-column flex-sm-row align-items-center justify-content-center">
-                                <div class="feature_icon">
-                                    <img loading="lazy"  src="<?=base_url($configs->templatePath)?>/assets/images/svg/money-back.svg" alt="icon">
+                            <div class="article-content">
+                                <div class="article-title">
+                                    <a href="<?= $post->url ?>" class=""><?= $post->title ?? '' ?></a>
                                 </div>
-                                <div class="feature_content">
-                                    <h4><?= get_theme_config('money_back_title') ?? '' ?></h4>
-                                    <p><?= get_theme_config('money_back_text') ?? '' ?></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div
-                                    class="single_feature d-flex flex-column flex-sm-row align-items-center justify-content-center">
-                                <div class="feature_icon">
-                                    <img loading="lazy"  src="<?=base_url($configs->templatePath)?>/assets/images/svg/service-hours.svg" alt="icon">
-                                </div>
-                                <div class="feature_content">
-                                    <h4><?= get_theme_config('support_text') ?? '' ?></h4>
-                                    <p><?= get_theme_config('support_text') ?? '' ?></p>
+                                <div class="article-btn">
+                                    <a href="<?= $post->url ?>"
+                                        class="tf-btn btn-line fw-6"><?= lang('Home.read_more') ?><i
+                                            class="icon icon-arrow1-top-left"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
+                    <?php endforeach; ?>
 
-    <?php if (get_theme_config('top_ranking_active')):?>
-    <!-- top ranking -->
-    <section class="top_ranking section_padding_b">
-        <div class="container">
-            <h2 class="section_title_2 mb-0"><?= lang('Product.top_ranking') ?></h2>
-            <div class="row">
-                <div class="col-xl-3 col-lg-4 col-6">
-                    <?= view_cell('\App\Cells\Product\TopRankingCell', 'column_key=first_col', 300) ?>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-6">
-                    <?= view_cell('\App\Cells\Product\TopRankingCell', 'column_key=second_col', 300) ?>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-6">
-                    <?= view_cell('\App\Cells\Product\TopRankingCell', 'column_key=third_col', 300) ?>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-6 d-lg-none d-block d-xl-block">
-                    <?= view_cell('\App\Cells\Product\TopRankingCell', 'column_key=fourth_col', 300) ?>
                 </div>
             </div>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if (get_theme_config('new_arrivals_active')): ?>
-    <!-- new arrive -->
-    <section class="new_arrive section_padding_b">
-        <div class="container">
-            <div class="d-flex align-items-start justify-content-between">
-                <h2 class="section_title_2"><?= lang('Product.new_product') ?></h2>
-                <div class="seemore_2 pt-2">
-                    <a href="<?= base_url(route_to('product_shop')) ?>"><?= lang('Product.see_more') ?> <span><i class="las la-angle-right"></i></span></a>
-                </div>
-            </div>
-            <div class="row gy-4">
-                <?= view_cell('\App\Cells\Product\ListingByCell', 'type=new_arrivals', 300) ?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
-
-    <?php if (get_theme_config('active') && $ads = get_theme_config('ads_image')):?>
-    <!-- ad banner -->
-    <div class="ad_banner_area section_padding_b">
-        <div class="container">
-            <picture>
-                <img loading="lazy"  class="w-100" src="<?=base_url($ads->full_image)?>" alt="ad">
-            </picture>
+            <?php if (count($postList) > 3) : ?>
+            <div class="nav-sw nav-next-slider nav-next-recent box-icon w_46 round"><span
+                    class="icon icon-arrow-left"></span></div>
+            <div class="nav-sw nav-prev-slider nav-prev-recent box-icon w_46 round"><span
+                    class="icon icon-arrow-right"></span></div>
+            <div class="sw-dots style-2 sw-pagination-recent justify-content-center"></div>
+            <?php endif; ?>
         </div>
     </div>
-    <?php endif; ?>
+</section>
+<?php endif; ?>
+<!-- /Blogs post -->
 
-    <?php if (get_theme_config('recommended_active')):?>
-        <!-- recomended -->
-        <section class="new_arrive section_padding_b">
-            <div class="container">
-                <div class="d-flex align-items-start justify-content-between">
-                    <h2 class="section_title_2"><?= lang('product.recommended') ?></h2>
-                    <div class="seemore_2 pt-2">
-                        <a href="<?= base_url(route_to('product_shop')) ?>"><?= lang('Product.see_more') ?> <span><i class="las la-angle-right"></i></span></a>
+<!-- Icon box -->
+<section class="flat-spacing-1 flat-iconbox wow fadeInUp" data-wow-delay="0s">
+    <div class="container">
+        <div class="wrap-carousel wrap-mobile">
+            <div dir="ltr" class="swiper tf-sw-mobile" data-preview="1" data-space="15">
+                <div class="swiper-wrapper wrap-iconbox">
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-shipping"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14">
+                                    <?= lang('Home.icon_box_free_ship_title') ?></div>
+                                <p><?= lang('Home.icon_box_free_ship_desc') ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-payment fs-22"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14">
+                                    <?= lang('Home.icon_box_payment_title') ?></div>
+                                <p><?= lang('Home.icon_box_payment_desc') ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-return fs-20"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14">
+                                    <?= lang('Home.icon_box_returns_title') ?></div>
+                                <p><?= lang('Home.icon_box_returns_desc') ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="tf-icon-box style-row">
+                            <div class="icon">
+                                <i class="icon-suport"></i>
+                            </div>
+                            <div class="content ">
+                                <div class="title fw-8 font-montserrat text-uppercase fs-14">
+                                    <?= lang('Home.icon_box_support_title') ?></div>
+                                <p><?= lang('Home.icon_box_support_desc') ?></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row gy-4">
-                    <?= view_cell('\App\Cells\Product\ListingByCell', 'type=recommended', 300) ?>
-                </div>
-            </div>
-        </section>
-    <?php endif; ?>
 
+            </div>
+            <div class="sw-dots style-2 sw-pagination-mb justify-content-center"></div>
+        </div>
+    </div>
+</section>
+<!-- /Icon box -->
+<?= $this->endSection() ?>
+
+<?= $this->section('style') ?>
+<style>
+.video-responsive {
+    position: relative;
+    width: 100%;
+    height: 710px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.video-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+/* iPad Pro */
+@media screen and (max-width: 1024px) {
+    .video-responsive {
+        width: 459px;
+        height: 710px;
+    }
+}
+
+/* iPad Air */
+@media screen and (max-width: 820px) {
+    .video-responsive {
+        width: 357px;
+        height: 710px;
+    }
+}
+
+/* iPad Mini */
+@media screen and (max-width: 768px) {
+    .video-responsive {
+        width: 339px;
+        height: 710px;
+    }
+}
+
+/* iPhone 14 Pro Max */
+@media screen and (max-width: 430px) {
+    .video-responsive {
+        width: 400px;
+        height: 410px;
+    }
+}
+
+/* iPhone 12 Pro */
+@media screen and (max-width: 390px) {
+    .video-responsive {
+        width: 360px;
+        height: 410px;
+    }
+}
+
+/* Samsung Galaxy S20 Ultra */
+@media screen and (max-width: 412px) {
+    .video-responsive {
+        width: 382px;
+        height: 410px;
+    }
+}
+
+/* Samsung Galaxy S8 */
+@media screen and (max-width: 360px) {
+    .video-responsive {
+        width: 330px;
+        height: 410px;
+    }
+}
+</style>
 <?= $this->endSection() ?>

@@ -1,66 +1,14 @@
 <?php
 /**
  * @author tmtuan
- * created Date: 10/23/2023
- * Project: Unigem
+ * created Date: 13-Apr-2025
  */
 
 namespace Modules\Acp\Models\Store\Product;
 
+use App\Models\Store\Product\ProductModel as BaseProductModel;
 
-use CodeIgniter\Model;
-use Modules\Acp\Entities\Product;
-
-class ProductModel extends Model
-{
-    protected $DBGroup          = 'default';
-    protected $table            = 'product';
-    protected $primaryKey       = 'id';
-    protected $useAutoIncrement = true;
-    protected $returnType       = Product::class;
-    protected $useSoftDeletes   = true;
-    protected $protectFields    = true;
-    protected $allowedFields = [
-        'user_init',
-        'cat_id',
-        'pd_sku',
-        'pd_name',
-        'pd_slug',
-        'pd_image',
-        'pd_tags',
-        'manufacture_id',
-        'origin_price',
-        'price',
-        'price_discount',
-        'pd_status',
-        'minimum',
-        'user_edit',
-    ];
-
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
-
-    // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
-    protected $skipValidation       = false;
-    protected $cleanValidationRules = true;
-
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = [];
-    protected $afterDelete    = [];
-
+class ProductModel extends BaseProductModel {
     /**
      * Recover soft delete post
      */
@@ -69,5 +17,4 @@ class ProductModel extends Model
         if ( $this->db->query($sql) ) return true;
         else return false;
     }
-
 }

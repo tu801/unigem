@@ -3,7 +3,6 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
-use Modules\Acp\Models\ConfigModel;
 
 class Pager extends BaseConfig
 {
@@ -22,10 +21,12 @@ class Pager extends BaseConfig
      * @var array<string, string>
      */
     public array $templates = [
-        'default_full'   => 'App\Views\templates\paginate',
+        'default_full'   => 'CodeIgniter\Pager\Views\default_full',
         'default_simple' => 'CodeIgniter\Pager\Views\default_simple',
         'default_head'   => 'CodeIgniter\Pager\Views\default_head',
         'acp_full'   	 => 'App\Modules\Acp\Views\templates\paginate',
+        'product_grid'   	 => 'App\Views\templates\product-grid-paginate',
+        'product_list'   	 => 'App\Views\templates\product-list-paginate',
     ];
 
     /**
@@ -36,15 +37,4 @@ class Pager extends BaseConfig
      * The default number of results shown in a single page.
      */
     public int $perPage = 20;
-
-    public function __construct()
-    {
-        $modelConfig = model(ConfigModel::class);
-        $pagerConfig = $modelConfig
-            ->where('group_id', ConfigModel::DEFAULT_GROUP)
-            ->where('key', 'page_number')
-            ->first();
-
-        $this->perPage = $pagerConfig->value ?? 20;
-    }
 }

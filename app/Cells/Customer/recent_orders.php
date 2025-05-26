@@ -4,8 +4,8 @@
     foreach ($orders as $item) : ?>
     <div class="single_prof_recorder">
 <!--        <div class="prorder_img">-->
-<!--            <img loading="lazy"  src="assets/images/tv.png" alt="product">-->
-<!--            <img loading="lazy"  src="assets/images/tv.png" alt="product">-->
+<!--            <img loading="lazy"  src="images/tv.png" alt="product">-->
+<!--            <img loading="lazy"  src="images/tv.png" alt="product">-->
 <!--        </div>-->
         <div class="prorder_btn">
             <a href="<?=base_url(route_to('order_history_detail', $item->order_id))?>">
@@ -34,18 +34,18 @@
             <?php
             $textColor = '';
             switch ($item->status) {
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::OPEN:
+                case \App\Enums\Store\Order\EOrderStatus::OPEN:
                     $textColor = '';
                     break;
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::CONFIRMED:
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::SHIPPED:
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::PROCESSED:
+                case \App\Enums\Store\Order\EOrderStatus::CONFIRMED:
+                case \App\Enums\Store\Order\EOrderStatus::SHIPPED:
+                case \App\Enums\Store\Order\EOrderStatus::PROCESSED:
                     $textColor = 'text-yellow';
                     break;
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::CANCELLED:
+                case \App\Enums\Store\Order\EOrderStatus::CANCELLED:
                     $textColor = 'text-color';
                     break;
-                case \Modules\Acp\Enums\Store\Order\EOrderStatus::COMPLETE:
+                case \App\Enums\Store\Order\EOrderStatus::COMPLETE:
                     $textColor = 'text-green';
                     break;
             }

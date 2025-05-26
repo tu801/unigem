@@ -1,28 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= get_theme_config('general_site_title') ?? env('app.site_name') ?? '' ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
     <meta name="robots" content="noindex, follow" />
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="<?=get_favicon_url($configs)?>" type="image/x-icon">
+    <!-- font -->
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>fonts/fonts.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>fonts/font-icons.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/drift-basic.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/photoswipe.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>css/animate.css">
+    <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>css/styles.css"/>
+    <link rel="stylesheet"type="text/css" href="<?=base_url($configs->templatePath)?>css/custom-styles.css"/>
+
+    <!-- Favicon and Touch Icons  -->
+    <link rel="shortcut icon" href="<?=get_favicon_url($configs)?>">
+    <link rel="apple-touch-icon-precomposed" href="<?=get_favicon_url($configs)?>">
 
     <?php echo view_cell('\App\Libraries\SeoMeta\SeoMetaCell::render')?>
-
-    <!-- all css -->
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/jquery-ui.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/slick.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/line-awesome.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/nice-select.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/style.css">
-    <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>/assets/css/responsive.css">
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="<?= base_url($configs->scriptsPath)?>/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
     <!--load custom css-->
     <?= $this->renderSection('style') ?>
@@ -33,60 +35,96 @@
 
 </head>
 
-<body>
-    <div id="app">
-        <!-- Preloader -->
-        <div class="preloader">
-            <img src="<?=base_url($configs->templatePath)?>/assets/images/preloader.gif" alt="preloader">
+<body class="preload-wrapper color-primary-4">
+    <!-- RTL -->
+    <!-- <a href="javascript:void(0);" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a> -->
+    <!-- /RTL  -->
+    <!-- preload -->
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
         </div>
+    </div>
+    <!-- /preload -->
+    <div id="wrapper">
+        <!-- header -->
+        <?= $this->include($configs->view . '\templates\header') ?>
+        <!-- /header -->
+        
+        <?= $this->renderSection('content')?>
 
-        <!-- top header -->
-        <?= $this->include($configs->view . '\layouts\_header') ?>
-
-        <!-- navbar -->
-        <?= $this->include($configs->view . '\layouts\_navbar') ?>
-
-        <!-- mobile bottom bar -->
-        <?= $this->include($configs->view . '\layouts\_mobile_bottom_bar') ?>
-
-        <!-- mobile menu -->
-        <?= $this->include($configs->view . '\layouts\_mobile_menu') ?>
-
-        <!--  mobile cart -->
-        <?= $this->include($configs->view . '\layouts\_mobile_cart') ?>
-
-        <!-- mobile searchbar -->
-        <?= $this->include($configs->view . '\layouts\_mobile_search_bar') ?>
-
-        <!-- mobile category -->
-        <?= $this->include($configs->view . '\layouts\_mobile_category') ?>
-
-        <!-- CONTENT BEGINS -->
-        <?= $this->renderSection('content') ?>
-        <!-- CONTENT ENDS -->
-
-        <!-- footer area -->
-        <?= $this->include($configs->view . '\layouts\_footer') ?>
-
-        <!-- copyright -->
-        <?= $this->include($configs->view . '\layouts\_copyright') ?>
-
-        <!-- popup -->
-        <?= $this->include($configs->view . '\components\popup') ?>
+        <!-- Footer -->
+        <?= $this->include($configs->view. '\templates\footer')?>
+        <!-- /Footer -->
     </div>
 
-    <script src="<?=insert_vue()?>"></script>
-    <!-- all js -->
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/jquery-3.5.1.min.js"></script>
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/jquery-ui.min.js"></script>
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/slick.min.js"></script>
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/jquery.nice-select.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="<?=base_url($configs->scriptsPath)?>/plugins/sweetalert2/sweetalert2.min.js"></script>
-    <script src="<?=base_url('/themes/store/shop.js')?>"></script>
-    <script src="<?=base_url($configs->templatePath)?>/assets/js/app.js"></script>
+    <!-- gotop -->
+    <button id="goTop">
+        <span class="border-progress"></span>
+        <span class="icon icon-arrow-up"></span>
+    </button>
+    <!-- /gotop -->
+    
+    <!-- toolbar-bottom -->
+    <?= $this->include($configs->view. '\templates\toolbar-bottom')?>
+    <!-- /toolbar-bottom -->
 
+    <!-- mobile menu -->
+    <?= $this->include($configs->view. '\templates\mobile-menu')?>
+    <!-- /mobile menu -->
+
+    <!-- canvasSearch -->
+    <?= $this->include($configs->view. '\templates\canvas-search')?>
+    <!-- /canvasSearch -->
+
+    <!-- toolbarShopmb -->
+    <?= $this->include($configs->view. '\templates\toolbar-shop-mobile')?>
+    <!-- /toolbarShopmb -->
+
+    <!-- modal login -->
+    <?= $this->include($configs->view. '\components\modal-login')?>
+    <!-- /modal login -->
+
+    <!-- shoppingCart -->
+    <?= $this->include($configs->view. '\components\modal-shopping-cart')?>
+    <!-- /shoppingCart -->
+
+    <!-- modal quick_view -->
+    <?= $this->include($configs->view. '\components\modal-quick-view')?>
+    <!-- /modal quick_view -->
+
+    <!-- modal share social -->
+    <?= $this->include($configs->view. '\components\modal-share-social')?>
+    <!-- /modal share social -->
+
+    <script src="<?=insert_vue()?>"></script>
+    <!-- Javascript -->
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/jquery.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/carousel.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/count-down.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/lazysize.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/drift.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/wow.min.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/multiple-modal.js"></script>
+    <script type="text/javascript" src="<?=base_url($configs->templatePath)?>js/main.js"></script>  
+    <script type="module" src="<?=base_url($configs->templatePath)?>js/model-viewer.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.type-languages').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var redirectUrl = selectedOption.data('href');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
+    </script>
+    
     <?= $this->renderSection('scripts') ?>
 </body>
 </html>

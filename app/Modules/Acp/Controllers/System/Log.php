@@ -7,8 +7,7 @@
 namespace Modules\Acp\Controllers\System;
 
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\LogModel;
-use Modules\Auth\Models\LoginModel;
+use App\Models\LogModel;
 
 class Log extends AcpController
 {
@@ -18,14 +17,11 @@ class Log extends AcpController
         if (empty($this->_model)) {
             $this->_model = model(LogModel::class);
         }
-        if (empty($this->_loginModel)) {
-            $this->_loginModel = model(LoginModel::class);
-        }
     }
 
     public function index()
     {
-        if (!$this->user->is_root) {
+        if (!$this->user->inGroup('superadmin', 'admin')) {
             return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
         }
         $this->_data['title'] = lang("Nhật ký");
@@ -99,7 +95,7 @@ class Log extends AcpController
 
     public function detail($logId)
     {
-        if (!$this->user->is_root) {
+        if (!$this->user->inGroup('superadmin', 'admin')) {
             return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
         }
 

@@ -2,13 +2,13 @@
 /**
  * @author tmtuan
  * created Date: 10/20/2023
- * Project: Unigem
  */
 
 namespace App\Controllers\Blog;
 
 
 use App\Controllers\BaseController;
+use App\Enums\CategoryEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Libraries\SeoMeta\SeoMetaCell;
 use App\Libraries\SeoMeta\SeoMetaEnum;
@@ -17,6 +17,8 @@ use Modules\Acp\Models\Blog\PostModel;
 
 class Category extends  BaseController
 {
+    protected $_modelPost;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,15 +30,16 @@ class Category extends  BaseController
     {
         $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
             ->where('category_content.slug', $slug)
-            ->where('lang_id', $this->_data['curLang']->id)
+            ->where('lang_id', $this->currentLang->id)
             ->first();
         if (isset($item->id)) {
             $postCategory = $this->_modelPost->join('post_content', 'post_content.post_id = post.id')
                 ->join('post_categories', "post_categories.cat_id = {$item->id} AND post_categories.post_id = post.id")
-                ->where('lang_id',  $this->_data['curLang']->id)
+                ->where('lang_id',  $this->currentLang->id)
                 ->where('post_status', 'publish')
                 ->select('post.*,post_content.*');
 
+            $this->page_title = $item->title;
             $this->_data['category'] = $item;
             $this->_data['post_category'] = $postCategory->paginate(6);
             $this->_data['pager'] = $this->_modelPost->pager;
@@ -56,9 +59,11 @@ class Category extends  BaseController
 
             //set breadcrumb
             BreadCrumbCell::add('Home', base_url());
-            BreadCrumbCell::add($item->title, route_to('category_list', $item->slug));
+            BreadCrumbCell::add($item->title, base_url(route_to('category_page', $item->slug)));
 
-            return $this->_render('blog/category/blog', $this->_data);
+            if ( $item->cat_type == CategoryEnum::CAT_TYPE_PRODUCT ) return redirect(route_to('product_category', $item->slug));
+            
+            return $this->_render('blog/category/blog-grid', $this->_data);
         } else {
             return $this->_render('errors/404', $this->_data);
         }

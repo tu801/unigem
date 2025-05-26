@@ -11,30 +11,28 @@ namespace Modules\Acp\Controllers\Store\Order;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use Config\Database;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Enums\Store\Order\EDeliveryType;
-use Modules\Acp\Enums\Store\Order\EOrderStatus;
-use Modules\Acp\Enums\Store\Order\EPaymentMethod;
-use Modules\Acp\Enums\Store\Order\EPaymentStatus;
-use Modules\Acp\Enums\Store\Order\EUnitPrice;
-use Modules\Acp\Enums\Store\Product\EProductType;
-use Modules\Acp\Enums\Store\Promotion\EVoucherStatus;
-use Modules\Acp\Enums\Store\Promotion\PromotionEnum;
-use Modules\Acp\Enums\Store\ShopEnum;
-use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\PaymentBankTransferModel;
-use Modules\Acp\Models\Store\Customer\CustomerModel;
-use Modules\Acp\Models\Store\Order\OrderItemModel;
-use Modules\Acp\Models\Store\Order\OrderModel;
-use Modules\Acp\Models\Store\Product\ProductModel;
-use Modules\Acp\Models\Store\Promotion\PromotionVoucherModel;
-use Modules\Acp\Models\Store\ShopModel;
+use App\Enums\Store\Order\EDeliveryType;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Enums\Store\Order\EPaymentMethod;
+use App\Enums\Store\Order\EPaymentStatus;
+use App\Enums\Store\Order\EUnitPrice;
+use App\Enums\Store\Product\EProductType;
+use App\Enums\Store\Promotion\EVoucherStatus;
+use App\Enums\Store\Promotion\PromotionEnum;
+use App\Enums\Store\ShopEnum;
+use App\Models\ConfigModel;
+use App\Models\PaymentBankTransferModel;
+use App\Models\Store\Customer\CustomerModel;
+use App\Models\Store\Order\OrderItemModel;
+use App\Models\Store\Order\OrderModel;
+use App\Models\Store\Product\ProductModel;
+use App\Models\Store\Promotion\PromotionVoucherModel;
+use App\Models\Store\ShopModel;
 use Modules\Acp\Traits\deleteItem;
-use Modules\Acp\Traits\SystemLog;
 
 class OrderController extends AcpController
 {
     use deleteItem;
-    use SystemLog;
 
     protected $db;
     protected $_shopModel;
@@ -169,7 +167,7 @@ class OrderController extends AcpController
 
         if ( isset($item->order_id) ) {
             //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
+            if (!$this->user->inGroup('superadmin', 'admin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
             if ( $this->_model->recover($item->order_id) ) {
                 //log Action

@@ -2,15 +2,16 @@
 
 namespace Modules\Acp\Controllers\System\Config;
 
+use App\Enums\CacheKeys;
 use Modules\Acp\Controllers\AcpController;
-use Modules\Acp\Models\AttachModel;
-use Modules\Acp\Models\ConfigModel;
-use Modules\Acp\Models\PostModel;
-use Modules\Acp\Traits\SystemLog;
+use App\Models\AttachModel;
+use App\Models\Blog\PostModel;
+use App\Models\ConfigModel;
 
 class Config extends AcpController
 {
-    use SystemLog;
+    protected $_modelPost;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,9 +23,6 @@ class Config extends AcpController
 
     public function index()
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title']= lang("Config.config_title");
         $postData = $this->request->getPost(); //print_r($postData);exit;
         $getData = $this->request->getGet(); //print_r($postData);exit;
@@ -55,9 +53,6 @@ class Config extends AcpController
     //show config custom page
     public function custom($group)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang("Acp.config_customtitle");
 
         if ($this->config->sys['themes_name'] === 'default') return redirect()->back()->with('error', lang('Acp.themes_name_invalid'));
@@ -118,7 +113,9 @@ class Config extends AcpController
                     'value' => $cfData
                 ];
                 $this->_model->update($item->id, $updateData);
-                // $this->_model->where('id', $item->id )->delete();
+                
+                // clear cache
+                cache()->delete(CacheKeys::SYS_CONFIG);
             }
             return redirect()->route('config_custom', [$group])
                 ->with('error', lang('Acp.cf_customedit_reset') . ' - ' . $postData['resetCustom']);
@@ -156,8 +153,11 @@ class Config extends AcpController
                 $updateData = [
                     'value' => $cfData
                 ];
-                if (!$this->_model->update($item->id, $updateData))
+                if (!$this->_model->update($item->id, $updateData)){
+                    // clear cache
+                    cache()->delete(CacheKeys::SYS_CONFIG);
                     return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+                }
             } else {
                 $insertData = [
                     'group_id' => $group,
@@ -166,8 +166,11 @@ class Config extends AcpController
                     'value' => $cfData,
                     'is_json' => 1
                 ];
-                if (!$this->_model->insert($insertData))
+                if (!$this->_model->insert($insertData)){
+                    // clear cache
+                    cache()->delete(CacheKeys::SYS_CONFIG);
                     return redirect()->back()->withInput()->with('errors', $this->_model->errors());
+                }
             }
         }
         return redirect()->route('config_custom', [$group])
@@ -179,9 +182,6 @@ class Config extends AcpController
      */
     public function add($group)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang('Acp.cf_title_add');
         $this->_data['selected_group'] = $group;
         $this->_render('\system\config\add', $this->_data);
@@ -240,6 +240,8 @@ class Config extends AcpController
             'subject_type' => ConfigModel::class,
         ];
         $this->logAction($logData);
+        // clear cache
+        cache()->delete(CacheKeys::SYS_CONFIG);
         // Success!
         if (isset($insertData['save'])) return redirect()->route('edit_config', [$item->id])->with('message', lang('Acp.cf_addSuccess', [$item->title]));
         else if (isset($insertData['save_exit'])) return redirect()->route('config')->with('message', lang('Acp.cf_addSuccess', [$item->title]));
@@ -251,9 +253,6 @@ class Config extends AcpController
      */
     public function edit($idItem)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $this->_data['title'] = lang('Acp.cf_edit_title');
         $item = $this->_model->withDeleted()
             ->find($idItem);
@@ -318,6 +317,8 @@ class Config extends AcpController
             'subject_type' => ConfigModel::class,
         ];
         $this->logAction($logData);
+        // clear cache
+        cache()->delete(CacheKeys::SYS_CONFIG);
         // Success!
         if (isset($inputData['save'])) return redirect()->route('config')->with('message', lang('Acp.cf_edit_Success'));
         else if (isset($inputData['save_exit'])) return redirect()->route('config')->with('message', lang('Acp.cf_edit_Success'));
@@ -327,9 +328,6 @@ class Config extends AcpController
 
     public function clone($id)
     {
-        //check permission
-        if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
-
         $item = $this->_model->find($id);
 
         if (isset($item->id)) {
@@ -355,6 +353,9 @@ class Config extends AcpController
             ];
             $this->logAction($logData);
 
+            // clear cache
+            cache()->delete(CacheKeys::SYS_CONFIG);
+
             return redirect()->route('edit_config', [$newItem->id])->with('error', lang('Config.clone_success', [$newItem->key]));
         } else {
             return redirect()->route('config')->with('error', lang('Config.no_config_found'));
@@ -370,8 +371,6 @@ class Config extends AcpController
         $item = $this->_model->find($idItem);
 
         if (isset($item->id)) {
-            //check permission
-            if (!$this->user->can($this->currentAct)) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
 
             if ($this->_model->delete($item->id)) {
                 //log Action
@@ -383,6 +382,9 @@ class Config extends AcpController
                     'subject_type' => ConfigModel::class,
                 ];
                 $this->logAction($logData);
+                // clear cache
+                cache()->delete(CacheKeys::SYS_CONFIG);
+
                 return redirect()->route('config')->with('message', lang('Acp.cf_delete_success', [$item->title]));
             } else return redirect()->route('config')->with('error', lang('Acp.delete_fail'));
         } else return redirect()->route('config')->with('error', lang('Acp.invalid_request'));

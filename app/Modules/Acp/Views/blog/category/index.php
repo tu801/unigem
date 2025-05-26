@@ -2,10 +2,10 @@
 echo $this->extend($config->viewLayout);
 echo $this->section('content');?>
 
-<div class="row">
+<div class="row" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>" >
 
     <!--Add New Category-->
-    <div class="col-5">
+    <div class="col-md-5">
         <?= form_open(route_to('add_category', $cat_type)) ?>
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -47,6 +47,10 @@ echo $this->section('content');?>
                     <textarea class="form-control" rows="3" name="description" placeholder="Nhập mô tả"><?= old('description') ?></textarea>
                 </div>
 
+                <?php if ($cat_type == 'product') :?> 
+                <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" select-img-type="1" input-name="cat_image" return-img="id" img-data=""></config-img>
+                <?php endif;?>
+
                 <hr>
 
                 <div class="ml-0">
@@ -81,8 +85,6 @@ echo $this->section('content');?>
                     </div>
                 </div>
 
-
-
             </div>
 
             <div class="card-footer">
@@ -94,7 +96,7 @@ echo $this->section('content');?>
     </div>
 
     <!--List Category-->
-    <div class="col-7" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
+    <div class="col-md-7" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
 
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -103,7 +105,7 @@ echo $this->section('content');?>
                     <a class="<?= ($action == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("{$config->adminSlug}/category/{$cat_type}?deleted=1") ?>">Deleted</a>
                 </div>
 
-                <div class="card-tools">
+                <div class="card-tools mt-2">
                     <div class="input-group input-group-sm">
                         <input type="text" name="title" class="form-control" placeholder="<?= lang('Category.search') ?>" v-model="searchkey" @keyup="onSearch">
                         <div class="input-group-append">
@@ -117,7 +119,7 @@ echo $this->section('content');?>
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="mailbox-controls">
-                    <div class="input-group col-3">
+                    <div class="input-group col-md-3 mb-2">
                         <select name="action" id="bulk-action-selector-top" class="form-control">
                             <option value="-1">Bulk Actions</option>
                             <option value="mdelete">Delete</option>
@@ -141,6 +143,7 @@ echo $this->section('content');?>
                                 <th><?= lang('Category.title') ?></th>
                                 <th><?= lang('Category.parent_cat') ?></th>
                                 <th><?= lang('Category.slug') ?></th>
+                                <th><?= lang('Category.cat_status') ?></th>
                                 <th><?= lang('Actions') ?></th>
                             </tr>
                         </thead>
@@ -153,8 +156,9 @@ echo $this->section('content');?>
                                     </div>
                                 </td>
                                 <td><a :href="renderEditUrl(cat)">{{ cat.title }}</a></td>
-                                <td>{{ catParent(cat) }}</td>
+                                <td v-html="catParent(cat)"></td>
                                 <td>{{ cat.slug }}</td>
+                                <td v-html="cat.status"></td>
                                 <td>
                                     <a class="btn btn-primary btn-sm mb-2" :href="renderEditUrl(cat)"><i class="fas fa-edit"></i></a> &nbsp;
                                         <a class="btn btn-danger btn-sm mb-2" @click.prevent="delCat(cat.id)"><i class="fas fa-trash"></i></a>
@@ -163,7 +167,7 @@ echo $this->section('content');?>
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="5"><?= lang('Acp.no_item_found') ?></td>
+                                <td colspan="6"><?= lang('Acp.no_item_found') ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -175,13 +179,29 @@ echo $this->section('content');?>
     </div>
 
 </div>
+
+<?php
+echo view($config->view.'\system\attach\_vGallery');
+echo view($config->view.'\system\attach\_vConfigAttach');
+echo view($config->view.'\system\attach\_vImgSelect');
+?>
 <?= $this->endSection() ?>
 
-<?php echo $this->section('pageScripts') ?>
+<?=$this->section('pageScripts') ?>
+<script src="<?= base_url($config->scriptsPath)?>/acp/sys/vConfigAttach.js"></script>
 <!-- Import Category App -->
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/vCategory.js"></script>
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/postWordCount.js"></script>
 <script>
+    catList.component('config-img', vConfigAttach);
+    catList.component('vgallery', gallery);
+    catList.component('vimg-reivew', imgGalleryReview);
+    catList.component('vgallery-img', galleryImg);
+    catList.component('vimg-infor', imgInfor);
+    catList.component('vfileReivew', fileReview);
+    catList.component('vimg-select', vFileSelector);
+    catList.component('vfile-preivew', filePreview);
     const listCatMounted = catList.mount('#listCat');
+
 </script>
 <?= $this->endSection() ?>
