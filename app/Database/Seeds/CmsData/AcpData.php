@@ -3,10 +3,10 @@
 namespace App\Database\Seeds\CmsData;
 
 use CodeIgniter\CLI\CLI;
-use App\Models\Blog\CategoryModel;
 use App\Models\LangModel;
 use Faker\Factory;
 use CodeIgniter\Shield\Entities\User;
+use Modules\Acp\Models\Blog\CategoryModel;
 
 class AcpData extends \CodeIgniter\Database\Seeder
 {
@@ -20,7 +20,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
     public function run()
     {
         //insert default user data
-        // $this->generateDefaultUsers();
+        $this->generateDefaultUsers();
 
         //get user data
         $user = $this->userModel->findByCredentials(['email' => 'tmtuan801@gmail.com']);
