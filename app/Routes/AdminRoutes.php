@@ -207,9 +207,9 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
 
     // shop routes
     $routes->group('shop', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
-        $routes->match(['get', 'post'], '/', 'ShopController::index', ['as' => 'list_shop']);
-        $routes->match(['get', 'post'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
-        $routes->match(['get', 'post'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
+        $routes->match(['GET', 'POST'], '/', 'ShopController::index', ['as' => 'list_shop']);
+        $routes->match(['GET', 'POST'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
+        $routes->match(['GET', 'POST'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
     });
 
