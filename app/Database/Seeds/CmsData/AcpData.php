@@ -74,7 +74,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
             1 => [
                 'user_init'         => $user->id ?? 1,
                 'user_type'         => get_class($_userModel),
-                'name'              => 'Tiếng Anh',
+                'name'              => 'English',
                 'locale'            => 'en',
                 'lang_code'         => 'en-US',
                 'flag'              => 'us.svg',
