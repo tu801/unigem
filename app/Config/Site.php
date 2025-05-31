@@ -14,10 +14,12 @@ class Site extends BaseConfig {
     public $uploadFolder =  ROOTPATH."uploads".DIRECTORY_SEPARATOR;
     public $imageThumb = ['height' => 360, 'width' => 550];
     public $scriptsPath = "scripts/";
+    public $sys;
 
     //--------------------------------------------------------------------
     // Layout for the views to extend
     //--------------------------------------------------------------------
+    public $view;
     public $theme_name = "unigem";
     public $viewLayout = 'master';
     public $templatePath;

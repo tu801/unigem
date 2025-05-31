@@ -39,6 +39,11 @@ abstract class BaseController extends Controller
     protected $page_title;
 
     /**
+     * @var int
+     */
+    protected $maxSizeImage;
+
+    /**
      * Instance of the main Response.
      *
      * @var ResponseInterface
