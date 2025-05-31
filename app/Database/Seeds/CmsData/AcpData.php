@@ -103,17 +103,20 @@ class AcpData extends \CodeIgniter\Database\Seeder
         //insert default user data
         CLI::write("----- insert default User Data -----");
 
-        for ($i = 0; $i < 8; $i++) {
-            $userData = $this->generateFakerUser('123123');
-            $userData['username'] = str_replace('.', '', $userData['username']);
+        if ( getenv('CI_ENVIRONMENT') === 'development' ) {
+           
+            for ($i = 0; $i < 8; $i++) {
+                $userData = $this->generateFakerUser('123123');
+                $userData['username'] = str_replace('.', '', $userData['username']);
 
-            CLI::write("- Create Users {$userData['username']} | {$userData['email']} ");
-            $user = new User($userData);
-            $this->userModel->save($user);
-            $newUser = $this->userModel->findById($this->userModel->getInsertID());
+                CLI::write("- Create Users {$userData['username']} | {$userData['email']} ");
+                $user = new User($userData);
+                $this->userModel->save($user);
+                $newUser = $this->userModel->findById($this->userModel->getInsertID());
 
-            $this->userModel->addToDefaultGroup($newUser);
-            $newUser->forcePasswordReset();
+                $this->userModel->addToDefaultGroup($newUser);
+                $newUser->forcePasswordReset();
+            }
         }
 
         //insert defaut user admin with pw 1234qwer@#$
