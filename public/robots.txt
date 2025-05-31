@@ -1,2 +1,15 @@
 User-agent: *
-Disallow: 
+Disallow: /writable/
+Disallow: /vendor/
+Disallow: /tests/
+Disallow: /system/
+Disallow: /app/
+Disallow: /env
+Disallow: /composer.json
+Disallow: /composer.lock
+Allow: /public/assets/
+Allow: /public/uploads/
+Allow: /public/images/
+Allow: /public/css/
+Allow: /public/js/
+
