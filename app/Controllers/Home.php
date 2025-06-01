@@ -78,17 +78,17 @@ class Home extends BaseController
             ];
             $errMess = [
                 'fullname'     => [
-                    'required'            => lang('Home.contact_fullname_required'),
+                    'required'            => lang('Contact.contact_fullname_required'),
                 ],
                 'email'        => [
-                    'required'    => lang('Home.contact_email_required'),
+                    'required'    => lang('Contact.contact_email_required'),
                     'valid_email' => lang('Validation.valid_email'),
                 ],
                 'subject'     => [
-                    'required'   => lang('Home.contact_subject_required'),
+                    'required'   => lang('Contact.contact_subject_required'),
                 ],
                 'message' => [
-                    'required' => lang('Home.contact_message_required'),
+                    'required' => lang('Contact.contact_message_required'),
                 ],
             ];
             if (!$this->validate($rules, $errMess)) {
@@ -102,7 +102,7 @@ class Home extends BaseController
                     ->where('created_at >=', date('Y-m-d H:i:s', strtotime('-15 minutes')))
                     ->first();
             if(!empty($formCheck)) {
-                return redirect()->back()->withInput()->with('errors', [lang('Home.form_submit_same_ip_error')]);
+                return redirect()->back()->withInput()->with('errors', [lang('Contact.form_submit_same_ip_error')]);
             }
 
             $postData['contact_type'] = ContactEnum::FORM_CONTACT_TYPE;
@@ -110,7 +110,7 @@ class Home extends BaseController
             $postData['phone'] = '';
             $contactModel->save($postData);
             
-            return redirect()->back()->with('message', lang('Home.form_submit_success'));
+            return redirect()->back()->with('message', lang('Contact.form_submit_success'));
         }
 
         return $this->_render('home/contact', $this->_data);

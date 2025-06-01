@@ -18,18 +18,6 @@ return [
     'status_active'         => 'Đang hoạt động',
     'status_in_active'      => 'Không hoạt động',
 
-    // Contact
-    'contact'               => 'Thông tin liên hệ',
-    'contact_name'          => 'Tên liên hệ',
-    'contact_phone'         => 'Số điện thoại',
-    'contact_email'         => 'Email',
-    'contact_subject'       => 'Chủ đề',
-    'contact_message'       => 'Nội dung',
-
-    'contact_status_new'     => 'Mới',
-    'contact_status_read'    => 'Đã đọc',
-    'contact_status_resolve' => 'Đã giải quyết',
-
     // error message
     'name_required'         => 'Vui lòng điền tên cửa hàng',
     'name_is_exist'         => 'Tên cửa hàng đã tồn tại',

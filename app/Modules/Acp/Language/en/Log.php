@@ -22,8 +22,12 @@ return [
     'edit_page_desc' => '#[{0}] edited content of page #{1}',
 
     // shop logging message
-    'add_shop' => 'Thêm Shop',
-    'add_shop_desc' => '[{0}] đã thêm thành công shop #{1}',
-    'edit_shop' => 'Sửa thông tin Shop',
-    'edit_shop_desc' => '[{0}] đã sửa thành công thông tin shop #{1}',
+    'add_shop' => 'Add Shop',
+    'add_shop_desc' => '[{0}] successfully added shop #{1}',
+    'edit_shop' => 'Edit Shop Information',
+    'edit_shop_desc' => '[{0}] successfully edited shop information #{1}',
+
+    // contact logging message
+    'edit_contact'  => 'Edit Contact',
+    'edit_contact_desc' => '[{0}] edited contact #{1}',
 ];

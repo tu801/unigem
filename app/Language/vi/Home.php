@@ -59,22 +59,4 @@ return [
 
     'shipping_and_delivery_title'       => 'Vận chuyển & Giao hàng',
 
-    // Contact Page
-    'contact_email'                     => 'Email',
-    'contact_phone'                     => 'Số điện thoại',
-    'contact_name'                      => 'Họ và tên',
-    'select_subject'                    => 'Bạn cần chúng tôi giúp gì?',
-    'subject_purchase_advice'           => 'Tư vấn mua hàng',
-    'subject_warranty_advice'           => 'Tư vấn về bảo hành',
-    'subject_other'                     => 'Các vấn đề khác',
-    'contact_form_title'                => 'Gửi tin nhắn',
-    'contact_form_desc'                 => 'Nếu bạn có bất kì thắc mắc nào hay cần bất kì điều gì hãy gửi tin nhắn cho chúng tôi',
-
-    'contact_fullname_required'         => 'Họ và tên không được để trống',
-    'contact_email_required'            => 'Email không được để trống',
-    'contact_email_invalid'             => 'Email không hợp lệ',
-    'contact_subject_required'          => 'Chủ đề không được để trống',
-    'contact_message_required'          => 'Nội dung liên hệ không được để trống',
-    'form_submit_same_ip_error'         => 'Bạn đã gửi liên hệ trước đó, vui lòng thử lại sau',
-    'form_submit_success'               => 'Chúng tôi đã nhận được tin nhắn của bạn, chúng tôi sẽ liên hệ với bạn sớm nhất có thể',
 ];

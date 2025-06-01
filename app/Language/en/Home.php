@@ -58,22 +58,4 @@ return [
 
     'shipping_and_delivery_title'       => 'Shipping & Delivery',
 
-    // Contact Page
-    'contact_email'                     => 'Email',
-    'contact_phone'                     => 'Phone number',
-    'contact_name'                      => 'Full name',
-    'select_subject'                    => 'How can we help you?',
-    'subject_purchase_advice'           => 'Purchase advice',
-    'subject_warranty_advice'           => 'Warranty advice',
-    'subject_other'                     => 'Other issues',
-    'contact_form_title'                => 'Send a message',
-    'contact_form_desc'                 => 'If you have any questions or need anything, please send us a message.',
-
-    'contact_fullname_required'         => 'Full name cannot be empty',
-    'contact_email_required'            => 'Email cannot be empty',
-    'contact_email_invalid'             => 'Invalid email',
-    'contact_subject_required'          => 'Subject cannot be empty',
-    'contact_message_required'          => 'Message content cannot be empty',
-    'form_submit_same_ip_error'         => 'You have already sent a contact request, please try again later',
-    'form_submit_success'               => 'We have received your message, we will contact you as soon as possible',
 ];

@@ -27,31 +27,31 @@ echo $this->section('content');
             <div class="tf-content-left">
                 <h5 class="mb_20"><?= get_theme_config('general_company_name') ?></h5>
                 <div class="mb_20">
-                    <p class="mb_15"><strong><?= lang('Home.company_address') ?></strong></p>
+                    <p class="mb_15"><strong><?= lang('Contact.company_address') ?></strong></p>
                     <p><?= get_theme_config('general_address') ?></p>
                 </div>
                 <div class="mb_20">
-                    <p class="mb_15"><strong><?= lang('Home.company_phone') ?></strong></p>
-                    <p><a href="tel:<?= get_theme_config('hotline') ?>"
+                    <p class="mb_15"><strong><?= lang('Contact.company_phone') ?></strong></p>
+                    <p><a href="tel:<?= get_theme_config('general_hotline') ?>"
                             class="footer-menu_item"><?= get_theme_config('general_hotline') ?></a></p>
                 </div>
                 <div class="mb_20">
-                    <p class="mb_15"><strong><?= lang('Home.company_email') ?></strong></p>
+                    <p class="mb_15"><strong><?= lang('Contact.company_email') ?></strong></p>
                     <p><a
                             href="mailto:<?= get_theme_config('general_email') ?>"><?= get_theme_config('general_email') ?></a>
                     </p>
                 </div>
                 <div class="mb_36">
-                    <p class="mb_15"><strong><?= lang('Home.company_open_time') ?></strong></p>
-                    <p class="mb_15"><?= lang('Home.company_open_time_desc') ?></p>
+                    <p class="mb_15"><strong><?= lang('Contact.company_open_time') ?></strong></p>
+                    <p class="mb_15"><?= lang('Contact.company_open_time_desc') ?></p>
                 </div>
                 <div>
                     <?= view_cell('\App\Cells\Widgets\SocialLinksCell', null, $configs->viewCellCacheTtl, '_social_links_' . $currentLang->locale) ?>
                 </div>
             </div>
             <div class="tf-content-right">
-                <h5 class="mb_20"><?= lang('Home.contact_form_title') ?></h5>
-                <p class="mb_24"><?= lang('Home.contact_form_desc') ?></p>
+                <h5 class="mb_20"><?= lang('Contact.contact_form_title') ?></h5>
+                <p class="mb_24"><?= lang('Contact.contact_form_desc') ?></p>
 
                 <div>
                 <?php if (session()->has('errors')) : ?>
@@ -73,25 +73,25 @@ echo $this->section('content');
                         <div class="d-flex gap-15 mb_15">
                             <fieldset class="w-100">
                                 <input type="text" name="fullname" id="name" value="<?= old('fullname')?>"
-                                    placeholder="<?= lang('Home.contact_name') ?>" />
+                                    placeholder="<?= lang('Contact.contact_name') ?>" />
                             </fieldset>
                             <fieldset class="w-100">
                                 <input type="email" name="email" id="email" value="<?= old('email')?>"
-                                    placeholder="<?= lang('Home.contact_email') ?>" />
+                                    placeholder="<?= lang('Contact.contact_email') ?>" />
                             </fieldset>
                         </div>
                         <div class="d-flex mb_15">
                             <div class="select-custom w-100">
                                 <select class="tf-select w-100" name="subject">
-                                    <option value="">-- <?=lang('Home.select_subject')?> --</option>
+                                    <option value="">-- <?=lang('Contact.select_subject')?> --</option>
                                     <?php foreach ( ContactEnum::CONTACT_SUBJECT_LIST as $key ) : ?>
-                                    <option value="<?=$key?>" <?= old('subject') == $key ? "selected" : "" ?> ><?=lang('Home.subject_'.$key)?></option>
+                                    <option value="<?=$key?>" <?= old('subject') == $key ? "selected" : "" ?> ><?=lang('Contact.subject_'.$key)?></option>
                                     <?php endforeach;?>
                                 </select>
                             </div>
                         </div>
                         <div class="mb_15">
-                            <textarea placeholder="Message" name="message" id="message" cols="30"
+                            <textarea placeholder="<?=lang('Contact.contact_message')?>" name="message" id="message" cols="30"
                                 rows="10"><?=old('message')?></textarea>
                         </div>
                         <div class="send-wrap">
@@ -128,13 +128,13 @@ $(document).ready(function() {
             }
         },
         messages: {
-            fullname: "<?=lang('Home.contact_fullname_required')?>",
+            fullname: "<?=lang('Contact.contact_fullname_required')?>",
             email: {
-                required: "<?=lang('Home.contact_email_required')?>",
-                email: "<?=lang('Home.contact_email_invalid')?>" 
+                required: "<?=lang('Contact.contact_email_required')?>",
+                email: "<?=lang('Contact.contact_email_invalid')?>" 
             },
-            subject: "<?=lang('Home.contact_subject_required')?>",
-            message: "<?=lang('Home.contact_message_required')?>"
+            subject: "<?=lang('Contact.contact_subject_required')?>",
+            message: "<?=lang('Contact.contact_message_required')?>"
         },
         errorElement: 'label',
         errorClass: 'error text-danger',

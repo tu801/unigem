@@ -16,4 +16,12 @@ class ContactEnum extends BaseEnum
     const STATUS_NEW = 'new';
     const STATUS_READ = 'read';
     const STATUS_RESOLVE = 'resolve';
+
+    public static function getContactStatusList(){
+        return [
+            self::STATUS_NEW,
+            self::STATUS_READ,
+            self::STATUS_RESOLVE    
+        ];
+    }
 }
