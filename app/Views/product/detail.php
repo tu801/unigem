@@ -27,7 +27,7 @@ echo $this->section('content');
 <!-- /breadcrumb -->
 
 <!-- default -->
-<section class="flat-spacing-4 pt_0">
+<section class="flat-spacing-2 pt_0">
     <div class="tf-main-product section-image-zoom">
         <div class="container">
             <div class="row">

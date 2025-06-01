@@ -29,8 +29,6 @@ class ShopInfor extends Seeder
         $user = $this->userModel->findByCredentials(['email' => 'tmtuan801@gmail.com']);
 
         // create default shop infor with the shop name base on env config site_name and other informations are fake
-        $fakerObject = Factory::create();
-
         $shopName = getenv('app.site_name');
         CLI::write("- Create {$shopName} Shop Infor ");
         $shopModel = model(ShopModel::class);
@@ -50,8 +48,8 @@ class ShopInfor extends Seeder
         $shopModel->insert([
             'user_init' => $user->id ?? 1,
             'name' => $shopName,
-            'phone' => $fakerObject->phoneNumber,
-            'address' => $fakerObject->address,
+            'phone' => '0123456789',
+            'address' => '123 Main Street, City, Country',
             'status' => 1,
         ]);
     }

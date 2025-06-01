@@ -11,6 +11,7 @@ class Acp extends BaseConfig
     public $imageThumb = ['height' => 360, 'width' => 550];
     public $uploadMineType = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
     public $adminSlug = ADMIN_AREA;
+    public $sys;
 
     //--------------------------------------------------------------------
     // Layout for the views to extend

@@ -3,10 +3,10 @@
 namespace App\Database\Seeds\CmsData;
 
 use CodeIgniter\CLI\CLI;
-use App\Models\Blog\CategoryModel;
 use App\Models\LangModel;
 use Faker\Factory;
 use CodeIgniter\Shield\Entities\User;
+use Modules\Acp\Models\Blog\CategoryModel;
 
 class AcpData extends \CodeIgniter\Database\Seeder
 {
@@ -20,7 +20,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
     public function run()
     {
         //insert default user data
-        // $this->generateDefaultUsers();
+        $this->generateDefaultUsers();
 
         //get user data
         $user = $this->userModel->findByCredentials(['email' => 'tmtuan801@gmail.com']);
@@ -74,7 +74,7 @@ class AcpData extends \CodeIgniter\Database\Seeder
             1 => [
                 'user_init'         => $user->id ?? 1,
                 'user_type'         => get_class($_userModel),
-                'name'              => 'Tiếng Anh',
+                'name'              => 'English',
                 'locale'            => 'en',
                 'lang_code'         => 'en-US',
                 'flag'              => 'us.svg',
@@ -103,17 +103,20 @@ class AcpData extends \CodeIgniter\Database\Seeder
         //insert default user data
         CLI::write("----- insert default User Data -----");
 
-        for ($i = 0; $i < 8; $i++) {
-            $userData = $this->generateFakerUser('123123');
-            $userData['username'] = str_replace('.', '', $userData['username']);
+        if ( getenv('CI_ENVIRONMENT') === 'development' ) {
+           
+            for ($i = 0; $i < 8; $i++) {
+                $userData = $this->generateFakerUser('123123');
+                $userData['username'] = str_replace('.', '', $userData['username']);
 
-            CLI::write("- Create Users {$userData['username']} | {$userData['email']} ");
-            $user = new User($userData);
-            $this->userModel->save($user);
-            $newUser = $this->userModel->findById($this->userModel->getInsertID());
+                CLI::write("- Create Users {$userData['username']} | {$userData['email']} ");
+                $user = new User($userData);
+                $this->userModel->save($user);
+                $newUser = $this->userModel->findById($this->userModel->getInsertID());
 
-            $this->userModel->addToDefaultGroup($newUser);
-            $newUser->forcePasswordReset();
+                $this->userModel->addToDefaultGroup($newUser);
+                $newUser->forcePasswordReset();
+            }
         }
 
         //insert defaut user admin with pw 1234qwer@#$

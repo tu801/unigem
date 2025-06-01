@@ -127,7 +127,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('edit/(:num)', 'Category::edit/$1', ['as' => 'edit_category']);
         $routes->post('edit/(:num)', 'Category::editAction/$1');
 
-        $routes->get('remove/(:num)', 'Category::remove/$1', ['as' => 'remove_category']);
+        $routes->get('remove/(:num)', 'Category::removeCat/$1', ['as' => 'remove_category']);
 
         //Ajax
         $routes->get('list-cat/(:alpha)', 'Category::vuejsListCat/$1');
@@ -195,9 +195,9 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
 
     // shop routes
     $routes->group('shop', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
-        $routes->match(['get', 'post'], '/', 'ShopController::index', ['as' => 'list_shop']);
-        $routes->match(['get', 'post'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
-        $routes->match(['get', 'post'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
+        $routes->match(['GET', 'POST'], '/', 'ShopController::index', ['as' => 'list_shop']);
+        $routes->match(['GET', 'POST'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
+        $routes->match(['GET', 'POST'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
     });
 

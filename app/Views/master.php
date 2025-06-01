@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
-    <meta name="robots" content="noindex, follow" />
+    <?php if ( getenv('CI_ENVIRONMENT') === 'development' ) : ?>
+        <meta name="robots" content="noindex, nofollow" />
+    <?php else: ?>
+        <meta name="robots" content="index, follow" />
+    <?php endif; ?>
 
     <!-- font -->
     <link rel="stylesheet" href="<?=base_url($configs->templatePath)?>fonts/fonts.css">

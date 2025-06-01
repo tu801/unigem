@@ -112,7 +112,8 @@ class Post extends BaseController
             SeoMetaCell::add('og_description', get_theme_config('general_seo_description'));
             SeoMetaCell::add('og_url', current_url());
             $og_img_data = get_theme_config('general_seo_open_graph_image');
-            SeoMetaCell::add('og_image', base_url($og_img_data->full_image));
+            $ogp_img = isset($og_img_data->full_image) ? $og_img_data->full_image : $this->config->templatePath. '/unigem-logo.png';
+            SeoMetaCell::add('og_image', base_url($ogp_img));
 
             $postTags = $this->_model->join('post_content', 'post_content.post_id = post.id')
                 ->where('post_content.lang_id', $this->currentLang->id)
