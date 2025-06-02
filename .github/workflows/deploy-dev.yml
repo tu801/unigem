@@ -18,3 +18,9 @@ jobs:
           script: |
             cd /var/www/unigem-dev/src
             git pull origin develop
+
+            if git diff --name-status origin/develop...HEAD | grep '^A.*app/Database/Migrations/'; then
+              php spark migrate --all
+            else
+              echo "No new migration files. Skip migrate."
+            fi
