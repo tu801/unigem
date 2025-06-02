@@ -26,7 +26,7 @@ return [
     'footer_contact_info'               => 'Thông Tin Liên Hệ',
 
     'select_subject'                    => 'Bạn cần chúng tôi giúp gì?',
-    
+
     'contact_form_title'                => 'Gửi tin nhắn',
     'contact_form_desc'                 => 'Nếu bạn có bất kì thắc mắc nào hay cần bất kì điều gì hãy gửi tin nhắn cho chúng tôi',
 
@@ -38,6 +38,12 @@ return [
     'form_submit_same_ip_error'         => 'Bạn đã gửi liên hệ trước đó, vui lòng thử lại sau',
     'form_submit_success'               => 'Chúng tôi đã nhận được tin nhắn của bạn, chúng tôi sẽ liên hệ với bạn sớm nhất có thể',
 
+    'subscribeSuccess'                  => 'Đăng ký nhận bản tin thành công',
+    'subscribeEmailExists'              => 'Email đã được đăng ký trước đó, vui lòng sử dụng email khác',
+
     // admin panel
-    'contact_list'          => 'Danh sách liên hệ',
+    'contact_list'                      => 'Danh sách liên hệ',
+
+    'contact_list_type_form'                 => 'Form liên hệ',
+    'contact_list_type_subscribe'            => 'Email subscribe',
 ];

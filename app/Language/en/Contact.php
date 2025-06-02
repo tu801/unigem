@@ -26,7 +26,7 @@ return [
     'footer_contact_info'               => 'Contact Information',
 
     'select_subject'                    => 'How can we help you?',
-    
+
     'contact_form_title'                => 'Send Message',
     'contact_form_desc'                 => 'If you have any questions or need anything, please send us a message',
 
@@ -38,6 +38,12 @@ return [
     'form_submit_same_ip_error'         => 'You have already sent a contact message, please try again later',
     'form_submit_success'               => 'We have received your message, we will contact you as soon as possible',
 
+    'subscribeSuccess'                  => 'Subscription successful',
+    'subscribeEmailExists'              => 'Email has already been subscribed, please use a different email',
+
     // admin panel
     'contact_list'          => 'Contact List',
+
+    'contact_list_type_form'                 => 'Form Contact',
+    'contact_list_type_subscribe'            => 'Email Subscribe',
 ];

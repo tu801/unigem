@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('404.html', 'Home::error_404', ['as'=> 'show_error']);
-$routes->match(['GET', 'POST'],'contact.html', 'Home::contactUs', ['as'=> 'contactUs']);
+$routes->get('404.html', 'Home::error_404', ['as' => 'show_error']);
+$routes->match(['GET', 'POST'], 'contact.html', 'Home::contactUs', ['as' => 'contactUs']);
 
 /**
  * Product
@@ -62,6 +62,8 @@ $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($ro
 
 // ajax routes
 $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($routes) {
+    $routes->post('subscribe-email', 'ContactController::addSubscribeEmail');
+
     $routes->get('get-province', 'AjaxController::getProvinces');
     $routes->get('get-district/(:num)', 'AjaxController::getDistricts/$1');
     $routes->get('get-ward/(:num)', 'AjaxController::getWards/$1');
