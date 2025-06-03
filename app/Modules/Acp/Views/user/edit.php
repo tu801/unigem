@@ -33,20 +33,16 @@ echo $this->section('content') ?>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label"><?=lang('User.user_group')?></label>
                         <div class="col-sm-10">
-                            <select class="form-control m-b" name="gid">
+                            <select class="select2 form-control m-b" name="groups[]" multiple>
                                 <?php if($list_userg){
-                                    foreach($list_userg as $userg){
-                                        $sel = ( $userData->gid == $userg->id ) ? 'selected' : '';
-                                        echo "<option  value='".$userg->id."' ".$sel.">".$userg->name."</option>";
+                                    $currentUserGroup = $userData->getGroups();
+                                    foreach ($list_userg as $key => $group) {
+                                        $sel = ( in_array($key, $currentUserGroup) ) ? 'selected' : '';
+                                        echo "<option  value='".$key."' ".$sel.">".$group['title']."</option>";
                                     }
                                 }?>
                             </select>
-                            <br>
-                            <div class="icheck-danger d-inline">
-                                <input type="checkbox" name="sync_permission" value="1" id="checkboxRequiredChangePass">
-                                <label for="checkboxRequiredChangePass">Cập nhật lại quyền cho user này theo quyền của nhóm được chọn
-                                </label>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -108,6 +104,8 @@ echo $this->section('content') ?>
             format: "dd-mm-yyyy",
             autoclose: true,
         });
+        //Initialize Select2 Elements
+        $('.select2').select2();
     });
 </script>
 <?= $this->endSection() ?>

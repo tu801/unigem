@@ -41,6 +41,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('edit/(:num)', 'User::editAction/$1', ['filter' => 'group:superadmin,admin']);
 
         $routes->get('remove/(:num)', 'User::remove/$1', ['as' => 'remove_user', 'filter' => 'group:superadmin,admin']);
+        $routes->post('delete/(:num)', 'User::permanentDelete/$1', ['as' => 'permanent_delete_user', 'filter' => 'group:superadmin,admin']);
     });
 
     //config controller

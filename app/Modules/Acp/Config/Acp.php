@@ -25,25 +25,9 @@ class Acp extends BaseConfig
     public $footer_js;
 
     //--------------------------------------------------------------------
-    // Config permission group
+    // Config user group avaiable
     //--------------------------------------------------------------------
-    public $permission_groups = [
-        'admin' => [
-            'title' => 'Trang Quản Trị',
-            'type' => 'default',
-            'module' => 'acp',
-            'objects' => [
-                'config' => 'Cấu hình',
-                'user' => 'Nhân viên',
-                'usergroup' => 'Nhóm người dùng',
-                'themeoptioncontroller' => 'Quản Lý Giao Diện',
-                'menu'  => 'Quản lý menu',
-                'category' => 'Quản lý danh mục',
-                'page' => 'Quản Lý Trang',
-                'post'  => 'Quản lý tin'
-            ]
-        ]
-    ];
+    public $available_groups = ['admin', 'user', 'customer', 'content_manager', 'sale_manager'];
 
     //--------------------------------------------------------------------
     // Config User Meta
@@ -116,4 +100,16 @@ class Acp extends BaseConfig
         ['name' => "Mô-đun Acp", 'val' => 'acp'],
         ['name' => 'Mô-đun Site', 'val' => 'site'],
     ];
+
+    public function getUserGroup()
+    {
+        $groups = config('AuthGroups')->groups;
+        $result = [];
+
+        foreach ( $this->available_groups as $group ) {
+            $result[$group] = $groups[$group];
+        }
+
+        return $result;
+    }
 }

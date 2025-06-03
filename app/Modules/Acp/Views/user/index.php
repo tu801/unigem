@@ -72,7 +72,17 @@ $frmUrl = (isset($action) && $action == 'deleted') ? route_to('list_user') . '?d
                                     <img src="<?= getUserAvatar($row) ?>" class="img-lg img-thumbnail">
                                 </td>
                                 <td><?= $row->meta['fullname'] ?? '' ?></td>
-                                <td><?= (isset($row->groupData) && is_array($row->groupData)) ? $row->groupData['name'] : '' ?>
+                                <td>
+                                    <?php
+                                    $currentUserGroup = $row->getGroups();
+                                    $availableGroups = $config->getUserGroup();
+                                    if (!empty($currentUserGroup)) {
+                                        foreach ($currentUserGroup as $key) {
+                                            $displayText = $availableGroups[$key] ?? '';
+                                            echo "<span class='badge badge-info p-2 m-1'>{$displayText['title']}</span>";
+                                        }
+                                    }
+                                    ?>
                                 </td>
                                 <td><?= $row->created_at->toLocalizedString('d/m/Y') ?></td>
                                 <td>
@@ -85,9 +95,14 @@ $frmUrl = (isset($action) && $action == 'deleted') ? route_to('list_user') . '?d
                                     <?php if ($action == 'all') : ?>
                                     <a class="btn btn-danger btn-sm mb-2 acp_item_del"
                                         href="<?= route_to("remove_user", $row->id) ?>"><i class="fas fa-trash"></i></a>
-                                    <?php elseif ($action == 'deleted' && $login_user->root_user) : ?>
+                                    <?php elseif ($action == 'deleted' && $login_user->inGroup('superadmin', 'admin') ) : ?>
                                     <a class="btn btn-success btn-sm mb-2"
                                         href="<?= route_to("recover_user", $row->id) ?>"><i class="fa fa-redo"></i></a>
+                                    <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Permanent Delete Item" 
+                                        data-delete-message="Bạn có chắc chắn muốn thực hiện hành động này? Việc này sẽ xoá hoàn toàn item này và không thể khôi phục lại được."
+                                        data-delete="<?= route_to("permanent_delete_user", $row->id)?>" data-id="<?=$row->id?>" >
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

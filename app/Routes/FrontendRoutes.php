@@ -69,6 +69,10 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
     $routes->get('get-ward/(:num)', 'AjaxController::getWards/$1');
     $routes->get('get-shipping-fee', 'AjaxController::getShippingFee');
 
+    $routes->group('customer', null, function ($routes) {
+        $routes->post('register', 'CustomerController::register');
+    });
+
     $routes->group('product', null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');
         $routes->post('search', 'AjaxController::searchProduct');

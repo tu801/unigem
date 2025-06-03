@@ -25,11 +25,11 @@ return [
     'expiredJWT'     => 'Token has expired.',
     'beforeValidJWT' => 'Token is not yet valid.',
 
-    'email'           => 'Email Address',
+    'email'           => 'Email',
     'username'        => 'Username',
     'password'        => 'Password',
     'passwordConfirm' => 'Password (repeat)',
-    'haveAccount'     => 'Already have an account?',
+    'haveAccount'     => 'Already have an account? Login now!',
     'token'           => 'Token',
 
     // Buttons
@@ -37,16 +37,19 @@ return [
     'send'    => 'Send',
 
     // Registration
-    'register'         => 'Register',
-    'registerDisabled' => 'Registration is currently not allowed.',
-    'registerSuccess'  => 'Welcome to us!',
+    'register'                  => 'Register',
+    'registerDisabled'          => 'Registration is currently not allowed.',
+    'registerSuccess'           => 'Welcome to us!',
+    'newCustomerRegisterNow'    => 'Don\'t have an account? Register now!',
+    'fullName'                  => 'Full name',
+    'phoneNumber'               => 'Phone number',
 
     // Login
     'login'              => 'Login',
     'needAccount'        => 'Need an account?',
     'rememberMe'         => 'Remember me?',
     'forgotPassword'     => 'Forgot password?',
-    'useMagicLink'       => 'Use Magic Link',
+    'useMagicLink'       => 'Use Magic Login Link',
     'magicLinkSubject'   => 'Your Magic Login Link',
     'magicTokenNotFound' => 'Unable to verify the link.',
     'magicLinkExpired'   => 'Sorry, the link has expired.',

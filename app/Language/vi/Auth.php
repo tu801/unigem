@@ -25,11 +25,11 @@ return [
     'expiredJWT'     => 'Token đã hết hạn.',
     'beforeValidJWT' => 'Token chưa có hiệu lực.',
 
-    'email'           => 'Địa chỉ Email',
+    'email'           => 'Email',
     'username'        => 'Tên đăng nhập',
     'password'        => 'Mật khẩu',
     'passwordConfirm' => 'Mật khẩu (nhập lại)',
-    'haveAccount'     => 'Đã có tài khoản?',
+    'haveAccount'     => 'Đã có tài khoản? Đăng nhập ngay!',
     'token'           => 'Token',
 
     // Buttons
@@ -37,9 +37,12 @@ return [
     'send'    => 'Gửi',
 
     // Registration
-    'register'         => 'Đăng ký',
-    'registerDisabled' => 'Đăng ký hiện không được cho phép.',
-    'registerSuccess'  => 'Chào mừng bạn đến với chúng tôi!',
+    'register'                  => 'Đăng ký',
+    'registerDisabled'          => 'Đăng ký hiện không được cho phép.',
+    'registerSuccess'           => 'Chào mừng bạn đến với chúng tôi!',
+    'newCustomerRegisterNow'    => 'Chưa có tài khoản? Đăng ký ngay!',
+    'fullName'                  => 'Họ và tên',
+    'phoneNumber'               => 'Số điện thoại',
 
     // Login
     'login'              => 'Đăng nhập',
