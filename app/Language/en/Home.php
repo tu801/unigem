@@ -58,15 +58,4 @@ return [
 
     'shipping_and_delivery_title'       => 'Shipping & Delivery',
 
-    // Contact Page
-    
-    'company_address'                   => 'Address',
-    'company_phone'                     => 'Phone',
-    'company_email'                     => 'Email',
-    'company_open_time'                 => 'Opening hours',
-    'company_open_time_desc'            => 'Monday - Saturday: 09:00 - 18:00',
-    'footer_contact_info'               => 'Contact Information',
-
-    'contact_form_title'                => 'Send a message',
-    'contact_form_desc'                 => 'If you have any questions or need anything, please send us a message',
 ];

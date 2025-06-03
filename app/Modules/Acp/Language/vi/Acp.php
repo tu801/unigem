@@ -35,6 +35,7 @@ return [
     'menu_setup'        => 'Quản lý Menu',
 
     'shop_manager'      => 'Quản lý cửa hàng',
+    'contact_manager'   => 'Quản lý liên hệ',
 
     'faker'             => 'Tạo dữ liệu',
 
