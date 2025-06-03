@@ -58,8 +58,8 @@
             </li>
 
             <!-- Shop -->
-            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'shippingconfigcontroller', 'luckydrawgamecontroller'))) ? "menu-open" : "" ?>">
-                <a href="#" class="nav-link <?= (in_array($controller, array('shopcontroller', 'shippingconfigcontroller', 'luckydrawgamecontroller'))) ? "active" : "" ?>">
+            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "menu-open" : "" ?>">
+                <a href="#" class="nav-link <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-store"></i>
                     <p>
                         <?= lang('Acp.shop_manager') ?>
@@ -71,6 +71,12 @@
                         <a href="<?= route_to('list_shop') ?>" class="nav-link <?= ($controller == 'shopcontroller') ? "active" : '' ?>">
                             <i class="far fa-circle  nav-icon"></i>
                             <p><?= lang('Acp.shop_manager'); ?></p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= route_to('list_contact') ?>" class="nav-link <?= ($controller == 'contactcontroller') ? "active" : '' ?>">
+                            <i class="far fa-id-badge  nav-icon"></i>
+                            <p><?= lang('Acp.contact_manager'); ?></p>
                         </a>
                     </li>
                 </ul>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -58,15 +59,4 @@ return [
 
     'shipping_and_delivery_title'       => 'Vận chuyển & Giao hàng',
 
-    // Contact Page
-    
-    'company_address'                   => 'Địa chỉ',
-    'company_phone'                     => 'Điện thoại',
-    'company_email'                     => 'Email',
-    'company_open_time'                 => 'Giờ mở cửa',
-    'company_open_time_desc'            => 'Thứ 2 - Thứ 7: 09:00 - 18:00',
-    'footer_contact_info'               => 'Thông Tin Liên Hệ',
-
-    'contact_form_title'                => 'Gửi tin nhắn',
-    'contact_form_desc'                 => 'Nếu bạn có bất kì thắc mắc nào hay cần bất kì điều gì hãy gửi tin nhắn cho chúng tôi',
 ];

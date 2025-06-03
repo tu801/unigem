@@ -4,6 +4,8 @@ return [
     // General
     'product_weight_unit'                => 'ct',
 
+    'internalServerError'               => 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.',
+
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Đăng nhập',
     'cmsFirstTimeChangePassText'        => 'Đổi mật khẩu',

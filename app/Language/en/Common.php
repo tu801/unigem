@@ -4,6 +4,8 @@ return [
     // General
     'product_weight_unit'                => 'ct',
 
+    'internalServerError'               => 'Internal server error. Please try again later.',
+
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Sign in to start your session',
     'cmsFirstTimeChangePassText'        => 'First Time Change Password',

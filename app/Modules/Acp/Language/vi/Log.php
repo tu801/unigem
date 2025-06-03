@@ -26,4 +26,8 @@ return [
     'add_shop_desc' => '[{0}] đã thêm thành công shop #{1}',
     'edit_shop' => 'Sửa thông tin Shop',
     'edit_shop_desc' => '[{0}] đã sửa thành công thông tin shop #{1}',
+
+    // contact logging message
+    'edit_contact'  => 'Sửa liên hệ',
+    'edit_contact_desc' => '[{0}] đã sửa liên hệ #{1}',
 ];

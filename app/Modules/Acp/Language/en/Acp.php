@@ -35,6 +35,7 @@ return [
     'menu_setup'        => 'Menu Management',
 
     'shop_manager'      => 'Shop Management',
+    'contact_manager'   => 'Contact Management',
 
     'faker'             => 'Generate Data',
 
