@@ -37,8 +37,8 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
      */
     $routes->get('login', '\App\Controllers\Login::login', ['as' => 'cus_login']);
     $routes->post('login', '\App\Controllers\Login::actionLogin');
-    $routes->get('register', '\App\Controllers\Register::register', ['as' => 'cus_register']);
-    $routes->post('register', '\App\Controllers\Register::actionRegister');
+    $routes->get('register', 'Register::register', ['as' => 'cus_register']);
+    $routes->post('register', 'Register::registerSubmit');
     $routes->get('logout', 'AuthCustomer::logout', ['as' => 'cus_logout']);
 
     // Activation

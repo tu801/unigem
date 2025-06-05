@@ -41,8 +41,6 @@ return [
     'registerDisabled'          => 'Registration is currently not allowed.',
     'registerSuccess'           => 'Welcome to us!',
     'newCustomerRegisterNow'    => 'Don\'t have an account? Register now!',
-    'fullName'                  => 'Full name',
-    'phoneNumber'               => 'Phone number',
 
     // Login
     'login'              => 'Login',

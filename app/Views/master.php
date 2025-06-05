@@ -7,9 +7,9 @@
     <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
     <?php if (getenv('CI_ENVIRONMENT') === 'development') : ?>
-        <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="noindex, nofollow" />
     <?php else: ?>
-        <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow" />
     <?php endif; ?>
 
     <!-- font -->
@@ -37,7 +37,7 @@
     <?= $this->renderSection('style') ?>
 
     <script type="text/javascript">
-        var site_url = '<?= base_url() ?>';
+    var site_url = '<?= base_url() ?>';
     </script>
 
 </head>
@@ -113,7 +113,6 @@
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/count-down.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/lazysize.min.js"></script>
-    <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/drift.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/wow.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/multiple-modal.js"></script>
@@ -123,15 +122,15 @@
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/subscribe.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('.type-languages').on('change', function() {
-                var selectedOption = $(this).find('option:selected');
-                var redirectUrl = selectedOption.data('href');
-                if (redirectUrl) {
-                    window.location.href = redirectUrl;
-                }
-            });
+    $(document).ready(function() {
+        $('.type-languages').on('change', function() {
+            var selectedOption = $(this).find('option:selected');
+            var redirectUrl = selectedOption.data('href');
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
         });
+    });
     </script>
 
     <?= $this->renderSection('scripts') ?>

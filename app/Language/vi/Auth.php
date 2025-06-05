@@ -41,8 +41,6 @@ return [
     'registerDisabled'          => 'Đăng ký hiện không được cho phép.',
     'registerSuccess'           => 'Chào mừng bạn đến với chúng tôi!',
     'newCustomerRegisterNow'    => 'Chưa có tài khoản? Đăng ký ngay!',
-    'fullName'                  => 'Họ và tên',
-    'phoneNumber'               => 'Số điện thoại',
 
     // Login
     'login'              => 'Đăng nhập',
