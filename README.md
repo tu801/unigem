@@ -76,3 +76,19 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+## Vietnamese Area database
+
+### update v2.4.0
+
+Run migration script to update area tables first
+
+```shell
+php spark migrate --all
+```
+
+Update Vietnamese Area database data:
+
+```shell
+php spark db:seed ImportVietNamAreaDataV01Mar2025
+```

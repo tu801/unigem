@@ -6,6 +6,9 @@ thêm field cho table language
 
 ```sql
 ALTER TABLE `language` ADD `currency_symbol` VARCHAR(32) NULL AFTER `currency_code`;
+
+UPDATE `language` SET `name` = 'English', `currency_code` = 'USD', `currency_symbol`='$' WHERE `language`.`id` = 2;
+UPDATE `language` SET `currency_code` = 'VND', `currency_symbol`='₫' WHERE `language`.`id` = 1;
 ```
 
 sau khi thêm thì thiêt lập giá trị tiền tệ cho vnd + usd
