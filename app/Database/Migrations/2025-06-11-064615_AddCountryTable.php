@@ -15,12 +15,17 @@ class AddCountryTable extends Migration
             'id'                    => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'code'                  => ['type' => 'varchar', 'constraint' => 32, 'null' => true],
             'name'                  => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+            'full_name'             => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+            'flags'                 => ['type' => 'text', 'null' => true],
+            'currency'              => ['type' => 'text', 'null' => true],
             'created_at'            => ['type' => 'datetime', 'null' => true],
             'updated_at'            => ['type' => 'datetime', 'null' => true],
             'deleted_at'            => ['type' => 'datetime', 'null' => true],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('country', true);
+        $this->forge->addKey('code');
+        $this->forge->addKey('name');
+        $this->forge->createTable('countries', true);
 
         // add field country_id to customer table
         $db = \Config\Database::connect();
@@ -53,7 +58,7 @@ class AddCountryTable extends Migration
     public function down()
     {
         // delete table country
-        $this->forge->dropTable('country');
+        $this->forge->dropTable('countries');
 
         // drop field country_id from customer table
         $this->forge->dropColumn('customer', 'country_id');
