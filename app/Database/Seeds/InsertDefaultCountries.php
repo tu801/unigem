@@ -20,7 +20,7 @@ class InsertDefaultCountries extends Seeder
             $code = $item['cca2']; // 2-letter ISO code
             $name = $item['name']['common']; // Common name
             $full_name = $item['name']['official']; // Official name
-            $flags = json_encode($item['flags'], JSON_UNESCAPED_UNICODE); // Flags url
+            $flagsJson = json_encode($item['flags'], JSON_UNESCAPED_UNICODE); // Flags url
             $currencyJson = json_encode($item['currencies'], JSON_UNESCAPED_UNICODE);
 
             // Check if country already exists by code and name
@@ -37,8 +37,8 @@ class InsertDefaultCountries extends Seeder
                 'code' => $code,
                 'name' => $name,
                 'full_name' => $full_name,
-                'flags' => $flags,
-                'currency' => $currencyJson,
+                'flags' => $flagsJson,
+                'currencies' => $currencyJson,
                 'created_at' => date('Y-m-d H:i:s'),
             ];
 

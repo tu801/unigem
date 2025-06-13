@@ -13,11 +13,11 @@ class AddCountryTable extends Migration
          */
         $this->forge->addField([
             'id'                    => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'code'                  => ['type' => 'varchar', 'constraint' => 32, 'null' => true],
-            'name'                  => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+            'code'                  => ['type' => 'varchar', 'constraint' => 32, 'null' => false],
+            'name'                  => ['type' => 'varchar', 'constraint' => 255, 'null' => false],
             'full_name'             => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
-            'flags'                 => ['type' => 'text', 'null' => true],
-            'currency'              => ['type' => 'text', 'null' => true],
+            'flags'                 => ['type' => 'text', 'null' => true, 'comment' => 'JSON value'], // store JSON value
+            'currencies'            => ['type' => 'text', 'null' => true, 'comment' => 'JSON value'], // store JSON value
             'created_at'            => ['type' => 'datetime', 'null' => true],
             'updated_at'            => ['type' => 'datetime', 'null' => true],
             'deleted_at'            => ['type' => 'datetime', 'null' => true],
