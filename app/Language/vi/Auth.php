@@ -93,10 +93,10 @@ return [
 
     // Activate
     'emailActivateTitle'    => 'Kích hoạt Email',
-    'emailActivateBody'     => 'Chúng tôi vừa gửi cho bạn một email có mã để xác nhận địa chỉ email của bạn. Sao chép mã đó và dán vào bên dưới.',
+    'emailActivateBody'     => 'Chúng tôi vừa gửi cho bạn một email có mã để xác nhận địa chỉ email của bạn. Sao chép mã đó và dán vào bên dưới để kích hoạt tài khoản của bạn.',
     'emailActivateSubject'  => 'Mã kích hoạt của bạn',
     'emailActivateMailBody' => 'Vui lòng sử dụng mã dưới đây để kích hoạt tài khoản của bạn và bắt đầu sử dụng trang web.',
-    'invalidActivateToken'  => 'Mã không chính xác.',
+    'invalidActivateToken'  => 'Mã kích hoạt không chính xác.',
     'needActivate'          => 'Bạn phải hoàn thành đăng ký bằng cách xác nhận mã đã gửi đến địa chỉ email của bạn.',
     'activationBlocked'     => 'Bạn phải kích hoạt tài khoản trước khi đăng nhập.',
 

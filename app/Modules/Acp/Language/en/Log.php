@@ -14,6 +14,8 @@ return [
     'device_login' => 'Device',
     'status' => 'Status',
     'ip_address' => 'IP Address',
+    'module' => 'Log Module',
+    'description' => 'Log Description',
 
     // Logging titles
     'add_page' => 'Add New Page',

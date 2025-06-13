@@ -14,6 +14,8 @@ return [
     'device_login' => 'Thiết bị',
     'status' => 'Trạng thái',
     'ip_address' => 'Địa chỉ IP',
+    'module' => 'Mô-đun',
+    'description' => 'Mô tả',
 
     //logging title
     'add_page' => 'Thêm trang mới',

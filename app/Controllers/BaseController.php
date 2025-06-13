@@ -11,6 +11,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Enums\UserTypeEnum;
+use App\Models\Store\Customer\CustomerModel;
 use Modules\Acp\Libraries\ThemeOptions;
 use Psr\Log\LoggerInterface;
 
@@ -93,7 +94,7 @@ abstract class BaseController extends Controller
 
         if ($authenticator->loggedIn()) {
             $this->user = $authenticator->getUser();
-            if ($this->user->user_type == UserTypeEnum::CUSTOMER) $this->customer = model(CusModel::class)->queryCustomerByUserId($this->user->id)->first();
+            if ($this->user->user_type == UserTypeEnum::CUSTOMER) $this->customer = model(CustomerModel::class)->queryCustomerByUserId($this->user->id)->first();
         }
     }
 

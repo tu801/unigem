@@ -100,7 +100,7 @@ class Auth extends ShieldAuth
      * @var array<string, class-string<ActionInterface>|null>
      */
     public array $actions = [
-        'register' => null,
+        'register' => \CodeIgniter\Shield\Authentication\Actions\EmailActivator::class,
         'login'    => null,
     ];
 
@@ -483,8 +483,9 @@ class Auth extends ShieldAuth
      */
     public function permissionDeniedRedirect(): string
     {
-        $user = auth()->user(); dd($user->user_type);
-        $url = ( $user->user_type == UserTypeEnum::ADMIN ) ? ADMIN_AREA : setting('Auth.redirects')['permission_denied'];
+        $user = auth()->user();
+        dd($user->user_type);
+        $url = ($user->user_type == UserTypeEnum::ADMIN) ? ADMIN_AREA : setting('Auth.redirects')['permission_denied'];
 
         return $this->getUrl($url);
     }
@@ -496,7 +497,7 @@ class Auth extends ShieldAuth
     public function groupDeniedRedirect(): string
     {
         $user = auth()->user();
-        $url = ( $user->user_type == UserTypeEnum::ADMIN ) ? ADMIN_AREA : setting('Auth.redirects')['group_denied'];
+        $url = ($user->user_type == UserTypeEnum::ADMIN) ? ADMIN_AREA : setting('Auth.redirects')['group_denied'];
 
         return $this->getUrl($url);
     }

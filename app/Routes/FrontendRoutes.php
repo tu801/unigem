@@ -43,6 +43,7 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
 
     // Activation
     $routes->get('activate-account', 'AuthCustomer::activateAccount', ['as' => 'cus_activate_account']);
+    $routes->post('activate/verify', 'AuthCustomer::verify', ['as' => 'cus_activate_account_verify']);
     $routes->get('forgot-password', 'AuthCustomer::forgotPassword', ['as' => 'cus_forgot_password']);
 });
 
@@ -64,10 +65,10 @@ $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($ro
 $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($routes) {
     $routes->post('subscribe-email', 'ContactController::addSubscribeEmail');
 
-    $routes->get('get-province', 'AjaxController::getProvinces');
-    $routes->get('get-district/(:num)', 'AjaxController::getDistricts/$1');
-    $routes->get('get-ward/(:num)', 'AjaxController::getWards/$1');
-    $routes->get('get-shipping-fee', 'AjaxController::getShippingFee');
+    $routes->get('get-province', 'AreaController::getProvinces');
+    $routes->get('get-district/(:num)', 'AreaController::getDistricts/$1');
+    $routes->get('get-ward/(:num)', 'AreaController::getWards/$1');
+    $routes->get('get-shipping-fee', 'AreaController::getShippingFee');
 
     $routes->group('customer', null, function ($routes) {
         $routes->post('register', 'CustomerController::register');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 13-Apr-2025
@@ -28,6 +29,7 @@ class CustomerModel extends Model
         'cus_phone',
         'cus_address',
         'cus_birthday',
+        'country_id ',
         'province_id',
         'district_id',
         'ward_id',
@@ -63,9 +65,16 @@ class CustomerModel extends Model
         do {
             $code = strtoupper(getRandomString(6));
             $check = $this->where('cus_code', $code)
-                    ->get()->getFirstRow();
+                ->get()->getFirstRow();
         } while (isset($check->id) && $check->id !== 0);
 
         return $code;
+    }
+
+    public function queryCustomerByUserId($user_id)
+    {
+        $this->where('user_id', $user_id);
+
+        return $this;
     }
 }
