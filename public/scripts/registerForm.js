@@ -41,9 +41,6 @@ $(document).ready(function () {
     );
     var countryCode = selectedOption.attr("data-code");
 
-    console.log("Selected value:", selectedValue);
-    console.log("Country code:", countryCode);
-
     if (countryCode == "VN") {
       $("#vietnam_address").removeClass("d-none");
       $("#other_country_address").addClass("d-none");

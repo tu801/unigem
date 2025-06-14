@@ -5,6 +5,7 @@ return [
     'product_weight_unit'                => 'ct',
 
     'internalServerError'               => 'Internal server error. Please try again later.',
+    'somethingWentWrong'                => 'Something went wrong. Please try again later.',
 
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Sign in to start your session',

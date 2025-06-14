@@ -6,13 +6,13 @@
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-login-form">
-                <form class="" action="my-account.html" accept-charset="utf-8">
+                <form class="" accept-charset="utf-8" id="loginForm" >
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " id="login-email" type="email" name="email">
                         <label class="tf-field-label" for=""><?= lang('Auth.email') ?> *</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password" name="">
+                        <input class="tf-field-input tf-input" placeholder=" " id="login-password" type="password" name="password">
                         <label class="tf-field-label" for=""><?= lang('Auth.password') ?> *</label>
                     </div>
                     <div>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="bottom">
                         <div class="w-100">
-                            <button type="submit"
+                            <button type="submit" id="login-submit"
                                 class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span><?= lang('Auth.login') ?></span></button>
                         </div>
                         <div class="w-100">
@@ -68,3 +68,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    const loginValidateMessage = {
+        emailInvalid: '<?= lang('Auth.invalidEmail') ?>',
+        emailRequired: '<?= lang('Auth.emailRequired') ?>',
+        passwordRequired: '<?= lang('Auth.passwordRequired') ?>',
+        somethingWentWrong: '<?= lang('Common.somethingWentWrong') ?>',
+        loginSuccess: '<?= lang('Auth.loginSuccess') ?>',
+    }
+</script>

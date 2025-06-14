@@ -26,7 +26,7 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     $routes->get('profile', 'Profile::profile', ['as' => 'cus_profile']);
     $routes->match(['GET', 'POST'], 'account-profile-info', 'Profile::profileInfo', ['as' => 'edit_cus_profile']);
     $routes->match(['GET', 'POST'], 'change-password', 'AuthCustomer::changePassword', ['as' => 'cus_change_password']);
-    
+
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
     $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);
 
@@ -69,9 +69,8 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
     $routes->get('get-ward/(:num)', 'AreaController::getWards/$1');
     $routes->get('get-shipping-fee', 'AreaController::getShippingFee');
 
-    $routes->group('customer', null, function ($routes) {
-        $routes->post('register', 'CustomerController::register');
-    });
+    $routes->post('customer-login', 'CustomerController::login');
+    $routes->get('customer-logout', 'CustomerController::logout');
 
     $routes->group('product', null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');

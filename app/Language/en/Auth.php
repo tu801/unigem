@@ -16,7 +16,8 @@ return [
     'badToken'              => 'Invalid access token.',
     'oldToken'              => 'Access token has expired.',
     'noUserEntity'          => 'User Entity must be provided to validate the password.',
-    'invalidEmail'          => 'Unable to verify the email address matches the saved email.',
+    'emailRequired'         => 'Please enter an email.',
+    'invalidEmail'          => 'Invalid email address.',
     'unableSendEmailToUser' => 'Sorry, there was a problem sending the email. We could not send an email to "{0}".',
     'throttled'             => 'Too many requests from this IP address. You can try again in {0} seconds.',
     'notEnoughPrivilege'    => 'You do not have the necessary privileges to perform the desired action.',
@@ -56,8 +57,12 @@ return [
     'magicLinkDisabled'  => 'The use of MagicLink is currently not allowed.',
     'successLogout'      => 'You have successfully logged out.',
     'backToLogin'        => 'Back to Login',
+    'loginSuccess'       => 'Login successful',
+    'already_logged_in'  => 'You are already logged in. Please log out before logging in again.',
+    'logoutSuccess'      => 'Logout successful',
 
     // Passwords
+    'passwordRequired'          => 'Please enter a password.',
     'errorPasswordLength'       => 'Password must be at least {0, number} characters.',
     'suggestPasswordLength'     => 'A passphrase - up to 255 characters - creates a safer and easier to remember password.',
     'errorPasswordCommon'       => 'Password must not be a common password.',

@@ -16,7 +16,8 @@ return [
     'badToken'              => 'Access token không hợp lệ.',
     'oldToken'              => 'Access token đã hết hạn.',
     'noUserEntity'          => 'Phải cung cấp User Entity để xác thực mật khẩu.',
-    'invalidEmail'          => 'Không thể xác minh địa chỉ email khớp với email đã lưu.',
+    'emailRequired'         => 'Vui lòng nhập email.',
+    'invalidEmail'          => 'Email không hợp lệ.',
     'unableSendEmailToUser' => 'Xin lỗi, đã xảy ra sự cố khi gửi email. Chúng tôi không thể gửi email đến "{0}".',
     'throttled'             => 'Quá nhiều yêu cầu từ địa chỉ IP này. Bạn có thể thử lại sau {0} giây.',
     'notEnoughPrivilege'    => 'Bạn không có quyền cần thiết để thực hiện thao tác mong muốn.',
@@ -56,8 +57,12 @@ return [
     'magicLinkDisabled'  => 'Việc sử dụng MagicLink hiện không được cho phép.',
     'successLogout'      => 'Bạn đã đăng xuất thành công.',
     'backToLogin'        => 'Quay lại Đăng nhập',
+    'loginSuccess'       => 'Đăng nhập thành công',
+    'already_logged_in'  => 'Bạn đã đăng nhập rồi. Vui lòng đăng xuất trước khi đăng nhập lại.',
+    'logoutSuccess'      => 'Đăng xuất thành công',
 
     // Passwords
+    'passwordRequired'          => 'Vui lòng điền mật khẩu.',
     'errorPasswordLength'       => 'Mật khẩu phải có ít nhất {0, number} ký tự.',
     'suggestPasswordLength'     => 'Cụm mật khẩu - dài tới 255 ký tự - tạo ra mật khẩu an toàn hơn và dễ nhớ.',
     'errorPasswordCommon'       => 'Mật khẩu không được là mật khẩu thông dụng.',

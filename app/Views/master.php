@@ -88,9 +88,11 @@
     <?= $this->include($configs->view . '\templates\toolbar-shop-mobile') ?>
     <!-- /toolbarShopmb -->
 
+    <?php if ( !auth()->loggedIn() ) : ?>
     <!-- modal login -->
     <?= $this->include($configs->view . '\components\modal-login') ?>
     <!-- /modal login -->
+    <?php endif; ?>
 
     <!-- shoppingCart -->
     <?= $this->include($configs->view . '\components\modal-shopping-cart') ?>
@@ -120,6 +122,7 @@
     <script type="module" src="<?= base_url($configs->templatePath) ?>js/model-viewer.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->scriptsPath) ?>plugins/toastr/toastr.min.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/subscribe.js"></script>
+    <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/customer-login.js"></script>
 
     <script type="text/javascript">
     $(document).ready(function() {
