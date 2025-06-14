@@ -11,7 +11,18 @@ return [
     'vietnam_country'                            => 'Việt Nam',
     'other_country'                              => 'Quốc gia khác',
 
-    'activate_account'                          => 'Kích hoạt tài khoản',
+    'activate_account'                           => 'Kích hoạt tài khoản',
+
+    // customer profile
+    'my_account'                                 => 'Tài khoản của tôi',
+    'welcome_back'                               => 'Chào bạn, {0}!',
+    'dashboard_message'                          => 'Tại đây bạn có thể quản lý thông tin tài khoản của mình, xem lịch sử đơn hàng và cập nhật địa chỉ giao hàng.',
+    'logout'                                     => 'Đăng xuất',
+    'dashboard'                                  => 'Bảng điều khiển',
+    'account_detail'                             => 'Thông tin tài khoản',
+    'change_password'                            => 'Đổi mật khẩu',
+    'shipping_address'                           => 'Địa chỉ giao hàng',
+    'orders'                                     => 'Đơn hàng',
 
     // validation message
     'cus_full_name_required'                    => 'Vui lòng nhập họ tên',

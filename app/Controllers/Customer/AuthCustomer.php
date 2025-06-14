@@ -89,6 +89,7 @@ class AuthCustomer extends \App\Controllers\BaseController
      */
     public function verify()
     {
+        $customerModel = model(\App\Models\Store\Customer\CustomerModel::class);
         /** @var Session $authenticator */
         $authenticator = auth('session')->getAuthenticator();
 
@@ -116,6 +117,8 @@ class AuthCustomer extends \App\Controllers\BaseController
 
         // Set the user active now
         $user->activate();
+        $customer = $customerModel->queryCustomerByUserId($user->id)->first();
+        $customerModel->update($customer->id, ['active' => 1]);
 
         // Success!
         return redirect()->to(route_to('cus_profile'))

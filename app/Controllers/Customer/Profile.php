@@ -30,33 +30,23 @@ class Profile extends BaseController
 
     public function profile()
     {
-        if (!isset($this->user)) {
+        if (!isset($this->user) || $this->user->user_type == UserTypeEnum::ADMIN) {
             return redirect()->route('/');
         }
 
         if ($this->user->user_type == UserTypeEnum::ADMIN) {
-            return redirect()->to(base_url());
+            return redirect()->route('/');
         }
 
-        dd($this->user, $this->customer);
-
-        //set breadcrumb
-        BreadCrumbCell::add('Home', base_url());
-        BreadCrumbCell::add(lang('CustomerProfile.my_account'), route_to('cus_profile'));
-
-        $this->_data['user'] = $this->customer;
+        $this->_data['customer'] = $this->customer;
 
         return $this->_render('customer/profile', $this->_data);
     }
 
     public function profileInfo()
     {
-        if (!$this->auth->check()) {
-            return redirect()->route('cus_login');
-        }
-
-        if ($this->user->user_type == UserTypeEnum::ADMIN) {
-            return redirect()->to(base_url());
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
+            return redirect()->route('/');
         }
 
         //set breadcrumb
@@ -69,7 +59,7 @@ class Profile extends BaseController
             return $this->saveProfileAction($this->customer);
         }
 
-        $this->_data['user'] = $this->customer;
+        $this->_data['customer'] = $this->customer;
         return $this->_render('customer/profile_info', $this->_data);
     }
 

@@ -124,9 +124,15 @@ class Register extends BaseController
             $customer = new Customer($postData);
             $customer->cus_code = $this->_model->generateCode();
             $customer->country_id = $postData['country'] ?? null;
-            $customer->province_id  = $postData['province'] ?? null;
-            $customer->district_id  = $postData['district'] ?? null;
-            $customer->ward_id  = $postData['ward'] ?? null;
+            if ( $postData['country'] == 200 ) {
+                $customer->province_id  = $postData['province'] ?? null;
+                $customer->district_id  = $postData['district'] ?? null;
+                $customer->ward_id  = $postData['ward'] ?? null;
+            } else {
+                $customer->province_id  = 0;
+                $customer->district_id  =  0;
+                $customer->ward_id  = 0;
+            }
 
             $cusId = $this->_model->insert($customer);
 

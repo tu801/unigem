@@ -26,9 +26,7 @@ echo $this->section('content');
             <div class="col-lg-9">
                 <div class="my-account-content account-dashboard">
                     <div class="mb_60">
-                        <h6 class="fw-5 mb_20"><?=lang('Customer.welcome_back', [$customer->cus_full_name])?></h6>
-                        <p class="fw-5 mb_20"><?=lang('Customer.dashboard_message')?></p>
-                        <?php echo view_cell('\App\Cells\Customer\RecentOrdersCell') ?>
+                        Customer Profile Information
                     </div>
                 </div>
             </div>

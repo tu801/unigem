@@ -26,15 +26,14 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     $routes->get('profile', 'Profile::profile', ['as' => 'cus_profile']);
     $routes->match(['GET', 'POST'], 'account-profile-info', 'Profile::profileInfo', ['as' => 'edit_cus_profile']);
     $routes->match(['GET', 'POST'], 'change-password', 'AuthCustomer::changePassword', ['as' => 'cus_change_password']);
+    
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
     $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);
 
-    $routes->get('my-voucher', 'Voucher::list', ['as' => 'voucher_list']);
+    
     $routes->match(['GET', 'POST'], 'my-voucher/claim-gift/(:num)', 'Voucher::claimGift/$1', ['as' => 'claim_gift']);
 
-    /**
-     * Auth
-     */
+    // Authentication
     $routes->get('login', '\App\Controllers\Login::login', ['as' => 'cus_login']);
     $routes->post('login', '\App\Controllers\Login::actionLogin');
     $routes->get('register', 'Register::register', ['as' => 'cus_register']);

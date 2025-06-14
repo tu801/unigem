@@ -29,7 +29,7 @@ class CustomerModel extends Model
         'cus_phone',
         'cus_address',
         'cus_birthday',
-        'country_id ',
+        'country_id',
         'province_id',
         'district_id',
         'ward_id',

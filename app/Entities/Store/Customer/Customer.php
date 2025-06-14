@@ -26,20 +26,27 @@ class Customer extends Entity
         }
     }
 
+    /**
+     * Get the full address of the customer.
+     * if the country is Vietnam (country_id == 200), include province, district, and ward.
+     * If not, return only the cus_address.
+     *
+     * @return string
+     */
     public function getFullAddress()
     {
-        if (empty($this->province_id) || empty($this->district_id) || empty($this->ward_id)) {
-            return false;
+        if ( $this->country_id == 200 ) {
+            $province = model(ProvinceModel::class)->find($this->province_id);
+            $district = model(DistrictModel::class)->find($this->district_id);
+            $ward     = model(WardModel::class)->find($this->ward_id);
+
+            $this->full_address = $this->cus_address;
+            $this->full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
+            $this->full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
+            $this->full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
+        } else {
+            $this->full_address = $this->cus_address;
         }
-
-        $province = model(ProvinceModel::class)->find($this->province_id);
-        $district = model(DistrictModel::class)->find($this->district_id);
-        $ward     = model(WardModel::class)->find($this->ward_id);
-
-        $this->full_address = $this->cus_address;
-        $this->full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
-        $this->full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
-        $this->full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
 
         return $this->full_address;
     }
