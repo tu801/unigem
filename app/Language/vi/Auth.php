@@ -48,6 +48,8 @@ return [
     'needAccount'        => 'Cần một tài khoản?',
     'rememberMe'         => 'Ghi nhớ đăng nhập?',
     'forgotPassword'     => 'Quên mật khẩu?',
+    'forgotPasswordTitle' => 'Quên mật khẩu',
+    'forgotPasswordText'  => '<p>Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.</p>',
     'useMagicLink'       => 'Sử dụng Liên kết Đăng nhập',
     'magicLinkSubject'   => 'Liên kết Đăng nhập của bạn',
     'magicTokenNotFound' => 'Không thể xác minh liên kết.',
@@ -78,12 +80,22 @@ return [
     'passwordChangeSuccess'     => 'Đổi mật khẩu thành công',
     'userDoesNotExist'          => 'Mật khẩu không được thay đổi. Người dùng không tồn tại',
     'resetTokenExpired'         => 'Xin lỗi. Token đặt lại của bạn đã hết hạn.',
+    'forgotPasswordSuccess'     => 'Chúng tôi đã gửi email với hướng dẫn đặt lại mật khẩu của bạn. Vui lòng kiểm tra hộp thư đến của bạn.',
+    'emailForgotPasswordExtra'  => 'Kiểm tra email để khôi phục mật khẩu. Recover Password URL : {0}',
+    'recoverPasswordEmail'      => 'Hãy truy cập vào link sau đây để đặt lại mật khẩu của bạn:',
+    'recoverPasswordLink'       => 'Đặt lại mật khẩu',
+    'recoverPassword'           => 'Khôi phục mật khẩu',
+    'recoverPasswordBody'       => 'Hãy nhập mật khẩu mới của bạn vào ô bên dưới để khôi phục mật khẩu.',
+    'passwordMaxLength'         => 'Mật khẩu không được vượt quá 255 ký tự.',
+    'passwordNotMatch'          => 'Mật khẩu không khớp. Vui lòng thử lại.',
+    'recoverPasswordSuccess'    => 'Mật khẩu của bạn đã được đặt lại thành công. Bạn có thể đăng nhập bằng mật khẩu mới của mình.',
 
     // Email Globals
     'emailInfo'      => 'Một số thông tin về người dùng:',
     'emailIpAddress' => 'Địa chỉ IP:',
     'emailDevice'    => 'Thiết bị:',
     'emailDate'      => 'Ngày:',
+    'emailNotFound'  => 'Không tìm thấy người dùng với địa chỉ email này.',
 
     // 2FA
     'email2FATitle'       => 'Xác thực Hai yếu tố',
@@ -97,6 +109,7 @@ return [
     'needVerification'    => 'Kiểm tra email của bạn để hoàn tất kích hoạt tài khoản.',
 
     // Activate
+    'activateAccountTitle'    => 'Kích hoạt tài khoản',
     'emailActivateTitle'    => 'Kích hoạt Email',
     'emailActivateBody'     => 'Chúng tôi vừa gửi cho bạn một email có mã để xác nhận địa chỉ email của bạn. Sao chép mã đó và dán vào bên dưới để kích hoạt tài khoản của bạn.',
     'emailActivateSubject'  => 'Mã kích hoạt của bạn',

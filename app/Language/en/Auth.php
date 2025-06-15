@@ -48,6 +48,8 @@ return [
     'needAccount'        => 'Need an account?',
     'rememberMe'         => 'Remember me?',
     'forgotPassword'     => 'Forgot password?',
+    'forgotPasswordTitle' => 'Forgot Password',
+    'forgotPasswordText'  => '<p>Enter your email address and we will send you a link to reset your password.</p>',
     'useMagicLink'       => 'Use Magic Login Link',
     'magicLinkSubject'   => 'Your Magic Login Link',
     'magicTokenNotFound' => 'Unable to verify the link.',
@@ -78,12 +80,22 @@ return [
     'passwordChangeSuccess'     => 'Password changed successfully',
     'userDoesNotExist'          => 'Password not changed. User does not exist',
     'resetTokenExpired'         => 'Sorry. Your reset token has expired.',
+    'forgotPasswordSuccess'     => 'We have sent an email with instructions to reset your password. Please check your inbox.',
+    'emailForgotPasswordExtra'  => 'Check your email to recover your password',
+    'recoverPasswordEmail'      => 'Please visit the following link to reset your password:',
+    'recoverPasswordLink'       => 'Reset Password',
+    'recoverPassword'           => 'Recover Password',
+    'recoverPasswordBody'       => 'Please enter your new password in the field below to recover your password.',
+    'passwordMaxLength'         => 'Password must not exceed 255 characters.',
+    'passwordNotMatch'          => 'Password does not match. Please try again.',
+    'recoverPasswordSuccess'    => 'Your password has been successfully reset. You can now log in with your new password.',
 
     // Email Globals
     'emailInfo'      => 'Some information about the user:',
     'emailIpAddress' => 'IP Address:',
     'emailDevice'    => 'Device:',
     'emailDate'      => 'Date:',
+    'emailNotFound'  => 'No user found with this email address.',
 
     // 2FA
     'email2FATitle'       => 'Two-Factor Authentication',
@@ -97,6 +109,7 @@ return [
     'needVerification'    => 'Check your email to complete account activation.',
 
     // Activate
+    'activateAccountTitle' => 'Activate Account',
     'emailActivateTitle'    => 'Email Activation',
     'emailActivateBody'     => 'We have just sent you an email with a code to confirm your email address. Copy that code and paste it below.',
     'emailActivateSubject'  => 'Your activation code',

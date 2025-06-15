@@ -6,6 +6,7 @@ return [
 
     'internalServerError'               => 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.',
     'somethingWentWrong'                => 'Đã xảy ra lỗi. Vui lòng thử lại sau.',
+    'invalidRequest'                    => 'Yêu cầu không hợp lệ.',
 
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Đăng nhập',

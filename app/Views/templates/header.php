@@ -22,8 +22,11 @@
                 <ul class="nav-icon d-flex justify-content-end align-items-center gap-20">
                     <li class="nav-search"><a href="#canvasSearch" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="nav-icon-item"><i class="icon icon-search"></i></a></li>
                     <li class="nav-account">
-                        <?php if ( auth()->loggedIn() ) : ?>
-                            <a href="<?= base_url(route_to('cus_profile')) ?>" class="nav-icon-item"><i class="icon icon-account"></i></a>
+                        <?php if ( auth()->loggedIn() ) :
+                            $user = auth()->getUser();
+                            $profileUrl = $user->user_type === \App\Enums\UserTypeEnum::CUSTOMER ? route_to('cus_profile') : route_to('admin_dashboard');
+                        ?>
+                            <a href="<?= $profileUrl ?>" class="nav-icon-item"><i class="icon icon-account"></i></a>
                         <?php else : ?>
                             <a href="#login" data-bs-toggle="modal" class="nav-icon-item"><i class="icon icon-account"></i></a>
                         <?php endif; ?>

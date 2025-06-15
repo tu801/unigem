@@ -34,8 +34,8 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     $routes->match(['GET', 'POST'], 'my-voucher/claim-gift/(:num)', 'Voucher::claimGift/$1', ['as' => 'claim_gift']);
 
     // Authentication
-    $routes->get('login', '\App\Controllers\Login::login', ['as' => 'cus_login']);
-    $routes->post('login', '\App\Controllers\Login::actionLogin');
+    $routes->get('login', 'Login::loginView', ['as' => 'cus_login']);
+    $routes->post('login', 'Login::loginSubmit');
     $routes->get('register', 'Register::register', ['as' => 'cus_register']);
     $routes->post('register', 'Register::registerSubmit');
     $routes->get('logout', 'AuthCustomer::logout', ['as' => 'cus_logout']);
@@ -43,7 +43,8 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     // Activation
     $routes->get('activate-account', 'AuthCustomer::activateAccount', ['as' => 'cus_activate_account']);
     $routes->post('activate/verify', 'AuthCustomer::verify', ['as' => 'cus_activate_account_verify']);
-    $routes->get('forgot-password', 'AuthCustomer::forgotPassword', ['as' => 'cus_forgot_password']);
+    $routes->get('recover-password', 'AuthCustomer::recoverPasswordView', ['as' => 'cus_recover_password']);
+    $routes->post('recover-password', 'AuthCustomer::recoverPassword');
 });
 
 /**
@@ -69,8 +70,11 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
     $routes->get('get-ward/(:num)', 'AreaController::getWards/$1');
     $routes->get('get-shipping-fee', 'AreaController::getShippingFee');
 
-    $routes->post('customer-login', 'CustomerController::login');
-    $routes->get('customer-logout', 'CustomerController::logout');
+    $routes->group('customer', null, function ($routes) {
+        $routes->post('login', 'CustomerController::login');
+        $routes->post('forgot-password', 'CustomerController::forgotPassword');
+        $routes->get('logout', 'CustomerController::logout');
+    });
 
     $routes->group('product', null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');

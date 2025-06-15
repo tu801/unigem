@@ -38,4 +38,6 @@ return [
     'invalid_old_password'      => 'Mật khẩu cũ không chính xác',
     'changePassSuccess'         => 'Đổi mật khẩu thành công',
 
+    'recoverPasswordLog'        => 'Khách hàng #{0} - {1} đã yêu cầu khôi phục mật khẩu',
+
 ];

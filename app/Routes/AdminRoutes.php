@@ -204,7 +204,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
 
     // contact routes
     $routes->group('contact', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
-        $routes->match(['get', 'post'], '/', 'ContactController::index', ['as' => 'list_contact']);
+        $routes->match(['GET', 'POST'], '/', 'ContactController::index', ['as' => 'list_contact']);
         $routes->get('view/(:num)', 'ContactController::viewContact/$1', ['as' => 'view_contact']);
         $routes->post('view/(:num)', 'ContactController::editContact/$1');
     });

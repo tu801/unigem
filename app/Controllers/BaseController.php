@@ -75,7 +75,7 @@ abstract class BaseController extends Controller
     {
         $this->db = db_connect();
         helper($this->helpers);
-        $this->config           = config('Site');
+        
     }
 
     /**
@@ -88,6 +88,7 @@ abstract class BaseController extends Controller
         $authenticator = auth('session')->getAuthenticator();
 
         // Preload any models, libraries, etc, here.
+        $this->config           = config('Site');
         $this->getConfig();
         $this->_setupTheme();
         $this->_setLang();
