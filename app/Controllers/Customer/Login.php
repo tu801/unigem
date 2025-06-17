@@ -2,6 +2,7 @@
 namespace App\Controllers\Customer;
 
 use App\Controllers\BaseController;
+use App\Enums\UserTypeEnum;
 use App\Models\Store\Customer\CustomerModel;
 use App\Traits\Customer\CustomerValidationRules;
 use App\Traits\SpamFilter;

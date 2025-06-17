@@ -58,7 +58,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[30]',
                 'min_length[3]',
-                'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
+                // 'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
             ],
         ],
         // 'email' => [

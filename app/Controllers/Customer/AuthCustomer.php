@@ -11,6 +11,7 @@ use CodeIgniter\Shield\Models\UserIdentityModel;
 use CodeIgniter\Shield\Traits\Viewable;
 use RuntimeException;
 use App\Enums\Store\CustomerActiveEnum;
+use CodeIgniter\Shield\Authentication\Passwords\DictionaryValidator;
 
 class AuthCustomer extends \App\Controllers\BaseController
 {
@@ -174,8 +175,6 @@ class AuthCustomer extends \App\Controllers\BaseController
 
         $identity = $this->identityModel->getIdentityBySecret(CustomerActiveEnum::FORGOT_PASSWORD_TYPE_EMAIL, $token);
 
-        $identifier = $token ?? '';
-
         // No token found?
         if ($identity === null) {
             return redirect()->back()
@@ -226,10 +225,21 @@ class AuthCustomer extends \App\Controllers\BaseController
             //return the errors
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        $passwordChecker = new DictionaryValidator(config('Auth'));
+        $result = $passwordChecker->check($this->request->getPost('password'), $customerAccount);
+        if (! $result->isOk()) {
+            return redirect()->back()->with('errors', $result->reason())->withInput();
+        }
 
         // update password
         try {
             $this->db->transBegin();
+            //record old password
+            $oldData = [
+                'id' => $customerAccount->id,
+                'user_name' => $customerAccount->username,
+                'old_password' => $customerAccount->password_hash
+            ];
 
             // update customer account
             $customerAccount->password = $this->request->getPost('password');
@@ -242,7 +252,7 @@ class AuthCustomer extends \App\Controllers\BaseController
             $logData = [
                 'title' => 'Customer Recover Password',
                 'description' => lang('CustomerProfile.recoverPasswordLog', [$customerAccount->id, $customerAccount->username]),
-                'properties' => $customerAccount,
+                'properties' => $oldData,
                 'subject_id' => $customerAccount->id,
                 'subject_type' => \App\Models\User\UserModel::class,
             ];

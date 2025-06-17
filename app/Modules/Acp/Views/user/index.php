@@ -78,8 +78,8 @@ $frmUrl = (isset($action) && $action == 'deleted') ? route_to('list_user') . '?d
                                     $availableGroups = $config->getUserGroup();
                                     if (!empty($currentUserGroup)) {
                                         foreach ($currentUserGroup as $key) {
-                                            $displayText = $availableGroups[$key] ?? '';
-                                            echo "<span class='badge badge-info p-2 m-1'>{$displayText['title']}</span>";
+                                            $displayText = $availableGroups[$key]['title'] ?? '';
+                                            echo "<span class='badge badge-info p-2 m-1'>{$displayText}</span>";
                                         }
                                     }
                                     ?>
