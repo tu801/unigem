@@ -15,22 +15,35 @@ $postConfigs = $config->cmsStatus;
                 </div>
                 <div class="card-body pad">
                     <div class="form-group">
-                        <label for="inputFullName" class="col-sm-2 col-form-label"><?= lang('Customer.full_name') ?> <span class="text-danger">*</span></label>
+                        <label for="inputFullName" class="col-form-label"><?= lang('Customer.full_name') ?> <span class="text-danger">*</span></label>
                         <input type="text" name="cus_full_name" class="form-control <?= session('errors.cus_full_name') ? 'is-invalid' : '' ?>"
                                id="inputFullName" placeholder="<?= lang('Customer.full_name') ?>" value="<?= old('cus_full_name') ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="inputPhone" class="col-sm-2 col-form-label"><?= lang('Customer.phone') ?> <span class="text-danger">*</span></label>
+                        <label for="inputPhone" class="col-form-label"><?= lang('Customer.phone') ?> <span class="text-danger">*</span></label>
                         <input type="text" name="cus_phone" class="form-control <?= session('errors.cus_phone') ? 'is-invalid' : '' ?>"
                                id="inputPhone" placeholder="<?= lang('Customer.phone') ?>" value="<?= old('cus_phone') ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="inputEmail" class="col-sm-2 col-form-label"><?= lang('Customer.email') ?> <span class="text-danger">*</span></label>
+                        <label for="inputEmail" class="col-form-label"><?= lang('Customer.email') ?> <span class="text-danger">*</span></label>
                         <input type="text" name="cus_email" class="form-control <?= session('errors.cus_email') ? 'is-invalid' : '' ?>"
                                id="inputEmail" placeholder="<?= lang('Customer.email') ?>" value="<?= old('cus_email') ?>">
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label"><?=lang('Customer.password')?> <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control <?php if(session('errors.password')) : ?>is-invalid<?php endif ?>"
+                            name="password" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label"><?=lang('Customer.password_confirm')?> <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control <?php if(session('errors.pass_confirm')) : ?>is-invalid<?php endif ?>"
+                            name="password_confirm" autocomplete="off">
+                    </div>
+
                     <div class="form-group">
                         <label><?=lang('Customer.birthday')?> </label>
                         <div class="input-group date">
@@ -46,6 +59,19 @@ $postConfigs = $config->cmsStatus;
                     </div>
 
                     <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label><?= lang('Acp.country') ?> <span class="text-danger">*</span></label>
+                                <?php if(isset($countries)): ?>
+                                <select name="country_id" class="form-control select_country" style="width: 100%;" id="country" country-selected="<?= old('country') ?? 200 ?>">
+                                    <?php foreach($countries as $country): ?>
+                                    <option value="<?=$country->id?>" data-flag="<?= $country->flags->svg ?>" data-code="<?= $country->code ?>" ><?=$country->name?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
                         <div class="col-6">
                             <div class="form-group ">
                                 <label><?= lang('Acp.province') ?> <span class="text-danger">*</span> </label>
@@ -65,6 +91,7 @@ $postConfigs = $config->cmsStatus;
                                 <select name="ward_id" area-selected="<?= old('ward_id') ?>" class="form-control select_ward" style="width: 100%;"></select>
                             </div>
                         </div>
+                        
                     </div>
 
                     <div class="form-group">
@@ -94,15 +121,6 @@ $postConfigs = $config->cmsStatus;
     <script src="<?= base_url($config->scriptsPath)?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="<?= base_url($config->scriptsPath)?>/plugins/moment/moment.min.js"></script>
     <script src="<?= base_url($config->scriptsPath)?>/acp/areaLocation.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#cus_datepicker").datepicker({
-                todayHighlight: true,
-                format: "dd-mm-yyyy",
-                autoclose: true,
-                endDate: new Date()
-            });
-        });
-    </script>
+    <script src="<?= base_url($config->scriptsPath)?>/acp/customer.js"></script>
 
 <?= $this->endSection() ?>

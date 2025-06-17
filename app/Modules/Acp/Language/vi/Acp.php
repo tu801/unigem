@@ -55,6 +55,7 @@ return [
     'created_view'      => 'Ngày tạo',
     'status'            => 'Trạng thái',
 
+    'country'           => 'Quốc gia',
     'province'          => 'Tỉnh / Thành Phố',
     'district'          => 'Quận / Huyện',
     'select_district'   => 'Chọn Quận/Huyện',

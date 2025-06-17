@@ -137,12 +137,12 @@
                         </a>
                     </li>
 
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a href="<?= base_url($config->adminSlug . '/customer/') ?>" class="nav-link <?= (($controller == 'customercontroller') && in_array($method, array('index', 'addCustomer', 'editCustomer', 'detail', 'createCustomerAccount'))) ? "active" : '' ?>">
                             <i class="fas fa-user-tag"></i>
                             <p><?= lang('Acp.customer_manager'); ?></p>
                         </a>
-                    </li> -->
+                    </li>
 
                 </ul>
             </li>

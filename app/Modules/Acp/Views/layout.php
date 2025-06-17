@@ -39,7 +39,7 @@
 
     <script type="text/javascript">
         var base_url = '<?=base_url()?>';
-        var bkUrl = '<?=base_url($config->adminSlug)?>';
+        var bkUrl = '<?=base_url($config->adminSlug)?>/';
     </script>
     <script src="<?=insert_vue()?>"></script>
     <!-- jQuery -->

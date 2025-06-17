@@ -7,6 +7,7 @@
 
 namespace Modules\Acp\Controllers\Store\Customer;
 
+use App\Entities\Store\Customer\Customer;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\I18n\Time;
@@ -18,6 +19,7 @@ use Modules\Acp\Controllers\Traits\CustomerAvatar;
 use App\Entities\User;
 use App\Enums\Store\CustomerActiveEnum;
 use App\Enums\UserTypeEnum;
+use App\Models\Country;
 use App\Models\Store\Customer\CustomerModel;
 use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
@@ -82,6 +84,7 @@ class CustomerController extends AcpController
     public function addCustomer() {
         $this->_data['title']= lang('Customer.add_title');
 
+        $this->_data['countries'] = model(Country::class)->getCountries();
         $this->_render('\customer\add', $this->_data);
     }
 
@@ -89,14 +92,18 @@ class CustomerController extends AcpController
     {
         // Validate here first, since some things can only be validated properly here.
         $rules = [
-            'cus_phone'     => 'required|valid_phone|is_unique[customer.cus_phone]',
+            'cus_phone'     => 'required|min_length[8]|is_unique[customer.cus_phone]',
             'cus_full_name' => 'required',
             'cus_email'	    => 'permit_empty|valid_email|is_unique[customer.cus_email]',
+            'cus_address'   => 'required',
+            'password'      => 'required|min_length[6]',
+            'password_confirm'      => 'matches[password]'
         ];
         $errMess = [
             'cus_phone' => [
                 'required' => lang('Customer.phone_required'),
-                'is_unique' => lang('Customer.phone_is_unique')
+                'min_length' => lang('Customer.cus_phone_min_length'),
+                'is_unique' => lang('Customer.phone_is_unique'),
             ],
             'cus_full_name' => [
                 'required' => lang('Customer.full_name_required')
@@ -105,6 +112,16 @@ class CustomerController extends AcpController
                 'required' => lang('Customer.email_required'),
                 'valid_email' => lang('Customer.valid_email'),
                 'is_unique' => lang('Customer.email_exits')
+            ],
+            'cus_address' => [
+                'required' => lang('Customer.cus_address_required')
+            ],
+            'password' => [
+                'required' => lang('Customer.password_required'),
+                'min_length' => lang('Customer.password_min_length'),
+            ],
+            'password_confirm' => [
+                'matches' => lang('Customer.password_confirm_matches_password'),
             ],
         ];
 
@@ -115,33 +132,66 @@ class CustomerController extends AcpController
         }
 
         $postData = $this->request->getPost();
-
-        $customerCode = $this->_model->generateCode();
+        $customer = new Customer($postData);
 
         try {
             $this->db->transBegin();
-            $postData['cus_code'] = $customerCode;
-            $postData['cus_birthday'] = !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null;
-            $id = $this->_model->insert($postData);
+            
+            $customer->cus_code = $this->_model->generateCode();
+            $customer->cus_birthday = !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null;
+            if ( $postData['country'] == 200 ) {
+                $customer->province_id  = $postData['province'] ?? null;
+                $customer->district_id  = $postData['district'] ?? null;
+                $customer->ward_id  = $postData['ward'] ?? null;
+            } else {
+                $customer->province_id  = 0;
+                $customer->district_id  =  0;
+                $customer->ward_id  = 0;
+            }
+
+            $cusId = $this->_model->insert($customer);
+
+            if (!$cusId) {
+                $errors = $this->_model->errors();
+                $this->db->transRollback();
+                return redirect()->back()->withInput()->with('errors', $errors);
+            }
+
+            // create customer login account
+            $newCustomer = $this->_model->find($cusId);
+            $cusAccount = new User();
+            $cusAccount->email = $newCustomer->cus_email;
+            $cusAccount->username = $newCustomer->cus_email;
+            $cusAccount->password = $postData['password'];
+            $cusAccount->user_type = UserTypeEnum::CUSTOMER;
+            $this->_userModel->save($cusAccount);
+            $newCusAccount = $this->_userModel->findById($this->_userModel->getInsertID());
+            $this->_userModel->addToDefaultGroup($newCusAccount);
+            $newCusAccount->addGroup('customer');
+
+            // update customer with user_id
+            $updateData = [
+                'user_id' => $newCusAccount->id
+            ];
+            $this->_model->update($cusId, $updateData);
+
+            //log Action
+            $logData = [
+                'title' => lang('Log.add_customer'),
+                'description' => lang('Log.add_shop_desc', [$this->user->username, $customer->cus_email]),
+                'properties' => $postData,
+                'subject_id' => $cusId,
+                'subject_type' => CustomerModel::class,
+            ];
+            $this->logAction($logData);
+
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
 
-        $item = $this->_model->find($id);
-
-        //log Action
-        $logData = [
-            'title' => 'Add Customer',
-            'description' => lang('Customer.addCustomerLog', [$this->user->username, $item->cus_email]),
-            'properties' => $item,
-            'subject_id' => $item->id,
-            'subject_type' => CustomerModel::class,
-        ];
-        $this->logAction($logData);
-
-        return redirect()->route('customer')->with('message', lang('Customer.addSuccess', [$item->cus_email]));
+        return redirect()->route('customer')->with('message', lang('Customer.addSuccess', [$customer->cus_email]));
     }
 
     /**

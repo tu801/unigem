@@ -28,7 +28,7 @@ echo $this->section('content')
                     <div class="card-tools mt-2">
                         <div class="input-group input-group-sm">
                             <input type="text" value="<?=(isset($search_title))?$search_title:''?>" 
-                                name="keyword" class="form-control" placeholder="<?=lang('Acp.search')?>">
+                                name="keyword" class="form-control" placeholder="<?=lang('Customer.search_placeholder')?>">
                             <div class="input-group-append">
                                 <button name="search" class="btn btn-primary">
                                     <i class="fas fa-search"></i>

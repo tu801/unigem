@@ -3,9 +3,11 @@
 return [
     // General
     'product_weight_unit'                => 'ct',
+    'customer'                          => 'Customer',
 
     'internalServerError'               => 'Internal server error. Please try again later.',
     'somethingWentWrong'                => 'Something went wrong. Please try again later.',
+    'invalidRequest'                    => 'Invalid Request',
 
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Sign in to start your session',

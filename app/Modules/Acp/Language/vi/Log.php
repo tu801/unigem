@@ -32,4 +32,10 @@ return [
     // contact logging message
     'edit_contact'  => 'Sửa liên hệ',
     'edit_contact_desc' => '[{0}] đã sửa liên hệ #{1}',
+
+    // customer logging message
+    'add_customer' => 'Thêm Khách Hàng',
+    'add_customer_desc' => '[{0}] đã thêm thành công Khách Hàng #{1}',
+    'edit_customer' => 'Sửa thông tin Khách Hàng',
+    'edit_customer_desc' => '[{0}] đã sửa thành công thông tin Khách Hàng #{1}',
 ];
