@@ -293,7 +293,7 @@ class MenuController extends AcpController
     public function removeItem($idItem)
     {
         $item = $this->_menuItemsModel->find($idItem);
-        $key = $this->request->getGet('menu');
+        $key = $this->request->getGet('key');
         if (!isset($key) || $key === '') return redirect()->route('menu')->with('error', lang('Acp.invalid_request'));
 
         $menu = $this->_model->where('slug', $key)->first();
