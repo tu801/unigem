@@ -484,7 +484,6 @@ class Auth extends ShieldAuth
     public function permissionDeniedRedirect(): string
     {
         $user = auth()->user();
-        dd($user->user_type);
         $url = ($user->user_type == UserTypeEnum::ADMIN) ? ADMIN_AREA : setting('Auth.redirects')['permission_denied'];
 
         return $this->getUrl($url);

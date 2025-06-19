@@ -1,8 +1,8 @@
 <?php
 echo $this->extend($config->viewLayout);
-echo $this->section('content');?>
+echo $this->section('content'); ?>
 
-<div class="row" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>" >
+<div class="row" id="listCat" data-cat-type="<?= $cat_type ?>" data-action="<?= $action ?>">
 
     <!--Add New Category-->
     <div class="col-md-5">
@@ -15,7 +15,9 @@ echo $this->section('content');?>
             <div class="card-body">
                 <div class="form-group">
                     <label for="categoryTitle"><?= lang('Category.title') ?></label>
-                    <input type="text" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>" id="categoryTitle" name="title" value="<?= old('title') ?>" placeholder="<?= lang('Category.title') ?>">
+                    <input type="text" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>"
+                        id="categoryTitle" name="title" value="<?= old('title') ?>"
+                        placeholder="<?= lang('Category.title') ?>">
                 </div>
 
                 <div class="form-group">
@@ -37,19 +39,22 @@ echo $this->section('content');?>
                     <label><?= lang('Category.cat_status') ?></label>
                     <select class="form-control" name="cat_status">
                         <?php foreach ($config->cmsStatus['status'] as $key => $title) : ?>
-                            <option <?= old('cat_status') == $key ? 'selected' : ''  ?> value='<?= $key ?>'><?= $title ?></option>
+                        <option <?= old('cat_status') == $key ? 'selected' : ''  ?> value='<?= $key ?>'><?= $title ?>
+                        </option>
                         <?php endforeach;    ?>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label><?= lang('Category.description') ?></label>
-                    <textarea class="form-control" rows="3" name="description" placeholder="Nhập mô tả"><?= old('description') ?></textarea>
+                    <textarea class="form-control" rows="3" name="description"
+                        placeholder="Nhập mô tả"><?= old('description') ?></textarea>
                 </div>
 
-                <?php if ($cat_type == 'product') :?> 
-                <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" select-img-type="1" input-name="cat_image" return-img="id" img-data=""></config-img>
-                <?php endif;?>
+                <?php if ($cat_type == 'product') : ?>
+                <config-img id="cat_image" img-desc="<?= lang('Category.cat_image') ?>" select-img-type="1"
+                    input-name="cat_image" return-img="id" img-data=""></config-img>
+                <?php endif; ?>
 
                 <hr>
 
@@ -57,11 +62,13 @@ echo $this->section('content');?>
                     <p class="h5">
                     <div class="d-flex justify-content-between align-items-center">
                         <b><?= lang('Acp.search_engine_optimize'); ?></b>
-                        <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <a class="btn btn-link" data-toggle="collapse" data-target="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">
                             <?= lang('Acp.edit_seo_meta'); ?>
                         </a>
                     </div>
-                    <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;"></div>
+                    <div style="margin-top:5px;margin-bottom:5px;height:1px;width:100%;border-top:1px solid #ccc;">
+                    </div>
                     <br />
                     <?= lang('Acp.setup_seo_desc'); ?>
                     </p>
@@ -69,8 +76,10 @@ echo $this->section('content');?>
                 <div class="collapse" id="collapseExample">
                     <div class="card-body">
                         <div class="form-group ">
-                            <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="title_word_left">70</span>
-                            <input id="title_word_count" name="seo_title" type="text" class="form-control" value="<?= old('meta_title') ?>">
+                            <label><?= lang('Post.meta_title') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span
+                                id="title_word_left">70</span>
+                            <input id="title_word_count" name="seo_title" type="text" class="form-control"
+                                value="<?= old('meta_title') ?>">
                         </div>
 
                         <div class="form-group ">
@@ -79,8 +88,10 @@ echo $this->section('content');?>
                         </div>
 
                         <div class="form-group ">
-                            <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?> <span id="word_left">300</span>
-                            <textarea id="word_count" class="form-control" name="seo_description"><?= old('seo_description') ?></textarea>
+                            <label><?= lang('Post.meta_description') ?></label> - <?= lang('Acp.meta_desc_left'); ?>
+                            <span id="word_left">300</span>
+                            <textarea id="word_count" class="form-control"
+                                name="seo_description"><?= old('seo_description') ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -101,13 +112,16 @@ echo $this->section('content');?>
         <div class="card card-primary card-outline">
             <div class="card-header">
                 <div class="card-title">
-                    <a class="<?= ($action == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("{$config->adminSlug}/category/{$cat_type}") ?>">All</a> |
-                    <a class="<?= ($action == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("{$config->adminSlug}/category/{$cat_type}?deleted=1") ?>">Deleted</a>
+                    <a class="<?= ($action == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>"
+                        href="<?= base_url("{$config->adminSlug}/category/{$cat_type}") ?>">All</a> |
+                    <a class="<?= ($action == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>"
+                        href="<?= base_url("{$config->adminSlug}/category/{$cat_type}?deleted=1") ?>">Deleted</a>
                 </div>
 
                 <div class="card-tools mt-2">
                     <div class="input-group input-group-sm">
-                        <input type="text" name="title" class="form-control" placeholder="<?= lang('Category.search') ?>" v-model="searchkey" @keyup="onSearch">
+                        <input type="text" name="title" class="form-control"
+                            placeholder="<?= lang('Category.search') ?>" v-model="searchkey" @keyup="onSearch">
                         <div class="input-group-append">
                             <button type="submit" name="search" class="btn btn-primary" @click.prevent="onSearch">
                                 <i class="fas fa-search"></i>
@@ -160,8 +174,13 @@ echo $this->section('content');?>
                                 <td>{{ cat.slug }}</td>
                                 <td v-html="cat.status"></td>
                                 <td>
-                                    <a class="btn btn-primary btn-sm mb-2" :href="renderEditUrl(cat)"><i class="fas fa-edit"></i></a> &nbsp;
-                                        <a class="btn btn-danger btn-sm mb-2" @click.prevent="delCat(cat.id)"><i class="fas fa-trash"></i></a>
+                                    <a v-if="dataAction==='deleted' && isRootAdmin" class="btn btn-primary btn-sm mb-2"
+                                        title="Recover Item" :href="renderRecoverUrl(cat)"><i
+                                            class="fas fa-reply"></i></a>
+                                    <a v-if="dataAction!=='deleted'" class="btn btn-primary btn-sm mb-2"
+                                        :href="renderEditUrl(cat)"><i class="fas fa-edit"></i></a> &nbsp;
+                                    <a v-if="dataAction!=='deleted'" class="btn btn-danger btn-sm mb-2"
+                                        @click.prevent="delCat(cat.id)"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -172,7 +191,8 @@ echo $this->section('content');?>
                         </tbody>
                     </table>
                 </div>
-                <div v-else class="text-center"><img class="image img-size-64" src="<?= base_url($config->templatePath) ?>/assets/img/loading.svg"></div>
+                <div v-else class="text-center"><img class="image img-size-64"
+                        src="<?= base_url($config->templatePath) ?>/assets/img/loading.svg"></div>
             </div>
         </div>
 
@@ -181,27 +201,26 @@ echo $this->section('content');?>
 </div>
 
 <?php
-echo view($config->view.'\system\attach\_vGallery');
-echo view($config->view.'\system\attach\_vConfigAttach');
-echo view($config->view.'\system\attach\_vImgSelect');
+echo view($config->view . '\system\attach\_vGallery');
+echo view($config->view . '\system\attach\_vConfigAttach');
+echo view($config->view . '\system\attach\_vImgSelect');
 ?>
 <?= $this->endSection() ?>
 
-<?=$this->section('pageScripts') ?>
-<script src="<?= base_url($config->scriptsPath)?>/acp/sys/vConfigAttach.js"></script>
+<?= $this->section('pageScripts') ?>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/sys/vConfigAttach.js"></script>
 <!-- Import Category App -->
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/vCategory.js"></script>
 <script src="<?= base_url($config->scriptsPath) ?>/acp/blog/postWordCount.js"></script>
 <script>
-    catList.component('config-img', vConfigAttach);
-    catList.component('vgallery', gallery);
-    catList.component('vimg-reivew', imgGalleryReview);
-    catList.component('vgallery-img', galleryImg);
-    catList.component('vimg-infor', imgInfor);
-    catList.component('vfileReivew', fileReview);
-    catList.component('vimg-select', vFileSelector);
-    catList.component('vfile-preivew', filePreview);
-    const listCatMounted = catList.mount('#listCat');
-
+catList.component('config-img', vConfigAttach);
+catList.component('vgallery', gallery);
+catList.component('vimg-reivew', imgGalleryReview);
+catList.component('vgallery-img', galleryImg);
+catList.component('vimg-infor', imgInfor);
+catList.component('vfileReivew', fileReview);
+catList.component('vimg-select', vFileSelector);
+catList.component('vfile-preivew', filePreview);
+const listCatMounted = catList.mount('#listCat');
 </script>
 <?= $this->endSection() ?>

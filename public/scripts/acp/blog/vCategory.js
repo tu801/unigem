@@ -7,19 +7,25 @@ const catList = Vue.createApp({
   data() {
     return {
       cat_type: "",
-      action: "",
+      dataAction: "",
       categories: [],
       allCategories: null, // Thêm thuộc tính này để lưu trữ danh sách gốc
       loading: true,
       searchkey: "",
+      isRootAdmin: false,
     };
   },
   created() {
+    var dataAction = $("#listCat").attr("data-action");
+    this.dataAction = dataAction;
     this.fetchCategories();
   },
   methods: {
     renderEditUrl(cat) {
       return bkUrl + "/category/edit/" + cat.id;
+    },
+    renderRecoverUrl(cat) {
+      return bkUrl + "/category/recover/" + cat.id;
     },
     catParent(cat) {
       if (cat.parent_id > 0) {
@@ -75,10 +81,9 @@ const catList = Vue.createApp({
     },
     fetchCategories() {
       var catType = $("#listCat").attr("data-cat-type");
-      var dataAction = $("#listCat").attr("data-action");
       let actionParam = "";
 
-      if (typeof dataAction != "undefined" && dataAction == "deleted")
+      if (typeof this.dataAction != "undefined" && this.dataAction == "deleted")
         actionParam = "?deleted=1";
 
       var url = bkUrl + "/category/list-cat/" + catType + actionParam;
@@ -91,10 +96,14 @@ const catList = Vue.createApp({
         dataType: "json",
         success: function (response) {
           if (response.error == 0) {
+            this.isRootAdmin = response.isRootAdmin;
             this.categories = response.data;
             this.allCategories = [...response.data]; // Lưu trữ danh sách gốc
           } else {
-            if (typeof dataAction != "undefined" && dataAction != "deleted") {
+            if (
+              typeof this.dataAction != "undefined" &&
+              this.dataAction != "deleted"
+            ) {
               const productCategoryCheck = localStorage.getItem(
                 "product_category_is_empty"
               );

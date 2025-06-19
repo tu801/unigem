@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/09/2021
@@ -14,21 +15,15 @@ use App\Models\LangModel;
 
 class PostModel extends BasePostModel
 {
-    /**
-     * Recover soft delete post
-     */
-    public function recover($id) {
-        $sql = "UPDATE `tmt_post` SET `deleted_at` = NULL WHERE `tmt_post`.`id` = {$id}";
-        if ( $this->db->query($sql) ) return true;
-        else return false;
-    }
+    use \Modules\Acp\Traits\RecoverItemModel;
 
     /**
      * get All post in Month
      */
-    public function postInMonth($month, $status = ''){
+    public function postInMonth($month, $status = '')
+    {
         $tblPrefix = $this->db->getPrefix();
-        $stt = ( isset($status) && $status !== '' ) ? "AND post_status = '{$status}' " : '';
+        $stt = (isset($status) && $status !== '') ? "AND post_status = '{$status}' " : '';
         $sql = " SELECT * FROM `{$tblPrefix}post` WHERE post_type = 'post' AND MONTH(created_at) = {$month} {$stt} AND deleted_at IS NULL ORDER BY id DESC ";
 
         $result = $this->db->query($sql);
@@ -39,9 +34,10 @@ class PostModel extends BasePostModel
      * Remove all categories by post item id
      * @param int $postId
      */
-    public function removeCatById(int $postId) {
+    public function removeCatById(int $postId)
+    {
         $tblPrefix = $this->db->getPrefix();
-        $builder = $this->db->table($tblPrefix.'post_categories');
+        $builder = $this->db->table($tblPrefix . 'post_categories');
         $builder->where('post_id', $postId);
         $builder->delete();
     }
@@ -51,9 +47,10 @@ class PostModel extends BasePostModel
      * @param $postId
      * @param $catId
      */
-    public function addCategories($postId, $catId, $is_primary = 0){
+    public function addCategories($postId, $catId, $is_primary = 0)
+    {
         $tblPrefix = $this->db->getPrefix();
-        $builder = $this->db->table($tblPrefix.'post_categories');
+        $builder = $this->db->table($tblPrefix . 'post_categories');
         $insertData = [
             'post_id' => $postId,
             'cat_id' => $catId,
@@ -71,7 +68,7 @@ class PostModel extends BasePostModel
     {
         $_contentModel = \model(PostContentModel::class);
         $post = $_contentModel->where('title', $title)->first();
-        if ( !isset($post->id) || empty($post) ) return true;
+        if (!isset($post->id) || empty($post)) return true;
         else return false;
     }
 
@@ -84,7 +81,7 @@ class PostModel extends BasePostModel
     public function addPost($post)
     {
         $newPostId = $this->insert($post);
-        if ( $newPostId ) {
+        if ($newPostId) {
             $_contentModel = \model(PostContentModel::class);
             $langData = \model(LangModel::class)->listLang();
             try {
@@ -92,8 +89,8 @@ class PostModel extends BasePostModel
                     $post->post_id = $newPostId;
                     $post->lang_id = $item->id;
 
-                    if ( !isset($post->seo_title) || empty($post->seo_title) ) $post->seo_title = $post->title;
-                    if ( !isset($post->seo_description) || empty($post->seo_description) ) $post->seo_description = $post->description;
+                    if (!isset($post->seo_title) || empty($post->seo_title)) $post->seo_title = $post->title;
+                    if (!isset($post->seo_description) || empty($post->seo_description)) $post->seo_description = $post->description;
 
                     $_contentModel->insert($post);
                 }
@@ -103,7 +100,6 @@ class PostModel extends BasePostModel
 
             return $newPostId;
         } else return false;
-
     }
 
     /**
@@ -121,5 +117,4 @@ class PostModel extends BasePostModel
             ])
             ->countAllResults();
     }
-
 }

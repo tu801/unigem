@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 29-Nov-20
@@ -66,7 +67,6 @@ class Crawler
         } else {
             return false;
         }
-
     }
 
     /**
@@ -85,7 +85,7 @@ class Crawler
             return false;
         }
         $this->dom = file_get_html($url);
-        if ( empty($this->dom) ) {
+        if (empty($this->dom)) {
             return false;
         }
 
@@ -220,7 +220,7 @@ class Crawler
      */
     public function get_title()
     {
-        if ( empty($this->head) ) {
+        if (empty($this->head)) {
             if (!$page_title = $this->dom->find('head title', 0)) {
                 return false;
             }
@@ -240,7 +240,7 @@ class Crawler
      */
     public function get_description()
     {
-        if ( empty($this->head) ) {
+        if (empty($this->head)) {
             if (!$page_description = $this->dom->find('head meta[name=description]', 0)) {
                 return false;
             }
@@ -260,7 +260,7 @@ class Crawler
      */
     public function get_keywords()
     {
-        if ( empty($this->head) ) {
+        if (empty($this->head)) {
             if (!$page_keywords = $this->dom->find('head meta[name=keywords]', 0)) {
                 return false;
             }
@@ -271,7 +271,6 @@ class Crawler
         }
 
         return $page_keywords->content;
-
     }
 
     /**
@@ -321,7 +320,6 @@ class Crawler
                             $exclude_term_found = true;
                         }
                     }
-
                 }
                 if ($exclude_term_found) continue;
             }
@@ -355,7 +353,6 @@ class Crawler
                     'text' => $this->clean_text($anchor->innertext)
                 );
             }
-
         }
 
         return $this->links;
@@ -364,7 +361,8 @@ class Crawler
     /**
      * get post content base on the site
      */
-    public function get_content() {
+    public function get_content()
+    {
         $site_url = parse_url($this->url);
 
         switch (str_replace('www.', '', $site_url['host'])) {
@@ -397,7 +395,7 @@ class Crawler
                 break;
         }
 
-        if ( empty($page_content) ) return false;
+        if (empty($page_content)) return false;
         return $page_content;
     }
 
@@ -405,13 +403,12 @@ class Crawler
      * get content from gameworld
      * @return bool
      */
-    private function gameworld() {
-//        dd($this->dom->find('div[class=tdc-content-wrap]', 0)->children(0)->children(1));
-        dd($this->dom->find('div[class=tdb-block-inner td-fix-index]'));
+    private function gameworld()
+    {
         if (!$content = $this->dom->find('div[class=tdb_single_content]', 0)) {
             return false;
         }
-dd($content->content);
+
         return $content->innertext;
     }
 
@@ -420,7 +417,8 @@ dd($content->content);
      * get content from game8.vn
      * @return bool|string|string[]|null
      */
-    private function game8() {
+    private function game8()
+    {
         if (!$content = $this->dom->find('div[id=noi_dung]', 0)) {
             return false;
         }
@@ -429,7 +427,7 @@ dd($content->content);
         $contentData = $content->innertext;
         $contentData = str_replace('<!--PC_InRead-->', '', $contentData);
         $contentData = str_replace('<!--PC_CBV-->', '', $contentData);
-        $contentData = preg_replace("/<\/?ins[^>]*\>/i",'',$contentData);
+        $contentData = preg_replace("/<\/?ins[^>]*\>/i", '', $contentData);
         $contentData = preg_replace('#<div class="all_slide_thecao_ud">(.*?)</div>#', '', $contentData);
         $contentData = preg_replace('#<div class="slide_thecao_ud">(.*?)</div>#', '', $contentData);
         $contentData = preg_replace('#<div class="item">(.*?)</div>#', '', $contentData);
@@ -443,7 +441,8 @@ dd($content->content);
      * get post content from gamehub.vn
      * @return bool
      */
-    private function gamehub() {
+    private function gamehub()
+    {
         if (!$content = $this->dom->find('article', 0)) {
             return false;
         }
@@ -452,7 +451,7 @@ dd($content->content);
 
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -465,7 +464,8 @@ dd($content->content);
      * get post content from game4v
      * @return bool
      */
-    private function game4v() {
+    private function game4v()
+    {
         if (!$content = $this->dom->find('article', 0)) {
             return false;
         }
@@ -474,7 +474,7 @@ dd($content->content);
 
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -496,7 +496,8 @@ dd($content->content);
      * get post content from gamek.vn
      * @return bool|string|string[]|null
      */
-    private function gamek() {
+    private function gamek()
+    {
         if (!$content = $this->dom->find('div[class=rightdetail_content]', 0)) {
             return false;
         }
@@ -505,7 +506,7 @@ dd($content->content);
 
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -538,7 +539,8 @@ dd($content->content);
      * get post content from infogame
      * @return bool
      */
-    private function infogame() {
+    private function infogame()
+    {
         if (!$content = $this->dom->find('div[class=noidung]', 0)) {
             return false;
         }
@@ -547,7 +549,7 @@ dd($content->content);
 
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -561,7 +563,8 @@ dd($content->content);
      * @return bool|string|string[]
      * @throws \ReflectionException
      */
-    private function techrum() {
+    private function techrum()
+    {
         if (!$content = $this->dom->find('article', 0)) {
             return false;
         }
@@ -570,7 +573,7 @@ dd($content->content);
 
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -584,13 +587,14 @@ dd($content->content);
      * @return bool|string|string[]
      * @throws \ReflectionException
      */
-    private function xemgame() {
+    private function xemgame()
+    {
         if (!$content = $this->dom->find('div[class=rightdetail_content]', 0)) {
             return false;
         }
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -606,13 +610,14 @@ dd($content->content);
      * @return bool|string|string[]
      * @throws \ReflectionException
      */
-    private function tinanime() {
+    private function tinanime()
+    {
         if (!$content = $this->dom->find('div[class=news-content]', 0)) {
             return false;
         }
         //get the image url
         $imgURLs = [];
-        foreach($content->find('img') as $element) {
+        foreach ($content->find('img') as $element) {
             $imgURLs[] = $element->src;
         }
         $replaceUrl = $this->getImage($imgURLs);
@@ -629,31 +634,32 @@ dd($content->content);
      * @return array
      * @throws \ReflectionException
      */
-    public function getImage(Array $urls) {
+    public function getImage(array $urls)
+    {
         helper('text');
         $attachModel = new AttachModel();
         $configs = config("Acp");
 
-        $sub_folder = "attach/".date('Y/m/d');
-        $imagePath = $configs->uploadFolder.$sub_folder;
+        $sub_folder = "attach/" . date('Y/m/d');
+        $imagePath = $configs->uploadFolder . $sub_folder;
 
         //check path
-        if ( !is_dir($imagePath) ) {
+        if (!is_dir($imagePath)) {
             mkdir($imagePath, 0755, true);
         }
 
         $imgResult = [];
         foreach ($urls as $item) {
-            if ( preg_match('/(\.jpg|\.png|\.jpeg|\.gif)$/', $item) ) {
+            if (preg_match('/(\.jpg|\.png|\.jpeg|\.gif)$/', $item)) {
                 $info = pathinfo($item);
-                $dest_file_name = 'embergame-'.random_string('alnum', 25).".{$info['extension']}";
-                copy($item, $imagePath.'/'.$dest_file_name);
-                if ( file_exists($imagePath.'/'.$dest_file_name) ){ //make sure the image exist
+                $dest_file_name = 'embergame-' . random_string('alnum', 25) . ".{$info['extension']}";
+                copy($item, $imagePath . '/' . $dest_file_name);
+                if (file_exists($imagePath . '/' . $dest_file_name)) { //make sure the image exist
                     //create thumb
                     $imgThumb = [
                         'file_name' => $dest_file_name,
-                        'original_image' => $imagePath.'/'.$dest_file_name,
-                        'path' => $imagePath."/thumb"
+                        'original_image' => $imagePath . '/' . $dest_file_name,
+                        'path' => $imagePath . "/thumb"
                     ];
                     create_thumb($imgThumb);
 
@@ -664,10 +670,10 @@ dd($content->content);
                         'file_name' => $dest_file_name,
                         'file_title' => $dest_file_name
                     ];
-                    if ( !$attachModel->insert($insertData) ) {
+                    if (!$attachModel->insert($insertData)) {
                         //insert fail
                         $this->delete_image($dest_file_name, $sub_folder);
-                    } else $imgResult[] = base_url('uploads/'.$sub_folder.'/'.$dest_file_name);
+                    } else $imgResult[] = base_url('uploads/' . $sub_folder . '/' . $dest_file_name);
                 }
             }
         }
