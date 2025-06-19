@@ -14,6 +14,8 @@ use App\Models\LangModel;
 
 class CategoryModel extends BaseCategoryModel
 {
+    use \Modules\Acp\Traits\RecoverItemModel;
+
     /**
      * insert new item if exist otherwise edit the item data
      * @param $input

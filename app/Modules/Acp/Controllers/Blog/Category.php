@@ -313,57 +313,77 @@ class Category extends AcpController
      */
     public function removeCat($idItem)
     {
-        $item = $this->_model->join('category_content', 'category_content.cat_id = category.id')
+        $cat = $this->_model
+            ->join('category_content', 'category_content.cat_id = category.id')
             ->where('id', $idItem)
             ->where('lang_id', $this->currentLang->id)
-            ->withDeleted()
-            ->find($idItem); 
-        if (!isset($item->id)) {
+            ->first();
+
+        if (empty($cat) || !isset($cat->id)) {
             return redirect()->route('category', ['post'])->with('error', lang('Acp.no_item_found'));
         }
-        
-        // check cat item is parent
-        $childCat = $this->_model->where('parent_id', $item->id)->findAll();
-        if (count($childCat) > 0) {
+
+        // Kiểm tra nếu là category cha
+        if ($this->_model->where('parent_id', $cat->id)->countAllResults() > 0) {
             return redirect()->route('category', ['post'])->with('error', lang('Category.error_delete_cat_has_child'));
-        }dd($item);
-
-        if ($this->_model->delete($item->id, (bool) $item->deleted_at)) {
-            //log Action
-            $logData = [
-                'title' => 'Delete Category',
-                'description' => "#{$this->user->username} đã xoá category #{$item->slug}",
-                'properties' => $item->toArray(),
-                'subject_id' => $item->id,
-                'subject_type' => CategoryModel::class,
-            ];
-            $this->logAction($logData);
-
-            // delete cache
-            $this->_removeCache();
-
-            return redirect()->back()->with('message', lang('Category.delete_success', [$item->id]));
         }
+
+        if ($this->_model->delete($cat->id, (bool) $cat->deleted_at)) {
+            // Ghi log
+            $this->logAction([
+                'title' => 'Remove Category',
+                'description' => "#{$this->user->username} đã xóa category #{$cat->slug}",
+                'properties' => $cat->toArray(),
+                'subject_id' => $cat->id,
+                'subject_type' => CategoryModel::class,
+            ]);
+            $this->_removeCache();
+            return redirect()->back()->with('message', lang('Category.delete_success', [$cat->id]));
+        }
+
         return redirect()->route('category', ['post'])->with('error', lang('Acp.delete_fail'));
-        
     }
 
-    private function _removeCache() {
+    private function _removeCache()
+    {
         cache()->deleteMatching(CacheKeys::CATEGORY_PREFIX . '*');
         cache()->deleteMatching(CacheKeys::MENU_PREFIX . '*');
+    }
+
+    public function recoverCat($catId)
+    {
+        $cat = $this->_model
+            ->where('id', $catId)
+            ->onlyDeleted()
+            ->first();
+
+        if (empty($cat) || !isset($cat->id)) {
+            return redirect()->route('category', ['post'])->with('error', lang('Acp.no_item_found'));
+        }
+        if (!$this->_model->recover($cat->id)) {
+            return redirect()->back()->with('error', lang('Acp.recover_fail'));
+        }
+
+        $prop = method_exists(get_class($cat), 'toArray') ? $cat->toArray() : (array)$cat;
+        $logData = [
+            'title' => 'Recover Category',
+            'description' => lang('Acp.recover_success', [$cat->id]),
+            'properties' => $prop,
+            'subject_id' => $cat->id,
+            'subject_type' => get_class($this->_model),
+        ];
+        $this->logAction($logData);
+        return redirect()->back()->with('message', lang('Acp.recover_success', [$cat->id]));
     }
 
     //AJAX
     //list category for vuejs
     public function vuejsListCat($type)
     {
-        $response = array();
         $input = $this->request->getGet();
-
-        if (isset($input['s']) && !empty($input['s'])) {
-            $key = esc($input['s']);
-            $this->_model->like('title', $key);
-        }
+        $isRootAdmin = $this->user->inGroup('superadmin');
+        $searchKey = isset($input['s']) ? esc($input['s']) : null;
+        $isDeleted = isset($input['deleted']) && $input['deleted'] == 1;
 
         $catSelect = 'category.id, category.cat_status, parent_id, title, slug, description, seo_meta';
         $this->_model->select($catSelect)
@@ -371,97 +391,111 @@ class Category extends AcpController
             ->where('lang_id', $this->currentLang->id)
             ->where('cat_type', $type ?? 'post');
 
-        if (isset($input['deleted']) && $input['deleted'] == 1) $catData = $this->_model->onlyDeleted()->findAll();
-        else $catData = $this->_model->findAll();
+        if ($searchKey) {
+            $this->_model->like('title', $searchKey);
+        }
 
-        if (isset($catData) && count($catData) > 0) {
+        $catData = $isDeleted ? $this->_model->onlyDeleted()->findAll() : $this->_model->findAll();
+
+        if (!empty($catData)) {
             foreach ($catData as $cat) {
-                if ($cat->parent_id > 0) {
-                    $parent = $this->_model->select($catSelect)
-                        ->join('category_content', 'category_content.cat_id = category.id')
-                        ->where('lang_id', $this->currentLang->id)
-                        ->find($cat->parent_id);
-                    if ( isset($parent->id) &&!empty($parent) ) $cat->parent = $parent;
-                    else {
-                        $cat->parent_not_found_message = lang('Category.cat_parent_not_found');
-                    }
-                }
+                $cat = $this->attachParentToCategory($cat, $catSelect);
                 $cat->value = $cat->id;
                 $cat->label = $cat->title;
                 $cat->status = $this->__transformStatusView($cat->cat_status);
             }
-            $response['data'] = $catData;
-            $response['error'] = 0;
+            $response = [
+                'data' => $catData,
+                'isRootAdmin' => $isRootAdmin,
+                'error' => 0,
+            ];
         } else {
-            $response['error'] = 1;
-            $response['message'] = (isset($input['s']) && !empty($input['s']))
-                ? 'Danh mục bạn tìm kiếm không tồn tại'
-                : 'Không tìm thấy danh mục! Vui lòng thêm danh mục mới';
+            $response = [
+                'error' => 1,
+                'message' => $searchKey
+                    ? lang('Category.cat_not_found_search')
+                    : lang('Category.cat_not_found'),
+            ];
         }
+
         return $this->response->setJSON($response);
+    }
+
+    /**
+     * Gắn thông tin parent cho category nếu có
+     */
+    private function attachParentToCategory($cat, $catSelect)
+    {
+        if ($cat->parent_id > 0) {
+            $parent = $this->_model->select($catSelect)
+                ->join('category_content', 'category_content.cat_id = category.id')
+                ->where('lang_id', $this->currentLang->id)
+                ->find($cat->parent_id);
+            if (!empty($parent) && isset($parent->id)) {
+                $cat->parent = $parent;
+            } else {
+                $cat->parent_not_found_message = lang('Category.cat_parent_not_found');
+            }
+        }
+        return $cat;
     }
 
     public function ajxEditSlug($itemId = false)
     {
-        $response = array();
+        $response = ['error' => 1, 'text' => lang('Acp.invalid_request')];
         $postData = $this->request->getPost();
 
         if (!$itemId) {
-            $response['error'] = 1;
-            $response['text'] = lang('Acp.invalid_request');
-        } else {
+            return $this->response->setJSON($response);
+        }
+
+        $item = $this->_model->find($itemId);
+        if (empty($item) || !isset($item->id) || $item->id < 0) {
+            return $this->response->setJSON($response);
+        }
+
+        // Validate input
+        $rules = [
+            'category_slug' => "required|min_length[3]|is_unique[category_content.slug,cat_id,{$itemId}]",
+        ];
+        $errMess = [
+            'category_slug' => [
+                'required' => lang('Category.slug_required'),
+                'min_length' => lang('Category.slug_min_length'),
+                'is_unique' => lang('Category.slug_is_exist')
+            ],
+        ];
+
+        if (!$this->validate($rules, $errMess)) {
+            $errors = $this->validator->getErrors();
+            $response['text'] = implode('<br>', $errors);
+            return $this->response->setJSON($response);
+        }
+
+        // Update slug
+        $updateArray = ['slug' => $postData['category_slug']];
+        $modelCategoryContent = model(CategoryContentModel::class);
+        $modelCategoryContent->where('category_content.lang_id', $this->currentLang->id)
+            ->where('cat_id', $itemId);
+
+        if ($modelCategoryContent->update(null, $updateArray)) {
+            // Xoá cache
+            $this->_removeCache();
+
+            $this->_model->join('category_content', 'category_content.cat_id = category.id');
             $item = $this->_model->find($itemId);
 
-            if (!isset($item->id) || $item->id < 0) {
-                $response['error'] = 1;
-                $response['text'] = lang('Acp.invalid_request');
-            } else {
-                //validate the data
-                $rules = [
-                    'category_slug'           => "required|min_length[3]|is_unique[category_content.slug,cat_id,{$itemId}]",
-                ];
-
-                $errMess = [
-                    'category_slug' => [
-                        'required' => lang('Category.slug_required'),
-                        'min_length' => lang('Category.slug_min_length'),
-                        'is_unique' => lang('Category.slug_is_exist')
-                    ],
-                ];
-                if (!$this->validate($rules, $errMess)) {
-                    $err = $this->validator->getErrors();
-                    $textReturn = '';
-                    foreach ($err as $mes) {
-                        $textReturn .= $mes . '<br>';
-                    }
-                    $response['error'] = 1;
-                    $response['text'] = $textReturn;
-                } else {
-                    $updateArray = array(
-                        'slug' => $postData['category_slug']
-                    );
-                    $modelCategoryContent = model(CategoryContentModel::class);
-                    $modelCategoryContent->where('category_content.lang_id', $this->currentLang->id)
-                        ->where('cat_id', $itemId);
-
-                    if ($modelCategoryContent->update(null, $updateArray)) {
-                        // delete cache
-                        $this->_removeCache();
-
-                        $this->_model->join('category_content', 'category_content.cat_id = category.id');
-                        $item = $this->_model->find($itemId);
-                        $response['error'] = 0;
-                        $response['text'] = lang('Category.updateSlug_success');
-                        $returnData['categoryId'] = $itemId;
-                        $returnData['slug'] = $postData['category_slug'];
-                        $returnData['fullSlug'] = $item->url;
-                        $response['postData'] = $returnData;
-                    } else {
-                        $response['error'] = 1;
-                        $response['text'] = $this->_model->errors();
-                    }
-                }
-            }
+            $response = [
+                'error' => 0,
+                'text' => lang('Category.updateSlug_success'),
+                'postData' => [
+                    'categoryId' => $itemId,
+                    'slug' => $postData['category_slug'],
+                    'fullSlug' => $item->url ?? '',
+                ],
+            ];
+        } else {
+            $response['text'] = $this->_model->errors();
         }
 
         return $this->response->setJSON($response);
