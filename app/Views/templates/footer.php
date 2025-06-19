@@ -17,11 +17,11 @@
                         <div class="footer-col footer-col-3 footer-col-block">
                             <div class="footer-heading footer-heading-desktop">
                                 <h6 class="fs-14 text-uppercase fw-8 font-montserrat">
-                                    <?= lang('Home.footer_contact_info') ?></h6>
+                                    <?= lang('Contact.footer_contact_info') ?></h6>
                             </div>
                             <div class="footer-heading footer-heading-moblie">
                                 <h6 class="fs-14 text-uppercase fw-8 font-montserrat">
-                                    <?= lang('Home.footer_contact_info') ?></h6>
+                                    <?= lang('Contact.footer_contact_info') ?></h6>
                             </div>
                             <ul class="footer-menu-list tf-collapse-content">
                                 <li>
