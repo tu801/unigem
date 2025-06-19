@@ -19,7 +19,16 @@ class MenuModel extends Model
     protected $useSoftDeletes = false;
 
     protected $allowedFields = [
-        'lang_id', 'user_init', 'user_type', 'name', 'status', 'location', 'slug', 'id', 'created_at', 'updated_at'
+        'lang_id',
+        'user_init',
+        'user_type',
+        'name',
+        'status',
+        'location',
+        'slug',
+        'id',
+        'created_at',
+        'updated_at'
     ];
 
     protected $useTimestamps = true;
@@ -50,7 +59,8 @@ class MenuModel extends Model
     /*
      * get Child menu and return html list
      */
-    public function getChild($parent, $menu) {
+    public function getChild($parent, $menu)
+    {
         $bd = $this->db->table($this->table);
         $html = '';
         $config = config('Acp');
@@ -59,28 +69,28 @@ class MenuModel extends Model
         $childs = $_menuItems->where(['menu_id ' => $menu->id, 'parent_id' => $parent->id])
             ->orderBy('order ASC')
             ->get()->getResult();
-        if ( !empty($childs) ) {
+        if (!empty($childs)) {
             $html .= '<ol class="dd-list">';
             foreach ($childs as $item) {
-                $delItemUrl = base_url($adminSlug."/menu/remove/{$item->id}?menu={$menu->slug}" );
+                $delItemUrl = base_url($adminSlug . "/menu/remove/{$item->id}?key={$menu->slug}");
 
-                $html .= '<li class="dd-item" data-id="'.$item->id.'">';
-                $html .= '<div class="dd-handle"><h3 class="title" id="menuTitle_'.$item->id.'">'.$item->title.'</h3>';
+                $html .= '<li class="dd-item" data-id="' . $item->id . '">';
+                $html .= '<div class="dd-handle"><h3 class="title" id="menuTitle_' . $item->id . '">' . $item->title . '</h3>';
                 $html .= '<div class="float-right">
-                            <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#editForm_'.$item->id.'" role="button" aria-expanded="false"
+                            <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#editForm_' . $item->id . '" role="button" aria-expanded="false"
                                aria-controls="editForm_<?=$row->id?>">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a class="btn btn-danger btn-sm acpRmItem" href="'.$delItemUrl.'">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>';
+<i class="fa fa-edit"></i>
+</a>
+<a class="btn btn-danger btn-sm acpRmItem" href="' . $delItemUrl . '">
+    <i class="fas fa-trash"></i>
+</a>
+</div>';
                 $html .= '</div>';
-                $html .= '<div class="card collapse card-danger card-outline"  id="editForm_'.$item->id.'">';
-                if ( $item->type == 'category' ) :
-                    $html .= view($config->view.'\blog\menu\components\_editCategoryCard', ['row' => $item]);
+                $html .= '<div class="card collapse card-danger card-outline" id="editForm_' . $item->id . '">';
+                if ($item->type == 'category') :
+                    $html .= view($config->view . '\blog\menu\components\_editCategoryCard', ['row' => $item]);
                 else :
-                    $html .= view($config->view.'\blog\menu\components\_editMenuCard', ['row' => $item]);
+                    $html .= view($config->view . '\blog\menu\components\_editMenuCard', ['row' => $item]);
                 endif;
                 $html .= '</div>';
                 $html .= $this->getChild($item, $menu);
@@ -90,5 +100,4 @@ class MenuModel extends Model
         }
         return $html;
     }
-
 }

@@ -39,8 +39,8 @@ class MenuController extends AcpController
     {
         $this->_data['title'] = lang("Menu.menu_title");
         $this->_data['data'] = $this->_model
-                            ->where('lang_id', $this->currentLang->id)
-                            ->findAll();
+            ->where('lang_id', $this->currentLang->id)
+            ->findAll();
         $this->_render('\blog\menu\index', $this->_data);
     }
 
@@ -221,7 +221,7 @@ class MenuController extends AcpController
                     ]
                 ],
                 'name' => [
-                    'rules' => 'required|min_length[2]|is_unique[menu.name,id,'.$postData['menu_id'].']',
+                    'rules' => 'required|min_length[2]|is_unique[menu.name,id,' . $postData['menu_id'] . ']',
                     'errors' => [
                         'required' => lang('Menu.menu_required'),
                         'min_length' => lang('Menu.menu_min_length'),
@@ -245,17 +245,17 @@ class MenuController extends AcpController
 
 
             //update menu items order
-            $menuHierarchical = json_decode($postData['menuHierarchical']); 
+            $menuHierarchical = json_decode($postData['menuHierarchical']);
             if (!empty($menuHierarchical)) {
                 foreach ($menuHierarchical as $index => $menu) {
-                    if ( !empty($menu) && isset($menu->id) ) {
+                    if (!empty($menu) && isset($menu->id)) {
                         $updateData = array(
                             'order' => $index,
                             'parent_id' => 0
                         );
                         $this->_menuItemsModel->update($menu->id, $updateData);
                         if (isset($menu->children) && !empty($menu->children)) $this->updateChild($menu->children, $menu->id);
-                    }                    
+                    }
                 }
 
                 $mess = lang('Menu.update_success');
@@ -337,7 +337,7 @@ class MenuController extends AcpController
         else $this->_model->where('lang_id', $inputData['lang']->id);
 
         $menuData = $this->_model->findAll();
-        
+
         foreach ($menuData as $item) {
             $date = date_create($item->created_at);
             $item->created = date_format($date, 'd/m/Y');
@@ -357,17 +357,18 @@ class MenuController extends AcpController
         return $this->response->setJSON($response);
     }
 
-    private function _getLocationList($menuItem) {
+    private function _getLocationList($menuItem)
+    {
         $all_menu_location = new Collection(model(ConfigModel::class)->getMenuLocation());
-        if ( !empty($menuItem->location) ) {
+        if (!empty($menuItem->location)) {
             $selected_locations = json_decode($menuItem->location);
-            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations)  {
-               if ( in_array($locationItem->value, $selected_locations)) {
+            $locationData = $all_menu_location->map(function ($locationItem) use ($selected_locations) {
+                if (in_array($locationItem->value, $selected_locations)) {
                     return [
                         'location_key' => $locationItem->value,
                         'location_name' => $locationItem->title,
                     ];
-               }
+                }
             });
         }
 
@@ -410,7 +411,7 @@ class MenuController extends AcpController
                 $response['error'] = 1;
                 $response['message'] = $textReturn;
             } else {
-                if ( !isset($postData['lang_id']) || empty($postData['lang_id']) || $postData['lang_id'] == 0 ) {
+                if (!isset($postData['lang_id']) || empty($postData['lang_id']) || $postData['lang_id'] == 0) {
                     $postData['lang_id'] = $this->currentLang->id;
                 }
 
