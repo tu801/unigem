@@ -128,6 +128,7 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('edit/(:num)', 'Category::editAction/$1');
 
         $routes->get('remove/(:num)', 'Category::removeCat/$1', ['as' => 'remove_category']);
+        $routes->get('recover/(:num)', 'Category::recoverCat/$1', ['as' => 'recover_category']);
 
         //Ajax
         $routes->get('list-cat/(:alpha)', 'Category::vuejsListCat/$1');
