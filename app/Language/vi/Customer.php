@@ -26,6 +26,8 @@ return [
     'change_password_success'                    => 'Đổi mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới của bạn.',
     'shipping_address'                           => 'Địa chỉ giao hàng',
     'orders'                                     => 'Đơn hàng',
+    'editCustomerProfileLog'                     => '#{0} dã chỉnh sửa thông tin tài khoản',
+    'editProfileSuccess'                         => 'Cập nhật thông tin tài khoản thành công',
 
     // validation message
     'cus_full_name_required'                    => 'Vui lòng nhập họ tên',

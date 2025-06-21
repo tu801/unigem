@@ -253,6 +253,12 @@ class CustomerController extends AcpController
         // good then save the item
         $postData = $this->request->getPost();
         $postData['cus_birthday'] = !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null;
+        if ($postData['country_id'] != VIETNAM_COUNTRY_ID) {
+            $postData['province_id']  = 0;
+            $postData['district_id']  =  0;
+            $postData['ward_id']  = 0;
+        }
+
         try {
             $this->db->transBegin();
             $this->_model->update($cus_id, $postData);

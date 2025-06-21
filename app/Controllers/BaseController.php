@@ -137,7 +137,7 @@ abstract class BaseController extends Controller
     {
         $authenticator = auth('session')->getAuthenticator();
         if (!auth()->loggedIn()) {
-            return redirect()->route('/');
+            return redirect()->route('cus_login')->with('message', lang('Customer.login_required'));
         }
 
         $user = $authenticator->getUser();

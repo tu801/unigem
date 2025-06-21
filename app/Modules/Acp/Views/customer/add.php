@@ -133,8 +133,7 @@ $postConfigs = $config->cmsStatus;
 </form>
 <?= $this->endSection() ?>
 <?= $this->section('pageStyles') ?>
-<link rel="stylesheet"
-    href="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
 <?= $this->endSection() ?>
 <?= $this->section('pageScripts') ?>
 <script src="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js">

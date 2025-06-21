@@ -12,11 +12,13 @@ namespace App\Controllers\Customer;
 use App\Controllers\BaseController;
 use App\Enums\UserTypeEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
+use App\Models\Country;
 use App\Models\CusModel;
 use App\Models\Store\Customer\CustomerModel;
 use App\Models\User\UserModel;
 use App\Traits\SpamFilter;
 use CodeIgniter\Database\Exceptions\DatabaseException;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\I18n\Time;
 
 class Profile extends BaseController
@@ -35,12 +37,12 @@ class Profile extends BaseController
         $this->userModel = model(UserModel::class);
 
         // check customer logged in
-        $this->checkCustomerLoggedIn();
+        return $this->checkCustomerLoggedIn();
     }
 
     public function profile()
     {
-        if ($this->user->user_type == UserTypeEnum::ADMIN) {
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
             return redirect()->route('/');
         }
 
@@ -49,10 +51,12 @@ class Profile extends BaseController
 
     public function profileInfo()
     {
-        //set breadcrumb
-        BreadCrumbCell::add('Home', base_url());
-        BreadCrumbCell::add(lang('CustomerProfile.my_account'), route_to('cus_profile'));
-        BreadCrumbCell::add(lang('CustomerProfile.cus_information'), route_to('edit_cus_profile'));
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
+            return redirect()->route('/');
+        }
+
+        $this->page_title = lang('Customer.account_detail');
+        $this->_data['countries'] = model(Country::class)->getCountries();
 
         if ($this->request->getPost()) {
             $this->checkSpam();
@@ -62,7 +66,7 @@ class Profile extends BaseController
         return $this->_render('customer/profile_info', $this->_data);
     }
 
-    public function saveProfileAction($customer)
+    private function saveProfileAction()
     {
         $postData = $this->request->getPost();
         if (empty($postData)) {
@@ -71,27 +75,20 @@ class Profile extends BaseController
 
         // Validate here first, since some things can only be validated properly here.
         $rules = [
-            'full_name'     => 'required',
-            'province_id'   => 'required',
-            'district_id'   => 'required',
-            'ward_id'       => 'required',
-            'address'       => 'required',
+            'cus_phone'        => 'required|valid_phone|is_unique[customer.cus_phone,id,' . $this->_data['customer']->id . ']',
+            'cus_full_name'    => 'required',
+            'cus_address'       => 'required',
         ];
         $errMess = [
-            'full_name' => [
+            'mobile' => [
+                'cus_phone' => lang('Customer.phone_required'),
+                'is_unique' => lang('Customer.phone_is_unique')
+            ],
+            'cus_full_name' => [
                 'required' => lang('Customer.full_name_required')
             ],
-            'province_id' => [
-                'required' => lang('CustomerProfile.province_id_required')
-            ],
-            'district_id' => [
-                'required' => lang('CustomerProfile.district_id_required')
-            ],
-            'ward_id' => [
-                'required' => lang('CustomerProfile.ward_id_required')
-            ],
-            'address' => [
-                'required' => lang('CustomerProfile.address_required')
+            'cus_address' => [
+                'required' => lang('Customer.cus_address_required')
             ],
         ];
         //validate the input
@@ -99,35 +96,34 @@ class Profile extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         // save data
-        $updateData = [
-            'cus_birthday'  => !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null,
-            'cus_full_name' => $postData['full_name'],
-            'province_id'   => $postData['province_id'],
-            'district_id'   => $postData['district_id'],
-            'ward_id'       => $postData['ward_id'],
-            'cus_address'   => $postData['address'],
-        ];
-
+        $postData['cus_birthday'] = !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null;
+        if ($postData['country_id'] != VIETNAM_COUNTRY_ID) {
+            $postData['province_id']  = 0;
+            $postData['district_id']  =  0;
+            $postData['ward_id']  = 0;
+        }
+        
         try {
             $this->db->transBegin();
-            $this->_model->update($customer->id, $updateData);
+            $this->_model->update($this->_data['customer']->id, $postData);
+
+            // log Action
+            $logData = [
+                'title' => 'Edit Customer Profile',
+                'description' => lang('Customer.editCustomerProfileLog', [ $this->_data['customer']->cus_code . ' - ' . $this->_data['customer']->cus_full_name]),
+                'properties' => $postData,
+                'subject_id' => $this->_data['customer']->id,
+                'subject_type' => CustomerModel::class,
+            ];
+            $this->logAction($logData);
+            
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
-        $item = $this->_model->find($customer->id);
-        // log Action
-        $logData = [
-            'title' => 'Edit Customer',
-            'description' => lang('CustomerProfile.editCustomerLog', [$item->cus_code]),
-            'properties' => $item,
-            'subject_id' => $item->id,
-            'subject_type' => CusModel::class,
-        ];
-        $this->logAction($logData);
 
-        return redirect()->route('edit_cus_profile')->with('message', lang('CustomerProfile.editProfileSuccess'));
+        return redirect()->route('edit_cus_profile')->with('message', lang('Customer.editProfileSuccess'));
     }
 
     public function changePassword()
@@ -144,7 +140,12 @@ class Profile extends BaseController
         return $this->_render('customer/cus_change_password', $this->_data);
     }
 
-    public function changePasswordAction()
+    /**
+     * Change password action
+     *
+     * @return RedirectResponse
+     */
+    private function changePasswordAction()
     {
         $postData = $this->request->getPost();
         if (empty($postData)) {

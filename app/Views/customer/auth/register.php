@@ -67,7 +67,7 @@ echo $this->section('content');
                                 <label for="country"><?= lang('Customer.select_country') ?></label>
                                 <div class="select-custom">
                                     <select class="w-100" id="country" name="country_id"
-                                        country-selected="<?= old('country') ?? 200 ?>">
+                                        country-selected="<?= old('country_id') ?? 200 ?>">
                                         <?php if (!empty($countries)) :
                                             foreach ($countries as $item) : ?>
                                                 <option value="<?= $item->id ?>" data-code="<?= $item->code ?>"
@@ -82,15 +82,15 @@ echo $this->section('content');
                             <div id="vietnam_address">
                                 <div class="mb_15">
                                     <select class=" w-100 select_province" id="province" name="province_id"
-                                        area-selected="<?= old('province') ?>"></select>
+                                        area-selected="<?= old('province_id') ?>"></select>
                                 </div>
                                 <div class=" mb_15">
                                     <select class=" w-100 select_district" id="district" name="district_id"
-                                        area-selected="<?= old('district') ?>"></select>
+                                        area-selected="<?= old('district_id') ?>"></select>
                                 </div>
                                 <div class=" mb_15">
                                     <select class=" w-100 select_ward" id="ward" name="ward_id"
-                                        area-selected="<?= old('ward') ?>"></select>
+                                        area-selected="<?= old('ward_id') ?>"></select>
                                 </div>
                                 <div class="tf-field style-1 mb_15">
                                     <input class="tf-field-input tf-input" placeholder=" " type="text"
@@ -129,6 +129,21 @@ echo $this->section('content');
 <link rel="stylesheet" href="<?= base_url($configs->scriptsPath) ?>/plugins/select2/css/select2.min.css">
 <link rel="stylesheet"
     href="<?= base_url($configs->scriptsPath) ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+<!-- Add CSS for error styling -->
+<style>
+    .tf-field.error .tf-field-input,
+    .mb_15.error select,
+    fieldset.error select {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    }
+
+    .error-message {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+</style>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
@@ -159,18 +174,4 @@ echo $this->section('content');
 
 <script src="<?= base_url($configs->scriptsPath) ?>registerForm.js"></script>
 
-<!-- Add CSS for error styling -->
-<style>
-    .tf-field.error .tf-field-input,
-    .mb_15.error select,
-    fieldset.error select {
-        border-color: #dc3545 !important;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-    }
-
-    .error-message {
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-    }
-</style>
 <?= $this->endSection() ?>

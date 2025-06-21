@@ -26,6 +26,8 @@ return [
     'change_password_success'                    => 'Password changed successfully! Please log in with your new password.',
     'shipping_address'                           => 'Shipping Address',
     'orders'                                     => 'Orders',
+    'editCustomerProfileLog'                     => '#{0} has edited their account information',
+    'editProfileSuccess'                         => 'Profile updated successfully',
 
     // validation message
     'cus_full_name_required'                    => 'Please enter full name',
