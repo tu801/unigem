@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 8/19/2023
@@ -14,6 +15,7 @@ return [
     'service_information'   => 'Service Information',
     'image_des'             => 'Avatar must be larger than or equal to 200px x 200px',
     'search_placeholder'    => 'Customer code or phone number',
+    'walk_in_customer'      => 'Walk-in Customer',
 
     'avatar'        => 'Avatar',
     'full_name'     => 'Full Name',
@@ -75,6 +77,8 @@ return [
     'guarantee_end'                    => 'End',
     'note'                             => 'Note',
     'status'                           => 'Status',
+    'status_1'                         => 'Active',
+    'status_0'                         => 'Inactive',
     'title_customer_service_guarantee' => 'Warranty History List',
     'add_service_guarantee'            => 'Warranty Note',
     'doctor'                           => 'Doctor',

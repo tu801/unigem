@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 8/19/2023
@@ -14,6 +15,7 @@ return [
     'service_information'   => 'Thông tin dịch vụ',
     'image_des'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 200px x 200px',
     'search_placeholder'    => 'Mã khách hàng hoặc số điện thoại',
+    'walk_in_customer'      => 'Khách vãng lai',
 
     'avatar'    => 'Hỉnh đại diện',
     'full_name' => 'Họ Tên',
@@ -75,6 +77,8 @@ return [
     'guarantee_end'                    => 'Kết thúc',
     'note'                             => 'Ghi Chú',
     'status'                           => 'Trạng thái',
+    'status_1'                         => 'Đang hoạt động',
+    'status_0'                         => 'Chưa kích hoạt',
     'title_customer_service_guarantee' => 'Danh Sách Lần Bảo Hành',
     'add_service_guarantee'            => 'Ghi Chú Bảo Hành',
     'doctor'                           => 'Bác Sĩ',

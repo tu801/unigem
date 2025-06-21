@@ -4,18 +4,15 @@ namespace App\Controllers\Customer;
 
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use CodeIgniter\I18n\Time;
-use CodeIgniter\Shield\Authentication\Actions\EmailActivator;
 use CodeIgniter\Shield\Authentication\Authenticators\Session;
-use CodeIgniter\Shield\Exceptions\LogicException;
 use CodeIgniter\Shield\Models\UserIdentityModel;
-use CodeIgniter\Shield\Traits\Viewable;
 use RuntimeException;
 use App\Enums\Store\CustomerActiveEnum;
 use CodeIgniter\Shield\Authentication\Passwords\DictionaryValidator;
 
 class AuthCustomer extends \App\Controllers\BaseController
 {
-    use Viewable;
+    use \App\Traits\ActivationEmail;
 
     protected $identityModel;
     protected $customerModel;
@@ -37,55 +34,11 @@ class AuthCustomer extends \App\Controllers\BaseController
     public function activateAccount()
     {
         $this->page_title = lang('Customer.activate_account');
-        /** @var Session $authenticator */
-        $authenticator = auth('session')->getAuthenticator();
-
-        $user = $authenticator->getPendingUser();
-        if ($user === null) {
-            throw new RuntimeException('Cannot get the pending login User.');
-        }
 
         // send activation email
-        $this->sendActivationEmail($user);
+        $this->sendActivationEmail($this->getPendingLoginUser());
 
         return $this->_render('customer/auth/email_activation', $this->_data);
-    }
-
-    private function sendActivationEmail($user)
-    {
-        $emailActivator = new EmailActivator();
-
-        $userEmail = $user->email;
-        if ($userEmail === null) {
-            throw new LogicException(
-                'Email Activation needs user email address. user_id: ' . $user->id
-            );
-        }
-
-        $code = $emailActivator->createIdentity($user);
-
-        $ipAddress = $this->request->getIPAddress();
-        $userAgent = (string) $this->request->getUserAgent();
-        $date      = Time::now()->toDateTimeString();
-
-        // Send the email
-        helper('email');
-        $email = emailer(['mailType' => 'html'])
-            ->setFrom(setting('Email.fromEmail'), setting('Email.fromName') ?? '');
-        $email->setTo($user->email);
-        $email->setSubject(lang('Auth.emailActivateSubject'));
-        $email->setMessage($this->view(
-            '\App\Views\Email\email_activate_email',
-            ['code'  => $code, 'ipAddress' => $ipAddress, 'userAgent' => $userAgent, 'date' => $date],
-            ['debug' => false]
-        ));
-
-        if ($email->send(false) === false) {
-            throw new RuntimeException('Cannot send email for user: ' . $user->email . "\n" . $email->printDebugger(['headers']));
-        }
-
-        // Clear the email
-        $email->clear();
     }
 
     /**
@@ -125,6 +78,9 @@ class AuthCustomer extends \App\Controllers\BaseController
         $customer = $this->customerModel->queryCustomerByUserId($user->id)->first();
         $this->customerModel->update($customer->id, ['active' => CustomerActiveEnum::ACTIVE]);
 
+        // remove identity so it cannot be used again.
+        $this->identityModel->delete($identity->id);
+
         // Success!
         return redirect()->to(route_to('cus_profile'))
             ->with('message', lang('Auth.registerSuccess'));
@@ -133,7 +89,8 @@ class AuthCustomer extends \App\Controllers\BaseController
     /**
      * Displays the recover password view.
      */
-    public function recoverPasswordView() {
+    public function recoverPasswordView()
+    {
         $this->page_title = lang('Auth.recoverPassword');
         $token = $this->request->getGet('token') ?? '';
         $this->_data['token'] = $token;
@@ -159,7 +116,7 @@ class AuthCustomer extends \App\Controllers\BaseController
         // get customer by user_id
         $customer = $this->customerModel->queryCustomerByUserId($identity->user_id)->first();
 
-        if ( !isset($customer) ) {
+        if (!isset($customer)) {
             session()->setFlashdata('errors', lang('Auth.emailNotFound'));
 
             return $this->_render('customer/auth/recover_password', $this->_data);
@@ -189,15 +146,15 @@ class AuthCustomer extends \App\Controllers\BaseController
         $userModel = model(\App\Models\User\UserModel::class);
         // get customer account by user_id
         $customerAccount = $userModel->findById($identity->user_id);
-        if ( !isset($customerAccount) ) {
+        if (!isset($customerAccount)) {
             return redirect()->back()->with('errors', lang('Auth.emailNotFound'));
         }
 
-        if ( $customerAccount->user_type != \App\Enums\UserTypeEnum::CUSTOMER ) {
+        if ($customerAccount->user_type != \App\Enums\UserTypeEnum::CUSTOMER) {
             return redirect()->to('/')->with('errors', lang('Common.invalidRequest'));
         }
 
-        if ( $customerAccount->active == CustomerActiveEnum::INACTIVE ) {
+        if ($customerAccount->active == CustomerActiveEnum::INACTIVE) {
             return redirect()->to('/')->with('errors', lang('Auth.needVerification'));
         }
 
@@ -273,5 +230,4 @@ class AuthCustomer extends \App\Controllers\BaseController
         return redirect()->route('cus_login')
             ->with('message', lang('Auth.recoverPasswordSuccess'));
     }
-
 }

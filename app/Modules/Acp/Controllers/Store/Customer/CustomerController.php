@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 8/19/2023
@@ -25,12 +26,17 @@ use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\WardModel;
 use App\Models\User\UserModel;
+use App\Traits\SpamFilter;
+use CodeIgniter\Shield\Authentication\Authenticators\Session;
+use CodeIgniter\Shield\Models\UserIdentityModel;
+use CodeIgniter\Validation\Exceptions\ValidationException;
 use Modules\Acp\Traits\deleteItem;
 
 class CustomerController extends AcpController
 {
-    use deleteItem;
-    use CustomerAvatar;
+    use deleteItem, CustomerAvatar, SpamFilter;
+    use \App\Traits\ActivationEmail;
+
 
     protected $db;
     protected $_userModel;
@@ -39,26 +45,26 @@ class CustomerController extends AcpController
     public function __construct()
     {
         parent::__construct();
-        if ( empty($this->_model)) {
+        if (empty($this->_model)) {
             $this->_model = model(CustomerModel::class);
         }
         $this->_userModel = model(UserModel::class);
         $this->db             = Database::connect(); //Load database connection
         $this->auth_config = config('Auth');
-
     }
 
     /**
      * List pages
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function index() {
-        $this->_data['title']= lang("Customer.page_title");
+    public function index()
+    {
+        $this->_data['title'] = lang("Customer.page_title");
         $inputData = $this->request->getPost();
 
         //get Users Data
-        if ( isset($inputData['search']) ) {
-            if ( $inputData['keyword'] != '' ) {
+        if (isset($inputData['search'])) {
+            if ($inputData['keyword'] != '') {
                 $keyword = $inputData['keyword'];
                 $this->_model->orLike('customer.cus_code', "%{$keyword}%");
                 $this->_model->orLike('customer.cus_phone', "%{$keyword}%");
@@ -66,11 +72,13 @@ class CustomerController extends AcpController
             }
         }
 
-        if ( isset($postData) && !empty($postData) ) {
-            if ( !empty($postData['sel']) ) {
+        if (isset($postData) && !empty($postData)) {
+            if (!empty($postData['sel'])) {
                 $this->_model->delete($postData['sel']);
             } else return redirect()->back()->with('error', lang('Acp.no_item_to_delete'));
         }
+
+        $this->_model->orderBy('customer.created_at', 'DESC');
 
         $this->_data['data'] = $this->_model->paginate();
         $this->_data['pager'] = $this->_model->pager;
@@ -81,8 +89,9 @@ class CustomerController extends AcpController
     /**
      * show add Customer form
      */
-    public function addCustomer() {
-        $this->_data['title']= lang('Customer.add_title');
+    public function addCustomer()
+    {
+        $this->_data['title'] = lang('Customer.add_title');
 
         $this->_data['countries'] = model(Country::class)->getCountries();
         $this->_render('\customer\add', $this->_data);
@@ -94,7 +103,7 @@ class CustomerController extends AcpController
         $rules = [
             'cus_phone'     => 'required|min_length[8]|is_unique[customer.cus_phone]',
             'cus_full_name' => 'required',
-            'cus_email'	    => 'permit_empty|valid_email|is_unique[customer.cus_email]',
+            'cus_email'        => 'permit_empty|valid_email|is_unique[customer.cus_email]',
             'cus_address'   => 'required',
             'password'      => 'required|min_length[6]',
             'password_confirm'      => 'matches[password]'
@@ -126,8 +135,7 @@ class CustomerController extends AcpController
         ];
 
         //validate the input
-        if (! $this->validate($rules, $errMess))
-        {
+        if (! $this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -136,14 +144,10 @@ class CustomerController extends AcpController
 
         try {
             $this->db->transBegin();
-            
+
             $customer->cus_code = $this->_model->generateCode();
             $customer->cus_birthday = !empty($postData['cus_birthday']) ? Time::parse($postData['cus_birthday'])->format('Y-m-d') : null;
-            if ( $postData['country'] == 200 ) {
-                $customer->province_id  = $postData['province'] ?? null;
-                $customer->district_id  = $postData['district'] ?? null;
-                $customer->ward_id  = $postData['ward'] ?? null;
-            } else {
+            if ($postData['country_id'] != VIETNAM_COUNTRY_ID) {
                 $customer->province_id  = 0;
                 $customer->district_id  =  0;
                 $customer->ward_id  = 0;
@@ -186,6 +190,9 @@ class CustomerController extends AcpController
             $this->logAction($logData);
 
             $this->db->transCommit();
+
+            // send activation email
+            $this->sendActivationEmail($newCusAccount);
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
@@ -197,11 +204,12 @@ class CustomerController extends AcpController
     /**
      * show edit Customer form
      */
-    public function editCustomer($cus_id) {
-        $this->_data['title']= lang('Customer.edit_title');
+    public function editCustomer($cus_id)
+    {
+        $this->_data['title'] = lang('Customer.edit_title');
 
         $customer = $this->_model->find($cus_id);
-        if ( isset($customer->id) ) {
+        if (isset($customer->id)) {
             $this->_data['customer'] = $customer;
             $this->_render('\customer\edit', $this->_data);
         } else {
@@ -211,21 +219,21 @@ class CustomerController extends AcpController
 
     public function editAction($cus_id)
     {
-        if ( !$this->user->inGroup('superadmin', 'admin') ) {
+        if (!$this->user->inGroup('superadmin', 'admin')) {
             return redirect()->route('customer')->with('error', lang('Acp.no_permission'));
         }
 
         $item = $this->_model->find($cus_id);
 
-        if ( is_null($item) ) {
-            return redirect()->route('customer')->with('error',lang('Acp.no_item_found'));
+        if (is_null($item)) {
+            return redirect()->route('customer')->with('error', lang('Acp.no_item_found'));
         }
 
         // Validate here first, since some things can only be validated properly here.
         $rules = [
             'cus_phone'        => 'required|valid_phone|is_unique[customer.cus_phone,id,' . $cus_id . ']',
             'cus_full_name'      => 'required',
-            'cus_email'			=> 'permit_empty|valid_email|is_unique[customer.cus_email,id, ' . $cus_id . ']',
+            'cus_email'            => 'permit_empty|valid_email|is_unique[customer.cus_email,id, ' . $cus_id . ']',
         ];
         $errMess = [
             'mobile' => [
@@ -273,11 +281,11 @@ class CustomerController extends AcpController
 
     public function detail($cus_id)
     {
-        $this->_data['title']= lang('Customer.detail_title');
+        $this->_data['title'] = lang('Customer.detail_title');
 
         $customer = $this->_model->find($cus_id);
 
-        if ( isset($customer->id) ) {
+        if (isset($customer->id)) {
             $this->_data['customer'] = $customer;
             $this->_render('\customer\profile', $this->_data);
         } else {
@@ -292,10 +300,10 @@ class CustomerController extends AcpController
         if (isset($inputData['keyword_search']) && $inputData['keyword_search'] !== '') {
             $querySearch = esc($inputData['keyword_search']);
             $data = $this->_model->like('cus_full_name', $querySearch)
-                                 ->orLike('cus_email', $querySearch)
-                                 ->orLike('cus_phone', $querySearch)
-                                 ->orLike('cus_code', $querySearch)
-                                 ->findAll();
+                ->orLike('cus_email', $querySearch)
+                ->orLike('cus_phone', $querySearch)
+                ->orLike('cus_code', $querySearch)
+                ->findAll();
             $response['error'] = 0;
             $response['data'] = $data;
         } else {
@@ -324,7 +332,7 @@ class CustomerController extends AcpController
         $districtData = new Collection($districts);
         $wardData = new Collection($wards);
 
-        if ( $total < 20 ) {
+        if ($total < 20) {
             $faker = new Fabricator(CustomerModel::class);
             $generator = $faker->getFaker();
             $override = [
@@ -336,14 +344,14 @@ class CustomerController extends AcpController
 
             foreach ($customers as $cus) {
                 $randId = random_int(1, count($provinces));
-                $provinceItem = $provinceData->find(function ($item, $key) use($randId)  {
-                    if ( $randId == $key ) return $item;
+                $provinceItem = $provinceData->find(function ($item, $key) use ($randId) {
+                    if ($randId == $key) return $item;
                 });
-                $districtItem = $districtData->find(function ($item) use($provinceItem) {
-                    if ( $item['province_id'] == $provinceItem['id']) return $item;
+                $districtItem = $districtData->find(function ($item) use ($provinceItem) {
+                    if ($item['province_id'] == $provinceItem['id']) return $item;
                 });
-                $wardItem = $wardData->find(function ($item) use($districtItem) {
-                    if ( $item['district_id'] == $districtItem['id']) return $item;
+                $wardItem = $wardData->find(function ($item) use ($districtItem) {
+                    if ($item['district_id'] == $districtItem['id']) return $item;
                 });
 
                 $cus->cus_address = $generator->address();
@@ -361,10 +369,10 @@ class CustomerController extends AcpController
 
     public function createCustomerAccount($cus_id)
     {
-        $this->_data['title']= lang('Customer.create_customer_title');
+        $this->_data['title'] = lang('Customer.create_customer_title');
 
         $customer = $this->_model->find($cus_id);
-        if ( isset($customer->id) ) {
+        if (isset($customer->id)) {
             $this->_data['customer'] = $customer;
             $this->_render('\customer\create_customer_account', $this->_data);
         } else {
@@ -383,22 +391,20 @@ class CustomerController extends AcpController
         // Validate here first, since some things,
         // like the password, can only be validated properly here.
         $rules   = [
-            'username'     => 'required|alpha_numeric_space|min_length[4]|is_unique[users.username]',
-            'email'        => 'required|valid_email|is_unique[users.email]',
+            'username'     => 'required|min_length[4]|is_unique[users.username]',
+            'email'        => 'required|valid_email',
             'password'     => 'required|min_length[4]|strong_password',
             'pass_confirm' => 'required|matches[password]',
         ];
         $errMess = [
             'username'     => [
                 'required'            => lang('User.username_required'),
-                'alpha_numeric_space' => lang('User.alpha_numeric_space'),
                 'min_length'          => lang('User.min_length'),
                 'is_unique'           => lang('User.user_is_exist'),
             ],
             'email'        => [
                 'required'    => lang('User.email_required'),
                 'valid_email' => lang('User.valid_email'),
-                'is_unique'   => lang('User.email_exits'),
             ],
             'password'     => [
                 'required'   => lang('User.pw_required'),
@@ -416,71 +422,92 @@ class CustomerController extends AcpController
         }
         try {
             $this->db->transStart();
-            $postData['user_type'] = UserTypeEnum::CUSTOMER;
-            //good then save the new user
-            $user = new User($postData);
+            //good then save the new customer account
+            $cusAccount = new User($postData);
+            $cusAccount->username = $postData['username'];
+            $cusAccount->user_type = UserTypeEnum::CUSTOMER;
 
-            if ($customer->active == CustomerActiveEnum::ACTIVE ) {
-                $user->activate();
-            } else {
-                $user->generateActivateHash();
+            try {
+                $this->_userModel->save($cusAccount);
+            } catch (ValidationException $e) {
+                $this->db->transRollback();
+                return redirect()->back()->withInput()->with('errors', $this->_userModel->errors());
             }
+
+            // To get the complete user object with ID, we need to get from the database
+            $user = $this->_userModel->findById($this->_userModel->getInsertID());
+
+            // Add to default group
+            $this->_userModel->addToDefaultGroup($user);
+            $user->addGroup('customer');
+
+            // update customer with user_id
+            $this->_model->update($cus_id, ['user_id' => $user->id]);
 
             if (isset($postData['force_pass_reset'])) {
-                $user->generateResetHash();
+                $user->forcePasswordReset();
             }
 
-            $user_id = $this->_userModel->insert($user);
-            if (!$user_id) {
-                return redirect()->back()->withInput()->with('errors', $this->_model->errors());
-            }
-            // link customer = user_id
-            $this->_model->update($cus_id, [
-                'user_id' => $user_id,
-            ]);
+            //log Action
+            $logData = [
+                'title'        => 'Create Customer Account',
+                'description'  => "#{$this->user->username} đã tạo tài khoản khách hàng #{$user->username}",
+                'properties'   => $user->toArray(),
+                'subject_id'   => $user->id,
+                'subject_type' => UserModel::class,
+            ];
+            $this->logAction($logData);
+
             $this->db->transCommit();
-
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
 
-
-        //log Action
-        $logData = [
-            'title'        => 'Add User',
-            'description'  => "#{$this->user->username} đã thêm user #{$user->username}",
-            'properties'   => $user->toArray(),
-            'subject_id'   => $user->id,
-            'subject_type' => UserModel::class,
-        ];
-        $this->logAction($logData);
         return redirect()->route('customer_detail', [$cus_id])->with('message', lang('User.addSuccess', [$user->username]));
     }
 
-    public function active($id) {
+    public function active($id)
+    {
         $cusData = $this->_model->find($id);
         $user = null;
 
-        $throttler = service('throttler');
+        // check spam
+        $this->checkSpam();
 
-        if ($throttler->check($this->request->getIPAddress(), 2, MINUTE) === false) {
-            return service('response')->setStatusCode(429)->setBody(lang('Auth.tooManyRequests', [$throttler->getTokentime()]));
-        }
-        if ( !isset($cusData->id) ) {
+        if (!isset($cusData->id)) {
             return redirect()->back()->with('errors', lang('Acp.invalid_request'));
         }
-        if ( isset($cusData->user_id) ) $user = $this->_userModel->find($cusData->user_id);
+        if (isset($cusData->user_id)) $user = $this->_userModel->find($cusData->user_id);
         try {
             $this->db->transStart();
-            $cusData->active = CustomerActiveEnum::ACTIVE;
-            $this->_model->save($cusData);
+            $this->_model->update($cusData->id, ['active' => CustomerActiveEnum::ACTIVE]);
 
             // also update the user active status
-            if ( isset($user->id) ) {
+            if (isset($user->id)) {
                 $user->activate();
                 $this->_userModel->save($user);
+
+                $identityModel = model(UserIdentityModel::class);
+
+                $identity = $identityModel->getIdentityByType(
+                    $user,
+                    Session::ID_TYPE_EMAIL_ACTIVATE
+                );
+
+                if (isset($identity->id)) {
+                    $identityModel->delete($identity->id);
+                }
             }
+
+            // log Action
+            $logData = [
+                'title' => 'Activate Customer',
+                'description' => "#{$this->user->username} đã active customer #{$cusData->cus_full_name}",
+                'subject_id' => $cusData->id,
+                'subject_type' => CustomerModel::class,
+            ];
+            $this->logAction($logData);
 
             $this->db->transCommit();
         } catch (DatabaseException $e) {
