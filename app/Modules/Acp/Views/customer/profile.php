@@ -1,4 +1,7 @@
 <?php
+
+use CodeIgniter\I18n\Time;
+
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
 
@@ -55,6 +58,11 @@ echo $this->section('content');
             <div class="card-body">
                 <strong><?=lang('Customer.full_name')?></strong>
                 <p class="text-muted"><?=$customer->cus_full_name?></p>
+
+                <hr>
+                
+                <strong><?=lang('Customer.birthday')?></strong>
+                <p class="text-muted"><?=$customer->cus_birthday?></p>
 
                 <hr>
 

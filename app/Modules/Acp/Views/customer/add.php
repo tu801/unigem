@@ -69,7 +69,7 @@ $postConfigs = $config->cmsStatus;
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label><?= lang('Acp.country') ?> <span class="text-danger">*</span></label>
+                                <label><?= lang('Acp.country') ?> </label>
                                 <?php if (isset($countries)): ?>
                                     <select name="country_id" class="form-control select_country" style="width: 100%;"
                                         id="country" country-selected="<?= old('country_id') ?? 200 ?>">
@@ -84,14 +84,14 @@ $postConfigs = $config->cmsStatus;
 
                         <div class="col-6">
                             <div class="form-group ">
-                                <label><?= lang('Acp.province') ?> <span class="text-danger">*</span> </label>
+                                <label><?= lang('Acp.province') ?>  </label>
                                 <select name="province_id" area-selected="<?= old('province_id') ?>"
                                     class="form-control select_province" style="width: 100%;"></select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group ">
-                                <label><?= lang('Acp.district') ?> <span class="text-danger">*</span></label>
+                                <label><?= lang('Acp.district') ?> </label>
                                 <select name="district_id" area-selected="<?= old('district_id') ?>"
                                     class="form-control select_district" style="width: 100%;"></select>
                             </div>
@@ -109,7 +109,7 @@ $postConfigs = $config->cmsStatus;
                     </div>
 
                     <div class="form-group">
-                        <label><?= lang('Customer.address') ?></label>
+                        <label><?= lang('Customer.address') ?> <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="cus_address"><?= old('cus_address') ?></textarea>
                     </div>
 

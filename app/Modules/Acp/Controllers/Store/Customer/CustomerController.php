@@ -207,6 +207,8 @@ class CustomerController extends AcpController
         $customer = $this->_model->find($cus_id);
         if (isset($customer->id)) {
             $this->_data['customer'] = $customer;
+
+            $this->_data['countries'] = model(Country::class)->getCountries();
             $this->_render('\customer\edit', $this->_data);
         } else {
             return redirect()->route('customer')->with('error', lang('Customer.customer_not_exist'));
@@ -228,8 +230,8 @@ class CustomerController extends AcpController
         // Validate here first, since some things can only be validated properly here.
         $rules = [
             'cus_phone'        => 'required|valid_phone|is_unique[customer.cus_phone,id,' . $cus_id . ']',
-            'cus_full_name'      => 'required',
-            'cus_email'            => 'permit_empty|valid_email|is_unique[customer.cus_email,id, ' . $cus_id . ']',
+            'cus_full_name'    => 'required',
+            'cus_address'       => 'required',
         ];
         $errMess = [
             'mobile' => [
@@ -239,10 +241,8 @@ class CustomerController extends AcpController
             'cus_full_name' => [
                 'required' => lang('Customer.full_name_required')
             ],
-            'cus_email' => [
-                'required' => lang('Customer.email_required'),
-                'valid_email' => lang('Customer.valid_email'),
-                'is_unique' => lang('Customer.email_exits')
+            'cus_address' => [
+                'required' => lang('Customer.cus_address_required')
             ],
         ];
 
@@ -256,21 +256,22 @@ class CustomerController extends AcpController
         try {
             $this->db->transBegin();
             $this->_model->update($cus_id, $postData);
+
+            // log Action
+            $logData = [
+                'title' => 'Edit Customer',
+                'description' => lang('Customer.editCustomerLog', [$this->user->username, $item->cus_email]),
+                'properties' => $item,
+                'subject_id' => $item->id,
+                'subject_type' => CustomerModel::class,
+            ];
+            $this->logAction($logData);
+            
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
-
-        // log Action
-        $logData = [
-            'title' => 'Edit Customer',
-            'description' => lang('Customer.editCustomerLog', [$this->user->username, $item->cus_email]),
-            'properties' => $item,
-            'subject_id' => $item->id,
-            'subject_type' => CustomerModel::class,
-        ];
-        $this->logAction($logData);
 
         return redirect()->route('customer')->with('message', lang('Customer.editSuccess', [$this->user->username, $item->cus_email]));
     }

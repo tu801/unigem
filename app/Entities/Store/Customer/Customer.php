@@ -6,6 +6,7 @@ use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\WardModel;
 use App\Models\User\UserModel;
+use CodeIgniter\I18n\Time;
 
 class Customer extends Entity
 {
@@ -49,5 +50,14 @@ class Customer extends Entity
         }
 
         return $this->full_address;
+    }
+
+    public function getCusBirthday()
+    {
+        if ( empty($this->attributes['cus_birthday']) ) {
+            return '';
+        }
+
+        return Time::parse($this->attributes['cus_birthday'])->format('d-m-Y');
     }
 }
