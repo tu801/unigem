@@ -16,6 +16,7 @@ return [
     'image_des'             => 'Avatar must be larger than or equal to 200px x 200px',
     'search_placeholder'    => 'Customer code or phone number',
     'walk_in_customer'      => 'Walk-in Customer',
+    'edit_profile'          => 'Edit Profile',
 
     'avatar'        => 'Avatar',
     'full_name'     => 'Full Name',
@@ -26,6 +27,11 @@ return [
     'address'       => 'Address',
     'password'      => 'Password',
     'password_confirm' => 'Password Confirm',
+
+    'shipping_address'   => 'Shipping Address',
+    'ship_full_name'     => 'Recipient Name',
+    'ship_email'         => 'Recipient Email',
+    'ship_phone'         => 'Recipient Phone Number',
 
     'add_service'        => 'Add Service',
     'edit_service'       => 'Edit Service',
@@ -70,6 +76,8 @@ return [
     'password_min_length'   => 'Password must be at least 6 characters',
     'password_confirm_matches_password' => 'Password does not match',
 
+    'no_shipping_address' => 'Chưa có địa chỉ giao hàng',
+
     // From edit modal
     'enable_warranty'                  => 'Service Warranty',
     'guarantee_time'                   => 'Warranty Period',
@@ -86,15 +94,4 @@ return [
     'addServiceGuaranteeLog'           => '#{0} Provided Warranty #{1}',
     'doctor_name_required'             => 'Please enter the Doctor\'s Name',
 
-    // check guarantee
-    'not_guarantee'          => 'No Warranty',
-    'month'                  => 'Month',
-    'check_guarantee_title'  => 'Warranty Lookup',
-    'check_guarantee_button' => 'Check',
-    'under_warranty'         => 'Under Warranty',
-    'not_warranty'           => 'No Warranty',
-    'no_warranty'            => 'Not Yet Warranted',
-    'phone_support'          => 'Support Hotline',
-    'date_buy'               => 'Purchase Date',
-    'edit_profile'           => 'Edit Profile',
 ];

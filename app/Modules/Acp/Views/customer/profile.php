@@ -50,39 +50,25 @@ echo $this->section('content');
     </div> <!-- /.lefcol -->
     <div class="col-md-9">
         <!-- About Me Box -->
-        <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title"><?=lang('User.title_general_info')?></h3>
+        <div class="card">
+            <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#accountInfo" data-toggle="tab"><?=lang('User.title_general_info')?></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#shippingAddress" data-toggle="tab"><?=lang('Customer.shipping_address')?></a></li>
+                </ul>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <strong><?=lang('Customer.full_name')?></strong>
-                <p class="text-muted"><?=$customer->cus_full_name?></p>
+                <div class="tab-content">
 
-                <hr>
-                
-                <strong><?=lang('Customer.birthday')?></strong>
-                <p class="text-muted"><?=$customer->cus_birthday?></p>
+                    <div class="active tab-pane" id="accountInfo">
+                        <?=view('Modules\Acp\Views\customer\profile_tab_account_info')?>
+                    </div>
 
-                <hr>
-
-                <strong><?=lang('User.email')?></strong>
-                <p class="text-muted"><?=$customer->cus_email?></p>
-
-                <hr>
-
-                <strong> <?=lang('Customer.phone')?></strong>
-                <p class="text-muted"><?=$customer->cus_phone?></p>
-
-                <hr>
-
-                <strong><?=lang('Customer.customer_code')?></strong>
-                <p class="text-muted"><?=$customer->cus_code?></p>
-
-                <hr>
-                <strong><?=lang('Customer.address')?></strong>
-                <p class="text-muted"><?=$customer->full_address?></p>
-                <hr>
+                    <div class="tab-pane" id="shippingAddress">
+                        <?=view('Modules\Acp\Views\customer\profile_tab_shipping_address')?>
+                    </div>
+                </div>
             </div>
             <!-- /.card-body -->
         </div>

@@ -16,6 +16,7 @@ return [
     'image_des'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 200px x 200px',
     'search_placeholder'    => 'Mã khách hàng hoặc số điện thoại',
     'walk_in_customer'      => 'Khách vãng lai',
+    'edit_profile'           => 'Sửa Profile',
 
     'avatar'    => 'Hỉnh đại diện',
     'full_name' => 'Họ Tên',
@@ -26,6 +27,11 @@ return [
     'address'   => 'Địa chỉ',
     'password'  => 'Mật khẩu',
     'password_confirm' => 'Xác nhận mật khẩu',
+
+    'shipping_address'   => 'Địa chỉ giao hàng',
+    'ship_full_name'     => 'Họ tên người nhận',
+    'ship_email'         => 'Email người nhận',
+    'ship_phone'         => 'Số điện thoại người nhận',
 
     'add_service'        => 'Thêm dịch vụ',
     'edit_service'       => 'Sửa dịch vụ',
@@ -70,6 +76,8 @@ return [
     'password_min_length'   => 'Mật khẩu phải có ít nhất 6 ký tự',
     'password_confirm_matches_password' => 'Mật khẩu không trùng khớp',
 
+    'no_shipping_address' => 'Chưa có địa chỉ giao hàng',
+
     // From edit modal
     'enable_warranty'                  => 'Bảo hành dịch vụ',
     'guarantee_time'                   => 'Thời gian bảo hành',
@@ -86,15 +94,4 @@ return [
     'addServiceGuaranteeLog'           => '#{0} Đã Bảo Hành #{1}',
     'doctor_name_required'             => 'Vui lòng điền Tên Bác Sĩ Thực Hiện',
 
-    // check guarantee
-    'not_guarantee'          => 'Không có bảo Hành',
-    'month'                  => 'Tháng',
-    'check_guarantee_title'  => 'Tra Cứu Bảo Hành',
-    'check_guarantee_button' => 'Kiểm tra',
-    'under_warranty'         => 'Đã bảo hành',
-    'not_warranty'           => 'Không Có bảo hành',
-    'no_warranty'            => 'Chưa bảo hành',
-    'phone_support'          => 'Tổng Đài Hỗ Trợ',
-    'date_buy'               => 'Ngày mua',
-    'edit_profile'           => 'Sửa Profile',
 ];

@@ -58,7 +58,7 @@ echo $this->section('content');
         <div class="card">
             <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link active" href="#info" data-toggle="tab">Thông Tin</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#info" data-toggle="tab"><?=lang('User.title_general_info')?></a></li>
                 </ul>
             </div>
             <!-- /.card-header -->
