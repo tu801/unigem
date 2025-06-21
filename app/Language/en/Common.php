@@ -2,7 +2,8 @@
 
 return [
     // General
-    'product_weight_unit'                => 'ct',
+    'product_weight_unit'               => 'ct',
+    'save_changes'                      => '',
     'customer'                          => 'Customer',
 
     'internalServerError'               => 'Internal server error. Please try again later.',

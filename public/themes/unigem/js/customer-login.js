@@ -57,9 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.code == 200) {
             toastr.success(data.message || loginValidateMessage.loginSuccess);
             // redirect to main page
-            setInterval(function () {
-              window.location.href = "/";
-            }, 500);
+            setTimeout(function () {
+              window.location.reload();
+            }, 700);
           } else {
             toastr.error(
               data.message || loginValidateMessage.somethingWentWrong

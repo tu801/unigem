@@ -21,6 +21,9 @@ return [
     'dashboard'                                  => 'Dashboard',
     'account_detail'                             => 'Account Details',
     'change_password'                            => 'Change Password',
+    'current_password'                           => 'Current Password',
+    'old_password_not_match'                     => 'Old password does not match',
+    'change_password_success'                    => 'Password changed successfully! Please log in with your new password.',
     'shipping_address'                           => 'Shipping Address',
     'orders'                                     => 'Orders',
 

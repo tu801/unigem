@@ -89,6 +89,8 @@ return [
     'passwordMaxLength'         => 'Mật khẩu không được vượt quá 255 ký tự.',
     'passwordNotMatch'          => 'Mật khẩu không khớp. Vui lòng thử lại.',
     'recoverPasswordSuccess'    => 'Mật khẩu của bạn đã được đặt lại thành công. Bạn có thể đăng nhập bằng mật khẩu mới của mình.',
+    'passwordChangeRequired'    => 'Vui lòng đặt lại mật khẩu của bạn trước khi tiếp tục.',
+    'oldPassword'               => 'Mật khẩu cũ',
 
     // Email Globals
     'emailInfo'      => 'Một số thông tin về người dùng:',

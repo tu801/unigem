@@ -25,7 +25,7 @@ $routes->group('product', ['namespace' => '\App\Controllers\Product'], function 
 $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], function ($routes) {
     $routes->get('profile', 'Profile::profile', ['as' => 'cus_profile']);
     $routes->match(['GET', 'POST'], 'account-profile-info', 'Profile::profileInfo', ['as' => 'edit_cus_profile']);
-    $routes->match(['GET', 'POST'], 'change-password', 'AuthCustomer::changePassword', ['as' => 'cus_change_password']);
+    $routes->match(['GET', 'POST'], 'change-password', 'Profile::changePassword', ['as' => 'cus_change_password']);
 
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
     $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);

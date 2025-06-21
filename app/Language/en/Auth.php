@@ -89,6 +89,8 @@ return [
     'passwordMaxLength'         => 'Password must not exceed 255 characters.',
     'passwordNotMatch'          => 'Password does not match. Please try again.',
     'recoverPasswordSuccess'    => 'Your password has been successfully reset. You can now log in with your new password.',
+    'passwordChangeRequired'    => 'Please set your password before proceeding.',
+    'oldPassword'               => 'Old Password',
 
     // Email Globals
     'emailInfo'      => 'Some information about the user:',

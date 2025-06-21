@@ -21,6 +21,9 @@ return [
     'dashboard'                                  => 'Bảng điều khiển',
     'account_detail'                             => 'Thông tin tài khoản',
     'change_password'                            => 'Đổi mật khẩu',
+    'current_password'                           => 'Mật khẩu hiện tại',
+    'old_password_not_match'                     => 'Mật khẩu cũ không đúng',
+    'change_password_success'                    => 'Đổi mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới của bạn.',
     'shipping_address'                           => 'Địa chỉ giao hàng',
     'orders'                                     => 'Đơn hàng',
 

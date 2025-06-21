@@ -39,6 +39,15 @@
                     </div>
                 </div>
 
+                <!-- Old Password -->
+                <div class="form-group mb-3">
+                    <label for="floatingPasswordInput"><?= lang('Auth.oldPassword') ?></label>
+                    <input type="password" class="form-control" 
+                            id="floatingPasswordInput" name="old_password"
+                            inputmode="text" autocomplete="old-password" 
+                            placeholder="<?= lang('Auth.oldPassword') ?>" required>
+                </div>
+
                 <!-- Password -->
                 <div class="form-group mb-3">
                     <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>

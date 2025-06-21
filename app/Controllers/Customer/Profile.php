@@ -14,52 +14,51 @@ use App\Enums\UserTypeEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Models\CusModel;
 use App\Models\Store\Customer\CustomerModel;
+use App\Models\User\UserModel;
+use App\Traits\SpamFilter;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\I18n\Time;
 
 class Profile extends BaseController
 {
-    protected $session;
+    use SpamFilter;
+
+    /**
+     * @var UserModel
+     */
+    protected $userModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->_model  = model(CustomerModel::class);
-        $this->user = auth()->user();
+        $this->userModel = model(UserModel::class);
+
+        // check customer logged in
+        $this->checkCustomerLoggedIn();
     }
 
     public function profile()
     {
-        if (!isset($this->user) || $this->user->user_type == UserTypeEnum::ADMIN) {
-            return redirect()->route('/');
-        }
-
         if ($this->user->user_type == UserTypeEnum::ADMIN) {
             return redirect()->route('/');
         }
-
-        $this->_data['customer'] = $this->customer;
 
         return $this->_render('customer/profile', $this->_data);
     }
 
     public function profileInfo()
     {
-        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
-            return redirect()->route('/');
-        }
-
         //set breadcrumb
         BreadCrumbCell::add('Home', base_url());
         BreadCrumbCell::add(lang('CustomerProfile.my_account'), route_to('cus_profile'));
         BreadCrumbCell::add(lang('CustomerProfile.cus_information'), route_to('edit_cus_profile'));
 
         if ($this->request->getPost()) {
-            $this->_checkThrottler();
-            return $this->saveProfileAction($this->customer);
+            $this->checkSpam();
+            return $this->saveProfileAction();
         }
 
-        $this->_data['customer'] = $this->customer;
         return $this->_render('customer/profile_info', $this->_data);
     }
 
@@ -129,5 +128,97 @@ class Profile extends BaseController
         $this->logAction($logData);
 
         return redirect()->route('edit_cus_profile')->with('message', lang('CustomerProfile.editProfileSuccess'));
+    }
+
+    public function changePassword()
+    {
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
+            return redirect()->route('/');
+        }
+
+        if ($this->request->getPost()) {
+            $this->checkSpam();
+            return $this->changePasswordAction();
+        }
+
+        return $this->_render('customer/cus_change_password', $this->_data);
+    }
+
+    public function changePasswordAction()
+    {
+        $postData = $this->request->getPost();
+        if (empty($postData)) {
+            return redirect()->back()->with('errors', lang('Acp.invalid_request'));
+        }
+
+        // Validate here first, since some things can only be validated properly here.
+        $rules = [
+            'password'          => 'required|min_length[6]',
+            'password_confirm'  => 'required|matches[password]',
+        ];
+        $errMess = [
+            'password' => [
+                'required' => lang('Customer.password_required'),
+                    'min_length' => lang('Customer.password_min_length'),
+            ],
+            'password_confirm' => [
+                'required' => lang('Customer.password_confirm_required'),
+                'matches' => lang('Customer.password_confirm_matches_password'),
+            ],
+        ];
+        //validate the input
+        if (! $this->validate($rules, $errMess)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+        $user = $this->user;
+        
+        // check old password
+        $oldPassword = $this->request->getPost('old_password');
+        /** @var Passwords $passwords */
+        $passwords = service('passwords');
+
+        // Now, try matching the passwords.
+        if (! $passwords->verify($oldPassword, $user->password_hash)) {
+            return redirect()->back()->withInput()->with('error', lang('Customer.old_password_not_match'));
+        }
+        
+        // save new password 
+        try {
+            $this->db->transBegin();
+            
+            //record old password
+            $oldData = [
+                'user_id' => $user->id,
+                'user_name' => $user->username,
+                'old_password' => $user->password_hash
+            ];
+
+            $user->password = $postData['password'];
+            $this->userModel->save($user);
+
+            if ($user->requiresPasswordReset()) {
+                $user->undoForcePasswordReset();
+            }
+
+            // log reset password
+            $logData = [
+                'title' => lang('Customer.change_password'),
+                'description' => "Khách hàng #{$user->username} đã đổi mật khẩu",
+                'properties' => $oldData,
+                'subject_id' => $user->id,
+                'subject_type' => UserModel::class,
+            ];
+            logAction($logData);
+
+            $this->db->transCommit();
+        } catch (DatabaseException $e) {
+            $this->db->transRollback();
+            return redirect()->back()->withInput()->with('errors', $e->getMessage());
+        }
+        
+        $authenticator = auth('session')->getAuthenticator();
+        $authenticator->logout();
+
+        return redirect()->route('cus_login')->with('message', lang('Customer.change_password_success'));
     }
 }

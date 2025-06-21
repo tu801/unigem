@@ -34,7 +34,6 @@ abstract class BaseController extends Controller
     protected $config;
     protected $db;
     protected $user;
-    protected $customer;
     protected $theme;
     protected $currentLang;
     protected $page_title;
@@ -75,7 +74,6 @@ abstract class BaseController extends Controller
     {
         $this->db = db_connect();
         helper($this->helpers);
-        
     }
 
     /**
@@ -85,7 +83,6 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
-        $authenticator = auth('session')->getAuthenticator();
 
         // Preload any models, libraries, etc, here.
         $this->config           = config('Site');
@@ -93,10 +90,6 @@ abstract class BaseController extends Controller
         $this->_setupTheme();
         $this->_setLang();
 
-        if ($authenticator->loggedIn()) {
-            $this->user = $authenticator->getUser();
-            if ($this->user->user_type == UserTypeEnum::CUSTOMER) $this->customer = model(CustomerModel::class)->queryCustomerByUserId($this->user->id)->first();
-        }
     }
 
     /**
@@ -133,5 +126,28 @@ abstract class BaseController extends Controller
         return $renderer
             ->setData($data)
             ->render($viewPage);
+    }
+
+    /**
+     * Check if the customer is logged in, if not redirect to home page
+     *
+     * @return RedirectResponse|void
+     */
+    public function checkCustomerLoggedIn()
+    {
+        $authenticator = auth('session')->getAuthenticator();
+        if (!auth()->loggedIn()) {
+            return redirect()->route('/');
+        }
+
+        $user = $authenticator->getUser();
+        if ($user->user_type != UserTypeEnum::CUSTOMER) {
+            return redirect()->route('/');
+        }
+
+        $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
+
+        $this->user = $user;
+        $this->_data['customer'] = $customer;
     }
 }

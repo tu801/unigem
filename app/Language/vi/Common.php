@@ -2,7 +2,8 @@
 
 return [
     // General
-    'product_weight_unit'                => 'ct',
+    'product_weight_unit'               => 'ct',
+    'save_changes'                      => 'Lưu thay đổi',
     'customer'                          => 'Khách hàng',
 
     'internalServerError'               => 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.',

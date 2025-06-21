@@ -42,7 +42,8 @@ class Filters extends BaseFilters
         'auth-rates'    => \CodeIgniter\Shield\Filters\AuthRates::class,
         'group'         => \CodeIgniter\Shield\Filters\GroupFilter::class,
         'permission'    => \CodeIgniter\Shield\Filters\PermissionFilter::class,
-        'force-reset'   => \CodeIgniter\Shield\Filters\ForcePasswordResetFilter::class,
+        'force-reset'   => \App\Filters\ForcePasswordResetFilter::class,
+        'customer-force-reset'   => \App\Filters\ForceCustomerPasswordResetFilter::class,
         'jwt'           => \CodeIgniter\Shield\Filters\JWTAuth::class,
         'admin'         => AdminFilter::class
     ];
@@ -83,7 +84,9 @@ class Filters extends BaseFilters
             // 'honeypot',
             'csrf',
             // 'invalidchars',
-            'force-reset' => ['except' => ['login*', 'register', 'auth/a/*', 'change-password', 'reset-password', 'logout']]
+            'customer-force-reset' => [
+                'except' => ['login*', 'register', 'auth/a/*', 'change-password', 'reset-password', 'logout', 'customer/change-password', 'customer/logout']
+            ],
         ],
         'after' => [
             // 'honeypot',
@@ -134,6 +137,11 @@ class Filters extends BaseFilters
 
         $this->filters['session']   = ['before' => [$adminArea, $adminArea . '/*']];
         $this->filters['admin']     = ['before' => [$adminArea, $adminArea . '/*']];
+        $this->filters['force-reset']     = [
+            'before' => [$adminArea, $adminArea . '/*'],
+            'except' => ['login*', 'register', 'auth/a/*', 'change-password', 'reset-password', 'logout']
+        ];
+
 
         if (getenv('CI_ENVIRONMENT') !== 'production') {
             unset($this->globals['before'][0]);

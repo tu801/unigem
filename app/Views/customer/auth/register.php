@@ -66,7 +66,7 @@ echo $this->section('content');
                             <fieldset class="box fieldset mb_15">
                                 <label for="country"><?= lang('Customer.select_country') ?></label>
                                 <div class="select-custom">
-                                    <select class="w-100" id="country" name="country"
+                                    <select class="w-100" id="country" name="country_id"
                                         country-selected="<?= old('country') ?? 200 ?>">
                                         <?php if (!empty($countries)) :
                                             foreach ($countries as $item) : ?>
@@ -81,15 +81,15 @@ echo $this->section('content');
                             </fieldset>
                             <div id="vietnam_address">
                                 <div class="mb_15">
-                                    <select class=" w-100 select_province" id="province" name="province"
+                                    <select class=" w-100 select_province" id="province" name="province_id"
                                         area-selected="<?= old('province') ?>"></select>
                                 </div>
                                 <div class=" mb_15">
-                                    <select class=" w-100 select_district" id="district" name="district"
+                                    <select class=" w-100 select_district" id="district" name="district_id"
                                         area-selected="<?= old('district') ?>"></select>
                                 </div>
                                 <div class=" mb_15">
-                                    <select class=" w-100 select_ward" id="ward" name="ward"
+                                    <select class=" w-100 select_ward" id="ward" name="ward_id"
                                         area-selected="<?= old('ward') ?>"></select>
                                 </div>
                                 <div class="tf-field style-1 mb_15">

@@ -25,11 +25,7 @@ echo $this->section('content');
             </div>
             <div class="col-lg-9">
                 <div class="my-account-content account-dashboard">
-                    <?php if (session()->has('message')) : ?>
-                        <div class="alert alert-success mb_60">
-                            <?= esc(session('message')) ?>
-                        </div>
-                    <?php endif; ?>
+                    <?=view('customer/components/customer_alert_block')?>
 
                     <div class="mb_60">
                         <h6 class="fw-5 mb_20"><?=lang('Customer.welcome_back', [$customer->cus_full_name])?></h6>

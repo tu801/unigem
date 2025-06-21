@@ -229,14 +229,14 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('add', 'CustomerController::addCustomer', ['as' => 'add_customer']);
         $routes->post('add', 'CustomerController::addAction');
 
-        $routes->get('ativate/(:num)', 'CustomerController::active/$1', ['as' => 'active_customer']);
+        $routes->get('ativate/(:num)', 'AccountController::active/$1', ['as' => 'active_customer']);
 
         $routes->get('edit/(:num)', 'CustomerController::editCustomer/$1', ['as' => 'edit_customer']);
         $routes->post('edit/(:num)', 'CustomerController::editAction/$1');
         $routes->post('remove', 'CustomerController::ajxRemove/$1', ['as' => 'remove_customer']);
         $routes->post('search-customer', 'CustomerController::ajaxSearchCustomer', ['as' => 'search_customer']);
-        $routes->get('create-customer-account/(:num)', 'CustomerController::createCustomerAccount/$1', ['as' => 'create_customer_account']);
-        $routes->post('create-customer-account/(:num)', 'CustomerController::actionCustomerAccount/$1');
+        $routes->get('create-customer-account/(:num)', 'AccountController::createCustomerAccount/$1', ['as' => 'create_customer_account']);
+        $routes->post('create-customer-account/(:num)', 'AccountController::actionCustomerAccount/$1');
 
         $routes->get('generate', 'CustomerController::generateCustomer', ['as' => 'generate_customer']);
     });

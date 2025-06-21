@@ -123,12 +123,7 @@ class Register extends BaseController
             $this->db->transBegin();
             $customer = new Customer($postData);
             $customer->cus_code = $this->_model->generateCode();
-            $customer->country_id = $postData['country'] ?? null;
-            if ( $postData['country'] == 200 ) {
-                $customer->province_id  = $postData['province'] ?? null;
-                $customer->district_id  = $postData['district'] ?? null;
-                $customer->ward_id  = $postData['ward'] ?? null;
-            } else {
+            if ($postData['country_id'] != VIETNAM_COUNTRY_ID) {
                 $customer->province_id  = 0;
                 $customer->district_id  =  0;
                 $customer->ward_id  = 0;
