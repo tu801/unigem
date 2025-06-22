@@ -115,25 +115,6 @@ echo $this->section('content');
 <script src="<?= base_url($configs->scriptsPath) ?>areaLocation.js"></script>
 <script src="<?= base_url($configs->scriptsPath) ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script>
-// Error messages
-const errorMessages = {
-    fullNameRequired: '<?= lang('Customer.cus_full_name_required') ?>',
-    phoneRequired: '<?= lang('Customer.cus_phone_required') ?>',
-    phoneInvalid: '<?= lang('Customer.cus_phone_invalid') ?>',
-    emailRequired: '<?= lang('Customer.cus_email_required') ?>',
-    emailInvalid: '<?= lang('Customer.cus_email_valid_email') ?>',
-    passwordRequired: '<?= lang('Customer.password_required') ?>',
-    passwordMinLength: '<?= lang('Customer.password_min_length') ?>',
-    passwordConfirmRequired: '<?= lang('Customer.password_confirm_required') ?>',
-    passwordNotMatch: '<?= lang('Customer.password_confirm_matches_password') ?>',
-    countryRequired: '<?= lang('Customer.country_required') ?>',
-    provinceRequired: '<?= lang('Customer.province_required') ?>',
-    districtRequired: '<?= lang('Customer.district_required') ?>',
-    wardRequired: '<?= lang('Customer.ward_required') ?>',
-    vnAddressRequired: '<?= lang('Customer.cus_address_required') ?>',
-    addressRequired: '<?= lang('Customer.cus_address_required') ?>',
-    processing: '<?= lang('Customer.processing') ?>'
-};
 
 $(document).ready(function () {
     $("#cusBirthday").datepicker({

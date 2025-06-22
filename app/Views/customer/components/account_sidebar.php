@@ -23,10 +23,10 @@ $currentUri = '/' . uri_string();
             <?php endif; ?>
         </li>
         <li>
-            <?php if ($currentUri === route_to('my_account_address')) : ?>
+            <?php if ($currentUri === route_to('my_shipping_address')) : ?>
                 <span class="my-account-nav-item active"><?= lang('Customer.shipping_address') ?></span>
             <?php else : ?>
-                <a href="my-account-address.html" class="my-account-nav-item"><?= lang('Customer.shipping_address') ?></a>
+                <a href="<?= route_to('my_shipping_address') ?>" class="my-account-nav-item"><?= lang('Customer.shipping_address') ?></a>
             <?php endif; ?>
         </li>
         <li>

@@ -30,8 +30,10 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
     $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);
 
-    
-    $routes->match(['GET', 'POST'], 'my-voucher/claim-gift/(:num)', 'Voucher::claimGift/$1', ['as' => 'claim_gift']);
+    $routes->get('my-shipping-address', 'ShippingAddress::index', ['as' => 'my_shipping_address']);
+    $routes->match(['GET', 'POST'], 'add-new-shipping-address', 'ShippingAddress::createNewAddress', ['as' => 'add_new_address']);
+    $routes->match(['GET', 'POST'], 'edit-shipping-address/(:num)', 'ShippingAddress::edit/$1', ['as' => 'edit_shipping_address']);
+    $routes->get( 'delete-shipping-address/(:num)', 'ShippingAddress::delete/$1', ['as' => 'delete_shipping_address']);
 
     // Authentication
     $routes->get('login', 'Login::loginView', ['as' => 'cus_login']);

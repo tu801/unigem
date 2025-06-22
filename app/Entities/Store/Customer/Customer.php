@@ -9,6 +9,7 @@ use App\Models\Store\ProvinceModel;
 use App\Models\Store\WardModel;
 use App\Models\User\UserModel;
 use CodeIgniter\I18n\Time;
+use Libraries\Collection\Collection;
 
 class Customer extends Entity
 {
@@ -16,7 +17,7 @@ class Customer extends Entity
 
     protected $user_name;
 
-    protected $shippingAddress = [];
+    protected $shippingAddress;
 
     public function getUserName()
     {
@@ -76,13 +77,14 @@ class Customer extends Entity
         $shippingAddressData = $shippingAddressModel->where('cus_id', $this->id)
             ->orderBy('id', 'DESC')
             ->findAll();
+        $collection = new Collection([]);
 
         if ( !empty($shippingAddressData) ) {
             foreach ($shippingAddressData as $address) {
                 $full_address = '';
 
                 if ( $address->country_id == 200 ) {
-                    $country = $countryModel->find($address->country_id);
+                    $country = $countryModel->asArray()->find($address->country_id);
                     $province = $provinceModel->find($address->province_id);
                     $district = $districtModel->find($address->district_id);
                     $ward     = $wardModel->find($address->ward_id);
@@ -91,26 +93,35 @@ class Customer extends Entity
                     $full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
                     $full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
                     $full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
-                    $full_address .= isset($country['id']) ? ', '.$country['full_name'] : '';
+                    // $full_address .= isset($country['id']) ? ', '.$country['full_name'] : '';
                 } else {
                     $full_address = $address->ship_address;
                 }
 
-                $this->shippingAddress[] = [
+                $check = $collection->find(function ($item) use ($address) {
+                    return $item->id == $address->id;
+                });
+                if ($check) {
+                    continue; 
+                }
+
+                $collection->push((object) [
                     'id' => $address->id,
                     'ship_full_name' => $address->ship_full_name,
                     'ship_telephone' => $address->ship_telephone,
-                    'ship_address' => $address->ship_address,
                     'ship_email' => $address->ship_email,
+                    'ship_address' => $full_address,
                     'country_id' => $address->country_id,
                     'province_id' => $address->province_id,
                     'district_id' => $address->district_id,
                     'ward_id' => $address->ward_id,
+                    'is_default' => $address->is_default,
                     'full_address' => $full_address,
-                ];
+                ]);
             }
         }
 
-        return $this->shippingAddress;
+        $this->shippingAddress = $collection;
+        return $this->shippingAddress->toArray();
     }
 }

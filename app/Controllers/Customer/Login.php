@@ -1,9 +1,7 @@
 <?php
 namespace App\Controllers\Customer;
 
-use App\Controllers\BaseController;
 use App\Enums\UserTypeEnum;
-use App\Models\Store\Customer\CustomerModel;
 use App\Traits\Customer\CustomerValidationRules;
 use App\Traits\SpamFilter;
 
@@ -11,14 +9,13 @@ use App\Traits\SpamFilter;
  * Class Login
  * Handles customer login functionality.
  */
-class Login extends BaseController
+class Login extends CustomerController
 {
-    use CustomerValidationRules, SpamFilter;
+    use CustomerValidationRules;
 
     public function __construct()
     {
         parent::__construct();
-        $this->_model = model(CustomerModel::class);
     }
 
     public function loginView()

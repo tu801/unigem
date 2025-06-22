@@ -8,36 +8,22 @@
 
 namespace App\Controllers\Customer;
 
-
-use App\Controllers\BaseController;
 use App\Enums\UserTypeEnum;
 use App\Libraries\BreadCrumb\BreadCrumbCell;
 use App\Models\Country;
 use App\Models\CusModel;
 use App\Models\Store\Customer\CustomerModel;
 use App\Models\User\UserModel;
-use App\Traits\SpamFilter;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\I18n\Time;
 
-class Profile extends BaseController
+class Profile extends CustomerController
 {
-    use SpamFilter;
-
-    /**
-     * @var UserModel
-     */
-    protected $userModel;
-
+    
     public function __construct()
     {
         parent::__construct();
-        $this->_model  = model(CustomerModel::class);
-        $this->userModel = model(UserModel::class);
-
-        // check customer logged in
-        return $this->checkCustomerLoggedIn();
     }
 
     public function profile()

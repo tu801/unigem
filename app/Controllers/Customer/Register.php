@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Customer;
 
-use App\Controllers\BaseController;
 use App\Entities\Store\Customer\Customer;
 use App\Entities\User;
 use App\Enums\UserTypeEnum;
@@ -14,16 +13,11 @@ use App\Models\User\UserModel;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Events\Events;
 
-class Register extends BaseController
+class Register extends CustomerController
 {
-    protected $userModel;
-
     public function __construct()
     {
         parent::__construct();
-
-        $this->_model = model(CustomerModel::class);
-        $this->userModel = model(UserModel::class);
 
         //SEOData config
         SeoMetaCell::setCanonical();
@@ -53,7 +47,7 @@ class Register extends BaseController
         BreadCrumbCell::add(lang('Home.cus_register'), route_to('cus_register'));
         $this->page_title = lang('Home.cus_register');
 
-        $this->_data['countries'] = model(Country::class)->getCountries();
+        $this->_data['countries'] = $this->countryModel->getCountries();
         return $this->_render('customer/auth/register', $this->_data);
     }
 
