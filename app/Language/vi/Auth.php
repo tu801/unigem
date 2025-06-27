@@ -16,7 +16,8 @@ return [
     'badToken'              => 'Access token không hợp lệ.',
     'oldToken'              => 'Access token đã hết hạn.',
     'noUserEntity'          => 'Phải cung cấp User Entity để xác thực mật khẩu.',
-    'invalidEmail'          => 'Không thể xác minh địa chỉ email khớp với email đã lưu.',
+    'emailRequired'         => 'Vui lòng nhập email.',
+    'invalidEmail'          => 'Email không hợp lệ.',
     'unableSendEmailToUser' => 'Xin lỗi, đã xảy ra sự cố khi gửi email. Chúng tôi không thể gửi email đến "{0}".',
     'throttled'             => 'Quá nhiều yêu cầu từ địa chỉ IP này. Bạn có thể thử lại sau {0} giây.',
     'notEnoughPrivilege'    => 'Bạn không có quyền cần thiết để thực hiện thao tác mong muốn.',
@@ -25,11 +26,11 @@ return [
     'expiredJWT'     => 'Token đã hết hạn.',
     'beforeValidJWT' => 'Token chưa có hiệu lực.',
 
-    'email'           => 'Địa chỉ Email',
+    'email'           => 'Email',
     'username'        => 'Tên đăng nhập',
     'password'        => 'Mật khẩu',
     'passwordConfirm' => 'Mật khẩu (nhập lại)',
-    'haveAccount'     => 'Đã có tài khoản?',
+    'haveAccount'     => 'Đã có tài khoản? Đăng nhập ngay!',
     'token'           => 'Token',
 
     // Buttons
@@ -37,15 +38,18 @@ return [
     'send'    => 'Gửi',
 
     // Registration
-    'register'         => 'Đăng ký',
-    'registerDisabled' => 'Đăng ký hiện không được cho phép.',
-    'registerSuccess'  => 'Chào mừng bạn đến với chúng tôi!',
+    'register'                  => 'Đăng ký',
+    'registerDisabled'          => 'Đăng ký hiện không được cho phép.',
+    'registerSuccess'           => 'Chào mừng bạn đến với chúng tôi!',
+    'newCustomerRegisterNow'    => 'Chưa có tài khoản? Đăng ký ngay!',
 
     // Login
     'login'              => 'Đăng nhập',
     'needAccount'        => 'Cần một tài khoản?',
     'rememberMe'         => 'Ghi nhớ đăng nhập?',
     'forgotPassword'     => 'Quên mật khẩu?',
+    'forgotPasswordTitle' => 'Quên mật khẩu',
+    'forgotPasswordText'  => '<p>Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.</p>',
     'useMagicLink'       => 'Sử dụng Liên kết Đăng nhập',
     'magicLinkSubject'   => 'Liên kết Đăng nhập của bạn',
     'magicTokenNotFound' => 'Không thể xác minh liên kết.',
@@ -55,8 +59,12 @@ return [
     'magicLinkDisabled'  => 'Việc sử dụng MagicLink hiện không được cho phép.',
     'successLogout'      => 'Bạn đã đăng xuất thành công.',
     'backToLogin'        => 'Quay lại Đăng nhập',
+    'loginSuccess'       => 'Đăng nhập thành công',
+    'already_logged_in'  => 'Bạn đã đăng nhập rồi. Vui lòng đăng xuất trước khi đăng nhập lại.',
+    'logoutSuccess'      => 'Đăng xuất thành công',
 
     // Passwords
+    'passwordRequired'          => 'Vui lòng điền mật khẩu.',
     'errorPasswordLength'       => 'Mật khẩu phải có ít nhất {0, number} ký tự.',
     'suggestPasswordLength'     => 'Cụm mật khẩu - dài tới 255 ký tự - tạo ra mật khẩu an toàn hơn và dễ nhớ.',
     'errorPasswordCommon'       => 'Mật khẩu không được là mật khẩu thông dụng.',
@@ -72,12 +80,24 @@ return [
     'passwordChangeSuccess'     => 'Đổi mật khẩu thành công',
     'userDoesNotExist'          => 'Mật khẩu không được thay đổi. Người dùng không tồn tại',
     'resetTokenExpired'         => 'Xin lỗi. Token đặt lại của bạn đã hết hạn.',
+    'forgotPasswordSuccess'     => 'Chúng tôi đã gửi email với hướng dẫn đặt lại mật khẩu của bạn. Vui lòng kiểm tra hộp thư đến của bạn.',
+    'emailForgotPasswordExtra'  => 'Kiểm tra email để khôi phục mật khẩu. Recover Password URL : {0}',
+    'recoverPasswordEmail'      => 'Hãy truy cập vào link sau đây để đặt lại mật khẩu của bạn:',
+    'recoverPasswordLink'       => 'Đặt lại mật khẩu',
+    'recoverPassword'           => 'Khôi phục mật khẩu',
+    'recoverPasswordBody'       => 'Hãy nhập mật khẩu mới của bạn vào ô bên dưới để khôi phục mật khẩu.',
+    'passwordMaxLength'         => 'Mật khẩu không được vượt quá 255 ký tự.',
+    'passwordNotMatch'          => 'Mật khẩu không khớp. Vui lòng thử lại.',
+    'recoverPasswordSuccess'    => 'Mật khẩu của bạn đã được đặt lại thành công. Bạn có thể đăng nhập bằng mật khẩu mới của mình.',
+    'passwordChangeRequired'    => 'Vui lòng đặt lại mật khẩu của bạn trước khi tiếp tục.',
+    'oldPassword'               => 'Mật khẩu cũ',
 
     // Email Globals
     'emailInfo'      => 'Một số thông tin về người dùng:',
     'emailIpAddress' => 'Địa chỉ IP:',
     'emailDevice'    => 'Thiết bị:',
     'emailDate'      => 'Ngày:',
+    'emailNotFound'  => 'Không tìm thấy người dùng với địa chỉ email này.',
 
     // 2FA
     'email2FATitle'       => 'Xác thực Hai yếu tố',
@@ -91,11 +111,12 @@ return [
     'needVerification'    => 'Kiểm tra email của bạn để hoàn tất kích hoạt tài khoản.',
 
     // Activate
+    'activateAccountTitle'    => 'Kích hoạt tài khoản',
     'emailActivateTitle'    => 'Kích hoạt Email',
-    'emailActivateBody'     => 'Chúng tôi vừa gửi cho bạn một email có mã để xác nhận địa chỉ email của bạn. Sao chép mã đó và dán vào bên dưới.',
+    'emailActivateBody'     => 'Chúng tôi vừa gửi cho bạn một email có mã để xác nhận địa chỉ email của bạn. Sao chép mã đó và dán vào bên dưới để kích hoạt tài khoản của bạn.',
     'emailActivateSubject'  => 'Mã kích hoạt của bạn',
     'emailActivateMailBody' => 'Vui lòng sử dụng mã dưới đây để kích hoạt tài khoản của bạn và bắt đầu sử dụng trang web.',
-    'invalidActivateToken'  => 'Mã không chính xác.',
+    'invalidActivateToken'  => 'Mã kích hoạt không chính xác.',
     'needActivate'          => 'Bạn phải hoàn thành đăng ký bằng cách xác nhận mã đã gửi đến địa chỉ email của bạn.',
     'activationBlocked'     => 'Bạn phải kích hoạt tài khoản trước khi đăng nhập.',
 

@@ -1,4 +1,7 @@
 <?php
+
+use CodeIgniter\I18n\Time;
+
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
 // print_r($customer->categories);exit;
@@ -27,7 +30,7 @@ $postConfigs = $config->cmsStatus;
                     </div>
                     <div class="form-group">
                         <label for="inputEmail" class="col-sm-2 col-form-label"><?= lang('Customer.email') ?> <span class="text-danger">*</span></label>
-                        <input type="text" name="cus_email" class="form-control <?= session('errors.cus_email') ? 'is-invalid' : '' ?>"
+                        <input type="text" disabled class="form-control"
                                id="inputEmail" placeholder="<?= lang('Customer.email') ?>" value="<?= $customer->cus_email ?>">
                     </div>
 
@@ -39,13 +42,12 @@ $postConfigs = $config->cmsStatus;
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
                             <?php
-                            $date = date_create($customer->cus_birthday);
-                            if ( $date != false ) {
-                                $bdCheck = date_format($date, 'Y');
-                                if ( $bdCheck > 1000 ) $birthday = date_format($date, 'd-m-Y');
-                                else $birthday = date('d-m-Y');
+                            if ( empty($customer->cus_birthday) ) {
+                                $birthday = !empty(old('cus_birthday')) ? Time::parse(old('cus_birthday'))->format('d-m-Y') : '';
                             }
-                            else $birthday = old('birthday');
+                            else {
+                                $birthday = $customer->cus_birthday;
+                            }
                             ?>
                             <input id="cus_datepicker" name="cus_birthday" class="form-control"  type="text" value="<?= $birthday?>"
                                    data-date-format="dd-mm-yyyy">
@@ -54,27 +56,41 @@ $postConfigs = $config->cmsStatus;
 
                     <div class="row">
                         <div class="col-6">
+                            <div class="form-group">
+                                <label><?= lang('Acp.country') ?></label>
+                                <?php if (isset($countries)): ?>
+                                    <select name="country_id" class="form-control select_country" style="width: 100%;"
+                                        id="country" country-selected="<?= $customer->country_id ?? old('country_id') ?>">
+                                        <?php foreach ($countries as $country): ?>
+                                            <option value="<?= $country->id ?>" data-flag="<?= $country->flags->svg ?>"
+                                                data-code="<?= $country->code ?>"><?= $country->name ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="col-6">
                             <div class="form-group ">
-                                <label><?= lang('Acp.province') ?> <span class="text-danger">*</span> </label>
+                                <label><?= lang('Acp.province') ?> </label>
                                 <select name="province_id" area-selected="<?= $customer->province_id ?>" class="form-control select_province" style="width: 100%;"></select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group ">
-                                <label><?= lang('Acp.district') ?> <span class="text-danger">*</span></label>
+                                <label><?= lang('Acp.district') ?> </label>
                                 <select name="district_id" area-selected="<?= $customer->district_id ?>" class="form-control select_district" style="width: 100%;"></select>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="postInputTitle"><?= lang('Acp.ward') ?> <span class="text-danger">*</span></label>
+                                <label for="postInputTitle"><?= lang('Acp.ward') ?></label>
                                 <select name="ward_id" area-selected="<?= $customer->ward_id ?? '' ?>" class="form-control select_ward" style="width: 100%;"></select>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label><?= lang('Customer.address') ?></label>
+                        <label><?= lang('Customer.address') ?> <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="cus_address"><?= $customer->cus_address ?></textarea>
                     </div>
 
@@ -100,15 +116,6 @@ $postConfigs = $config->cmsStatus;
 <script src="<?= base_url($config->scriptsPath)?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="<?= base_url($config->scriptsPath)?>/plugins/moment/moment.min.js"></script>
 <script src="<?= base_url($config->scriptsPath)?>/acp/areaLocation.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#cus_datepicker").datepicker({
-            todayHighlight: true,
-            format: "dd-mm-yyyy",
-            autoclose: true,
-            endDate: new Date()
-        });
-    });
-</script>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/customer.js"></script>
 
 <?= $this->endSection() ?>

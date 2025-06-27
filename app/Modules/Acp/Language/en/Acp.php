@@ -55,6 +55,7 @@ return [
     'created_view'      => 'Created Date',
     'status'            => 'Status',
 
+    'country'           => 'Country',
     'province'          => 'Province / City',
     'district'          => 'District',
     'select_district'   => 'Select District',

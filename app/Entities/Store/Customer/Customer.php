@@ -1,17 +1,23 @@
 <?php
 namespace App\Entities\Store\Customer;
 
+use App\Models\Country;
+use App\Models\Store\Customer\CustomerShipAddressModel;
 use CodeIgniter\Entity\Entity;
 use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\WardModel;
 use App\Models\User\UserModel;
+use CodeIgniter\I18n\Time;
+use Libraries\Collection\Collection;
 
 class Customer extends Entity
 {
     protected $full_address;
 
     protected $user_name;
+
+    protected $shippingAddress;
 
     public function getUserName()
     {
@@ -26,21 +32,96 @@ class Customer extends Entity
         }
     }
 
+    /**
+     * Get the full address of the customer.
+     * if the country is Vietnam (country_id == 200), include province, district, and ward.
+     * If not, return only the cus_address.
+     *
+     * @return string
+     */
     public function getFullAddress()
     {
-        if (empty($this->province_id) || empty($this->district_id) || empty($this->ward_id)) {
-            return false;
+        if ( $this->country_id == 200 ) {
+            $province = model(ProvinceModel::class)->find($this->province_id);
+            $district = model(DistrictModel::class)->find($this->district_id);
+            $ward     = model(WardModel::class)->find($this->ward_id);
+
+            $this->full_address = $this->cus_address;
+            $this->full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
+            $this->full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
+            $this->full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
+        } else {
+            $this->full_address = $this->cus_address;
         }
 
-        $province = model(ProvinceModel::class)->find($this->province_id);
-        $district = model(DistrictModel::class)->find($this->district_id);
-        $ward     = model(WardModel::class)->find($this->ward_id);
-
-        $this->full_address = $this->cus_address;
-        $this->full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
-        $this->full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
-        $this->full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
-
         return $this->full_address;
+    }
+
+    public function getCusBirthday()
+    {
+        if ( empty($this->attributes['cus_birthday']) ) {
+            return '';
+        }
+
+        return Time::parse($this->attributes['cus_birthday'])->format('d-m-Y');
+    }
+
+    public function getShippingAddress()
+    {
+        $shippingAddressModel = model(CustomerShipAddressModel::class);
+        $countryModel = model(Country::class);
+        $provinceModel = model(ProvinceModel::class);
+        $districtModel = model(DistrictModel::class);
+        $wardModel    = model(WardModel::class);
+
+        $shippingAddressData = $shippingAddressModel->where('cus_id', $this->id)
+            ->orderBy('id', 'DESC')
+            ->findAll();
+        $collection = new Collection([]);
+
+        if ( !empty($shippingAddressData) ) {
+            foreach ($shippingAddressData as $address) {
+                $full_address = '';
+
+                if ( $address->country_id == 200 ) {
+                    $country = $countryModel->asArray()->find($address->country_id);
+                    $province = $provinceModel->find($address->province_id);
+                    $district = $districtModel->find($address->district_id);
+                    $ward     = $wardModel->find($address->ward_id);
+
+                    $full_address .= $address->ship_address;
+                    $full_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
+                    $full_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
+                    $full_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
+                    // $full_address .= isset($country['id']) ? ', '.$country['full_name'] : '';
+                } else {
+                    $full_address = $address->ship_address;
+                }
+
+                $check = $collection->find(function ($item) use ($address) {
+                    return $item->id == $address->id;
+                });
+                if ($check) {
+                    continue; 
+                }
+
+                $collection->push((object) [
+                    'id' => $address->id,
+                    'ship_full_name' => $address->ship_full_name,
+                    'ship_telephone' => $address->ship_telephone,
+                    'ship_email' => $address->ship_email,
+                    'ship_address' => $full_address,
+                    'country_id' => $address->country_id,
+                    'province_id' => $address->province_id,
+                    'district_id' => $address->district_id,
+                    'ward_id' => $address->ward_id,
+                    'is_default' => $address->is_default,
+                    'full_address' => $full_address,
+                ]);
+            }
+        }
+
+        $this->shippingAddress = $collection;
+        return $this->shippingAddress->toArray();
     }
 }

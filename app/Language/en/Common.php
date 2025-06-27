@@ -2,9 +2,16 @@
 
 return [
     // General
-    'product_weight_unit'                => 'ct',
+    'product_weight_unit'               => 'ct',
+    'save_changes'                      => '',
+    'customer'                          => 'Customer',
+
+    'edit'                              => 'Edit',
+    'delete'                            => 'Delete',
 
     'internalServerError'               => 'Internal server error. Please try again later.',
+    'somethingWentWrong'                => 'Something went wrong. Please try again later.',
+    'invalidRequest'                    => 'Invalid Request',
 
     // CMS Authentication
     'cmsLoginWelcomeText'               => 'Sign in to start your session',

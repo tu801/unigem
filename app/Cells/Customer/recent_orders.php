@@ -1,5 +1,5 @@
-<div class="prof_recent_order shadow_sm mt-0">
-    <h4><?=lang('CustomerProfile.recent_order_title')?></h4>
+<div class="prof_recent_order shadow_sm mt-2">
+    <h5 class="fw-5 mb_20"><?=lang('CustomerProfile.recent_order_title')?></h5>
     <?php if ( count($orders) ) :
     foreach ($orders as $item) : ?>
     <div class="single_prof_recorder">

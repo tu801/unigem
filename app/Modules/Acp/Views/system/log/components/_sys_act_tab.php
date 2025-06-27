@@ -33,11 +33,11 @@
                 <table id="tblSysAct" class="table table-striped table-bordered" >
                     <thead>
                     <tr>
-                        <th width="5%"><?= lang('Permissions.id') ?></th>
+                        <th width="5%"><?= lang('Log.id') ?></th>
                         <th width="20%"><?= lang('Log.modified_title') ?></th>
                         <th width="30%"><?= lang('Log.subject_type') ?></th>
-                        <th width="8%"><?= lang('Permissions.module') ?></th>
-                        <th width="25%"><?= lang('Permissions.description') ?></th>
+                        <th width="8%"><?= lang('Log.module') ?></th>
+                        <th width="25%"><?= lang('Log.description') ?></th>
                         <th width="15%"><?= lang('Log.modified_date') ?></th>
                     </tr>
                     </thead>
