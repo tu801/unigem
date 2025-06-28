@@ -59,15 +59,15 @@ $siteName = ( $config->sys['default_site_name'] && !empty($config->sys['default_
 </div>
 
 <!-- ecommerce analytic-->
-<!--<div class="row">
+<div class="row">
     <div class="col-md-6 col-lg-6">
-        <?php //view_cell('EcommerceOverviewCell') ?>
+        <?=view_cell('EcommerceOverviewCell') ?>
     </div>
     <div class="col-md-6 col-lg-6">
-        <?php //view_cell('SaleChartOverTimeCell', ['configs' => $config]) ?>
+        <?=view_cell('SaleChartOverTimeCell', ['configs' => $config]) ?>
     </div>
-</div>-->
-    <!-- ecommerce analytic-->
+</div>
+<!-- ecommerce analytic-->
 
 <div class="row">
 <?php if ( isset($recentPosts) ) : ?>

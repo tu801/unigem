@@ -10,9 +10,12 @@ namespace App\Models\Store\Order;
 
 use CodeIgniter\Model;
 use App\Entities\Store\Order\OrderEntity;
+use App\Models\Traits\recoverItem;
 
 class OrderModel extends Model
 {
+    use recoverItem;
+    
     protected $DBGroup          = 'default';
     protected $table            = 'order';
     protected $primaryKey       = 'order_id';
@@ -33,11 +36,15 @@ class OrderModel extends Model
         'status',
         'payment_status',
         'payment_method',
+        'currency',
+        'exchange_rate',
+        'exchange_rate_id',
         'sub_total',
         'voucher_code',
         'discount_amount',
         'shipping_amount',
         'total',
+        'total_amount_vnd',
         'customer_paid',
     ];
 
@@ -76,9 +83,4 @@ class OrderModel extends Model
         return $code;
     }
 
-    public function recover($id) {
-        $sql = "UPDATE `{$this->table}` SET `deleted_at` = NULL WHERE `order_id` = {$id}";
-        if ( $this->db->query($sql) ) return true;
-        else return false;
-    }
 }

@@ -6,6 +6,13 @@
 namespace App\Models\Traits;
 
 trait recoverItem {
+    
+    /**
+     * Recover an item by its ID.
+     *
+     * @param int $id The ID of the item to recover.
+     * @return bool True on success, false on failure.
+     */
     public function recover($id) {
         $tblPrefix = $this->db->getPrefix();
         $tableName = $tblPrefix.$this->table;
