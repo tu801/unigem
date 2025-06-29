@@ -201,6 +201,11 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->match(['GET', 'POST'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
         $routes->match(['GET', 'POST'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
+
+        // currency exchange rate routes
+        $routes->group('exchange-rate', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
+            $routes->match(['GET', 'POST'], '/', 'ExchangeRateController::index', ['as' => 'list_exchange_rate']);
+        });
     });
 
     // contact routes

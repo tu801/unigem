@@ -39,6 +39,8 @@ return [
 
     'faker'             => 'Tạo dữ liệu',
 
+    'exchange_rate_manager' => 'Quản lý tỷ giá',
+
     //Action
     'add'               => 'Thêm',
     'edit'              => 'Sửa',

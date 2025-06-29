@@ -58,7 +58,7 @@
             </li>
 
             <!-- Shop -->
-            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "menu-open" : "" ?>">
+            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'contactcontroller', 'exchangeratecontroller'))) ? "menu-open" : "" ?>">
                 <a href="#" class="nav-link <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-store"></i>
                     <p>
@@ -77,6 +77,12 @@
                         <a href="<?= route_to('list_contact') ?>" class="nav-link <?= ($controller == 'contactcontroller') ? "active" : '' ?>">
                             <i class="far fa-id-badge  nav-icon"></i>
                             <p><?= lang('Acp.contact_manager'); ?></p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= route_to('list_exchange_rate') ?>" class="nav-link <?= ($controller == 'exchangeratecontroller') ? "active" : '' ?>">
+                            <i class="fas fa-exchange-alt nav-icon"></i>
+                            <p><?= lang('Acp.exchange_rate_manager'); ?></p>
                         </a>
                     </li>
                 </ul>
@@ -112,12 +118,12 @@
             </li>
 
             <!-- order -->
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-cart-arrow-down"></i>
                     <p><?= lang('Order.page_title') ?></p>
                 </a>
-            </li> -->
+            </li>
 
             <!-- Users -->
             <li class="nav-item has-treeview <?= (in_array($controller, array('user', 'usergroup', 'customercontroller'))) ? "menu-open" : "" ?>">

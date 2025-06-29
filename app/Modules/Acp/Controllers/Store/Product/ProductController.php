@@ -352,6 +352,8 @@ class ProductController extends AcpController
         $response = [];
         if (isset($inputData['keyword_search']) && $inputData['keyword_search'] !== '') {
             $data = $this->_model
+                ->join('product_content', 'product_content.product_id = product.id')
+                ->where('product_content.lang_id', $this->currentLang->id)
                 ->like('pd_name', $inputData['keyword_search'])
                 ->where('pd_status', ProductStatusEnum::PUBLISH)
                 ->findAll();

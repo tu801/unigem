@@ -79,6 +79,9 @@ class Orders extends Migration
             'updated_at'       	    => ['type' => 'datetime', 'null' => true],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addKey('currency_to');
+        $this->forge->addKey('currency_from');
+        $this->forge->addKey('is_active');
         $this->forge->createTable('exchange_rates', true);
     }
 
