@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -35,6 +36,15 @@ return [
 
     'currency_from'                     => 'Ngoại tệ chuyển đổi',
     'currency_to'                       => 'Tỷ giá quy đổi (VND)',
+    'current_exchange_rate'             => 'Tỷ giá hiện tại',
+    'last_update'                       => 'Cập nhật lần cuối',
 
     'save_exchange_rate'                => 'Lưu tỷ giá',
+
+    'rate_required'                     => 'Vui lòng nhập tỷ giá quy đổi',
+    'rate_decimal'                      => 'Tỷ giá quy đổi phải là một số hợp lệ',
+    'add_exchange_rate_log_title'       => 'Thêm tỷ giá hối đoái từ {0} sang {1}',
+    'add_exchange_rate_log_desc'        => 'Người dùng {0} đã thêm tỷ giá hối đoái mới từ {1} sang {2}.',
+    'addRateSuccess'                    => 'Tỷ giá hối đoái đã được thêm thành công [{0}]',
+    'editRateSuccess'                   => 'Tỷ giá hối đoái đã được cập nhật thành công [{0}]',
 ];

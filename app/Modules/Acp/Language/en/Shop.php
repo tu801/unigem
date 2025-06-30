@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -26,4 +27,24 @@ return [
     // success message
     'addSuccess'            => 'Successfully created store #{0}',
     'editSuccess'           => 'Successfully updated information for store #{0}',
+
+    // Exchange Rate Page
+    'exchange_rate_manager'             => 'Exchange Rate Management',
+
+    'note'                              => 'Note',
+    'currency_exchange_info'            => 'All exchange rates are converted to Vietnamese Dong (VND) and used to calculate the value of orders in the store.',
+
+    'currency_from'                     => 'Foreign currency to convert',
+    'currency_to'                       => 'Exchange rate (VND)',
+    'current_exchange_rate'             => 'Current exchange rate',
+    'last_update'                       => 'Last updated',
+
+    'save_exchange_rate'                => 'Save exchange rate',
+
+    'rate_required'                     => 'Please enter the exchange rate',
+    'rate_decimal'                      => 'Exchange rate must be a valid number',
+    'add_exchange_rate_log_title'       => 'Add exchange rate from {0} to {1}',
+    'add_exchange_rate_log_desc'        => 'User {0} has added a new exchange rate from {1} to {2}.',
+    'addRateSuccess'                    => 'Exchange rate has been successfully added [{0}]',
+    'editRateSuccess'                   => 'Exchange rate has been successfully updated [{0}]',
 ];
