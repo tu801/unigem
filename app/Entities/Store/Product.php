@@ -8,6 +8,8 @@ use CodeIgniter\I18n\Time;
 use App\Enums\UploadFolderEnum;
 use App\Models\AttachMetaModel;
 use App\Models\Blog\CategoryModel;
+use App\Models\LangModel;
+use App\Models\Store\ExchangeRateModel;
 
 class Product extends Entity
 {
@@ -21,6 +23,29 @@ class Product extends Entity
 
     protected string $display_price;
 
+    protected $product_meta;
+
+    public function getProductMeta()
+    {
+        if (empty($this->id)) {
+            throw new \RuntimeException(lang('Product.product_must_be_created'));
+        }
+
+        if (isset($this->lang_id)) {
+            $langData = model(LangModel::class)->find($this->lang_id);
+            if (isset($langData->id)) {
+                $this->product_meta['lang'] = $langData;
+
+                if ($this->lang_id != VIETNAM_COUNTRY_ID) {
+                    $exchangeRate = model(ExchangeRateModel::class)->getExchangeRate($langData->currency_code);
+                    $this->product_meta['exchange_rate'] = $exchangeRate ? $exchangeRate->rate : 1;
+                }
+            }
+        }
+
+        return $this->product_meta;
+    }
+
     /**
      * get product display price
      * @return string
@@ -31,7 +56,7 @@ class Product extends Entity
         helper('ecom');
 
         $price = ($this->attributes['price_discount'] > 0 && $this->attributes['price_discount'] < $this->attributes['price']) ? $this->attributes['price_discount'] : $this->attributes['price'];
-        if ( $price > 0 ) {
+        if ($price > 0) {
             $this->display_price = format_currency($price);
         } else {
             $this->display_price = lang('Product.contact_price_text'); // contact price
@@ -49,10 +74,9 @@ class Product extends Entity
         if (!empty($this->attributes['pd_image'])) {
             $mytime       = Time::parse($this->attributes['created_at']);
             $this->feature_image = [
-                'full'      => base_url('uploads/'.UploadFolderEnum::PRODUCT.'/'.$mytime->format('Y/m').'/'.$this->attributes['pd_image']),
-                'thumbnail' => base_url('uploads/'.UploadFolderEnum::PRODUCT.'/'.$mytime->format('Y/m').'/thumb/'.$this->attributes['pd_image']),
+                'full'      => base_url('uploads/' . UploadFolderEnum::PRODUCT . '/' . $mytime->format('Y/m') . '/' . $this->attributes['pd_image']),
+                'thumbnail' => base_url('uploads/' . UploadFolderEnum::PRODUCT . '/' . $mytime->format('Y/m') . '/thumb/' . $this->attributes['pd_image']),
             ];
-
         } else {
             $this->feature_image = [
                 'full'      => base_url($config->noimg),
@@ -73,12 +97,12 @@ class Product extends Entity
         $images         = $metaAttach->getAttMeta($this->id, 'product_images');
         $imageData      = [];
 
-        if ( !isset($images->id) ) {
+        if (!isset($images->id)) {
             return null; // no image for this product
         }
-        
+
         foreach ($images->images as $item) {
-            if ( !isset($item->product_thumb) || empty($item->product_thumb) ) $item->product_thumb = create_product_thumb($item); // create thumb if not exists in image attach
+            if (!isset($item->product_thumb) || empty($item->product_thumb)) $item->product_thumb = create_product_thumb($item); // create thumb if not exists in image attach
 
             $imageData[] = $item;
         }
@@ -101,12 +125,12 @@ class Product extends Entity
         return $catModel->getById($this->cat_id, $session->lang->id, 'product');
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         if (empty($this->id)) {
             throw new \RuntimeException(lang('Product.product_must_be_created'));
         }
-        $this->url = base_url(route_to('product_detail',$this->attributes['pd_slug'], $this->id ));
+        $this->url = base_url(route_to('product_detail', $this->attributes['pd_slug'], $this->id));
         return $this->url;
     }
-
 }

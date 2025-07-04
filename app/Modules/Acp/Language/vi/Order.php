@@ -3,7 +3,7 @@ return [
     'page_title'       => 'Quản lý đơn hàng',
     'add_title'        => 'Tạo đơn hàng',
     'edit_title'       => 'Sửa đơn hàng',
-    'info_basic'       => 'Thông Tin Cơ bản',
+    'info_basic'       => 'Thông Tin đơn hàng',
     'customer_name'    => 'Tên Khách Hàng',
     'phone'            => 'Số điện thoại',
     'email'            => 'Email',
@@ -26,6 +26,8 @@ return [
     'total'            => 'Tổng tiền',
     'customer_paid'    => 'Khách hàng đã trả',
     'created_view'     => 'Ngày mua',
+    'unit_price'       => 'Đơn giá',
+    'exchange_rate'    => 'Tỷ giá hối đoái',
 
     // delivery type
     'delivery_type_1'  => 'Nhận tại cửa hàng',
@@ -52,7 +54,16 @@ return [
     'addSuccess'       => "Đã thêm thành công đơn hàng mới #{0}",
     'editSuccess'      => 'Đã cập nhật thành công đơn hàng #{0}',
 
+    'addItemToCartSuccess'      => 'Đã thêm sản phẩm vào giỏ hàng thành công',
+    'increaseItemQuantity'      => 'Đã tăng số lượng sản phẩm trong giỏ hàng lên 1',
+    'deleteItemFromCartSuccess' => 'Đã xóa sản phẩm khỏi giỏ hàng thành công',
+
     'sub_total'                 => 'Tạm tính',
+
+    'shipping_info'             => 'Thông tin giao hàng',
+    'ship_full_name'            => 'Tên người nhận',
+    'ship_telephone'            => 'Số điện thoại người nhận',
+    'ship_email'                => 'Email người nhận',
     'shipping_fee'              => 'Phí giao hàng',
     'discount_amount'           => 'Giảm giá',
     'order_total'               => 'Tổng cộng',
@@ -62,6 +73,7 @@ return [
     'select_customer'  => 'Chọn khách hàng',
     'payment_paid_if_customer_paid' => 'Chọn trạng thái đã thanh toán khi, số tiền khách hàng trả đủ {0} vnđ',
     'success_if_payment_paid' => 'Trạng thái đơn hàng hoàn thành khi, đơn hàng đã được thanh toán',
+    'currency_exchange_note' => 'Tỷ giá hối đoái được sử dụng để tính toán giá trị đơn hàng trong cửa hàng. Tất cả tỷ giá được chuyển đổi sang đồng Việt Nam (VND).',
 
     // validate
     'full_name_required'      => 'Vui lòng nhập tên khách hàng',
@@ -75,7 +87,10 @@ return [
     'district_id_required'    => 'Vui lòng chọn quận/huyện',
     'ward_id_required'        => 'Vui lòng chọn phường/xã',
     'address_required'        => 'Vui Nhập địa chỉ',
+    'ship_full_name_required' => 'Vui lòng nhập tên người nhận',
+    'ship_telephone_required' => 'Vui lòng nhập số điện thoại người nhận',
 
+    'create_order_log_desc'   => '#{0} Tạo đơn hàng #{1} thành công',
 
     // invoice
     'invoice_title'           => 'Hóa đơn',

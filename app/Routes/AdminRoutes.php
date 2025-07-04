@@ -251,8 +251,8 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('/', 'OrderController::index', ['as' => 'order']);
         $routes->post('/', 'OrderController::index');
 
-        $routes->get('add', 'OrderController::addOrder', ['as' => 'add_order']);
-        $routes->post('add', 'OrderController::addAction');
+        $routes->get('add', 'CreateOrderController::addOrder', ['as' => 'add_order']);
+        $routes->post('add', 'CreateOrderController::addAction');
 
         $routes->get('create', 'OrderController::createOrder', ['as' => 'create_order']);
 

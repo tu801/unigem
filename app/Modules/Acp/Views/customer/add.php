@@ -72,7 +72,7 @@ $postConfigs = $config->cmsStatus;
                                 <label><?= lang('Acp.country') ?> </label>
                                 <?php if (isset($countries)): ?>
                                     <select name="country_id" class="form-control select_country" style="width: 100%;"
-                                        id="country" country-selected="<?= old('country_id') ?? 200 ?>">
+                                        id="country" country-selected="<?= old('country_id') ?? VIETNAM_COUNTRY_ID ?>">
                                         <?php foreach ($countries as $country): ?>
                                             <option value="<?= $country->id ?>" data-flag="<?= $country->flags->svg ?>"
                                                 data-code="<?= $country->code ?>"><?= $country->name ?></option>
@@ -84,7 +84,7 @@ $postConfigs = $config->cmsStatus;
 
                         <div class="col-6">
                             <div class="form-group ">
-                                <label><?= lang('Acp.province') ?>  </label>
+                                <label><?= lang('Acp.province') ?> </label>
                                 <select name="province_id" area-selected="<?= old('province_id') ?>"
                                     class="form-control select_province" style="width: 100%;"></select>
                             </div>
@@ -133,7 +133,8 @@ $postConfigs = $config->cmsStatus;
 </form>
 <?= $this->endSection() ?>
 <?= $this->section('pageStyles') ?>
-<link rel="stylesheet" href="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet"
+    href="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
 <?= $this->endSection() ?>
 <?= $this->section('pageScripts') ?>
 <script src="<?= base_url($config->scriptsPath) ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js">
