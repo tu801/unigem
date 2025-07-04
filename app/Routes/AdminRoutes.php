@@ -256,8 +256,8 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
 
         $routes->get('create', 'OrderController::createOrder', ['as' => 'create_order']);
 
-        $routes->get('edit/(:num)', 'OrderController::editOrder/$1', ['as' => 'edit_order']);
-        $routes->post('edit/(:num)', 'OrderController::editAction/$1');
+        $routes->get('edit/(:num)', 'EditOrderController::editOrder/$1', ['as' => 'edit_order']);
+        $routes->post('edit/(:num)', 'EditOrderController::editAction/$1');
 
         $routes->post('remove', 'OrderController::ajxRemove/$1', ['as' => 'remove_order']);
         $routes->get('order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']);

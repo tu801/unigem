@@ -16,7 +16,8 @@ class OrderItemModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'order_id',
-        'product',
+        'product_id',
+        'currency_type',
         'unit_price',
         'quantity',
         'total',

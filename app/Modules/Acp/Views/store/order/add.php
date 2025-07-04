@@ -165,7 +165,7 @@ echo $this->section('content');
                                 <label><?= lang('Acp.country') ?> </label>
                                 <?php if (isset($countries)): ?>
                                     <select name="country_id" class="form-control select_country" style="width: 100%;"
-                                        id="country" country-selected="<?= old('country_id') ?? VIETNAM_COUNTRY_ID ?>">
+                                        id="country" country-selected="<?= old('country_id') ?? VIETNAM_COUNTRY_ID ?>" v-model="order.country">
                                         <?php foreach ($countries as $country): ?>
                                             <option value="<?= $country->id ?>" data-flag="<?= $country->flags->svg ?>"
                                                 data-code="<?= $country->code ?>"><?= $country->name ?></option>
@@ -178,25 +178,25 @@ echo $this->section('content');
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> ">
                             <label><?= lang('Order.ship_full_name') ?> <span class="text-danger">*</span></label>
                             <input type="text" name="ship_full_name" value="<?= old('ship_full_name') ?>"
                                 class="form-control <?= session('errors.ship_full_name') ? 'is-invalid' : '' ?>">
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> ">
                             <label><?= lang('Order.ship_telephone') ?> <span class="text-danger">*</span></label>
                             <input type="text" name="ship_telephone" value="<?= old('ship_full_name') ?>"
                                 class="form-control <?= session('errors.ship_telephone') ? 'is-invalid' : '' ?>">
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-6" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> ">
                             <label><?= lang('Order.ship_email') ?> </label>
                             <input type="text" name="ship_email" value="<?= old('ship_full_name') ?>"
                                 class="form-control">
                         </div>
 
-                        <div class="col-6" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?>">
+                        <div class="col-6" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> && order.country == <?= VIETNAM_COUNTRY_ID ?> ">
                             <div class=" form-group">
                                 <label><?= lang('Acp.province') ?> <span class="text-danger">*</span> </label>
                                 <select name="province_id" area-selected="<?= old('province_id') ?>"
@@ -205,7 +205,7 @@ echo $this->section('content');
                         </div>
                     </div>
 
-                    <div class="row" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> ">
+                    <div class="row" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> && order.country == <?= VIETNAM_COUNTRY_ID ?> ">
                         <div class="col-6">
                             <div class="form-group ">
                                 <label><?= lang('Acp.district') ?> <span class="text-danger">*</span></label>
@@ -221,6 +221,9 @@ echo $this->section('content');
                                     class="form-control select_ward" style="width: 100%;"></select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?> ">
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="postInputTitle"><?= lang('Shop.address') ?> <span
@@ -364,13 +367,12 @@ echo $this->section('content');
             </div>
         </form>
     </div>
-</div>
 
-<?= view('Modules\Acp\Views\components\add_product_modal') ?>
-<?= view('Modules\Acp\Views\components\search_customer_modal') ?>
+    <?= view($config->view . '\components\add_product_modal') ?>
+    <?= view($config->view . '\components\search_customer_modal') ?>
 
-<input type="hidden" id="cstoken" value="<?= csrf_hash() ?>">
-<input type="hidden" id="csname" value="<?= csrf_token() ?>">
+    <input type="hidden" id="cstoken" value="<?= csrf_hash() ?>">
+    <input type="hidden" id="csname" value="<?= csrf_token() ?>">
 </div>
 <?= $this->endSection() ?>
 

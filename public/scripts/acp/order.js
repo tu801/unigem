@@ -124,6 +124,10 @@ const orderApp = Vue.createApp({
       $("#customer-modal").modal("hide");
 
       $('[name="country_id"]').val(customer.country_id).change();
+      $('[name="ship_full_name"]').val(customer.cus_full_name);
+      $('[name="ship_telephone"]').val(customer.cus_phone);
+      $('[name="ship_email"]').val(customer.cus_email);
+      $('[name="address"]').val(customer.cus_address);
 
       if (
         customer.country_id == VietNamCountryId &&
@@ -309,5 +313,6 @@ const orderApp = Vue.createApp({
     this.order.payment_status = payment_status;
     this.order.customer_paid = customer_paid;
     this.order.exchange_rate = exchange_rate;
+    this.order.country = VietNamCountryId;
   },
 });

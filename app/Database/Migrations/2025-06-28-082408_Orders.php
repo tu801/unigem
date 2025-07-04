@@ -53,6 +53,7 @@ class Orders extends Migration
             'oder_item_id'      => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'order_id'          => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true],
             'product_id'        => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true],
+            'currency_type'     => ['type' => 'varchar', 'constraint' => 32, 'default' => 'VND', 'comment' => 'VND, USD'],
             'unit_price'        => ['type' => 'decimal', 'constraint' => "14,2", 'unsigned' => true, 'default' => 0],
             'quantity'          => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
             'total'             => ['type' => 'decimal', 'constraint' => "14,2", 'unsigned' => true, 'default' => 0],

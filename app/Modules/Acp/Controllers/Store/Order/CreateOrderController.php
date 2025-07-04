@@ -26,6 +26,9 @@ class CreateOrderController extends OrderController
         $this->_data['title'] = lang("Order.add_title");
     }
 
+    /**
+     * show add order form
+     */
     public function addOrder()
     {
         $shops = $this->_shopModel->where('status', ShopEnum::STATUS['active'])->findAll();
@@ -38,6 +41,9 @@ class CreateOrderController extends OrderController
         $this->_render('\store\order\add', $this->_data);
     }
 
+    /**
+     * handle add order form submission
+     */
     public function addAction()
     {
         $inputData = $this->request->getPost();
@@ -153,15 +159,16 @@ class CreateOrderController extends OrderController
                 if (isset($product->id)) {
                     $priceProduct       = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price * $quantity;
                     $priceProductTotal  += $priceProduct;
-                    $weightProductTotal += $product->product_meta['weight'] * $quantity;
+                    $weightProductTotal += $product->pd_weight * $quantity;
 
                     // order item
                     $orderItems[] = [
-                        'product'    => $productID,
-                        'unit_price' => EUnitPrice::VND,
-                        'quantity'   => $quantity,
-                        'total'      => $priceProduct,
-                        'pd_type'    => EProductType::PRODUCT,
+                        'product_id'    => $productID,
+                        'currency_type' => $product->product_meta['lang']->currency_code,
+                        'unit_price'    => ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price,
+                        'quantity'      => $quantity,
+                        'total'         => $priceProduct,
+                        'pd_type'       => EProductType::PRODUCT,
                     ];
                 }
             }
@@ -186,15 +193,30 @@ class CreateOrderController extends OrderController
                 }
             }
 
-            $dataOrder['sub_total']       = $subAmount;
-            $dataOrder['total']           = $totalAmount;
+            // handle exchange rate
+            if ( $this->currentLang->id > 1 ) {
+                $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
+                $dataOrder['sub_total']        = $subAmount;
+                $dataOrder['total']            = $totalAmount;
+                $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
+                $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
+                $dataOrder['currency']         = $this->currentLang->currency_code;
+                $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
+            } else {
+                $dataOrder['sub_total']       = $subAmount;
+                $dataOrder['total']           = $totalAmount;
+                $dataOrder['exchange_rate']   = 1;
+                $dataOrder['exchange_rate_id'] = 0;
+                $dataOrder['currency']        = 'VND';
+                $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
+            }
 
             if ($inputData['payment_status'] == EPaymentStatus::PAID && $inputData['customer_paid'] != $totalAmount) {
                 $this->db->transRollback();
                 return redirect()->back()->withInput()->with('errors', ['customer_paid' => lang('Order.payment_paid_if_customer_paid', [number_format($totalAmount)])]);
             }
             $dataOrder['customer_paid'] = $inputData['customer_paid'] ?? 0;
-            dd($dataOrder);
+            // save order
             $orderID = $this->_model->insert($dataOrder);
 
             // save order items

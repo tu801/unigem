@@ -3,6 +3,7 @@ namespace App\Entities\Store\Order;
 
 use CodeIgniter\Entity\Entity;
 use App\Enums\Store\Order\EOrderStatus;
+use App\Models\Country;
 use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\ShopModel;
@@ -10,7 +11,7 @@ use App\Models\Store\WardModel;
 
 class OrderEntity extends Entity
 {
-    protected $full_address_delivery;
+    protected $full_delivery_address;
 
     public function getDeliveryInfo()
     {
@@ -32,21 +33,26 @@ class OrderEntity extends Entity
         return $_shopModel->where('shop_id', $this->attributes['shop_id'])->first();
     }
 
-    public function getFullAddressDelivery()
+    public function getFullDeliveryAddress()
     {
         if (empty($this->delivery_info)) {
             return false;
         }
+        $country = model(Country::class)->find($this->delivery_info->country_id);
         $province = model(ProvinceModel::class)->find($this->delivery_info->province_id);
         $district = model(DistrictModel::class)->find($this->delivery_info->district_id);
         $ward     = model(WardModel::class)->find($this->delivery_info->ward_id);
 
-        $this->full_address_delivery = $this->delivery_info->address;
-        $this->full_address_delivery .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
-        $this->full_address_delivery .= isset($district['id']) ? ', '.$district['full_name'] : '';
-        $this->full_address_delivery .= isset($province['id']) ? ', '.$province['full_name'] : '';
+        if ( $country->id != 200 ) {
+            $this->full_delivery_address = $this->delivery_info->cus_address . ', ' . $country->name;
+            return $this->full_delivery_address;
+        }
+        $this->full_delivery_address = $this->delivery_info->cus_address;
+        $this->full_delivery_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
+        $this->full_delivery_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
+        $this->full_delivery_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
 
-        return $this->full_address_delivery;
+        return $this->full_delivery_address;
     }
 
     public function getOrderStatusText()

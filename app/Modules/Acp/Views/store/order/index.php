@@ -13,11 +13,11 @@ echo $this->section('content')
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <a class="<?= ($listtype == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listtype=user") ?>"><?= lang('Order.list_user') ?></a> |
+                        <a class="<?= ($listType == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=user") ?>"><?= lang('Order.list_user') ?></a> |
                         <?php if (in_array($login_user->gid, [1, 2])) : ?>
-                            <a class="<?= ($listtype == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listtype=all") ?>"><?= lang('Order.list_all') ?></a> |
+                            <a class="<?= ($listType == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=all") ?>"><?= lang('Order.list_all') ?></a> |
                         <?php endif; ?>
-                        <a class="<?= ($listtype == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listtype=deleted") ?>"><?= lang('Order.list_delete') ?></a>
+                        <a class="<?= ($listType == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=deleted") ?>"><?= lang('Order.list_delete') ?></a>
                     </div>
 
                     <div class="card-tools mt-2">
@@ -152,7 +152,7 @@ echo $this->section('content')
                                     </td>
                                     <td><?=$row->created_at->format('d-m-Y')?></td>
                                     <td>
-                                        <?php if ($listtype !== 'deleted') : ?>
+                                        <?php if ($listType !== 'deleted') : ?>
                                             <a class="btn btn-primary btn-sm mb-2"  href="<?=route_to("edit_order", $row->order_id)?>"><i class="fas fa-edit"></i></a>
                                             <a class="btn btn-danger btn-sm mb-2 acpRmItem" title="Move to Trash" data-delete="<?=route_to("remove_order")?>" data-id="<?=$row->order_id?>" data-delete-message="Bạn có chắc chắn muốn xoá item này?" ><i class="fas fa-trash"></i></a>
                                         <?php else : ?>

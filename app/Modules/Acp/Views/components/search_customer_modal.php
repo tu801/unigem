@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <ul class="list-group">
+                    <ul class="list-group" v-if="customers_search.length > 0">
                         <li class="list-group-item d-flex justify-content-between align-items-center"
                             v-for="(item, index) in customers_search">
                             {{ item.cus_full_name }} - {{ item.cus_phone }}
