@@ -1,7 +1,7 @@
 <!-- Brand Logo -->
 <a href="<?= base_url($config->adminSlug . '/dashboard') ?>" class="brand-link bg-danger">
     <img src="/<?= $config->templatePath ?>assets/img/logo.png" alt="TMT" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light"><?=lang('Acp.cms_brand_text')?></span>
+    <span class="brand-text font-weight-light"><?= lang('Acp.cms_brand_text') ?></span>
 </a>
 
 <!-- Sidebar -->
@@ -88,8 +88,8 @@
                 </ul>
             </li>
 
-             <!-- Product -->
-             <?php
+            <!-- Product -->
+            <?php
             if (isset($cat_type) && $cat_type == 'product') $ctlArr = array('category', 'productcontroller');
             else $ctlArr = array('productcontroller', 'productmanufacturercontroller');
             ?>
@@ -119,7 +119,7 @@
 
             <!-- order -->
             <li class="nav-item">
-                <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller'))) ? "active" : "" ?>">
+                <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller', 'invoicecontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-cart-arrow-down"></i>
                     <p><?= lang('Order.page_title') ?></p>
                 </a>
