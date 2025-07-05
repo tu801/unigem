@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Acp\Controllers\Store\Order;
 
 use App\Enums\Store\Order\EDeliveryType;
@@ -15,7 +16,7 @@ use Modules\Acp\Controllers\Traits\UseVoucher;
 class EditOrderController extends OrderController
 {
     use ShippingFee, UseVoucher;
-    
+
     protected $pageTitle = 'Order.edit_page_title';
 
     public function __construct()
@@ -42,7 +43,7 @@ class EditOrderController extends OrderController
         $this->_data['title'] = lang('Order.edit_title');
         if (isset($order->order_id)) {
             $this->_data['countries'] = $this->_countryModel->getCountries();
-            
+
             $this->_data['order'] = $order;
             $this->_render('\store\order\edit', $this->_data);
         } else {
@@ -167,7 +168,7 @@ class EditOrderController extends OrderController
                 }
             }
 
-            if ( $this->currentLang->id > 1 ) {
+            if ($this->currentLang->id > 1) {
                 $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
                 $dataOrder['sub_total']        = $subAmount;
                 $dataOrder['total']            = $totalAmount;
@@ -190,7 +191,7 @@ class EditOrderController extends OrderController
             }
 
             // record log info
-            $logData = [
+            $recordLogData = [
                 'old_data'    => $order->toArray(),
             ];
 
@@ -199,7 +200,7 @@ class EditOrderController extends OrderController
 
             // save order items
             $oldOrderItems = $this->_orderItemModel->where('order_id', $orderID)->findAll();
-            $logData['old_data']['order_items'] = $oldOrderItems;
+            $recordLogData['old_data']['order_items'] = $oldOrderItems;
             $this->_orderItemModel->where('order_id', $orderID)->delete();
             foreach ($orderItems as $item) {
                 $item['order_id'] = $orderID;
@@ -207,12 +208,12 @@ class EditOrderController extends OrderController
             }
 
             //log Action
-            $logData['new_data'] = $order->toArray();
-            $logData['new_data']['order_items'] = $orderItems;
+            $recordLogData['new_data'] = $order->toArray();
+            $recordLogData['new_data']['order_items'] = $orderItems;
             $logData = [
                 'title'        => 'Edit Order #' . $order->order_id,
                 'description'  => "#{$this->user->username} đã chỉnh sửa order #{$order->order_id}",
-                'properties'   => $logData,
+                'properties'   => $recordLogData,
                 'subject_id'   => $order->order_id,
                 'subject_type' => OrderModel::class,
             ];
@@ -227,6 +228,5 @@ class EditOrderController extends OrderController
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
-
     }
 }

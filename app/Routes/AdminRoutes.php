@@ -260,12 +260,26 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('edit/(:num)', 'EditOrderController::editAction/$1');
 
         $routes->post('remove', 'OrderController::ajxRemove/$1', ['as' => 'remove_order']);
-        $routes->get('get-order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']); 
+        $routes->get('get-order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']);
         $routes->get('recover/(:num)', 'OrderController::recover/$1', ['as' => 'recover_order']);
 
         $routes->get('invoice/(:num)', 'InvoiceController::invoice/$1', ['as' => 'invoice_order']);
         $routes->get('invoice/(:num)/invoice-print.html', 'InvoiceController::invoicePrint/$1', ['as' => 'invoice_print']);
 
         $routes->get('view-deposit/(:num)', 'OrderController::viewDeposit/$1', ['as' => 'view_deposit_order']);
+    });
+
+    // voucher routes
+    $routes->group('voucher', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
+        $routes->match(['GET', 'POST'], '/', 'VoucherController::index', ['as' => 'list_voucher']);
+
+        $routes->match(['GET', 'POST'], 'add', 'VoucherController::add', ['as' => 'add_voucher']);
+
+        $routes->match(['GET', 'POST'], 'edit/(:num)', 'VoucherController::edit/$1', ['as' => 'edit_voucher']);
+
+        $routes->post('remove', 'VoucherController::ajxRemove/$1', ['as' => 'remove_voucher']);
+
+        $routes->get('view/(:num)', 'VoucherController::viewVoucher/$1', ['as' => 'view_voucher']);
+        $routes->post('view/(:num)', 'VoucherController::editVoucher/$1');
     });
 });

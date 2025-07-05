@@ -58,8 +58,9 @@
             </li>
 
             <!-- Shop -->
-            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'contactcontroller', 'exchangeratecontroller'))) ? "menu-open" : "" ?>">
-                <a href="#" class="nav-link <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "active" : "" ?>">
+            <?php $shopControllers = array('shopcontroller', 'contactcontroller', 'exchangeratecontroller', 'vouchercontroller'); ?>
+            <li class="nav-item has-treeview <?= (in_array($controller, $shopControllers)) ? "menu-open" : "" ?>">
+                <a href="#" class="nav-link <?= (in_array($controller, $shopControllers)) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-store"></i>
                     <p>
                         <?= lang('Acp.shop_manager') ?>
@@ -83,6 +84,12 @@
                         <a href="<?= route_to('list_exchange_rate') ?>" class="nav-link <?= ($controller == 'exchangeratecontroller') ? "active" : '' ?>">
                             <i class="fas fa-exchange-alt nav-icon"></i>
                             <p><?= lang('Acp.exchange_rate_manager'); ?></p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= route_to('list_voucher') ?>" class="nav-link <?= ($controller == 'vouchercontroller') ? "active" : '' ?>">
+                            <i class="fas fa-ticket-alt  nav-icon"></i>
+                            <p><?= lang('Acp.voucher_manager'); ?></p>
                         </a>
                     </li>
                 </ul>

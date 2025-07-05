@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/23/2023
@@ -21,18 +22,18 @@ class ShopController extends AcpController
     public function __construct()
     {
         parent::__construct();
-        if ( empty($this->_model)) {
+        if (empty($this->_model)) {
             $this->_model = model(ShopModel::class);
         }
     }
 
     public function index()
     {
-        $this->_data['title']= lang("Shop.page_title");
+        $this->_data['title'] = lang("Shop.page_title");
         $postData = $this->request->getPost();
 
-        if ( isset($postData) && !empty($postData) ) {
-            if ( !empty($postData['sel']) ) {
+        if (isset($postData) && !empty($postData)) {
+            if (!empty($postData['sel'])) {
                 $this->_model->delete($postData['sel']);
             }
 
@@ -50,9 +51,9 @@ class ShopController extends AcpController
 
     public function addShop()
     {
-        $this->_data['title']= lang('Shop.add_title');
+        $this->_data['title'] = lang('Shop.add_title');
 
-        if ( $this->request->getPost() ) {
+        if ($this->request->getPost()) {
             return $this->addAction();
         }
 
@@ -63,14 +64,13 @@ class ShopController extends AcpController
     public function addAction()
     {
         $postData = $this->request->getPost();
-        if ( empty($postData) ) {
+        if (empty($postData)) {
             return redirect()->route('list_shop')->with('errors', lang('Acp.invalid_request'));
         }
 
         // validate data
         [$rules, $errMess] = $this->_getValidateRules(null);
-        if (! $this->validate($rules, $errMess))
-        {
+        if (! $this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -78,9 +78,9 @@ class ShopController extends AcpController
 
         // upload image
         $image = $this->request->getFile('image');
-        if ( $image->getName() ) {
+        if ($image->getName()) {
             $info = [
-                'file_name' => clean_url($postData['name']).'-'.time().'.'. $image->getClientExtension(),
+                'file_name' => clean_url($postData['name']) . '-' . time() . '.' . $image->getClientExtension(),
                 'sub_folder' => UploadFolderEnum::SHOP
             ];
             $imgPath = $this->upload_image($image, $this->_getDefaultUploadRule(), $info);
@@ -116,10 +116,9 @@ class ShopController extends AcpController
         ];
         $this->logAction($logData);
 
-        if ( isset($postData['save']) ) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.addSuccess', [$item->name]));
-        else if ( isset($postData['save_exit']) ) return redirect()->route('list_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
-        else if ( isset($postData['save_addnew']) ) return redirect()->route('add_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
-
+        if (isset($postData['save'])) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.addSuccess', [$item->name]));
+        else if (isset($postData['save_exit'])) return redirect()->route('list_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_shop')->with('message', lang('Shop.addSuccess', [$item->name]));
     }
 
     public function editShop($id)
@@ -131,7 +130,7 @@ class ShopController extends AcpController
         }
 
         // save the edit when user post form data
-        if ( $this->request->getPost() ) {
+        if ($this->request->getPost()) {
             return $this->editAction($id, $item);
         }
 
@@ -142,22 +141,21 @@ class ShopController extends AcpController
     public function editAction($id, $oldItem)
     {
         $postData = $this->request->getPost();
-        if ( empty($postData) ) {
+        if (empty($postData)) {
             return redirect()->route('list_shop')->with('errors', lang('Acp.invalid_request'));
         }
 
         // validate data
         [$rules, $errMess] = $this->_getValidateRules($oldItem);
-        if (! $this->validate($rules, $errMess))
-        {
+        if (! $this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // upload image
         $image = $this->request->getFile('image');
-        if ( $image->getName() ) {
+        if ($image->getName()) {
             $info = [
-                'file_name' => clean_url($postData['name']).'-'.time().'.'. $image->getClientExtension(),
+                'file_name' => clean_url($postData['name']) . '-' . time() . '.' . $image->getClientExtension(),
                 'sub_folder' => UploadFolderEnum::SHOP
             ];
             $imgPath = $this->upload_image($image, $this->_getDefaultUploadRule(), $info);
@@ -172,12 +170,12 @@ class ShopController extends AcpController
                 'path' => $this->config->uploadFolder . '/' . $info['sub_folder'] . "/thumb"
             ];
             create_thumb($imgThumb);
-            delete_image($oldItem->image, '/' .$info['sub_folder']);
+            delete_image($oldItem->image, '/' . $info['sub_folder']);
             $postData['image'] = $info['file_name'];
         }
 
         $postData['updated_at'] = Time::now();
-        if (! $this->_model->update( $id, $postData) ) {
+        if (! $this->_model->update($id, $postData)) {
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
         // Success!
@@ -193,9 +191,9 @@ class ShopController extends AcpController
         ];
         $this->logAction($logData);
 
-        if ( isset($postData['save']) ) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.editSuccess', [$item->name]));
-        else if ( isset($postData['save_exit']) ) return redirect()->route('list_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
-        else if ( isset($postData['save_addnew']) ) return redirect()->route('add_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
+        if (isset($postData['save'])) return redirect()->route('edit_shop', [$item->shop_id])->with('message', lang('Shop.editSuccess', [$item->name]));
+        else if (isset($postData['save_exit'])) return redirect()->route('list_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
+        else if (isset($postData['save_addnew'])) return redirect()->route('add_shop')->with('message', lang('Shop.editSuccess', [$item->name]));
     }
 
     private function _getValidateRules($old_item)
@@ -207,7 +205,7 @@ class ShopController extends AcpController
             'ward_id'       => 'required',
             'address'       => 'required',
         ];
-        if ( isset($old_item) && $old_item->shop_id ) {
+        if (isset($old_item) && $old_item->shop_id) {
             $rules['name'] = "required|is_unique[shop.name,shop_id,{$old_item->shop_id}]";
         } else {
             $rules['name'] = 'required|is_unique[shop.name]';
@@ -242,19 +240,20 @@ class ShopController extends AcpController
      * Ajax soft delete item
      * @return mixed
      */
-    public function ajxRemove() {
+    public function ajxRemove()
+    {
         $response = [];
         $postData = $this->request->getPost();
-        if ( !isset($postData['id']) || empty($postData['id']) ) return $this->response->setJSON(['error' => 1, 'message' => lang('Acp.invalid_request')]);
+        if (!isset($postData['id']) || empty($postData['id'])) return $this->response->setJSON(['error' => 1, 'message' => lang('Acp.invalid_request')]);
 
         $item = $this->_model->find($postData['id']);
-        if ( !isset($item->shop_id) || empty($item) ) {
+        if (!isset($item->shop_id) || empty($item)) {
             $response['error'] = 1;
-            $response['message'] = lang('Acp.no_item');
+            $response['message'] = lang('Acp.item_not_found');
         } else {
             if ($this->_model->delete($item->shop_id)) {
                 //log Action
-                if ( method_exists(__CLASS__,'logAction') ) {
+                if (method_exists(__CLASS__, 'logAction')) {
                     $prop = method_exists(get_class($item), 'toArray') ? $item->toArray() : (array)$item;
                     $logData = [
                         'title' => 'Delete',
@@ -267,8 +266,7 @@ class ShopController extends AcpController
                 }
                 $response['error'] = 0;
                 $response['message'] = lang('Acp.delete_success', [$item->shop_id]);
-            }
-            else {
+            } else {
                 $response['error'] = 1;
                 $response['message'] = lang('Acp.delete_fail');
             }

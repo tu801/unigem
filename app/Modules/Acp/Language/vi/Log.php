@@ -38,4 +38,11 @@ return [
     'add_customer_desc' => '[{0}] đã thêm thành công Khách Hàng #{1}',
     'edit_customer' => 'Sửa thông tin Khách Hàng',
     'edit_customer_desc' => '[{0}] đã sửa thành công thông tin Khách Hàng #{1}',
+
+    // voucher logging message
+    'add_voucher' => 'Thêm Voucher',
+    'add_voucher_desc' => '[{0}] đã thêm thành công Voucher #{1}',
+
+    'edit_voucher' => 'Sửa Voucher #{0}',
+    'edit_voucher_desc' => '[{0}] đã sửa thành công Voucher #{1}',
 ];

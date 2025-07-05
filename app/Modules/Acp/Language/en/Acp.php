@@ -39,6 +39,9 @@ return [
 
     'faker'             => 'Generate Data',
 
+    'exchange_rate_manager' => 'Exchange Rate Management',
+    'voucher_manager'       => 'Voucher Management',
+
     //Action
     'add'               => 'Add',
     'edit'              => 'Edit',
@@ -128,7 +131,7 @@ return [
 
     'config_title'      => 'Configuration Management',
     'cf_edit_title'     => 'Edit Configuration',
-    'config_customtitle'=> 'Theme Configuration',
+    'config_customtitle' => 'Theme Configuration',
 
     'cf_title'          => 'Configuration Name',
     'cf_key'            => 'Key',
@@ -174,7 +177,7 @@ return [
     'category_product'     => 'Product Categories',
     'product'              => 'Product',
     'product_manufacturer' => 'Manufacturer Management',
-    
+
     'province_required'     => 'Please select province/city',
     'district_required'     => 'Please select district',
     'ward_required'         => 'Please select ward/commune',
