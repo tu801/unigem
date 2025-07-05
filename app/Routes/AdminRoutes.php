@@ -260,9 +260,12 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->post('edit/(:num)', 'EditOrderController::editAction/$1');
 
         $routes->post('remove', 'OrderController::ajxRemove/$1', ['as' => 'remove_order']);
-        $routes->get('order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']);
+        $routes->get('get-order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']); 
         $routes->get('recover/(:num)', 'OrderController::recover/$1', ['as' => 'recover_order']);
-        $routes->get('invoice/(:num)', 'OrderController::invoice/$1', ['as' => 'invoice_order']);
+
+        $routes->get('invoice/(:num)', 'InvoiceController::invoice/$1', ['as' => 'invoice_order']);
+        $routes->get('invoice/(:num)/invoice-print.html', 'InvoiceController::invoicePrint/$1', ['as' => 'invoice_print']);
+
         $routes->get('view-deposit/(:num)', 'OrderController::viewDeposit/$1', ['as' => 'view_deposit_order']);
     });
 });

@@ -115,18 +115,18 @@ echo $this->section('content');
                                 </select>
                             </div>
                         </div>
-                        <!-- <div class="col-6">
-                        <label><?= lang('Order.voucher_code') ?> </label>
-                        <div class="input-group mb-3">
-                            <input type="text" name="voucher_code" v-model="order.voucher_code"
-                                class="form-control <?= session('errors.voucher_code') ? 'is-invalid' : '' ?>"
-                                placeholder="<?= lang('Order.voucher_code') ?>">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-success btn-sm"
-                                    @click="applyVoucher()"><?= lang('Order.apply') ?></button>
+                        <div class="col-6">
+                            <label><?= lang('Order.voucher_code') ?> </label>
+                            <div class="input-group mb-3">
+                                <input type="text" name="voucher_code" v-model="order.voucher_code"
+                                    class="form-control <?= session('errors.voucher_code') ? 'is-invalid' : '' ?>"
+                                    placeholder="<?= lang('Order.voucher_code') ?>">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-success btn-sm"
+                                        @click="applyVoucher()"><?= lang('Order.apply') ?></button>
+                                </div>
                             </div>
                         </div>
-                    </div> -->
                         <div class="col-6" v-show="order.payment_status != <?= EPaymentStatus::UNPAID ?>">
                             <div class="form-group">
                                 <label><?= lang('Order.customer_paid') ?> </label>
@@ -143,6 +143,14 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="card-title"><?= lang('Order.shipping_info') ?></div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -235,6 +243,7 @@ echo $this->section('content');
                 </div>
             </div>
 
+            <!-- cart -->
             <div class="row">
                 <div class="col-12 col-md-8">
                     <!-- product list-->
@@ -353,6 +362,7 @@ echo $this->section('content');
                 </div>
             </div>
 
+            <!-- Action buttons -->
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <button class="btn btn-primary mr-2" id="postSave" name="save" type="submit"><?= lang('Acp.save') ?>
@@ -426,6 +436,7 @@ echo $this->section('content');
 
     const voucherCode = '<?= old('voucher_code') ?>';
     const full_name = '<?= old('full_name') ?>';
+    const delivery_type = '<?= old('delivery_type') ?? EDeliveryType::PICK_UP?>';
     const phone = '<?= old('phone') ?>';
     const email = '<?= old('email') ?>';
     const payment_status = <?= old('payment_status') ?? EPaymentStatus::UNPAID ?>;

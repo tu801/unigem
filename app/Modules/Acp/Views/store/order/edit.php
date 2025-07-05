@@ -33,6 +33,7 @@ echo $this->section('content');
                             <label><?= lang('Order.customer_name') ?></label>
                             <div class="input-group mb-3">
                                 <input type="text" v-model="order.full_name"  class="form-control" placeholder="<?= lang('Khách Hàng') ?>" readonly>
+                                <input type="hidden" name="customer_id" value="<?= $order->customer_id ?>">
                             </div>
                         </div>
 
@@ -95,7 +96,7 @@ echo $this->section('content');
                             </div>
                         </div>
 
-                        <!-- <div class="col-6">
+                        <div class="col-6">
                             <label><?= lang('Order.voucher_code') ?> </label>
                             <div class="input-group mb-3">
                                 <input name="voucher_code" v-model="order.voucher_code" class="form-control <?= session('errors.voucher_code') ? 'is-invalid' : '' ?>">
@@ -103,7 +104,7 @@ echo $this->section('content');
                                     <button type="button" class="btn btn-success btn-sm" @click="applyVoucher()"><?= lang('Order.apply') ?></button>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="col-6" v-show="order.payment_status != <?= EPaymentStatus::UNPAID ?>">
                             <div class="form-group">
@@ -120,6 +121,14 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="card-title"><?= lang('Order.shipping_info') ?></div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -266,20 +275,31 @@ echo $this->section('content');
                 <div class="col-12 col-md-4">
                     <div class="card card-outline card-primary">
                         <div class="card-body">
+                            <div class="alert alert-warning ">
+                                <i class="icon fas fa-info"></i>
+                                <?= lang('Order.currency_exchange_note') ?>
+                            </div>
+                            
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
+                                    <?php if ($currentLang->id != 1) : ?>
+                                        <tr>
+                                            <th style="width:50%"><?= lang('Order.exchange_rate') ?> :</th>
+                                            <td> {{ formatVnd(order.exchange_rate) }}</td>
+                                        </tr>
+                                    <?php endif; ?>
                                     <tr>
                                         <th style="width:50%"><?=lang('Order.sub_total')?> :</th>
                                         <td> {{ formatVnd(bill.sub_total) }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <th>
                                             <?=lang('Order.shipping_fee')?> :
                                             <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Order.shipping_fee_tooltips')?>"></i>
                                         </th>
                                         <td>{{ formatVnd(bill.shipping_fee) }}</td>
-                                    </tr>
+                                    </tr> -->
                                     <tr v-if="bill.discount > 0">
                                         <th><?=lang('Order.discount_amount')?> :</th>
                                         <td>{{ formatVnd(bill.discount) }}</td>
@@ -369,6 +389,7 @@ echo $this->section('content');
 
     const order_id = '<?= $order->order_id ?>';
     const voucherCode = '<?= $order->voucher_code ?? old('voucher_code') ?>';
+    const delivery_type = '<?= $order->delivery_type ?? old('delivery_type') ?>';
     const full_name = '<?= $order->full_name ?? old('full_name') ?>';
     const phone = '<?= $order->phone ?? old('phone') ?>';
     const email = '<?= $order->email ?? old('email') ?>';

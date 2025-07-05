@@ -1,10 +1,21 @@
 <?php
 namespace Modules\Acp\Controllers\Store\Order;
 
+use App\Enums\Store\Order\EDeliveryType;
+use App\Enums\Store\Order\EOrderStatus;
+use App\Enums\Store\Order\EPaymentMethod;
+use App\Enums\Store\Order\EPaymentStatus;
+use App\Enums\Store\Product\EProductType;
 use App\Enums\Store\ShopEnum;
+use App\Models\Store\Order\OrderModel;
+use CodeIgniter\Database\Exceptions\DatabaseException;
+use Modules\Acp\Controllers\Traits\ShippingFee;
+use Modules\Acp\Controllers\Traits\UseVoucher;
 
 class EditOrderController extends OrderController
 {
+    use ShippingFee, UseVoucher;
+    
     protected $pageTitle = 'Order.edit_page_title';
 
     public function __construct()
@@ -42,15 +53,25 @@ class EditOrderController extends OrderController
     public function editAction($orderID)
     {
         $inputData = $this->request->getPost();
-        $rules     = $this->ruleValidate();
+        $rules     = $this->ruleValidate(true);
         $errMess   = $this->messageValidate();
 
         if (isset($inputData['delivery_type']) && $inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
+            $rules['ship_full_name'] = 'required';
+            $rules['ship_telephone'] = 'required';
             $rules['province_id'] = 'required';
             $rules['district_id'] = 'required';
             $rules['ward_id']     = 'required';
             $rules['address']     = 'required';
+
+            $errMess['ship_full_name'] = [
+                'required' => lang('Order.ship_full_name_required'),
+            ];
+            $errMess['ship_telephone'] = [
+                'required' => lang('Order.ship_telephone_required'),
+            ];
         }
+
         //validate the input
         if (!$this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -71,9 +92,9 @@ class EditOrderController extends OrderController
                 'note'           => $inputData['note'],
                 'delivery_type'  => $inputData['delivery_type'],
                 'shop_id'        => $inputData['shop_id'],
-                'status'         => $inputData['status'] ?? EOrderStatus::PROCESSED,
-                'payment_status' => $inputData['payment_status'] ?? EPaymentStatus::UNPAID,
-                'payment_method' => $inputData['payment_method'] ?? EPaymentMethod::BANK_TRANSFER,
+                'status'         => $inputData['status'] ?? $order->status,
+                'payment_status' => $inputData['payment_status'] ?? $order->payment_status,
+                'payment_method' => $inputData['payment_method'] ?? $order->payment_method,
             ];
 
             if ($inputData['status'] == EOrderStatus::COMPLETE && $inputData['payment_status'] != EPaymentStatus::PAID) {
@@ -86,15 +107,16 @@ class EditOrderController extends OrderController
             }
 
             if ($inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
-                $deliveryInfo = json_encode([
-                    'name'        => $order->customer_info->name ?? '',
-                    'phone'       => $order->customer_info->phone ?? '',
-                    'province_id' => $inputData['province_id'],
-                    'district_id' => $inputData['district_id'],
-                    'ward_id'     => $inputData['ward_id'],
-                    'address'     => $inputData['address'],
+                $dataOrder['delivery_info'] = json_encode([
+                    'ship_full_name'    => $inputData['ship_full_name'] ?? $order->delivery_info->ship_full_name,
+                    'ship_telephone'    => $inputData['ship_telephone'] ?? $order->delivery_info->ship_telephone,
+                    'ship_email'        => $inputData['ship_email'] ?? $order->delivery_info->ship_email,
+                    'country_id'        => $inputData['country_id'] ?? $order->delivery_info->country_id ?? 0,
+                    'province_id'       => $inputData['province_id'] ?? $order->delivery_info->province_id ?? 0,
+                    'district_id'       => $inputData['district_id'] ?? $order->delivery_info->district_id ?? 0,
+                    'ward_id'           => $inputData['ward_id'] ?? $order->delivery_info->ward_id ?? 0,
+                    'cus_address'       => $inputData['address'] ?? $order->delivery_info->cus_address,
                 ]);
-                $dataOrder['delivery_info'] = $deliveryInfo;
             } else {
                 $dataOrder['delivery_info'] = null;
             }
@@ -107,19 +129,20 @@ class EditOrderController extends OrderController
             foreach ($inputData['product'] as $item) {
                 $quantity  = $item['quantity'];
                 $productID = $item['product_id'];
-                $product   = $this->_productModel->find($productID);
+                $product   = $this->_productModel->getProductItemById($productID, $this->currentLang);
                 if (isset($product->id)) {
                     $priceProduct       = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price * $quantity;
                     $priceProductTotal  += $priceProduct;
-                    $weightProductTotal += $product->product_meta['weight'] * $quantity;
+                    $weightProductTotal += $product->pd_weight * $quantity;
 
                     // order item
                     $orderItems[] = [
-                        'product'    => $productID,
-                        'unit_price' => EUnitPrice::VND,
-                        'quantity'   => $quantity,
-                        'total'      => $priceProduct,
-                        'pd_type'    => EProductType::PRODUCT,
+                        'product_id'    => $productID,
+                        'currency_type' => $product->product_meta['lang']->currency_code,
+                        'unit_price'    => ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price,
+                        'quantity'      => $quantity,
+                        'total'         => $priceProduct,
+                        'pd_type'       => EProductType::PRODUCT,
                     ];
                 }
             }
@@ -128,74 +151,82 @@ class EditOrderController extends OrderController
 
             // shipping bill
             if ($inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
-                $shipFeeProvince = $this->_configModel->getShipFee($inputData['province_id']);
-                $shipFeeOnWeight = $this->_configModel->getShipFeeOnWeight();
-                $totalShipFee    = ($weightProductTotal * $shipFeeOnWeight) + $shipFeeProvince;
+                $totalShipFee  = $this->calculateShippingFee(
+                    $inputData['province_id'] ?? 0,
+                    $weightProductTotal
+                );
                 $totalAmount     += $totalShipFee;
                 $dataOrder['shipping_amount'] = $totalShipFee;
             }
 
             // discount
-            if (isset($inputData['voucher_code'])) {
-                $voucherCode = $inputData['voucher_code'];
-                $voucher = $this->_promotionVoucherModel
-                    ->join('customer_voucher', 'customer_voucher.voucher_id = promotion_voucher.voucher_id', 'LEFT')
-                    ->where('voucher_code', $voucherCode)
-                    ->first();
-                if (isset($voucher) && $voucher->voucher_discount_type != PromotionEnum::DISCOUNT_TYPE_FREE_GIFT && ($voucher->voucher_status == EVoucherStatus::UNUSED || $voucher->voucher_code ==  $voucherCode)) {
-                    if ($voucher->voucher_discount_type == PromotionEnum::DISCOUNT_TYPE_PERCENT) {
-                        $discount = $totalAmount * ($voucher->voucher_discount_value / 100);
-                    }
-                    if ($voucher->voucher_discount_type == PromotionEnum::DISCOUNT_TYPE_VALUE) {
-                        $discount = $voucher->voucher_discount_value;
-                    }
-                    $totalAmount -= $discount;
-                    $dataOrder['discount_amount'] = $discount;
-                    $dataOrder['voucher_code']    = $voucherCode;
-                    if ($voucher->voucher_status != EVoucherStatus::USED) {
-                        $this->_promotionVoucherModel->where('voucher_code', $voucherCode)->set(['voucher_status' => EVoucherStatus::USED])->update();
-                    }
+            if (isset($inputData['voucher_code']) && !empty($inputData['voucher_code'])) {
+                $this->useVoucher($inputData['voucher_code'], $dataOrder);
+                if (isset($dataOrder['discount_amount']) && $dataOrder['discount_amount'] > 0) {
+                    $totalAmount -= $dataOrder['discount_amount'];
                 }
             }
 
-            $dataOrder['sub_total']       = $subAmount;
-            $dataOrder['total']           = $totalAmount;
+            if ( $this->currentLang->id > 1 ) {
+                $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
+                $dataOrder['sub_total']        = $subAmount;
+                $dataOrder['total']            = $totalAmount;
+                $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
+                $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
+                $dataOrder['currency']         = $this->currentLang->currency_code;
+                $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
+            } else {
+                $dataOrder['sub_total']       = $subAmount;
+                $dataOrder['total']           = $totalAmount;
+                $dataOrder['exchange_rate']   = 1;
+                $dataOrder['exchange_rate_id'] = 0;
+                $dataOrder['currency']        = 'VND';
+                $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
+            }
 
             if ($inputData['payment_status'] == EPaymentStatus::PAID && $inputData['customer_paid'] != $totalAmount) {
                 $this->db->transRollback();
                 return redirect()->back()->withInput()->with('errors', ['customer_paid' => lang('Order.payment_paid_if_customer_paid', [number_format($totalAmount)])]);
             }
-            $dataOrder['customer_paid'] = $inputData['customer_paid'] ?? 0;
+
+            // record log info
+            $logData = [
+                'old_data'    => $order->toArray(),
+            ];
 
             $order->fill($dataOrder);
             $this->_model->where('order_id', $orderID)->update(null, $order);
 
             // save order items
+            $oldOrderItems = $this->_orderItemModel->where('order_id', $orderID)->findAll();
+            $logData['old_data']['order_items'] = $oldOrderItems;
             $this->_orderItemModel->where('order_id', $orderID)->delete();
-
             foreach ($orderItems as $item) {
                 $item['order_id'] = $orderID;
                 $this->_orderItemModel->insert($item);
             }
 
+            //log Action
+            $logData['new_data'] = $order->toArray();
+            $logData['new_data']['order_items'] = $orderItems;
+            $logData = [
+                'title'        => 'Edit Order #' . $order->order_id,
+                'description'  => "#{$this->user->username} đã chỉnh sửa order #{$order->order_id}",
+                'properties'   => $logData,
+                'subject_id'   => $order->order_id,
+                'subject_type' => OrderModel::class,
+            ];
+            $this->logAction($logData);
             $this->db->transCommit();
+
+            if (isset($inputData['save'])) return redirect()->route('edit_order', [$order->order_id])->with('message', lang('Order.editSuccess', [$order->order_id]));
+            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->order_id]));
+            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.editSuccess', [$order->order_id]));
+            else return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->order_id]));
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
 
-        $item = $this->_model->where('order_id', $orderID)->first();
-        //log Action
-        $logData = [
-            'title'        => 'Add Product',
-            'description'  => "#{$this->user->username} đã thêm order #{$item->order_id}",
-            'properties'   => $item->toArray(),
-            'subject_id'   => $item->order_id,
-            'subject_type' => OrderModel::class,
-        ];
-        $this->logAction($logData);
-        if (isset($inputData['save'])) return redirect()->route('edit_order', [$item->order_id])->with('message', lang('Order.editSuccess', [$item->order_id]));
-        else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.editSuccess', [$item->order_id]));
-        else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.editSuccess', [$item->order_id]));
     }
 }

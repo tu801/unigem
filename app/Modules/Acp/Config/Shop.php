@@ -14,4 +14,6 @@ class Shop extends BaseConfig
     public $productThumbSize =  ['height' => 340, 'width' => 340];
 
     public $enableShippingFee = false;
+
+    public $defaultCurrency = 'VND';
 }

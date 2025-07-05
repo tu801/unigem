@@ -9,17 +9,9 @@
 namespace Modules\Acp\Controllers\Store\Order;
 
 
-use CodeIgniter\Database\Exceptions\DatabaseException;
 use Config\Database;
 use Modules\Acp\Controllers\AcpController;
-use App\Enums\Store\Order\EDeliveryType;
-use App\Enums\Store\Order\EOrderStatus;
-use App\Enums\Store\Order\EPaymentMethod;
 use App\Enums\Store\Order\EPaymentStatus;
-use App\Enums\Store\Order\EUnitPrice;
-use App\Enums\Store\Product\EProductType;
-use App\Enums\Store\Promotion\EVoucherStatus;
-use App\Enums\Store\Promotion\PromotionEnum;
 use App\Enums\Store\ShopEnum;
 use App\Models\ConfigModel;
 use App\Models\Country;
@@ -193,12 +185,9 @@ class OrderController extends AcpController
         $this->_render('\store\order\create', $this->_data);
     }
 
-    public function ruleValidate()
+    public function ruleValidate($isUpdate = false)
     {
-        return [
-            'full_name'      => 'required',
-            'phone'          => 'required',
-            'email'          => 'permit_empty',
+        $validRules = [
             'delivery_type'  => 'required',
             'shop_id'        => 'required',
             'province_id'    => 'permit_empty',
@@ -212,8 +201,15 @@ class OrderController extends AcpController
             'payment_method' => 'required',
             'voucher_code'   => 'permit_empty',
             'customer_paid'  => 'permit_empty',
-            'product'        => 'required',
         ];
+
+        if ( !$isUpdate ) {
+            $validRules['full_name'] = 'required';
+            $validRules['phone']     = 'required|is_unique[customer.cus_phone]';
+            $validRules['email']     = 'permit_empty|valid_email|is_unique[customer.cus_email]';
+        } 
+        
+        return $validRules;
     }
 
     public function messageValidate()
@@ -261,21 +257,18 @@ class OrderController extends AcpController
                 'required' => lang('Order.payment_method_required'),
             ],
             'voucher_code'   => [],
-            'product'        => [
-                'required' => lang('Order.product_required'),
-            ],
         ];
     }
 
     public function getOrderItem($id)
     {
         $response = [];
-        $order    = $this->_model->where('order_id', $id)->first();
+        $order    = $this->_model->find($id);
         if (isset($order->order_id)) {
             $data      = [];
             $orderItem = $this->_orderItemModel->where('order_id', $id)->findAll();
             foreach ($orderItem as $item) {
-                $product               = $this->_productModel->find($item->product);
+                $product               = $this->_productModel->getProductItemById($item->product_id);
                 $product->quantity     = (int) $item->quantity;
                 $product->product_meta = $product->product_meta;
                 $data[]                = $product;
@@ -290,29 +283,6 @@ class OrderController extends AcpController
         return $this->response->setJSON($response);
     }
 
-    public function invoice($orderID)
-    {
-        $order = $this->_model->where('order_id', $orderID)->join('customer', 'customer.id = order.customer_id')->first();
-
-        if (!isset($order->order_id)) {
-            return redirect()->route('order')->with('error', lang('Order.order_not_exist'));
-        }
-
-        $dataOrderItem      = [];
-        $orderItem = $this->_orderItemModel->where('order_id', $orderID)->findAll();
-        foreach ($orderItem as $item) {
-            $product               = $this->_productModel->find($item->product);
-            $product->quantity     = (int) $item->quantity;
-            $product->product_meta = $product->product_meta;
-            $product->order_item_sub_total = $item->total;
-            $dataOrderItem[]       = $product;
-        }
-
-        $this->_data['order'] = $order;
-        $this->_data['order_items'] = $dataOrderItem;
-        $this->_data['title'] = lang("Order.invoice_title");
-        $this->_render('\store\order\invoice', $this->_data);
-    }
 
     public function viewDeposit($orderID)
     {

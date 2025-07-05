@@ -298,6 +298,26 @@ const orderApp = Vue.createApp({
         return this.formatUsd(finalPrice);
       }
     },
+    getOrderItems($order_id) {
+      $.ajax({
+        url: bkUrl + "order/get-order-items/" + $order_id,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        type: "GET",
+        success: (response) => {
+          if (response.error === 1) {
+            SwalAlert.fire({
+              icon: "error",
+              title: response.message,
+            });
+          } else {
+            this.order_items = response.data;
+            this.charge();
+          }
+        },
+      });
+    },
   },
   mounted() {
     $('[name="province_id"]').change((data) => {
@@ -308,11 +328,21 @@ const orderApp = Vue.createApp({
     // Set initial values from old input
     this.order.voucher_code = voucherCode;
     this.order.full_name = full_name;
+    this.order.delivery_type = delivery_type;
     this.order.phone = phone;
     this.order.email = email;
     this.order.payment_status = payment_status;
     this.order.customer_paid = customer_paid;
     this.order.exchange_rate = exchange_rate;
     this.order.country = VietNamCountryId;
+
+    if (
+      typeof order_id !== "undefined" &&
+      order_id !== undefined &&
+      order_id !== null &&
+      order_id !== ""
+    ) {
+      this.getOrderItems(order_id);
+    }
   },
 });

@@ -81,20 +81,8 @@ class CreateOrderController extends OrderController
             // create customer if not exists
             if ($inputData['customer_id'] > 0) {
                 $customerData = $this->_customerModel->find($inputData['customer_id']);
-            } else {
-                $customerData = [
-                    'cus_code'      => $this->_customerModel->generateCode(),
-                    'cus_full_name' => $inputData['full_name'],
-                    'cus_phone'     => $inputData['phone'],
-                    'cus_email'     => $inputData['email'] ?? null,
-                    'country_id'    => $inputData['country_id'] ?? 0,
-                    'province_id'   => $inputData['province_id'] ?? 0,
-                    'district_id'   => $inputData['district_id'] ?? 0,
-                    'ward_id'       => $inputData['ward_id'] ?? 0,
-                    'cus_address'   => $inputData['address'],
-                ];
-                $customerID = $this->_customerModel->insert($customerData);
-                $customerData = $this->_customerModel->find($customerID);
+            } else {                
+                $customerData = $this->_customerModel->createOrderCustomer($inputData);
             }
 
             // prepare data order
@@ -121,7 +109,7 @@ class CreateOrderController extends OrderController
             }
 
             if ($inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
-                $deliveryInfo = json_encode([
+                $dataOrder['delivery_info'] = json_encode([
                     'ship_full_name'    => $inputData['ship_full_name'],
                     'ship_telephone'    => $inputData['ship_telephone'],
                     'ship_email'        => $inputData['ship_email'] ?? null,
@@ -131,11 +119,10 @@ class CreateOrderController extends OrderController
                     'ward_id'           => $inputData['ward_id'] ?? 0,
                     'cus_address'       => $inputData['address'],
                 ]);
-                $dataOrder['delivery_info'] = $deliveryInfo;
             }
 
             // customer
-            $customerInfo = json_encode([
+            $dataOrder['customer_info'] = json_encode([
                 'name'          => $customerData->cus_full_name,
                 'phone'         => $customerData->cus_phone,
                 'email'         => $customerData->cus_email,
@@ -145,7 +132,6 @@ class CreateOrderController extends OrderController
                 'ward_id'       => $customerData->ward_id,
                 'cus_address'   => $customerData->cus_address,
             ]);
-            $dataOrder['customer_info'] = $customerInfo;
 
             $totalAmount        = 0;
             $priceProductTotal  = 0;
@@ -186,7 +172,7 @@ class CreateOrderController extends OrderController
             }
 
             // discount
-            if (isset($inputData['voucher_code'])) {
+            if (isset($inputData['voucher_code']) && !empty($inputData['voucher_code'])) {
                 $this->useVoucher($inputData['voucher_code'], $dataOrder);
                 if (isset($dataOrder['discount_amount']) && $dataOrder['discount_amount'] > 0) {
                     $totalAmount -= $dataOrder['discount_amount'];
