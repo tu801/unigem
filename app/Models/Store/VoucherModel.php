@@ -8,7 +8,7 @@
 
 namespace App\Models\Store;
 
-
+use App\Entities\Store\Voucher;
 use CodeIgniter\Model;
 
 class VoucherModel extends Model
@@ -17,7 +17,7 @@ class VoucherModel extends Model
     protected $table            = 'voucher';
     protected $primaryKey       = 'voucher_id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'object';
+    protected $returnType       = Voucher::class;
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
@@ -26,6 +26,8 @@ class VoucherModel extends Model
         'voucher_description',
         'voucher_discount_type',
         'voucher_discount_value',
+        'voucher_minimum_order',
+        'currency',
         'voucher_start_date',
         'voucher_end_date',
         'voucher_status', // 0: disable, 1: enable, 2: expired

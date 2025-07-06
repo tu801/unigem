@@ -16,4 +16,11 @@ class Shop extends BaseConfig
     public $enableShippingFee = false;
 
     public $defaultCurrency = 'VND';
+    public $currencyList = [
+        'VND' => 'VND',
+        'USD' => 'USD',
+        // 'EUR' => 'EUR',
+        // 'JPY' => 'JPY',
+        // 'GBP' => 'GBP',
+    ];
 }

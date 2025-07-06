@@ -94,7 +94,7 @@ echo $this->section('content');
                         <div class="col-6">
                             <div class="form-group">
                                 <label><?= lang('Order.payment_status') ?> <span class="text-danger">*</span> </label>
-                                <select class="form-control" name="payment_status" v-model="order.payment_status">
+                                <select class="form-control" name="payment_status" v-model="order.payment_status" @change="onPaymentStatusChange">
                                     <?php foreach (EPaymentStatus::toArray() as $item): ?>
                                         <option value="<?= $item ?>"
                                             <?= ($item == old('payment_status')) ? 'selected' : '' ?>>
@@ -130,9 +130,9 @@ echo $this->section('content');
                         <div class="col-6" v-show="order.payment_status != <?= EPaymentStatus::UNPAID ?>">
                             <div class="form-group">
                                 <label><?= lang('Order.customer_paid') ?> </label>
-                                <input type="number" name="customer_paid" v-model="order.customer_paid"
-                                    class="form-control <?= session('errors.customer_paid') ? 'is-invalid' : '' ?>"
+                                <input type="number" class="form-control" id="inputCustomerPaid" @input="onCustomerPaidInput"
                                     placeholder="<?= lang('Order.customer_paid') ?>">
+                                <input type="hidden" name="customer_paid" id="customer_paid">
                             </div>
                         </div>
                     </div>
@@ -435,13 +435,15 @@ echo $this->section('content');
     });
 
     const voucherCode = '<?= old('voucher_code') ?>';
+    const lang_id = '<?= $currentLang->id ?>';
+    const currency = '<?= $currentLang->currency_code ?>';
     const full_name = '<?= old('full_name') ?>';
-    const delivery_type = '<?= old('delivery_type') ?? EDeliveryType::PICK_UP?>';
+    const delivery_type = '<?= old('delivery_type') ?? EDeliveryType::PICK_UP ?>';
     const phone = '<?= old('phone') ?>';
     const email = '<?= old('email') ?>';
     const payment_status = <?= old('payment_status') ?? EPaymentStatus::UNPAID ?>;
     const customer_paid = <?= old('customer_paid') ?? 0 ?>;
-    const exchange_rate = <?= $exchangeRate ?? 1 ?>; // Default exchange rate is 1 if not set
+    const exchange_rate = <?= $exchangeRate ?>;
 
     const search_product_url = '<?= route_to('search_product') ?>';
     const search_customer_url = '<?= route_to('search_customer') ?>';
@@ -451,6 +453,8 @@ echo $this->section('content');
         addItemToCartSuccess: '<?= lang('Order.addItemToCartSuccess') ?>',
         increaseItemQuantity: '<?= lang('Order.increaseItemQuantity') ?>',
         deleteItemFromCartSuccess: '<?= lang('Order.deleteItemFromCartSuccess') ?>',
+        invalidVoucherCurrency: '<?= lang('Order.invalidVoucherCurrency') ?>',
+        voucherAppliedSuccess: '<?= lang('Order.voucherAppliedSuccess') ?>',
     };
 
     const HomeDeliveryType = <?= EDeliveryType::HOME_DELIVERY ?>;

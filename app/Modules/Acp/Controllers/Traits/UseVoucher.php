@@ -2,34 +2,54 @@
 
 namespace Modules\Acp\Controllers\Traits;
 
+use App\Enums\Store\Voucher\VoucherDiscountTypeEnum;
+use App\Enums\Store\Voucher\VoucherStatusEnum;
+use App\Models\Store\VoucherModel;
+
 trait UseVoucher
 {
-    public function useVoucher($code, &$orderData)
+    public function useVoucher($code, &$orderData, $totalAmount = 0)
     {
-        $voucherModel = model('Modules\Acp\Models\Store\Voucher\VoucherModel');
+        $voucherModel = model(VoucherModel::class);
         $voucher = $voucherModel
-            ->join('customer_voucher', 'customer_voucher.voucher_id = promotion_voucher.voucher_id', 'LEFT')
             ->where('voucher_code', $code)
+            ->where('voucher_status', VoucherStatusEnum::ENABLE)
             ->first();
 
-        if (
-            isset($voucher) && $voucher->voucher_discount_type != PromotionEnum::DISCOUNT_TYPE_FREE_GIFT &&
-            $voucher->voucher_status == EVoucherStatus::UNUSED
-        ) {
-            if ($voucher->voucher_discount_type == PromotionEnum::DISCOUNT_TYPE_PERCENT) {
-                $discount = $totalAmount * ($voucher->voucher_discount_value / 100);
-            }
-            if ($voucher->voucher_discount_type == PromotionEnum::DISCOUNT_TYPE_VALUE) {
-                $discount = $voucher->voucher_discount_value;
-            }
-
-            $dataOrder['discount_amount'] = $discount;
-            $dataOrder['voucher_code'] = $code;
-            $this->_promotionVoucherModel->where('voucher_code', $voucherCode)->set(['voucher_status' => EVoucherStatus::USED])->update();
+        if (!$voucher) {
+            $orderData['discount_amount'] = 0;
+            $orderData['voucher_code'] = null;
+            return $orderData;
+        }
+        // Check if voucher is valid for the current order
+        if (!$voucher->isValid()) {
+            $orderData['discount_amount'] = 0;
+            $orderData['voucher_code'] = null;
+            return $orderData;
+        }
+        if ($voucher->currency != $orderData['currency']) {
+            $orderData['discount_amount'] = 0;
+            $orderData['voucher_code'] = null;
+            return $orderData;
+        }
+        if ($voucher->voucher_minimum_order > 0 && $voucher->voucher_minimum_order > $totalAmount) {
+            $orderData['discount_amount'] = 0;
+            $orderData['voucher_code'] = null;
+            return $orderData;
         }
 
-        $orderData['discount_amount'] = 0;
-        $dataOrder['voucher_code'] = null;
+        // Calculate discount based on voucher type
+        $voucherCode = $voucher->voucher_code;
+        if ($voucher->voucher_discount_type == VoucherDiscountTypeEnum::FIXED_AMOUNT) {
+            $discount = $voucher->voucher_discount_value;
+        } elseif ($voucher->voucher_discount_type == VoucherDiscountTypeEnum::PERCENTAGE) {
+            $discount = $totalAmount * ($voucher->voucher_discount_value / 100);
+        } else {
+            $discount = 0; // Default to no discount if type is unknown
+        }
+        // dd($voucher->voucher_discount_type, $voucher->voucher_discount_value, $totalAmount, $discount);
+        $orderData['discount_amount'] = $discount;
+        $orderData['voucher_code'] = $voucherCode;
 
         return $orderData;
     }

@@ -24,6 +24,7 @@ return [
     'code'             => 'Mã đơn hàng',
     'count_product'    => 'Số sản phẩm',
     'total'            => 'Tổng tiền',
+    'total_vnd'        => 'Tổng tiền (VND)',
     'customer_paid'    => 'Khách hàng đã trả',
     'created_view'     => 'Ngày mua',
     'unit_price'       => 'Đơn giá',
@@ -75,6 +76,8 @@ return [
     'success_if_payment_paid' => 'Trạng thái đơn hàng hoàn thành khi, đơn hàng đã được thanh toán',
     'currency_exchange_note' => 'Tỷ giá hối đoái được sử dụng để tính toán giá trị đơn hàng trong cửa hàng. Tất cả tỷ giá được chuyển đổi sang đồng Việt Nam (VND).',
 
+    'voucherAppliedSuccess' => 'Mã giảm giá đã được áp dụng thành công ',
+
     // validate
     'full_name_required'      => 'Vui lòng nhập tên khách hàng',
     'phone_required'          => 'Vui lòng nhập số điện thoại khách hàng',
@@ -91,6 +94,8 @@ return [
     'ship_telephone_required' => 'Vui lòng nhập số điện thoại người nhận',
 
     'create_order_log_desc'   => '#{0} Tạo đơn hàng #{1} thành công',
+
+    'invalidVoucherCurrency' => 'Mã giảm giá không hợp lệ với loại tiền tệ của đơn hàng. Vui lòng kiểm tra lại mã giảm giá hoặc loại tiền tệ của đơn hàng.',
 
     // invoice
     'invoice_title'           => 'Hóa đơn',

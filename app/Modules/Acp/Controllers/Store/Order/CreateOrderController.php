@@ -81,13 +81,14 @@ class CreateOrderController extends OrderController
             // create customer if not exists
             if ($inputData['customer_id'] > 0) {
                 $customerData = $this->_customerModel->find($inputData['customer_id']);
-            } else {                
+            } else {
                 $customerData = $this->_customerModel->createOrderCustomer($inputData);
             }
 
             // prepare data order
             $dataOrder = [
                 'user_init'      => $this->user->id,
+                'lang_id'        => $this->currentLang->id,
                 'customer_id'    => $customerData->id,
                 'shop_id'        => $inputData['shop_id'],
                 'code'           => $this->_model->generateCode(),
@@ -97,6 +98,7 @@ class CreateOrderController extends OrderController
                 'status'         => $inputData['status'] ?? EOrderStatus::OPEN,
                 'payment_status' => $inputData['payment_status'] ?? EPaymentStatus::UNPAID,
                 'payment_method' => $inputData['payment_method'] ?? EPaymentMethod::BANK_TRANSFER,
+                'currency'       => $this->currentLang->currency_code,
             ];
 
             if ($inputData['status'] == EOrderStatus::COMPLETE && $inputData['payment_status'] != EPaymentStatus::PAID) {
@@ -143,7 +145,8 @@ class CreateOrderController extends OrderController
                 $productID = $item['product_id'];
                 $product   = $this->_productModel->getProductItemById($productID, $this->currentLang);
                 if (isset($product->id)) {
-                    $priceProduct       = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price * $quantity;
+                    $unitPrice          = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
+                    $priceProduct       =  $unitPrice * $quantity;
                     $priceProductTotal  += $priceProduct;
                     $weightProductTotal += $product->pd_weight * $quantity;
 
@@ -151,7 +154,7 @@ class CreateOrderController extends OrderController
                     $orderItems[] = [
                         'product_id'    => $productID,
                         'currency_type' => $product->product_meta['lang']->currency_code,
-                        'unit_price'    => ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price,
+                        'unit_price'    => $unitPrice,
                         'quantity'      => $quantity,
                         'total'         => $priceProduct,
                         'pd_type'       => EProductType::PRODUCT,
@@ -173,27 +176,25 @@ class CreateOrderController extends OrderController
 
             // discount
             if (isset($inputData['voucher_code']) && !empty($inputData['voucher_code'])) {
-                $this->useVoucher($inputData['voucher_code'], $dataOrder);
+                $this->useVoucher($inputData['voucher_code'], $dataOrder, $totalAmount);
                 if (isset($dataOrder['discount_amount']) && $dataOrder['discount_amount'] > 0) {
                     $totalAmount -= $dataOrder['discount_amount'];
                 }
             }
 
             // handle exchange rate
-            if ( $this->currentLang->id > 1 ) {
+            if ($this->currentLang->id > 1) {
                 $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
                 $dataOrder['sub_total']        = $subAmount;
                 $dataOrder['total']            = $totalAmount;
                 $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
                 $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
-                $dataOrder['currency']         = $this->currentLang->currency_code;
                 $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
             } else {
                 $dataOrder['sub_total']       = $subAmount;
                 $dataOrder['total']           = $totalAmount;
                 $dataOrder['exchange_rate']   = 1;
                 $dataOrder['exchange_rate_id'] = 0;
-                $dataOrder['currency']        = 'VND';
                 $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
             }
 
@@ -225,9 +226,9 @@ class CreateOrderController extends OrderController
 
             $this->db->transCommit();
 
-            if (isset($inputData['save'])) return redirect()->route('edit_order', [$item->order_id])->with('message', lang('Order.addSuccess', [$item->order_id]));
-            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.addSuccess', [$item->order_id]));
-            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.addSuccess', [$item->order_id]));
+            if (isset($inputData['save'])) return redirect()->route('edit_order', [$item->order_id])->with('message', lang('Order.addSuccess', [$item->code]));
+            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.addSuccess', [$item->code]));
+            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.addSuccess', [$item->code]));
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());

@@ -67,6 +67,19 @@ echo $this->section('content');
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="form-group ">
+                        <label><?= lang('Shop.voucher_currency_list') ?></label>
+                        <select class="form-control" name="currency">
+                            <?php
+                            $selectedItem = old('currency') ?? '';
+                            $currencyList = config('Shop')->currencyList;
+                            foreach ($currencyList as $key => $val) :
+                                $selected = $selectedItem == $val ? 'selected' : '';
+                            ?>
+                                <option value='<?= $val ?>' <?= $selected ?>><?= $val ?></option>
+                            <?php endforeach;    ?>
+                        </select>
+                    </div>
+                    <div class="form-group ">
                         <label><?= lang('Post.post_status') ?></label>
                         <select class="form-control" name="voucher_status">
                             <?php

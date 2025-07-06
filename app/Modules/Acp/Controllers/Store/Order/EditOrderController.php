@@ -4,7 +4,6 @@ namespace Modules\Acp\Controllers\Store\Order;
 
 use App\Enums\Store\Order\EDeliveryType;
 use App\Enums\Store\Order\EOrderStatus;
-use App\Enums\Store\Order\EPaymentMethod;
 use App\Enums\Store\Order\EPaymentStatus;
 use App\Enums\Store\Product\EProductType;
 use App\Enums\Store\ShopEnum;
@@ -34,11 +33,6 @@ class EditOrderController extends OrderController
         $shops = $this->_shopModel->where('status', ShopEnum::STATUS['active'])->findAll();
         $order = $this->_model->where('order_id', $id)->join('customer', 'customer.id = order.customer_id')->first();
 
-        $this->_data['voucher'] = null;
-        if (isset($order->voucher_code)) {
-            $voucher                = $this->_promotionVoucherModel->where('voucher_code', $order->voucher_code)->first();
-            $this->_data['voucher'] = $voucher;
-        }
         $this->_data['shops'] = $shops;
         $this->_data['title'] = lang('Order.edit_title');
         if (isset($order->order_id)) {
@@ -54,7 +48,7 @@ class EditOrderController extends OrderController
     public function editAction($orderID)
     {
         $inputData = $this->request->getPost();
-        $rules     = $this->ruleValidate(true);
+        $rules     = $this->ruleValidate();
         $errMess   = $this->messageValidate();
 
         if (isset($inputData['delivery_type']) && $inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
@@ -96,6 +90,7 @@ class EditOrderController extends OrderController
                 'status'         => $inputData['status'] ?? $order->status,
                 'payment_status' => $inputData['payment_status'] ?? $order->payment_status,
                 'payment_method' => $inputData['payment_method'] ?? $order->payment_method,
+                'currency'       => $order->currency,
             ];
 
             if ($inputData['status'] == EOrderStatus::COMPLETE && $inputData['payment_status'] != EPaymentStatus::PAID) {
@@ -132,7 +127,8 @@ class EditOrderController extends OrderController
                 $productID = $item['product_id'];
                 $product   = $this->_productModel->getProductItemById($productID, $this->currentLang);
                 if (isset($product->id)) {
-                    $priceProduct       = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price * $quantity;
+                    $unitPrice          = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
+                    $priceProduct       =  $unitPrice * $quantity;
                     $priceProductTotal  += $priceProduct;
                     $weightProductTotal += $product->pd_weight * $quantity;
 
@@ -140,7 +136,7 @@ class EditOrderController extends OrderController
                     $orderItems[] = [
                         'product_id'    => $productID,
                         'currency_type' => $product->product_meta['lang']->currency_code,
-                        'unit_price'    => ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price,
+                        'unit_price'    => $unitPrice,
                         'quantity'      => $quantity,
                         'total'         => $priceProduct,
                         'pd_type'       => EProductType::PRODUCT,
@@ -162,7 +158,7 @@ class EditOrderController extends OrderController
 
             // discount
             if (isset($inputData['voucher_code']) && !empty($inputData['voucher_code'])) {
-                $this->useVoucher($inputData['voucher_code'], $dataOrder);
+                $this->useVoucher($inputData['voucher_code'], $dataOrder, $totalAmount);
                 if (isset($dataOrder['discount_amount']) && $dataOrder['discount_amount'] > 0) {
                     $totalAmount -= $dataOrder['discount_amount'];
                 }
@@ -174,20 +170,21 @@ class EditOrderController extends OrderController
                 $dataOrder['total']            = $totalAmount;
                 $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
                 $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
-                $dataOrder['currency']         = $this->currentLang->currency_code;
                 $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
             } else {
                 $dataOrder['sub_total']       = $subAmount;
                 $dataOrder['total']           = $totalAmount;
                 $dataOrder['exchange_rate']   = 1;
                 $dataOrder['exchange_rate_id'] = 0;
-                $dataOrder['currency']        = 'VND';
                 $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
             }
 
             if ($inputData['payment_status'] == EPaymentStatus::PAID && $inputData['customer_paid'] != $totalAmount) {
                 $this->db->transRollback();
                 return redirect()->back()->withInput()->with('errors', ['customer_paid' => lang('Order.payment_paid_if_customer_paid', [number_format($totalAmount)])]);
+            }
+            if ($inputData['payment_status'] == EPaymentStatus::PAID) {
+                $dataOrder['customer_paid'] = $inputData['customer_paid'] ?? $totalAmount;
             }
 
             // record log info
@@ -220,10 +217,10 @@ class EditOrderController extends OrderController
             $this->logAction($logData);
             $this->db->transCommit();
 
-            if (isset($inputData['save'])) return redirect()->route('edit_order', [$order->order_id])->with('message', lang('Order.editSuccess', [$order->order_id]));
-            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->order_id]));
-            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.editSuccess', [$order->order_id]));
-            else return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->order_id]));
+            if (isset($inputData['save'])) return redirect()->route('edit_order', [$order->order_id])->with('message', lang('Order.editSuccess', [$order->code]));
+            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->code]));
+            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.editSuccess', [$order->code]));
+            else return redirect()->route('order')->with('message', lang('Order.editSuccess', [$order->code]));
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());

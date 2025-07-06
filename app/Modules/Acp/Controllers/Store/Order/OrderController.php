@@ -15,6 +15,7 @@ use App\Enums\Store\Order\EPaymentStatus;
 use App\Enums\Store\ShopEnum;
 use App\Models\ConfigModel;
 use App\Models\Country;
+use App\Models\LangModel;
 use App\Models\Store\Customer\CustomerModel;
 use App\Models\Store\ExchangeRateModel;
 use App\Models\Store\Order\OrderItemModel;
@@ -185,7 +186,7 @@ class OrderController extends AcpController
         $this->_render('\store\order\create', $this->_data);
     }
 
-    public function ruleValidate($isUpdate = false)
+    public function ruleValidate()
     {
         $validRules = [
             'delivery_type'  => 'required',
@@ -203,12 +204,6 @@ class OrderController extends AcpController
             'customer_paid'  => 'permit_empty',
         ];
 
-        if ( !$isUpdate ) {
-            $validRules['full_name'] = 'required';
-            $validRules['phone']     = 'required|is_unique[customer.cus_phone]';
-            $validRules['email']     = 'permit_empty|valid_email|is_unique[customer.cus_email]';
-        } 
-        
         return $validRules;
     }
 
@@ -267,8 +262,9 @@ class OrderController extends AcpController
         if (isset($order->order_id)) {
             $data      = [];
             $orderItem = $this->_orderItemModel->where('order_id', $id)->findAll();
+            $lang      = model(LangModel::class)->find($order->lang_id);
             foreach ($orderItem as $item) {
-                $product               = $this->_productModel->getProductItemById($item->product_id);
+                $product               = $this->_productModel->getProductItemById($item->product_id, $lang);
                 $product->quantity     = (int) $item->quantity;
                 $product->product_meta = $product->product_meta;
                 $data[]                = $product;

@@ -91,7 +91,7 @@ echo $this->section('content')
                                     <th><?= lang('Order.customer_name') ?></th>
                                     <th><?= lang('Order.phone') ?></th>
                                     <th><?= lang('Order.count_product') ?></th>
-                                    <th><?= lang('Order.total') ?></th>
+                                    <th><?= lang('Order.total_vnd') ?></th>
                                     <th><?= lang('Order.status') ?></th>
                                     <th><?= lang('Order.payment_status') ?></th>
                                     <th><?= lang('Order.created_view') ?></th>
@@ -109,7 +109,7 @@ echo $this->section('content')
                                             <td><?= $row->cus_full_name ?? '' ?></td>
                                             <td><?= $row->cus_phone ?? '' ?></td>
                                             <td><?= $row->count_product ?? '' ?></td>
-                                            <td><span class="badge badge-info"> <?= number_format($row->total) ?>đ</span></td>
+                                            <td><span class="badge badge-info"> <?= number_format($row->total_amount_vnd) ?>đ</span></td>
                                             <td>
                                                 <?php
                                                 switch ($row->status) {

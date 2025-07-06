@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/23/2023
@@ -15,7 +16,7 @@ use App\Models\Traits\recoverItem;
 class OrderModel extends Model
 {
     use recoverItem;
-    
+
     protected $DBGroup          = 'default';
     protected $table            = 'order';
     protected $primaryKey       = 'order_id';
@@ -25,6 +26,7 @@ class OrderModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'user_init',
+        'lang_id',
         'customer_id',
         'shop_id',
         'code',
@@ -82,5 +84,4 @@ class OrderModel extends Model
 
         return $code;
     }
-
 }

@@ -11,7 +11,7 @@ echo $this->section('content');
 <div class="row" id="orderApp">
     <div class="col-md-12">
         <form action="" method="post">
-            <?=csrf_field()?>
+            <?= csrf_field() ?>
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <div class="card-title"><?= lang('Order.info_basic') ?></div>
@@ -32,7 +32,7 @@ echo $this->section('content');
                         <div class="col-6">
                             <label><?= lang('Order.customer_name') ?></label>
                             <div class="input-group mb-3">
-                                <input type="text" v-model="order.full_name"  class="form-control" placeholder="<?= lang('Khách Hàng') ?>" readonly>
+                                <input type="text" value="<?= $order->cus_full_name ?>" class="form-control" placeholder="<?= lang('Khách Hàng') ?>" readonly>
                                 <input type="hidden" name="customer_id" value="<?= $order->customer_id ?>">
                             </div>
                         </div>
@@ -40,29 +40,29 @@ echo $this->section('content');
                         <div class="col-6">
                             <div class="form-group">
                                 <label><?= lang('Order.phone') ?></label>
-                                <input type="text" v-model="order.phone"  class="form-control" placeholder="<?= lang('Số điện thoại') ?>" readonly>
+                                <input type="text" value="<?= $order->cus_phone ?>" class="form-control" placeholder="<?= lang('Số điện thoại') ?>" readonly>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label><?= lang('Order.email') ?></label>
-                                <input type="text" v-model="order.email"  class="form-control" placeholder="<?= lang('Email') ?>" readonly>
+                                <input type="text" value="<?= $order->cus_email ?>" class="form-control" placeholder="<?= lang('Email') ?>" readonly>
                             </div>
                         </div>
-                        
+
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
                                 <label><?= lang('Order.title') ?></label>
-                                <input type="text" name="title" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>" value="<?= $order->title ?>" >
+                                <input type="text" name="title" class="form-control <?= session('errors.title') ? 'is-invalid' : '' ?>" value="<?= $order->title ?>">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label><?= lang('Order.note') ?></label>
-                                <textarea class="form-control" name="note" placeholder="<?= lang('Ghi chú') ?>" ><?= $order->note ?></textarea>
+                                <textarea class="form-control" name="note" placeholder="<?= lang('Ghi chú') ?>"><?= $order->note ?></textarea>
                             </div>
                         </div>
                         <div class="col-6">
@@ -78,7 +78,7 @@ echo $this->section('content');
                         <div class="col-6">
                             <div class="form-group">
                                 <label><?= lang('Order.payment_status') ?> <span class="text-danger">*</span> </label>
-                                <select class="form-control" name="payment_status" v-model="order.payment_status">
+                                <select class="form-control" name="payment_status" v-model="order.payment_status" @change="onPaymentStatusChange">
                                     <?php foreach (EPaymentStatus::toArray() as $item): ?>
                                         <option value="<?= $item ?>" <?= ($item == $order->payment_status) ? 'selected' : '' ?>><?= lang("Order.payment_status_{$item}") ?></option>
                                     <?php endforeach; ?>
@@ -88,7 +88,7 @@ echo $this->section('content');
                         <div class="col-6">
                             <div class="form-group">
                                 <label><?= lang('Order.payment_method') ?> <span class="text-danger">*</span> </label>
-                                <select class="form-control"  name="payment_method">
+                                <select class="form-control" name="payment_method">
                                     <?php foreach (EPaymentMethod::toArray() as $item): ?>
                                         <option value="<?= $item ?>" <?= ($item ==  $order->payment_method) ? 'selected' : '' ?>><?= lang("Order.payment_method_{$item}") ?></option>
                                     <?php endforeach; ?>
@@ -109,9 +109,12 @@ echo $this->section('content');
                         <div class="col-6" v-show="order.payment_status != <?= EPaymentStatus::UNPAID ?>">
                             <div class="form-group">
                                 <label><?= lang('Order.customer_paid') ?> </label>
-                                <input type="number" name="customer_paid" v-model="order.customer_paid" class="form-control <?= session('errors.customer_paid') ? 'is-invalid' : '' ?>" placeholder="<?= lang('Order.customer_paid') ?>">
+                                <input type="number" class="form-control" id="inputCustomerPaid" @input="onCustomerPaidInput"
+                                    placeholder="<?= lang('Order.customer_paid') ?>">
+                                <input type="hidden" name="customer_paid" id="customer_paid">
                             </div>
                         </div>
+
                     </div>
 
                 </div>
@@ -199,7 +202,7 @@ echo $this->section('content');
                                 <select name="ward_id" area-selected="<?= $order->delivery_info->ward_id ?? '' ?>" class="form-control select_ward" style="width: 100%;"></select>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div class="row" v-show="order.delivery_type == <?= EDeliveryType::HOME_DELIVERY ?>">
@@ -228,39 +231,41 @@ echo $this->section('content');
                             <div class="row text-center">
                                 <table class="table table-striped" v-if="order_items.length > 0">
                                     <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col"><?= lang('Order.product_name') ?></th>
-                                        <th scope="col"><?= lang('Order.quantity') ?></th>
-                                        <th scope="col"><?= lang('Acp.actions') ?></th>
-                                    </tr>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col"><?= lang('Order.product_name') ?></th>
+                                            <th scope="col"><?= lang('Order.quantity') ?></th>
+                                            <th scope="col"><?= lang('Order.unit_price') ?></th>
+                                            <th scope="col"><?= lang('Acp.actions') ?></th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="(item, index) in order_items">
-                                        <th scope="row">{{ index + 1 }}</th>
-                                        <td>{{ item.pd_name }}</td>
-                                        <td class="w-50">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <button type="button" @click="minusQuantityProduct(index)" class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
+                                        <tr v-for="(item, index) in order_items">
+                                            <th scope="row">{{ index + 1 }}</th>
+                                            <td>{{ item.pd_name }}</td>
+                                            <td class="w-50">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <button type="button" @click="minusQuantityProduct(index)" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="number" class="form-control text-center" v-model="item.quantity">
+                                                    <div class="input-group-append">
+                                                        <button type="button" @click="plusQuantityProduct(index)" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <input type="number" class="form-control text-center" v-model="item.quantity">
-                                                <div class="input-group-append">
-                                                    <button type="button" @click="plusQuantityProduct(index)" class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
 
-                                        </td>
-                                        <td>
-                                            <button type="button" @click="deleteProduct(index)" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>{{ getDisplayPrice(item) }}</td>
+                                            <td>
+                                                <button type="button" @click="deleteProduct(index)" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -279,39 +284,39 @@ echo $this->section('content');
                                 <i class="icon fas fa-info"></i>
                                 <?= lang('Order.currency_exchange_note') ?>
                             </div>
-                            
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
-                                    <?php if ($currentLang->id != 1) : ?>
+                                        <?php if ($currentLang->id != 1) : ?>
+                                            <tr>
+                                                <th style="width:50%"><?= lang('Order.exchange_rate') ?> :</th>
+                                                <td> {{ formatVnd(order.exchange_rate) }}</td>
+                                            </tr>
+                                        <?php endif; ?>
                                         <tr>
-                                            <th style="width:50%"><?= lang('Order.exchange_rate') ?> :</th>
-                                            <td> {{ formatVnd(order.exchange_rate) }}</td>
+                                            <th style="width:50%"><?= lang('Order.sub_total') ?> :</th>
+                                            <td> {{ formatVnd(bill.sub_total) }}</td>
                                         </tr>
-                                    <?php endif; ?>
-                                    <tr>
-                                        <th style="width:50%"><?=lang('Order.sub_total')?> :</th>
-                                        <td> {{ formatVnd(bill.sub_total) }}</td>
-                                    </tr>
-                                    <!-- <tr>
+                                        <!-- <tr>
                                         <th>
-                                            <?=lang('Order.shipping_fee')?> :
-                                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?=lang('Order.shipping_fee_tooltips')?>"></i>
+                                            <?= lang('Order.shipping_fee') ?> :
+                                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?= lang('Order.shipping_fee_tooltips') ?>"></i>
                                         </th>
                                         <td>{{ formatVnd(bill.shipping_fee) }}</td>
                                     </tr> -->
-                                    <tr v-if="bill.discount > 0">
-                                        <th><?=lang('Order.discount_amount')?> :</th>
-                                        <td>{{ formatVnd(bill.discount) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th><?=lang('Order.order_total')?> :</th>
-                                        <td>{{ formatVnd(bill.total) }}</td>
-                                    </tr>
-                                    <tr v-if="order.payment_status == <?= EPaymentStatus::DEPOSIT ?> && order.customer_paid != bill.total">
-                                        <th><?=lang('Order.debt')?> :</th>
-                                        <td class="text-danger">{{ formatVnd((bill.total - order.customer_paid)) }}</td>
-                                    </tr>
+                                        <tr v-if="bill.discount > 0">
+                                            <th><?= lang('Order.discount_amount') ?> :</th>
+                                            <td>-{{ formatVnd(bill.discount) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><?= lang('Order.order_total') ?> :</th>
+                                            <td>{{ formatVnd(bill.total) }}</td>
+                                        </tr>
+                                        <tr v-if="order.payment_status == <?= EPaymentStatus::DEPOSIT ?> && order.customer_paid != bill.total">
+                                            <th><?= lang('Order.debt') ?> :</th>
+                                            <td class="text-danger">{{ formatVnd((bill.total - order.customer_paid)) }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -340,7 +345,7 @@ echo $this->section('content');
 <?= $this->endSection() ?>
 
 <?= $this->section('pageScripts') ?>
-<script src="<?= base_url($config->scriptsPath)?>/acp/areaLocation.js"></script>
+<script src="<?= base_url($config->scriptsPath) ?>/acp/areaLocation.js"></script>
 <script src="<?= base_url($config->scriptsPath) ?>/acp/order.js"></script>
 <script>
     const countryElement = $("#country");
@@ -389,10 +394,12 @@ echo $this->section('content');
 
     const order_id = '<?= $order->order_id ?>';
     const voucherCode = '<?= $order->voucher_code ?? old('voucher_code') ?>';
+    const lang_id = '<?= $order->lang_id ?>';
+    const currency = '<?= $order->currency ?>';
     const delivery_type = '<?= $order->delivery_type ?? old('delivery_type') ?>';
-    const full_name = '<?= $order->full_name ?? old('full_name') ?>';
-    const phone = '<?= $order->phone ?? old('phone') ?>';
-    const email = '<?= $order->email ?? old('email') ?>';
+    const full_name = '<?= $order->cus_full_name ?>';
+    const phone = '<?= $order->cus_phone ?>';
+    const email = '<?= $order->cus_email ?>';
     const payment_status = <?= $order->payment_status ?? old('payment_status') ?? EPaymentStatus::UNPAID ?>;
     const customer_paid = <?= $order->customer_paid ?? old('customer_paid') ?? 0 ?>;
     const exchange_rate = <?= $order->exchange_rate ?>;
@@ -405,6 +412,8 @@ echo $this->section('content');
         addItemToCartSuccess: '<?= lang('Order.addItemToCartSuccess') ?>',
         increaseItemQuantity: '<?= lang('Order.increaseItemQuantity') ?>',
         deleteItemFromCartSuccess: '<?= lang('Order.deleteItemFromCartSuccess') ?>',
+        invalidVoucherCurrency: '<?= lang('Order.invalidVoucherCurrency') ?>',
+        voucherAppliedSuccess: '<?= lang('Order.voucherAppliedSuccess') ?>',
     };
 
     const HomeDeliveryType = <?= $order->delivery_type ?? EDeliveryType::HOME_DELIVERY ?>;

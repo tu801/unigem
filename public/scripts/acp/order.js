@@ -4,6 +4,7 @@ const orderApp = Vue.createApp({
       order: {
         country: 0,
         customer_id: 0,
+        lang_id: 0,
         delivery_type: 1,
         full_name: "",
         phone: "",
@@ -11,6 +12,7 @@ const orderApp = Vue.createApp({
         payment_status: 0,
         customer_paid: 0,
         voucher_code: "",
+        currency: "VND", // Default currency
         exchange_rate: 1, // Default exchange rate
       },
       order_items: [],
@@ -28,11 +30,14 @@ const orderApp = Vue.createApp({
         ship_fee_province: 0,
         ship_fee_on_weight: 0,
       },
-      discount: {
-        value: 0,
-        type: "",
-      },
+      voucher: null,
     };
+  },
+  watch: {
+    "order.customer_paid": function (newValue) {
+      // Update the hidden field when order.customer_paid changes
+      $("#customer_paid").val(newValue);
+    },
   },
   methods: {
     eventSearchCustomer() {
@@ -214,12 +219,13 @@ const orderApp = Vue.createApp({
 
       total = total + shipping_fee;
 
-      if (this.discount.type && this.discount.value) {
-        if (this.discount.type == "percent") {
-          discount = total * (this.discount.value / 100);
+      // handle voucher discount
+      if (this.voucher !== null) {
+        if (this.voucher.voucher_discount_type == "percentage") {
+          discount = total * (this.voucher.voucher_discount_value / 100);
         }
-        if (this.discount.type == "value") {
-          discount = this.discount.value;
+        if (this.voucher.voucher_discount_type == "fixed_amount") {
+          discount = this.voucher.voucher_discount_value;
         }
       }
 
@@ -228,6 +234,10 @@ const orderApp = Vue.createApp({
       this.bill.shipping_fee = shipping_fee;
       this.bill.discount = discount * this.order.exchange_rate;
       this.bill.weight_product_total = weightProductTotal;
+
+      if (this.order.payment_status == 1) {
+        this.onPaymentStatusChange();
+      }
     },
     getShipFee() {
       let province_id = $('[name="province_id"]').val() ?? 1;
@@ -254,22 +264,33 @@ const orderApp = Vue.createApp({
     applyVoucher() {
       $.ajax({
         url:
-          base_url +
-          "order/apply-voucher?voucher_code=" +
-          this.order.voucher_code,
+          bkUrl + "order/apply-voucher?voucher_code=" + this.order.voucher_code,
         dataType: "json",
         contentType: false,
         processData: false,
         type: "GET",
         success: (response) => {
-          if (response.error === 1) {
+          if (response.code === 200) {
+            if (this.order.currency !== response.voucher.currency) {
+              SwalAlert.fire({
+                icon: "error",
+                title: messages.invalidVoucherCurrency,
+              });
+            } else {
+              this.voucher = response.voucher;
+              SwalAlert.fire({
+                icon: "success",
+                title:
+                  messages.voucherAppliedSuccess +
+                  response.voucher.voucher_code,
+              });
+              this.charge();
+            }
+          } else {
             SwalAlert.fire({
               icon: "error",
               title: response.message,
             });
-          } else {
-            this.discount = response.data;
-            this.charge();
           }
         },
       });
@@ -318,6 +339,30 @@ const orderApp = Vue.createApp({
         },
       });
     },
+    onPaymentStatusChange() {
+      if (this.order.payment_status == 1) {
+        this.order.customer_paid = this.bill.total;
+        const formattedTotal =
+          this.order.currency === "VND"
+            ? this.formatVnd(this.order.customer_paid)
+            : this.formatUsd(this.order.customer_paid);
+        console.log("formattedTotal", formattedTotal);
+        $("#inputCustomerPaid").prop("type", "text");
+        $("#inputCustomerPaid").val(formattedTotal);
+        $("#inputCustomerPaid").prop("readonly", true);
+      } else {
+        $("#inputCustomerPaid").prop("readonly", false);
+        $("#inputCustomerPaid").prop("type", "number");
+      }
+    },
+    onCustomerPaidInput(event) {
+      // Lấy giá trị từ event.target.value
+      const value = event.target.value;
+      this.order.customer_paid = parseFloat(value) || 0;
+
+      // Cập nhật hidden field
+      $("#customer_paid").val(this.order.customer_paid);
+    },
   },
   mounted() {
     $('[name="province_id"]').change((data) => {
@@ -327,6 +372,8 @@ const orderApp = Vue.createApp({
 
     // Set initial values from old input
     this.order.voucher_code = voucherCode;
+    this.order.lang_id = lang_id;
+    this.order.currency = currency;
     this.order.full_name = full_name;
     this.order.delivery_type = delivery_type;
     this.order.phone = phone;
@@ -343,6 +390,9 @@ const orderApp = Vue.createApp({
       order_id !== ""
     ) {
       this.getOrderItems(order_id);
+    }
+    if (this.order.voucher_code !== "") {
+      this.applyVoucher();
     }
   },
 });

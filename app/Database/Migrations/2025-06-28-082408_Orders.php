@@ -12,6 +12,7 @@ class Orders extends Migration
         $this->forge->addField([
             'order_id'          => ['type' => 'bigint', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'user_init'	      	=> ['type' => 'int', 'unsigned' => true, 'null' => true],
+            'lang_id'           => ['type' => 'int',  'unsigned' => true],
             'customer_id'       => ['type' => 'int', 'unsigned' => true, 'null' => true],
             'shop_id'           => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
             'code'	            => ['type' => 'varchar', 'constraint' => 32],

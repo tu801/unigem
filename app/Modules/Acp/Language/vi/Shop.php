@@ -70,9 +70,12 @@ return [
     'voucher_discount_value'            => 'Giá trị',
     'voucher_start_date'                => 'Ngày bắt đầu',
     'voucher_end_date'                  => 'Ngày kết thúc',
+    'voucher_currency_list'             => 'Loại tiền tệ',
 
     'voucher_code_is_exist'             => 'Mã giảm giá đã tồn tại, vui lòng chọn mã khác.',
     'voucher_title_required'            => 'Vui lòng nhập tiêu đề mã giảm giá.',
     'voucher_discount_type_required'    => 'Vui lòng chọn loại giảm giá.',
     'voucher_discount_value_required'   => 'Vui lòng nhập giá trị giảm giá.',
+    'voucher_code_not_found'            => 'Mã giảm giá không tồn tại hoặc đã hết hạn.',
+    'voucher_code_required'             => 'Vui lòng nhập mã giảm giá.',
 ];

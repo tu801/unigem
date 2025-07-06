@@ -267,6 +267,8 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('invoice/(:num)/invoice-print.html', 'InvoiceController::invoicePrint/$1', ['as' => 'invoice_print']);
 
         $routes->get('view-deposit/(:num)', 'OrderController::viewDeposit/$1', ['as' => 'view_deposit_order']);
+
+        $routes->get('apply-voucher', 'VoucherController::ajaxApplyVoucher', ['as' => 'apply_voucher']);
     });
 
     // voucher routes
