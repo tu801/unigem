@@ -47,15 +47,15 @@ class Product extends Entity
     }
 
     /**
-     * get product display price
+     * format price to display by current locale in session
      * @return string
      */
     public function getDisplayPrice()
     {
-        $lang = session()->lang;
         helper('ecom');
 
         $price = ($this->attributes['price_discount'] > 0 && $this->attributes['price_discount'] < $this->attributes['price']) ? $this->attributes['price_discount'] : $this->attributes['price'];
+
         if ($price > 0) {
             $this->display_price = format_currency($price);
         } else {

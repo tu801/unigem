@@ -2,6 +2,8 @@
 
 namespace Modules\Acp\Controllers\Store\Order;
 
+use App\Models\LangModel;
+
 class InvoiceController extends OrderController
 {
     public function __construct()
@@ -50,8 +52,9 @@ class InvoiceController extends OrderController
 
         $dataOrderItem      = [];
         $orderItem = $this->_orderItemModel->where('order_id', $orderID)->findAll();
+        $lang = model(LangModel::class)->find($order->lang_id);
         foreach ($orderItem as $item) {
-            $product               = $this->_productModel->getProductItemById($item->product_id, $this->currentLang);
+            $product               = $this->_productModel->getProductItemById($item->product_id, $lang);
             $product->quantity     = (int) $item->quantity;
             $product->product_meta = $product->product_meta;
             $product->order_item_sub_total = $item->total;

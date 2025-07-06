@@ -47,7 +47,7 @@ trait UseVoucher
         } else {
             $discount = 0; // Default to no discount if type is unknown
         }
-        // dd($voucher->voucher_discount_type, $voucher->voucher_discount_value, $totalAmount, $discount);
+
         $orderData['discount_amount'] = $discount;
         $orderData['voucher_code'] = $voucherCode;
 

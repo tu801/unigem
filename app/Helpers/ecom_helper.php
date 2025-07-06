@@ -72,9 +72,9 @@ if (!function_exists('format_currency')) {
      * @param bool $suffixes
      * @return string
      */
-    function format_currency($number)
+    function format_currency($number, $lang = null)
     {
-        $lang = session()->lang;
+        $lang = $lang ?? session()->lang;
         $suffixes = $lang->currency_symbol;
 
         if ($lang->locale == "en") {

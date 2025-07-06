@@ -121,11 +121,12 @@ class EditOrderController extends OrderController
             $priceProductTotal  = 0;
             $weightProductTotal = 0;
             $orderItems         = [];
+            $lang = model(\App\Models\LangModel::class)->find($order->lang_id);
             // product bill
             foreach ($inputData['product'] as $item) {
                 $quantity  = $item['quantity'];
                 $productID = $item['product_id'];
-                $product   = $this->_productModel->getProductItemById($productID, $this->currentLang);
+                $product   = $this->_productModel->getProductItemById($productID, $lang);
                 if (isset($product->id)) {
                     $unitPrice          = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
                     $priceProduct       =  $unitPrice * $quantity;
@@ -164,18 +165,13 @@ class EditOrderController extends OrderController
                 }
             }
 
-            if ($this->currentLang->id > 1) {
-                $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
+            if ($order->lang_id > 1) {
                 $dataOrder['sub_total']        = $subAmount;
                 $dataOrder['total']            = $totalAmount;
-                $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
-                $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
-                $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
+                $dataOrder['total_amount_vnd'] = round($totalAmount * ($order->exchange_rate ?? 1), 2);
             } else {
                 $dataOrder['sub_total']       = $subAmount;
                 $dataOrder['total']           = $totalAmount;
-                $dataOrder['exchange_rate']   = 1;
-                $dataOrder['exchange_rate_id'] = 0;
                 $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
             }
 

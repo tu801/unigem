@@ -1,6 +1,9 @@
 <?php
 
 use App\Enums\Store\Order\EDeliveryType;
+use App\Models\LangModel;
+
+$lang = model(LangModel::class)->find($order->lang_id);
 
 echo $this->extend($config->viewLayout);
 echo $this->section('content');
@@ -80,7 +83,11 @@ echo $this->section('content');
                                             <td><?= $item->quantity ?? '' ?></td>
                                             <td><?= $item->pd_name ?? '' ?></td>
                                             <td><?= $item->pd_sku ?? '' ?></td>
-                                            <td><?= number_format($item->order_item_sub_total) ?? '' ?>đ</td>
+                                            <td>
+                                                <?php
+                                                echo format_currency($item->order_item_sub_total, $lang);
+                                                ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -105,7 +112,16 @@ echo $this->section('content');
                                 <table class="table">
                                     <tr>
                                         <th style="width:50%"><?= lang('Order.sub_total') ?>:</th>
-                                        <td><?= number_format($order->sub_total) ?? '' ?>đ</td>
+                                        <td>
+                                            <?php
+                                            if ($order->lang_id == 1) {
+                                                echo format_currency($order->sub_total);
+                                            } else {
+                                                $subTotal = $order->sub_total * $order->exchange_rate;
+                                                echo format_currency($subTotal);
+                                            }
+                                            ?>
+                                        </td>
                                     </tr>
                                     <?php if ($order->currency != config('Shop')->defaultCurrency): ?>
                                         <tr>
@@ -116,7 +132,7 @@ echo $this->section('content');
                                     <?php if ($order->discount_amount > 0): ?>
                                         <tr>
                                             <th><?= lang('Order.discount_amount') ?>:</th>
-                                            <td><?= number_format($order->discount_amount) ?? '' ?>đ</td>
+                                            <td><?= number_format($order->discount_amount * $order->exchange_rate) ?? '' ?> đ</td>
                                         </tr>
                                     <?php endif; ?>
                                     <!-- <tr>
@@ -125,7 +141,7 @@ echo $this->section('content');
                                     </tr> -->
                                     <tr>
                                         <th><?= lang('Order.total') ?>:</th>
-                                        <td><?= number_format($order->total_amount_vnd) ?? '' ?>đ</td>
+                                        <td><?= number_format($order->total_amount_vnd) ?? '' ?> đ</td>
                                     </tr>
                                 </table>
                             </div>
