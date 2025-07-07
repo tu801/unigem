@@ -3,7 +3,7 @@ return [
     'page_title'       => 'Order Management',
     'add_title'        => 'Create Order',
     'edit_title'       => 'Edit Order',
-    'info_basic'       => 'Basic Information',
+    'info_basic'       => 'Order Information',
     'customer_name'    => 'Customer Name',
     'phone'            => 'Phone Number',
     'email'            => 'Email',
@@ -24,14 +24,15 @@ return [
     'code'             => 'Order Code',
     'count_product'    => 'Number of Products',
     'total'            => 'Total Amount',
+    'total_vnd'        => 'Total Amount (VND)',
     'customer_paid'    => 'Customer Paid',
     'created_view'     => 'Purchase Date',
     'unit_price'       => 'Unit Price',
     'exchange_rate'    => 'Exchange Rate',
 
     // delivery type
-    'delivery_type_1'  => 'Pick up at store',
-    'delivery_type_2'  => 'Home delivery',
+    'delivery_type_1'  => 'Store Pickup',
+    'delivery_type_2'  => 'Home Delivery',
     // order status
     'order_status_1'   => 'New Order',
     'order_status_2'   => 'Confirmed',
@@ -54,21 +55,28 @@ return [
     'addSuccess'       => "Successfully added new order #{0}",
     'editSuccess'      => 'Successfully updated order #{0}',
 
-    'addItemToCartSuccess' => 'Product added to cart successfully',
-    'increaseItemQuantity' => 'Product quantity in cart increased by 1',
-    'deleteItemFromCartSuccess' => 'Product removed from cart successfully',
+    'addItemToCartSuccess'      => 'Successfully added product to cart',
+    'increaseItemQuantity'      => 'Increased product quantity in cart by 1',
+    'deleteItemFromCartSuccess' => 'Successfully removed product from cart',
 
     'sub_total'                 => 'Subtotal',
+
+    'shipping_info'             => 'Shipping Information',
+    'ship_full_name'            => 'Recipient Name',
+    'ship_telephone'            => 'Recipient Phone',
+    'ship_email'                => 'Recipient Email',
     'shipping_fee'              => 'Shipping Fee',
     'discount_amount'           => 'Discount',
     'order_total'               => 'Total',
-    'shipping_fee_tooltips'     => 'Shipping fee is calculated by formula: [Item Weight] X [Shipping Fee by Weight] + [Shipping Fee by Province]',
+    'shipping_fee_tooltips'     => 'Shipping fee is calculated by formula: [Item Weight] X [Weight-based Shipping Fee] + [Province-based Shipping Fee]',
 
     'search_customer'  => 'Search Customer',
     'select_customer'  => 'Select Customer',
-    'payment_paid_if_customer_paid' => 'Select paid status when customer pays enough {0} VND',
+    'payment_paid_if_customer_paid' => 'Select paid status when customer pays full amount {0} VND',
     'success_if_payment_paid' => 'Order status completed when order has been paid',
-    'currency_exchange_note' => 'The exchange rate is used to calculate the order value in the store. All rates are converted to Vietnamese Dong (VND).',
+    'currency_exchange_note' => 'Exchange rate is used to calculate order value in the store. All rates are converted to Vietnamese Dong (VND).',
+
+    'voucherAppliedSuccess' => 'Discount code has been applied successfully ',
 
     // validate
     'full_name_required'      => 'Please enter customer name',
@@ -80,20 +88,25 @@ return [
     'product_required'        => 'Please select product',
     'province_id_required'    => 'Please select province/city',
     'district_id_required'    => 'Please select district',
-    'ward_id_required'        => 'Please select ward/commune',
+    'ward_id_required'        => 'Please select ward',
     'address_required'        => 'Please enter address',
+    'ship_full_name_required' => 'Please enter recipient name',
+    'ship_telephone_required' => 'Please enter recipient phone number',
 
+    'create_order_log_desc'   => '#{0} Successfully created order #{1}',
+
+    'invalidVoucherCurrency' => 'Discount code is invalid with the order currency. Please check the discount code or order currency.',
 
     // invoice
     'invoice_title'           => 'Invoice',
     'invoice_date'            => 'Date',
     'from'                    => 'From',
     'to'                      => 'To',
-    'pick_up'                 => 'Pick up at store',
+    'pick_up'                 => 'Store Pickup',
     'order'                   => 'Order',
     'customer_code'           => 'Customer Code',
     'product_sku'             => 'SKU Code',
-    'debt'                    => 'Debt',
+    'debt'                    => 'Outstanding Debt',
     'apply'                   => 'Apply',
     'discount_code'           => 'Discount Code',
     'deposit_title'           => 'Deposit Information',
