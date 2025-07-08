@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\LangModel;
+use App\Models\Store\ExchangeRateModel;
 use CodeIgniter\I18n\Time;
 
 if (!function_exists('currency_decode')) {
@@ -112,5 +114,21 @@ if (!function_exists('create_product_thumb')) {
         }
 
         return $productThumbFile;
+    }
+}
+
+if (!function_exists('getExchangeRate')) {
+
+    function getExchangeRate($lang_id = 0)
+    {
+        if ($lang_id == 0) {
+            $lang = session()->lang;
+        } else {
+            $lang = model(LangModel::class)->find($lang_id);
+        }
+
+        $exchangeRate = model(ExchangeRateModel::class)->getExchangeRate($lang->currency_code);
+
+        return $exchangeRate->rate ?? 1;
     }
 }

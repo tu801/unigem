@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
-    <?php if (getenv('CI_ENVIRONMENT') === 'development') : ?>
+    <?php
+
+    use App\Enums\Store\Order\EDeliveryType;
+    use App\Enums\Store\Order\EPaymentStatus;
+
+    if (getenv('CI_ENVIRONMENT') === 'development') : ?>
     <meta name="robots" content="noindex, nofollow" />
     <?php else: ?>
     <meta name="robots" content="index, follow" />
@@ -53,16 +58,27 @@
         </div>
     </div>
     <!-- /preload -->
-    <div id="wrapper">
-        <!-- header -->
-        <?= $this->include($configs->view . '\templates\header') ?>
-        <!-- /header -->
 
-        <?= $this->renderSection('content') ?>
+    <div id="ecomApp">
+        <div id="wrapper">
+            <!-- header -->
+            <?= $this->include($configs->view . '\templates\header') ?>
+            <!-- /header -->
 
-        <!-- Footer -->
-        <?= $this->include($configs->view . '\templates\footer') ?>
-        <!-- /Footer -->
+            <?= $this->renderSection('content') ?>
+
+            <!-- Footer -->
+            <?= $this->include($configs->view . '\templates\footer') ?>
+            <!-- /Footer -->
+        </div>
+
+        <!-- shoppingCart -->
+        <?= $this->include($configs->view . '\components\modal-shopping-cart') ?>
+        <!-- /shoppingCart -->
+
+        <!-- toolbar-bottom -->
+        <?= $this->include($configs->view . '\templates\toolbar-bottom') ?>
+        <!-- /toolbar-bottom -->
     </div>
 
     <!-- gotop -->
@@ -72,9 +88,6 @@
     </button>
     <!-- /gotop -->
 
-    <!-- toolbar-bottom -->
-    <?= $this->include($configs->view . '\templates\toolbar-bottom') ?>
-    <!-- /toolbar-bottom -->
 
     <!-- mobile menu -->
     <?= $this->include($configs->view . '\templates\mobile-menu') ?>
@@ -88,15 +101,11 @@
     <?= $this->include($configs->view . '\templates\toolbar-shop-mobile') ?>
     <!-- /toolbarShopmb -->
 
-    <?php if ( !auth()->loggedIn() ) : ?>
+    <?php if (!auth()->loggedIn()) : ?>
     <!-- modal login -->
     <?= $this->include($configs->view . '\components\modal-login') ?>
     <!-- /modal login -->
     <?php endif; ?>
-
-    <!-- shoppingCart -->
-    <?= $this->include($configs->view . '\components\modal-shopping-cart') ?>
-    <!-- /shoppingCart -->
 
     <!-- modal quick_view -->
     <?= $this->include($configs->view . '\components\modal-quick-view') ?>
@@ -124,6 +133,10 @@
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/subscribe.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/customer-login.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="<?= base_url($configs->scriptsPath) ?>/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="<?= base_url('/themes/store/shop.js') ?>"></script>
+
     <script type="text/javascript">
     $(document).ready(function() {
         $('.type-languages').on('change', function() {
@@ -134,6 +147,18 @@
             }
         });
     });
+
+    const lang_id = '<?= $currentLang->id ?>';
+    const currency = '<?= $currentLang->currency_code ?>';
+    const exchange_rate = <?= getExchangeRate($currentLang->id) ?>;
+    const VietNamCountryId = <?= VIETNAM_COUNTRY_ID ?>;
+    const HomeDeliveryType = <?= EDeliveryType::HOME_DELIVERY ?>;
+
+    const messages = {
+        addItemToCartSuccess: '<?= lang('Order.addItemToCartSuccess') ?>',
+    };
+
+    ecomApp.mount("#ecomApp");
     </script>
 
     <?= $this->renderSection('scripts') ?>

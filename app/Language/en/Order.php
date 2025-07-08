@@ -1,0 +1,41 @@
+<?php
+return [
+    'shopping_cart_title'     => 'Shopping Cart',
+    'checkout'                => 'Checkout',
+    'process_checkout'        => 'Proceed to Checkout',
+    'order'                   => 'Order',
+    'product'                 => 'Product',
+    'bill_detail'             => 'Bill Details',
+    'your_order'              => 'Your Order',
+    'complete_order'          => 'Complete Order',
+    'transfer_content'        => 'Transfer Content',
+    'total_payment'           => 'Total Payment',
+    'payment_completed'       => 'Payment Completed',
+    'order_completed'         => 'Completed!',
+    'order_completed_message' => 'Thank you for your order! Your order is being processed and will be completed within 3-6 hours.',
+    'continue_shopping'       => 'Continue Shopping',
+    'product_empty'           => 'No products',
+    'view_cart'               => 'View Cart',
+    'check_out'               => 'Checkout',
+    'cart_empty'              => 'Your cart is empty',
+
+    // Customer Order History
+    'order_history_title'       => 'Order History',
+    'order_status'              => 'Status',
+    'order_sub_total'           => 'Subtotal',
+    'order_total'               => 'Total',
+    'order_item_quantity'       => 'Number of Items',
+    'order_purchased_date'      => 'Purchase Date',
+    'order_code'                => 'Code',
+    'view_order_history'        => 'Details',
+
+    // customer order detail
+    'order_detail'              => 'Order Details',
+    'sold_by'                   => 'Store',
+    'deposit'                   => 'Deposit',
+    'image_payment'             => 'Payment Image',
+    'image_select'              => 'Select Image',
+    'add_note'                  => 'Add Note',
+    'add_note_placeholder'      => 'How can we help you with this order?',
+    'remove_item'               => 'Remove Item',
+];

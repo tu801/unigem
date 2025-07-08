@@ -59,4 +59,9 @@ return [
 
     'shipping_and_delivery_title'       => 'Vận chuyển & Giao hàng',
 
+    // toolbar bottom on mobile
+    'toolbar_bottom_shop'               => 'Cửa hàng',
+    'toolbar_bottom_search'             => 'Tìm kiếm',
+    'toolbar_bottom_account'            => 'Tài khoản',
+    'toolbar_bottom_cart'               => 'Giỏ hàng',
 ];

@@ -28,18 +28,21 @@
                 class="title link"><?= $product->pd_name ?></a>
             <span class="price current-price"><?= $product->display_price ?></span>
             <span class="published-date d-none"><?= $product->publish_date ?></span>
-            <?php 
-            $sortPrice = ( $product->price_discount > 0 && $product->price_discount < $product->price)? $product->price_discount : $product->price;
-            ?>
+            <?php
+                    $sortPrice = ($product->price_discount > 0 && $product->price_discount < $product->price) ? $product->price_discount : $product->price;
+                    ?>
             <span class="d-none sort-price"><?= $sortPrice ?></span>
 
             <p class="description"><?= strip_tags(word_limiter($product->pd_description ?? '', 30)) ?></p>
 
             <div class="list-product-btn">
-                <a href="#quick_add" data-bs-toggle="modal" class="box-icon quick-add style-3 hover-tooltip">
+                <?php if ($product->price > 0 || $product->price_discount > 0) : ?>
+                <a href="#quick_add" @click="addCart(<?= $product->id ?>)"
+                    class="box-icon quick-add style-3 hover-tooltip">
                     <span class="icon icon-bag"></span><span
                         class="tooltip"><?= lang('Product.quick_add_to_cart') ?></span>
                 </a>
+                <?php endif; ?>
 
                 <a href="#quick_view" data-bs-toggle="modal" data-product-id="<?= $product->id ?>"
                     class="box-icon quickview style-3 hover-tooltip">

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -57,5 +58,11 @@ return [
     'icon_box_support_desc'             => 'Online support',
 
     'shipping_and_delivery_title'       => 'Shipping & Delivery',
+
+    // toolbar bottom on mobile
+    'toolbar_bottom_shop'               => 'Shop',
+    'toolbar_bottom_search'             => 'Search',
+    'toolbar_bottom_account'            => 'Account',
+    'toolbar_bottom_cart'               => 'Cart',
 
 ];

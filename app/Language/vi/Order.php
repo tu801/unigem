@@ -15,10 +15,14 @@ return [
     'order_completed_message' => 'Xin cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đang được xử lý và sẽ được hoàn thành trong vòng 3-6 giờ.',
     'continue_shopping'       => 'Tiếp tục mua sắm',
     'product_empty'           => 'Chưa có sản phẩm',
+    'view_cart'               => 'Xem giỏ hàng',
+    'check_out'               => 'Thanh toán',
+    'cart_empty'              => 'Giỏ hàng của bạn đang trống',
 
     // Customer Order History
     'order_history_title'       => 'Lịch sử mua hàng',
     'order_status'              => 'Trạng thái',
+    'order_sub_total'           => 'Tạm tính',
     'order_total'               => 'Tổng tiền',
     'order_item_quantity'       => 'Số sản phẩm',
     'order_purchased_date'      => 'Ngày mua hàng',
@@ -31,4 +35,7 @@ return [
     'deposit'                   => 'Đặt cọc',
     'image_payment'             => 'Hình ảnh thanh toán',
     'image_select'              => 'Chọn ảnh',
+    'add_note'                  => 'Thêm ghi chú',
+    'add_note_placeholder'      => 'Chúng tôi có thể giúp gì cho bạn với đơn hàng này?',
+    'remove_item'               => 'Xóa sản phẩm',
 ];

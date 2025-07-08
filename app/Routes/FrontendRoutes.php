@@ -33,7 +33,7 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
     $routes->get('my-shipping-address', 'ShippingAddress::index', ['as' => 'my_shipping_address']);
     $routes->match(['GET', 'POST'], 'add-new-shipping-address', 'ShippingAddress::createNewAddress', ['as' => 'add_new_address']);
     $routes->match(['GET', 'POST'], 'edit-shipping-address/(:num)', 'ShippingAddress::edit/$1', ['as' => 'edit_shipping_address']);
-    $routes->get( 'delete-shipping-address/(:num)', 'ShippingAddress::delete/$1', ['as' => 'delete_shipping_address']);
+    $routes->get('delete-shipping-address/(:num)', 'ShippingAddress::delete/$1', ['as' => 'delete_shipping_address']);
 
     // Authentication
     $routes->get('login', 'Login::loginView', ['as' => 'cus_login']);
@@ -81,6 +81,10 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
     $routes->group('product', null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');
         $routes->post('search', 'AjaxController::searchProduct');
+    });
+
+    $routes->group('order', null, function ($routes) {
+        $routes->get('get-products', 'OrderController::getProducts');
     });
 });
 
