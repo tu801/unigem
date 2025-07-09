@@ -177,15 +177,6 @@ class OrderController extends AcpController
         } else return redirect()->back()->with('error', lang('Acp.invalid_request'));
     }
 
-    public function createOrder()
-    {
-        $shops = $this->_shopModel->where('status', ShopEnum::STATUS['active'])->findAll();
-        $this->_data['shops']    = $shops;
-        $this->_data['title'] = lang("Order.add_title");
-
-        $this->_render('\store\order\create', $this->_data);
-    }
-
     public function ruleValidate()
     {
         $validRules = [
