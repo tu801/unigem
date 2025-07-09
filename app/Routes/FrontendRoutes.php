@@ -53,8 +53,10 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
  * Order
  */
 $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($routes) {
-    $routes->get('cart', 'Order::cart', ['as' => 'order_cart']);
-    $routes->get('checkout', 'Order::checkout', ['as' => 'order_checkout']);
+    $routes->get('cart', 'Cart::index', ['as' => 'order_cart']);
+
+    $routes->get('checkout', 'Cart::checkout', ['as' => 'checkout_page']);
+
     $routes->post('checkout', 'Order::actionCheckout');
     $routes->get('success/([a-zA-Z0-9_-]+)', 'Order::orderSuccess/$1', ['as' => 'order_success']);
     $routes->get('payment/([a-zA-Z0-9_-]+)', 'Order::orderPayment/$1', ['as' => 'order_payment']);

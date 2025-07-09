@@ -55,6 +55,10 @@ class ProductModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Fields to select when querying products for order or cart
+     * @var array
+     */
     public $productQueryFields = [
         'id',
         'cat_id',
@@ -74,8 +78,8 @@ class ProductModel extends Model
         'product_content.price',
         'product_content.price_discount',
         'product_content.pd_tags',
-        'product_content.pd_description',
-        'product_content.product_info',
+        // 'product_content.pd_description',
+        // 'product_content.product_info',
         'product_content.seo_meta',
     ];
 }

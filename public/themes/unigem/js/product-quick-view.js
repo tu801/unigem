@@ -9,7 +9,6 @@
   var quickViewProduct = function () {
     if ($(".quickview").length) {
       $(".quickview").on("click", function (e) {
-        console.log("clicked test");
         var productId = $(this).data("product-id");
         var quickViewModal = $("#quick_view");
         var loading = quickViewModal.find(".tmt-spinner");
@@ -27,23 +26,12 @@
           success: function (response) {
             if (response && response.status === 200) {
               var product = response.data;
-              console.log(product);
+
               // Update modal content with product data
               // Product title
               quickViewModal
                 .find(".tf-product-info-title h5 a")
                 .text(product.pd_name);
-              quickViewModal
-                .find(".tf-product-info-title h5 a")
-                .attr("href", product.url || "product-detail.html");
-
-              // Product price
-              var price =
-                // Update modal content with product data
-                // Product title
-                quickViewModal
-                  .find(".tf-product-info-title h5 a")
-                  .text(product.pd_name);
               quickViewModal
                 .find(".tf-product-info-title h5 a")
                 .attr("href", product.url || "product-detail.html");
@@ -135,6 +123,30 @@
               }
 
               // Update product price
+              if (product.price_discount > 0 || product.price > 0) {
+                quickViewModal.find(".modalBuynowText").removeClass("d-none");
+
+                // Add click event for buy now button - dispatch event to Vue.js
+                quickViewModal
+                  .find(".btns-full")
+                  .off("click")
+                  .on("click", function (e) {
+                    e.preventDefault();
+
+                    // Dispatch custom event to Vue.js
+                    window.dispatchEvent(
+                      new CustomEvent("addToCartFromModal", {
+                        detail: { productId: product.id },
+                      })
+                    );
+
+                    // Close modal
+                    quickViewModal.modal("hide");
+                  });
+              } else {
+                quickViewModal.find(".modalBuynowText").addClass("d-none");
+              }
+
               quickViewModal
                 .find(".tf-qty-price.total-price")
                 .text(product.display_price);

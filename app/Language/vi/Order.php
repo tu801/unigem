@@ -19,6 +19,19 @@ return [
     'check_out'               => 'Thanh toán',
     'cart_empty'              => 'Giỏ hàng của bạn đang trống',
 
+    'add_note'                  => 'Thêm ghi chú',
+    'add_note_placeholder'      => 'Chúng tôi có thể giúp gì cho bạn với đơn hàng này?',
+    'remove_item'               => 'Xóa sản phẩm',
+    'unit_price'                => 'Đơn giá',
+    'quantity'                  => 'Số lượng',
+    'product_total'             => 'Tổng',
+    'sub_total'                 => 'Tạm tính',
+    'guarantee_safe_checkout'   => 'Thanh toán an toàn qua',
+
+    'cartSavingError'           => 'Lỗi lưu giỏ hàng, vui lòng thử lại sau.',
+    'loginToCheckout'           => 'Vui lòng đăng nhập để thanh toán.',
+    'voucherError'              => 'Mã giảm giá không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại.',
+
     // Customer Order History
     'order_history_title'       => 'Lịch sử mua hàng',
     'order_status'              => 'Trạng thái',
@@ -35,7 +48,5 @@ return [
     'deposit'                   => 'Đặt cọc',
     'image_payment'             => 'Hình ảnh thanh toán',
     'image_select'              => 'Chọn ảnh',
-    'add_note'                  => 'Thêm ghi chú',
-    'add_note_placeholder'      => 'Chúng tôi có thể giúp gì cho bạn với đơn hàng này?',
-    'remove_item'               => 'Xóa sản phẩm',
+
 ];

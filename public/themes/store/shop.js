@@ -1,10 +1,3 @@
-const SwalAlert = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 4000,
-});
-
 const ecomApp = Vue.createApp({
   data() {
     return {
@@ -76,6 +69,14 @@ const ecomApp = Vue.createApp({
     },
     getCartLocalStorage() {
       try {
+        // retrieve order data
+        const orderData = localStorage.getItem(
+          "UnigemcOrder_" + this.order.lang_id
+        );
+        if (orderData) {
+          this.order.note = JSON.parse(orderData).note || "";
+        }
+
         const localCartData = localStorage.getItem(
           "UnigemcCart_" + this.order.lang_id
         );
@@ -93,12 +94,15 @@ const ecomApp = Vue.createApp({
           "UnigemcCart_" + this.order.lang_id,
           JSON.stringify(carts)
         );
+
+        // handle order data
+        localStorage.setItem(
+          "UnigemcOrder_" + this.order.lang_id,
+          JSON.stringify({ note: this.order.note })
+        );
       } catch (error) {
         console.error("Error saving cart data to localStorage:", error);
-        SwalAlert.fire({
-          icon: "error",
-          title: "Không thể lưu giỏ hàng. Vui lòng thử lại!",
-        });
+        toastr.error(shopMessages.cartSavingError);
       }
     },
     // end local storage
@@ -111,11 +115,15 @@ const ecomApp = Vue.createApp({
       } else {
         this.carts[indexCartItem].quantity += 1;
       }
-      SwalAlert.fire({
-        icon: "success",
-        title: "Thêm sản phẩm vào giỏ hàng thành công",
-      });
+
       this.addProductToCartLocalStorage(product_id);
+      // toastr.options.positionClass = "toast-top-center";
+      toastr.success(shopMessages.addItemToCartSuccess);
+    },
+    // Handle event from modal
+    handleAddToCartFromModal(event) {
+      const productId = event.detail.productId;
+      this.addCart(productId);
     },
     fetchProduct(product_id) {
       if (!Array.isArray(product_id)) {
@@ -128,10 +136,7 @@ const ecomApp = Vue.createApp({
         type: "GET",
         success: (response) => {
           if (response.error === 1) {
-            SwalAlert.fire({
-              icon: "error",
-              title: response.message,
-            });
+            toastr.error(response.message);
           } else {
             // add to cart
             let cartStorage = this.getCartLocalStorage();
@@ -183,10 +188,7 @@ const ecomApp = Vue.createApp({
         type: "GET",
         success: (response) => {
           if (response.error === 1) {
-            SwalAlert.fire({
-              icon: "error",
-              title: response.message,
-            });
+            toastr.error(response.message);
           } else {
             this.bill.ship_fee_province = Number(
               response.data.ship_fee_province
@@ -267,14 +269,14 @@ const ecomApp = Vue.createApp({
         type: "GET",
         success: (response) => {
           if (response.error === 1) {
-            SwalAlert.fire({
-              icon: "error",
-              title: response.message,
-            });
+            toastr.error(response.message);
           } else {
             this.discount = response.data;
             this.charge();
           }
+        },
+        error: (xhr) => {
+          toastr.error(shopMessages.voucherError);
         },
       });
     },
@@ -293,6 +295,23 @@ const ecomApp = Vue.createApp({
 
       return this.formatCurrency(price);
     },
+    showUnitTotalPrice(product) {
+      const price =
+        product.price_discount > 0 && product.price_discount < product.price
+          ? product.price_discount
+          : product.price;
+
+      return this.formatCurrency(price * product.quantity);
+    },
+    checkout() {
+      if (this.order.customer_id === 0) {
+        console.log("customer_id", this.order.customer_id);
+        toastr.warning(shopMessages.loginToCheckout);
+        return;
+      }
+
+      window.location.href = checkoutUrl; // Redirect to checkout page
+    },
   },
   mounted() {
     // init default order values FIRST before recovering cart
@@ -306,8 +325,34 @@ const ecomApp = Vue.createApp({
     $('[name="province_id"]').change((data) => {
       this.getShipFee();
     });
-    // if (window.location.pathname == "/order/checkout") {
-    //   this.getShipFee();
-    // }
+
+    // Listen for custom event from modal
+    window.addEventListener(
+      "addToCartFromModal",
+      this.handleAddToCartFromModal
+    );
+  },
+
+  beforeUnmount() {
+    // Clean up event listener
+    window.removeEventListener(
+      "addToCartFromModal",
+      this.handleAddToCartFromModal
+    );
+  },
+
+  watch: {
+    "order.note": function (newValue) {
+      // Update note data in localStorage
+      try {
+        localStorage.setItem(
+          "UnigemcOrder_" + this.order.lang_id,
+          JSON.stringify({ note: this.order.note })
+        );
+      } catch (error) {
+        console.error("Error saving cart data to localStorage:", error);
+        toastr.error(shopMessages.cartSavingError);
+      }
+    },
   },
 });

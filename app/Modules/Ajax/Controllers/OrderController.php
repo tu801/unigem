@@ -44,6 +44,7 @@ class OrderController extends AjaxBaseController
         foreach ($productData as $item) {
             $item->feature_image = $item->feature_image;
             $item->product_meta = $item->product_meta;
+            $item->url = $item->url;
         }
 
         return $this->respond([
