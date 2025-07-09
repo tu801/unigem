@@ -54,8 +54,8 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
  */
 $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($routes) {
     $routes->get('cart', 'Order::cart', ['as' => 'order_cart']);
-    $routes->get('checkout', 'Order::checkout', ['as' => 'order_checkout']);
-    $routes->post('checkout', 'Order::actionCheckout');
+    $routes->match(['GET', 'POST'], 'checkout', 'Checkout::index', ['as' => 'order_checkout']);
+
     $routes->get('success/([a-zA-Z0-9_-]+)', 'Order::orderSuccess/$1', ['as' => 'order_success']);
     $routes->get('payment/([a-zA-Z0-9_-]+)', 'Order::orderPayment/$1', ['as' => 'order_payment']);
     $routes->post('payment/([a-zA-Z0-9_-]+)', 'Order::actionOrderPayment/$1');

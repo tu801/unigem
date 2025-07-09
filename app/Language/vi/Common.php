@@ -5,6 +5,7 @@ return [
     'product_weight_unit'               => 'ct',
     'save_changes'                      => 'Lưu thay đổi',
     'customer'                          => 'Khách hàng',
+    'country'                           => 'Quốc gia',
 
     'edit'                              => 'Chỉnh sửa',
     'delete'                            => 'Xóa',

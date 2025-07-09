@@ -7,14 +7,10 @@
     <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
     <?php
-
-    use App\Enums\Store\Order\EDeliveryType;
-    use App\Enums\Store\Order\EPaymentStatus;
-
     if (getenv('CI_ENVIRONMENT') === 'development') : ?>
-    <meta name="robots" content="noindex, nofollow" />
+        <meta name="robots" content="noindex, nofollow" />
     <?php else: ?>
-    <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow" />
     <?php endif; ?>
 
     <!-- font -->
@@ -42,12 +38,12 @@
     <?= $this->renderSection('style') ?>
 
     <script type="text/javascript">
-    var site_url = '<?= base_url() ?>';
+        var site_url = '<?= base_url() ?>';
     </script>
 
 </head>
 
-<body class="preload-wrapper color-primary-4">
+<body class="preload-wrapper">
     <!-- RTL -->
     <!-- <a href="javascript:void(0);" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a> -->
     <!-- /RTL  -->
@@ -102,9 +98,9 @@
     <!-- /toolbarShopmb -->
 
     <?php if (!auth()->loggedIn()) : ?>
-    <!-- modal login -->
-    <?= $this->include($configs->view . '\components\modal-login') ?>
-    <!-- /modal login -->
+        <!-- modal login -->
+        <?= $this->include($configs->view . '\components\modal-login') ?>
+        <!-- /modal login -->
     <?php endif; ?>
 
     <!-- modal quick_view -->
@@ -137,29 +133,7 @@
     <script src="<?= base_url($configs->scriptsPath) ?>/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?= base_url('/themes/store/shop.js') ?>"></script>
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('.type-languages').on('change', function() {
-            var selectedOption = $(this).find('option:selected');
-            var redirectUrl = selectedOption.data('href');
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            }
-        });
-    });
-
-    const lang_id = '<?= $currentLang->id ?>';
-    const currency = '<?= $currentLang->currency_code ?>';
-    const exchange_rate = <?= getExchangeRate($currentLang->id) ?>;
-    const VietNamCountryId = <?= VIETNAM_COUNTRY_ID ?>;
-    const HomeDeliveryType = <?= EDeliveryType::HOME_DELIVERY ?>;
-
-    const messages = {
-        addItemToCartSuccess: '<?= lang('Order.addItemToCartSuccess') ?>',
-    };
-
-    ecomApp.mount("#ecomApp");
-    </script>
+    <?= $this->include($configs->view . '\components\main-scripts') ?>
 
     <?= $this->renderSection('scripts') ?>
 </body>
