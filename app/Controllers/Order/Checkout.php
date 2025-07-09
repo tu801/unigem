@@ -6,14 +6,19 @@ use App\Enums\Store\Order\EDeliveryType;
 use App\Enums\Store\Order\EOrderStatus;
 use App\Enums\Store\Order\EPaymentMethod;
 use App\Enums\Store\Order\EPaymentStatus;
+use App\Enums\Store\Product\EProductType;
 use App\Models\Country;
 use App\Models\Store\Order\OrderModel;
 use App\Models\Store\Product\ProductModel;
 use App\Models\Store\ShopModel;
+use App\Traits\Store\ShippingFee;
+use App\Traits\Store\UseVoucher;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
 class Checkout extends \App\Controllers\BaseController
 {
+    use ShippingFee, UseVoucher;
+
     protected $_productModel;
 
     public function __construct()
@@ -155,6 +160,40 @@ class Checkout extends \App\Controllers\BaseController
             }
             $totalAmount += $priceProductTotal;
             $subAmount   = $totalAmount;
+
+            // shipping bill
+            if ($inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
+                $totalShipFee  = $this->calculateShippingFee(
+                    $inputData['province_id'] ?? 0,
+                    $weightProductTotal
+                );
+                $totalAmount     += $totalShipFee;
+                $dataOrder['shipping_amount'] = $totalShipFee;
+            }
+
+            // discount
+            if (isset($inputData['voucher_code']) && !empty($inputData['voucher_code'])) {
+                $this->useVoucher($inputData['voucher_code'], $dataOrder, $totalAmount);
+                if (isset($dataOrder['discount_amount']) && $dataOrder['discount_amount'] > 0) {
+                    $totalAmount -= $dataOrder['discount_amount'];
+                }
+            }
+
+            // handle exchange rate
+            if ($this->currentLang->id > 1) {
+                $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
+                $dataOrder['sub_total']        = $subAmount;
+                $dataOrder['total']            = $totalAmount;
+                $dataOrder['exchange_rate']    = $exchangeRate->rate ?? 1;
+                $dataOrder['exchange_rate_id'] = $exchangeRate->id ?? 0;
+                $dataOrder['total_amount_vnd'] = round($totalAmount * ($exchangeRate->rate ?? 1), 2);
+            } else {
+                $dataOrder['sub_total']       = $subAmount;
+                $dataOrder['total']           = $totalAmount;
+                $dataOrder['exchange_rate']   = 1;
+                $dataOrder['exchange_rate_id'] = 0;
+                $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
+            }
 
             dd($dataOrder);
         } catch (DatabaseException $e) {
