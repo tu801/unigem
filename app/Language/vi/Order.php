@@ -1,9 +1,12 @@
 <?php
 return [
     'shopping_cart_title'     => 'Giỏ hàng',
+    'order_success_title'     => 'Đặt hàng thành công',
+    'order_information'       => 'Thông tin đơn hàng',
     'checkout'                => 'Thanh toán',
     'process_checkout'        => 'Tiến hành hanh toán',
     'order'                   => 'Đơn hàng',
+    'order_code'              => 'Mã đơn hàng',
     'product'                 => 'Sản phẩm',
     'bill_detail'             => 'Chi tiết Hóa đơn',
     'your_order'              => 'Đơn hàng của bạn',
@@ -18,6 +21,7 @@ return [
     'view_cart'               => 'Xem giỏ hàng',
     'check_out'               => 'Thanh toán',
     'cart_empty'              => 'Giỏ hàng của bạn đang trống',
+    'place_order'             => 'Đặt hàng',
 
     'discount'                => 'Giảm giá',
     'voucher_code'            => 'Mã giảm giá',
@@ -30,6 +34,8 @@ return [
     'product_total'             => 'Tổng',
     'sub_total'                 => 'Tạm tính',
     'guarantee_safe_checkout'   => 'Thanh toán an toàn qua',
+
+    'continue_shopping'          => 'Tiếp tục mua sắm',
 
     'cartSavingError'           => 'Lỗi lưu giỏ hàng, vui lòng thử lại sau.',
     'loginToCheckout'           => 'Vui lòng đăng nhập để thanh toán.',
@@ -81,5 +87,6 @@ return [
     'placeOrderSuccess'         => 'Đặt hàng thành công! Mã đơn hàng của bạn là: {0}',
 
     'newOrderPlaced'            => 'Đơn hàng mới đã được đặt: {0}',
+    'invalid_order'             => 'Đơn hàng không hợp lệ, vui lòng thử lại sau.',
 
 ];

@@ -18,6 +18,7 @@ echo $this->section('content');
 <!-- cart -->
 <section class="flat-spacing-11">
     <div class="container">
+        <?= view($configs->view . '\components\session-alert-block') ?>
 
         <div class="tf-page-cart-wrap">
             <div class="tf-page-cart-item">
@@ -244,5 +245,19 @@ echo $this->section('content');
 </section>
 <!-- End Cart Section -->
 
+<!-- recently view -->
+<?php
+if (isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0) {
+    // render view component
+    if (isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0) {
+        $recentlyViewSectionData = [
+            'sectionTitle' => lang('Product.recently_view_products'),
+            'productData' => $recentlyViewedProducts,
+            'currentLang' => $currentLang,
+        ];
+        echo view($configs->view . '\components\product\related_products', $recentlyViewSectionData);
+    }
+} ?>
+<!-- /recently view -->
 
 <?= $this->endSection() ?>

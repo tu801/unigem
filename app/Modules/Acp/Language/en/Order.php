@@ -2,7 +2,7 @@
 return [
     'page_title'       => 'Order Management',
     'add_title'        => 'Create Order',
-    'edit_title'       => 'Edit Order',
+    'edit_title'       => 'Process Order',
     'info_basic'       => 'Order Information',
     'customer_name'    => 'Customer Name',
     'phone'            => 'Phone Number',

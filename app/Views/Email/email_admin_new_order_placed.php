@@ -9,49 +9,73 @@
 </head>
 
 <body>
-    <p>Xin chào, có đơn hàng mới vừa được đặt với mã là # <?= $order->code ?></p>
+    <p style="line-height: 20px; font-size: 20px;">Xin chào, có đơn hàng mới vừa được đặt với mã là # <?= $order->code ?></p>
 
-    <b>Một số thông tin về đơn hàng</b>
+    <p style="line-height: 20px; font-size: 20px;"><b>Một số thông tin về đơn hàng</b></p>
 
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="width: 100%;" width="100%">
         <tbody>
             <tr>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     Mã đơn hàng:
                 </td>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
-                    <?= $order->code ?>
+                <td style="line-height: 20px; font-size: 20px; ">
+                    <a href="<?= base_url('acp/order/edit/' . $order->order_id) ?>" target="_blank" rel="noopener noreferrer">
+                        <?= $order->code ?>
+                    </a>
                 </td>
             </tr>
             <tr>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     Tên Khách Hàng:
                 </td>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     <?= $customer->cus_full_name ?>
                 </td>
             </tr>
             <tr>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     Số điện thoại:
                 </td>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     <?= $customer->cus_phone ?>
                 </td>
             </tr>
             <tr>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     Tổng tiền:
                 </td>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     <?= number_format($order->total_amount_vnd) ?> đ
                 </td>
             </tr>
             <tr>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
+                    Phương thức giao hàng:
+                </td>
+                <td style="line-height: 20px; font-size: 20px; ">
+                    <?php
+
+                    use App\Enums\Store\Order\EDeliveryType;
+
+                    switch ($order->delivery_type) {
+                        case EDeliveryType::HOME_DELIVERY:
+                            echo 'Giao hàng tận nhà';
+                            break;
+                        case EDeliveryType::PICK_UP:
+                            echo 'Nhận tại cửa hàng';
+                            break;
+                        default:
+                            echo 'Không xác định';
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td style="line-height: 20px; font-size: 20px; ">
                     Ngày đặt hàng:
                 </td>
-                <td style="line-height: 20px; font-size: 20px; width: 100%; height: 20px; margin: 0;" align="left" width="100%" height="20">
+                <td style="line-height: 20px; font-size: 20px; ">
                     <?= $order->created_at ?>
                 </td>
             </tr>

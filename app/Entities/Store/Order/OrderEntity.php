@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Entities\Store\Order;
 
 use CodeIgniter\Entity\Entity;
 use App\Enums\Store\Order\EOrderStatus;
 use App\Models\Country;
+use App\Models\LangModel;
 use App\Models\Store\DistrictModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\ShopModel;
@@ -12,6 +14,7 @@ use App\Models\Store\WardModel;
 class OrderEntity extends Entity
 {
     protected $full_delivery_address;
+    protected $lang;
 
     public function getDeliveryInfo()
     {
@@ -43,14 +46,14 @@ class OrderEntity extends Entity
         $district = model(DistrictModel::class)->find($this->delivery_info->district_id);
         $ward     = model(WardModel::class)->find($this->delivery_info->ward_id);
 
-        if ( $country->id != 200 ) {
+        if ($country->id != 200) {
             $this->full_delivery_address = $this->delivery_info->cus_address . ', ' . $country->name;
             return $this->full_delivery_address;
         }
         $this->full_delivery_address = $this->delivery_info->cus_address;
-        $this->full_delivery_address .= isset($ward['id']) ? ', '.$ward['full_name'] : '';
-        $this->full_delivery_address .= isset($district['id']) ? ', '.$district['full_name'] : '';
-        $this->full_delivery_address .= isset($province['id']) ? ', '.$province['full_name'] : '';
+        $this->full_delivery_address .= isset($ward['id']) ? ', ' . $ward['full_name'] : '';
+        $this->full_delivery_address .= isset($district['id']) ? ', ' . $district['full_name'] : '';
+        $this->full_delivery_address .= isset($province['id']) ? ', ' . $province['full_name'] : '';
 
         return $this->full_delivery_address;
     }
@@ -79,5 +82,16 @@ class OrderEntity extends Entity
         }
 
         return $statusText;
+    }
+
+    public function getLang()
+    {
+        if (!isset($this->attributes['lang_id'])) {
+            return false;
+        }
+        if (empty($this->lang)) {
+            $this->lang = model(LangModel::class)->find($this->attributes['lang_id']);
+        }
+        return $this->lang;
     }
 }

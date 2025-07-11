@@ -19,18 +19,7 @@ echo $this->section('content');
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <?php if (session()->has('errors')) : ?>
-                    <ul class="alert alert-danger alert-dismissible text-danger">
-                        <?php foreach (session('errors') as $error) : ?>
-                            <li><?= $error ?></li>
-                        <?php endforeach ?>
-                    </ul>
-                <?php endif ?>
-                <?php if (session()->has('message')) : ?>
-                    <div class="alert alert-success">
-                        <?= session('message') ?>
-                    </div>
-                <?php endif ?>
+                <?= view($configs->view . '\components\session-alert-block') ?>
 
                 <div class="my-account-content account-edit">
                     <div class="">

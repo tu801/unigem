@@ -20,6 +20,7 @@ class Cart extends BaseController
      */
     public function index()
     {
+        $this->_data['recentlyViewedProducts'] = cache()->get('viewedProducts_' . $this->request->getIPAddress());
         return $this->_render('order/cart', $this->_data);
     }
 

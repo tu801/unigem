@@ -22,18 +22,7 @@ echo $this->section('content');
 <!-- checkout -->
 <section class="flat-spacing-11">
     <div class="container">
-        <?php if (session()->has('errors')) : ?>
-            <ul class="alert alert-danger alert-dismissible text-danger">
-                <?php foreach (session('errors') as $error) : ?>
-                    <li><?= $error ?></li>
-                <?php endforeach ?>
-            </ul>
-        <?php endif ?>
-        <?php if (session()->has('message')) : ?>
-            <div class="alert alert-success">
-                <?= session('message') ?>
-            </div>
-        <?php endif ?>
+        <?= view($configs->view . '\components\session-alert-block') ?>
 
         <form action="<?= route_to('order_checkout') ?>" method="post" id="checkoutForm">
             <?= csrf_field() ?>
@@ -175,12 +164,13 @@ echo $this->section('content');
 
                                 <p class="text_black-2 mb_20"><?= lang('Order.payment_currency_policy') ?></p>
                                 <!-- <div class="box-checkbox fieldset-radio mb_20">
-                                <input type="checkbox" id="check-agree" class="tf-check">
-                                <label for="check-agree" class="text_black-2">I have read and agree to the
-                                    website <a href="terms-conditions.html" class="text-decoration-underline">terms and conditions</a>.</label>
-                            </div> -->
+                                    <input type="checkbox" id="check-agree" class="tf-check">
+                                    <label for="check-agree" class="text_black-2">I have read and agree to the
+                                        website <a href="terms-conditions.html" class="text-decoration-underline">terms and conditions</a>.</label>
+                                </div> -->
+                                <input type="hidden" name="verify_code" :value="order.verify_code" />
                             </div>
-                            <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"><?= lang('Order.check_out') ?></button>
+                            <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"><?= lang('Order.place_order') ?></button>
                         </div>
                     </div>
                 </div>
@@ -188,8 +178,22 @@ echo $this->section('content');
         </form>
     </div>
 </section>
-
 <!-- /checkout -->
+
+<!-- recently view -->
+<?php
+if (isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0) {
+    // render view component
+    if (isset($recentlyViewedProducts) && count($recentlyViewedProducts) > 0) {
+        $recentlyViewSectionData = [
+            'sectionTitle' => lang('Product.recently_view_products'),
+            'productData' => $recentlyViewedProducts,
+            'currentLang' => $currentLang,
+        ];
+        echo view($configs->view . '\components\product\related_products', $recentlyViewSectionData);
+    }
+} ?>
+<!-- /recently view -->
 
 <?= $this->endSection() ?>
 

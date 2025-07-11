@@ -14,6 +14,7 @@ const ecomApp = Vue.createApp({
         voucher_code: "",
         currency: "VND", // Default currency
         exchange_rate: 1, // Default exchange rate
+        verify_code: "",
       },
       carts: [],
       bill: {
@@ -29,6 +30,89 @@ const ecomApp = Vue.createApp({
     };
   },
   methods: {
+    // Generate unique verify code
+    generateVerifyCode() {
+      const timestamp = Date.now().toString();
+      const random = Math.random().toString(36).substring(2, 8);
+      return timestamp + random;
+    },
+
+    // Initialize verify code
+    initVerifyCode() {
+      if (!this.order.verify_code) {
+        this.order.verify_code = this.generateVerifyCode();
+        this.saveVerifyCodeToStorage();
+      }
+    },
+
+    // Save verify code to localStorage
+    saveVerifyCodeToStorage() {
+      try {
+        localStorage.setItem(
+          "UnigemVerifyCode_" + this.order.lang_id,
+          this.order.verify_code
+        );
+      } catch (error) {
+        console.error("Error saving verify code to localStorage:", error);
+      }
+    },
+
+    // Get verify code from localStorage
+    getVerifyCodeFromStorage() {
+      try {
+        const verifyCode = localStorage.getItem(
+          "UnigemVerifyCode_" + this.order.lang_id
+        );
+        return verifyCode;
+      } catch (error) {
+        console.error("Error getting verify code from localStorage:", error);
+        return null;
+      }
+    },
+
+    // Clear cart and verify code
+    clearCart() {
+      try {
+        // Clear cart data
+        localStorage.removeItem("UnigemCart_" + this.order.lang_id);
+        localStorage.removeItem("UnigemOrder_" + this.order.lang_id);
+        localStorage.removeItem("UnigemCartVoucher_" + this.order.lang_id);
+        localStorage.removeItem("UnigemVerifyCode_" + this.order.lang_id);
+
+        // Reset data
+        this.carts = [];
+        this.voucher = null;
+        this.order.note = "";
+        this.order.voucher_code = "";
+        this.order.verify_code = "";
+
+        // Generate new verify code for next session
+        this.initVerifyCode();
+
+        this.charge();
+
+        console.log("Cart cleared successfully");
+      } catch (error) {
+        console.error("Error clearing cart:", error);
+      }
+    },
+
+    // Check URL params for verify_code (for success page)
+    checkUrlForVerifyCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const verifyCodeFromUrl = urlParams.get("verify_code");
+
+      if (verifyCodeFromUrl) {
+        // Verify if the code matches the stored one
+        const storedVerifyCode = this.getVerifyCodeFromStorage();
+        console.log("Verify code from URL:", verifyCodeFromUrl);
+        console.log("Stored verify code:", storedVerifyCode);
+        if (verifyCodeFromUrl === storedVerifyCode) {
+          this.clearCart();
+        }
+      }
+    },
+
     // local storage
     addProductToCartLocalStorage(product_id) {
       let carts = this.getCartLocalStorage();
@@ -71,7 +155,7 @@ const ecomApp = Vue.createApp({
       try {
         // retrieve order data
         const orderData = localStorage.getItem(
-          "UnigemcOrder_" + this.order.lang_id
+          "UnigemOrder_" + this.order.lang_id
         );
         if (orderData) {
           this.order.note = JSON.parse(orderData).note || "";
@@ -79,35 +163,44 @@ const ecomApp = Vue.createApp({
 
         // retrieve cart voucher data
         const voucherData = localStorage.getItem(
-          "UnigemcCartVoucher_" + this.order.lang_id
+          "UnigemCartVoucher_" + this.order.lang_id
         );
         if (voucherData) {
           this.voucher = JSON.parse(voucherData);
         }
 
+        // retrieve verify code
+        const verifyCode = this.getVerifyCodeFromStorage();
+        if (verifyCode) {
+          this.order.verify_code = verifyCode;
+        }
+
         const localCartData = localStorage.getItem(
-          "UnigemcCart_" + this.order.lang_id
+          "UnigemCart_" + this.order.lang_id
         );
         return localCartData ? JSON.parse(localCartData) : [];
       } catch (error) {
         console.error("Error parsing cart data from localStorage:", error);
         // Clear corrupted data and return empty array
-        localStorage.removeItem("UnigemcCart_" + this.order.lang_id);
+        localStorage.removeItem("UnigemCart_" + this.order.lang_id);
         return [];
       }
     },
     setCartLocalStorage(carts) {
       try {
         localStorage.setItem(
-          "UnigemcCart_" + this.order.lang_id,
+          "UnigemCart_" + this.order.lang_id,
           JSON.stringify(carts)
         );
 
         // handle order data
         localStorage.setItem(
-          "UnigemcOrder_" + this.order.lang_id,
+          "UnigemOrder_" + this.order.lang_id,
           JSON.stringify({ note: this.order.note })
         );
+
+        // save verify code
+        this.saveVerifyCodeToStorage();
       } catch (error) {
         console.error("Error saving cart data to localStorage:", error);
         toastr.error(shopMessages.cartSavingError);
@@ -182,6 +275,12 @@ const ecomApp = Vue.createApp({
     recoverCart() {
       let cartStorage = this.getCartLocalStorage();
       let productListID = cartStorage.map((item) => item.product_id);
+
+      // Initialize verify code if cart is empty or no verify code exists
+      if (productListID.length === 0 || !this.order.verify_code) {
+        this.initVerifyCode();
+      }
+
       if (productListID.length > 0) {
         this.fetchProduct(productListID);
       }
@@ -364,6 +463,9 @@ const ecomApp = Vue.createApp({
     this.order.currency = currency;
     this.order.exchange_rate = exchange_rate;
 
+    // Check URL for verify_code (for order success page)
+    this.checkUrlForVerifyCode();
+
     // check if customer is logged in
     this.getCustomer();
 
@@ -394,7 +496,7 @@ const ecomApp = Vue.createApp({
       // Update note data in localStorage
       try {
         localStorage.setItem(
-          "UnigemcOrder_" + this.order.lang_id,
+          "UnigemOrder_" + this.order.lang_id,
           JSON.stringify({ note: this.order.note })
         );
       } catch (error) {
@@ -406,7 +508,7 @@ const ecomApp = Vue.createApp({
       // Update voucher data in localStorage
       try {
         localStorage.setItem(
-          "UnigemcCartVoucher_" + this.order.lang_id,
+          "UnigemCartVoucher_" + this.order.lang_id,
           JSON.stringify(newValue)
         );
       } catch (error) {

@@ -56,10 +56,10 @@ class Checkout extends \App\Controllers\BaseController
 
         if ($this->request->getPost()) {
             // Handle the checkout form submission
-            $this->handleCheckoutFormSubmit();
+            return $this->handleCheckoutFormSubmit();
         }
 
-
+        $this->_data['recentlyViewedProducts'] = cache()->get('viewedProducts_' . $this->request->getIPAddress());
         $this->_data['countries'] = model(Country::class)->getCountries();
         // Render the checkout view
         return $this->_render('order/checkout', $this->_data);
@@ -71,6 +71,11 @@ class Checkout extends \App\Controllers\BaseController
         // Validate the input, process the order, etc.
         // Redirect or return a response as needed
         $inputData = $this->request->getPost();
+
+        if (!isset($inputData['verify_code']) || empty($inputData['verify_code'])) {
+            return redirect()->back()->withInput()->with('errors', lang('Order.invalid_order'));
+        }
+
         [$rules, $errMess] = $this->getValidationRules();
 
         if (isset($inputData['delivery_type']) && $inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
@@ -100,10 +105,10 @@ class Checkout extends \App\Controllers\BaseController
             $orderCode = $this->_model->generateCode();
 
             $dataOrder = [
-                'user_init'      => 0,
+                'user_init'      => $this->user->id,
                 'lang_id'        => $this->currentLang->id,
                 'customer_id'    => $customerData->id,
-                'shop_id'        => $shop->id,
+                'shop_id'        => $shop->shop_id,
                 'code'           => $orderCode,
                 'title'          => $inputData['title'] ?? $orderCode,
                 'note'           => $inputData['note'] ?? '',
@@ -203,21 +208,21 @@ class Checkout extends \App\Controllers\BaseController
             }
 
             // save order
-            $orderID = $this->_model->insert($dataOrder);
+            $this->_model->insert($dataOrder);
+            $newOrderItem = $this->_model->where('code', $dataOrder['code'])->first();
+
             // save order items
             foreach ($orderItems as $item) {
-                $item['order_id'] = $orderID;
+                $item['order_id'] = $newOrderItem->order_id;
                 $this->_orderItemModel->insert($item);
             }
-
-            $item = $this->_model->where('order_id', $orderID)->first();
 
             //log Action
             $logData = [
                 'title'        => 'Customer #' . $customerData->cus_code . ' placed order #' . $dataOrder['code'],
                 'description'  => lang('Order.create_order_log_desc', [$customerData->cus_code, $dataOrder['code']]),
-                'properties'   => $item->toArray(),
-                'subject_id'   => $item->order_id,
+                'properties'   => $newOrderItem->toArray(),
+                'subject_id'   => $newOrderItem->order_id,
                 'subject_type' => OrderModel::class,
             ];
             $this->logAction($logData);
@@ -225,9 +230,11 @@ class Checkout extends \App\Controllers\BaseController
             $this->db->transCommit();
 
             // send email 
-            $this->sendOrderEmail($item, $customerData);
+            $this->sendOrderEmail($newOrderItem, $customerData);
 
-            return redirect()->route('order_success', [$item->code])->with('message', lang('Order.placeOrderSuccess', [$item->code]));
+            $orderSuccessUrl = base_url();
+            return redirect()->to(route_to('order_success', $newOrderItem->code) . '?verify_code=' . $inputData['verify_code'])
+                ->with('message', lang('Order.placeOrderSuccess', [$newOrderItem->code]));
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());

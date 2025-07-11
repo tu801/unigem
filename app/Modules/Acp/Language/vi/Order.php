@@ -2,7 +2,7 @@
 return [
     'page_title'       => 'Quản lý đơn hàng',
     'add_title'        => 'Tạo đơn hàng',
-    'edit_title'       => 'Sửa đơn hàng',
+    'edit_title'       => 'Xử lý đơn hàng',
     'info_basic'       => 'Thông Tin đơn hàng',
     'customer_name'    => 'Tên Khách Hàng',
     'phone'            => 'Số điện thoại',
