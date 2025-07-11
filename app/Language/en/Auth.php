@@ -126,4 +126,5 @@ return [
 
     // Permissions
     'unknownPermission' => '{0} is not a valid permission.',
+    'login_required'    => 'You need to log in to perform this action.',
 ];

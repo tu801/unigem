@@ -64,5 +64,4 @@ return [
     'toolbar_bottom_search'             => 'Search',
     'toolbar_bottom_account'            => 'Account',
     'toolbar_bottom_cart'               => 'Cart',
-
 ];
