@@ -55,14 +55,13 @@ $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], functio
 $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($routes) {
     $routes->get('cart', 'Cart::index', ['as' => 'order_cart']);
 
-    $routes->get('checkout', 'Cart::checkout', ['as' => 'checkout_page']);
+    $routes->match(['GET', 'POST'], 'checkout', 'Checkout::index', ['as' => 'order_checkout']);
 
-    $routes->post('checkout', 'Order::actionCheckout');
     $routes->get('success/([a-zA-Z0-9_-]+)', 'Order::orderSuccess/$1', ['as' => 'order_success']);
+
     $routes->get('payment/([a-zA-Z0-9_-]+)', 'Order::orderPayment/$1', ['as' => 'order_payment']);
     $routes->post('payment/([a-zA-Z0-9_-]+)', 'Order::actionOrderPayment/$1');
     $routes->get('get-product', 'Order::getProduct');
-    $routes->get('apply-voucher', 'Order::applyVoucher');
 });
 
 // ajax routes
@@ -78,6 +77,7 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
         $routes->post('login', 'CustomerController::login');
         $routes->post('forgot-password', 'CustomerController::forgotPassword');
         $routes->get('logout', 'CustomerController::logout');
+        $routes->get('get-customer', 'CustomerController::getCustomer');
     });
 
     $routes->group('product', null, function ($routes) {
@@ -87,6 +87,7 @@ $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($
 
     $routes->group('order', null, function ($routes) {
         $routes->get('get-products', 'OrderController::getProducts');
+        $routes->get('apply-voucher', 'OrderController::ajaxApplyVoucher');
     });
 });
 

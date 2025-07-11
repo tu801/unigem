@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Ajax\Controllers;
 
 use App\Models\Store\Customer\CustomerModel;
@@ -11,7 +12,8 @@ use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\IncomingRequest;
 use App\Traits\Customer\CustomerValidationRules;
 
-class CustomerController extends AjaxBaseController {
+class CustomerController extends AjaxBaseController
+{
     use Viewable, CustomerValidationRules;
 
     public function __construct()
@@ -21,7 +23,8 @@ class CustomerController extends AjaxBaseController {
         $this->_model = model(CustomerModel::class);
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->checkSpam();
 
         if (!auth()->loggedIn()) {
@@ -38,7 +41,8 @@ class CustomerController extends AjaxBaseController {
         ]);
     }
 
-    public function login() {
+    public function login()
+    {
         $this->checkSpam();
 
         if (auth()->loggedIn()) {
@@ -78,8 +82,8 @@ class CustomerController extends AjaxBaseController {
                 ]);
             }
 
-            $user = $authenticator->getUser(); 
-            
+            $user = $authenticator->getUser();
+
             if ($user === null) {
                 return $this->respond([
                     'code' => '401',
@@ -104,7 +108,7 @@ class CustomerController extends AjaxBaseController {
                 ]
             ]);
         } catch (\Exception $e) {
-            $message = $authenticator->isPending() ? 
+            $message = $authenticator->isPending() ?
                 lang('Auth.activationBlocked') :
                 lang('Common.somethingWentWrong');
 
@@ -115,7 +119,8 @@ class CustomerController extends AjaxBaseController {
         }
     }
 
-    public function forgotPassword() {
+    public function forgotPassword()
+    {
         $this->checkSpam();
 
         if (auth()->loggedIn()) {
@@ -127,7 +132,7 @@ class CustomerController extends AjaxBaseController {
 
         // Check if the user exists
         $email = $this->request->getPost('email');
-        
+
         if (empty($email)) {
             return $this->respond([
                 'code' => '400',
@@ -151,7 +156,7 @@ class CustomerController extends AjaxBaseController {
                 'message' => lang('Auth.invalidEmail')
             ]);
         }
-        
+
         // check if the user is active
         if ($user->active == CustomerActiveEnum::INACTIVE) {
             return $this->respond([
@@ -159,7 +164,7 @@ class CustomerController extends AjaxBaseController {
                 'message' => lang('Auth.needVerification')
             ]);
         }
-        
+
         /** @var UserIdentityModel $identityModel */
         $identityModel = model(UserIdentityModel::class);
 
@@ -169,7 +174,7 @@ class CustomerController extends AjaxBaseController {
             'user_id' => $user->id
         ])->first();
 
-        if ( isset( $checkIdentity->id) && !Time::now()->isAfter($checkIdentity->expires)) {
+        if (isset($checkIdentity->id) && !Time::now()->isAfter($checkIdentity->expires)) {
             return $this->respond([
                 'code' => '200',
                 'message' => lang('Auth.forgotPasswordSuccess')
@@ -225,6 +230,43 @@ class CustomerController extends AjaxBaseController {
         return $this->respond([
             'code' => '200',
             'message' => lang('Auth.forgotPasswordSuccess')
+        ]);
+    }
+
+    public function getCustomer()
+    {
+        $this->checkSpam();
+
+        if (!auth()->loggedIn()) {
+            return $this->respond([
+                'code' => 400,
+                'message' => lang('Auth.login_required')
+            ]);
+        }
+
+        $user = auth()->user();
+        $customer = $this->_model->queryCustomerByUserId($user->id)->first();
+
+        if (empty($customer)) {
+            return $this->respond([
+                'code' => 404,
+                'message' => lang('Auth.login_required')
+            ]);
+        }
+
+        return $this->respond([
+            'code' => 200,
+            'customerData' => [
+                'customer_id' => $customer->cus_id,
+                'full_name' => $customer->cus_full_name,
+                'phone' => $customer->cus_phone,
+                'email' => $customer->cus_email,
+                'address' => $customer->cus_address,
+                'country_id' => $customer->country_id,
+                'province_id' => $customer->province_id,
+                'district_id' => $customer->district_id,
+                'ward_id' => $customer->ward_id
+            ]
         ]);
     }
 }

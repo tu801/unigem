@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Acp\Controllers\Traits;
+namespace App\Traits\Store;
 
 trait ShippingFee
 {

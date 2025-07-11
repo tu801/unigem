@@ -3,9 +3,12 @@
 namespace Modules\Ajax\Controllers;
 
 use App\Models\Store\Product\ProductModel;
+use App\Traits\Store\UseVoucher;
 
 class OrderController extends AjaxBaseController
 {
+    use UseVoucher;
+
     public function __construct()
     {
         parent::__construct();
@@ -50,6 +53,33 @@ class OrderController extends AjaxBaseController
         return $this->respond([
             'status' => 200,
             'data' => $productData
+        ]);
+    }
+
+    public function applyVoucher()
+    {
+        $this->checkSpam();
+        $voucherCode = $this->request->getGet('voucher_code');
+
+        if (empty($voucherCode)) {
+            return $this->respond([
+                'status' => 400,
+                'message' => lang('Order.voucher_code_required')
+            ]);
+        }
+
+        // Assuming you have a method to validate the voucher code
+        $voucher = model(\App\Models\Store\VoucherModel::class)->validateVoucher($voucherCode);
+        if (!$voucher) {
+            return $this->respond([
+                'status' => 404,
+                'message' => lang('Voucher.voucher_not_found')
+            ]);
+        }
+
+        return $this->respond([
+            'status' => 200,
+            'data' => $voucher
         ]);
     }
 }

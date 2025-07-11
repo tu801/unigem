@@ -1,61 +1,82 @@
 <?php
 
-namespace Modules\Acp\Controllers\Store\Order;
+namespace App\Controllers\Order;
 
 use App\Enums\Store\Order\EDeliveryType;
 use App\Enums\Store\Order\EOrderStatus;
 use App\Enums\Store\Order\EPaymentMethod;
 use App\Enums\Store\Order\EPaymentStatus;
 use App\Enums\Store\Product\EProductType;
-use App\Enums\Store\ShopEnum;
+use App\Models\Country;
+use App\Models\Store\ExchangeRateModel;
+use App\Models\Store\Order\OrderItemModel;
 use App\Models\Store\Order\OrderModel;
-use CodeIgniter\Database\Exceptions\DatabaseException;
-use Modules\Acp\Controllers\Store\Order\OrderController;
+use App\Models\Store\Product\ProductModel;
+use App\Models\Store\ShopModel;
+use App\Traits\Store\PlaceOrderEmail;
 use App\Traits\Store\ShippingFee;
 use App\Traits\Store\UseVoucher;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
-class CreateOrderController extends OrderController
+class Checkout extends \App\Controllers\BaseController
 {
-    use ShippingFee, UseVoucher;
+    use ShippingFee, UseVoucher, PlaceOrderEmail;
+
+    protected $_productModel;
+    protected $_exchangeRateModel;
+    protected $_orderItemModel;
 
     public function __construct()
     {
         parent::__construct();
+        // Load necessary models or libraries if needed
+        $this->page_title = lang('Order.checkout');
 
-        $this->_data['title'] = lang("Order.add_title");
+        $this->_model = model(OrderModel::class);
+        $this->_productModel = model(ProductModel::class);
+        $this->_exchangeRateModel = model(ExchangeRateModel::class);
+        $this->_orderItemModel = model(OrderItemModel::class);
+
+        // check customer logged in
+        return $this->checkCustomerLoggedIn();
     }
 
     /**
-     * show add order form
+     * Show the checkout page.
      */
-    public function addOrder()
+    public function index()
     {
-        $shops = $this->_shopModel->where('status', ShopEnum::STATUS['active'])->findAll();
-        $exchangeRate = $this->_exchangeRateModel->getExchangeRate($this->currentLang->currency_code);
+        $this->page_title = lang('Order.checkout');
+        $this->_data['page_title'] = $this->page_title;
 
-        $this->_data['shops']    = $shops;
-        $this->_data['title'] = lang("Order.add_title");
-        $this->_data['exchangeRate'] = isset($exchangeRate->rate) ? $exchangeRate->rate : 1; // Default exchange rate is 1 if not set
-        $this->_data['countries'] = $this->_countryModel->getCountries();
-        $this->_render('\store\order\add', $this->_data);
+        // Check if the user is logged in
+        if (!auth()->loggedIn()) {
+            return redirect()->to(route_to('cus_login'))->with('error', lang('Order.loginRequired'));
+        }
+
+        if ($this->request->getPost()) {
+            // Handle the checkout form submission
+            $this->handleCheckoutFormSubmit();
+        }
+
+
+        $this->_data['countries'] = model(Country::class)->getCountries();
+        // Render the checkout view
+        return $this->_render('order/checkout', $this->_data);
     }
 
-    /**
-     * handle add order form submission
-     */
-    public function addAction()
+    public function handleCheckoutFormSubmit()
     {
+        // Handle the form submission logic here
+        // Validate the input, process the order, etc.
+        // Redirect or return a response as needed
         $inputData = $this->request->getPost();
-        $rules     = $this->ruleValidate();
-        $errMess   = $this->messageValidate();
+        [$rules, $errMess] = $this->getValidationRules();
 
         if (isset($inputData['delivery_type']) && $inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
             $rules['ship_full_name'] = 'required';
             $rules['ship_telephone'] = 'required';
-            $rules['province_id'] = 'required';
-            $rules['district_id'] = 'required';
-            $rules['ward_id']     = 'required';
-            $rules['address']     = 'required';
+            $rules['country_id'] = 'required';
 
             $errMess['ship_full_name'] = [
                 'required' => lang('Order.ship_full_name_required'),
@@ -63,10 +84,6 @@ class CreateOrderController extends OrderController
             $errMess['ship_telephone'] = [
                 'required' => lang('Order.ship_telephone_required'),
             ];
-        }
-        if ($inputData['customer_id'] == 0) {
-            $rules['phone']     = 'required|is_unique[customer.cus_phone]';
-            $rules['email']     = 'permit_empty|valid_email|is_unique[customer.cus_email]';
         }
 
         //validate the input
@@ -76,38 +93,26 @@ class CreateOrderController extends OrderController
 
         try {
             $this->db->transBegin();
-
-            // create customer if not exists
-            if ($inputData['customer_id'] > 0) {
-                $customerData = $this->_customerModel->find($inputData['customer_id']);
-            } else {
-                $customerData = $this->_customerModel->createOrderCustomer($inputData);
-            }
+            $customerData = $this->_data['customer'];
 
             // prepare data order
+            $shop = model(ShopModel::class)->getDefaultShop();
+            $orderCode = $this->_model->generateCode();
+
             $dataOrder = [
-                'user_init'      => $this->user->id,
+                'user_init'      => 0,
                 'lang_id'        => $this->currentLang->id,
                 'customer_id'    => $customerData->id,
-                'shop_id'        => $inputData['shop_id'],
-                'code'           => $this->_model->generateCode(),
-                'title'          => $inputData['title'],
-                'note'           => $inputData['note'],
-                'delivery_type'  => $inputData['delivery_type'],
+                'shop_id'        => $shop->id,
+                'code'           => $orderCode,
+                'title'          => $inputData['title'] ?? $orderCode,
+                'note'           => $inputData['note'] ?? '',
+                'delivery_type'  => $inputData['delivery_type'] ?? EDeliveryType::PICK_UP,
                 'status'         => $inputData['status'] ?? EOrderStatus::OPEN,
                 'payment_status' => $inputData['payment_status'] ?? EPaymentStatus::UNPAID,
-                'payment_method' => $inputData['payment_method'] ?? EPaymentMethod::BANK_TRANSFER,
+                'payment_method' => $inputData['payment_method'] ?? EPaymentMethod::CASH,
                 'currency'       => $this->currentLang->currency_code,
             ];
-
-            if ($inputData['status'] == EOrderStatus::COMPLETE && $inputData['payment_status'] != EPaymentStatus::PAID) {
-                $this->db->transRollback();
-                return redirect()->back()->withInput()->with('errors', ['status' => lang('Order.success_if_payment_paid')]);
-            }
-
-            if ($inputData['payment_status'] == EPaymentStatus::DEPOSIT) {
-                $dataOrder['customer_paid'] = $inputData['customer_paid'];
-            }
 
             if ($inputData['delivery_type'] == EDeliveryType::HOME_DELIVERY) {
                 $dataOrder['delivery_info'] = json_encode([
@@ -118,15 +123,15 @@ class CreateOrderController extends OrderController
                     'province_id'       => $inputData['province_id'] ?? 0,
                     'district_id'       => $inputData['district_id'] ?? 0,
                     'ward_id'           => $inputData['ward_id'] ?? 0,
-                    'cus_address'       => $inputData['address'],
+                    'cus_address'       => $inputData['ship_address'],
                 ]);
             }
 
             // customer
             $dataOrder['customer_info'] = json_encode([
-                'name'          => $customerData->cus_full_name,
-                'phone'         => $customerData->cus_phone,
-                'email'         => $customerData->cus_email,
+                'name'          => $inputData['customer_name'] ?? $customerData->cus_full_name,
+                'phone'         => $inputData['customer_phone'] ?? $customerData->cus_phone,
+                'email'         => $inputData['customer_email'] ?? $customerData->cus_email,
                 'country_id'    => $customerData->country_id,
                 'province_id'   => $customerData->province_id,
                 'district_id'   => $customerData->district_id,
@@ -197,14 +202,8 @@ class CreateOrderController extends OrderController
                 $dataOrder['total_amount_vnd'] = round($totalAmount, 2);
             }
 
-            if ($inputData['payment_status'] == EPaymentStatus::PAID && $inputData['customer_paid'] != $totalAmount) {
-                $this->db->transRollback();
-                return redirect()->back()->withInput()->with('errors', ['customer_paid' => lang('Order.payment_paid_if_customer_paid', [number_format($totalAmount)])]);
-            }
-            $dataOrder['customer_paid'] = $inputData['customer_paid'] ?? 0;
             // save order
             $orderID = $this->_model->insert($dataOrder);
-
             // save order items
             foreach ($orderItems as $item) {
                 $item['order_id'] = $orderID;
@@ -215,8 +214,8 @@ class CreateOrderController extends OrderController
 
             //log Action
             $logData = [
-                'title'        => 'Create order #' . $dataOrder['code'],
-                'description'  => lang('Order.create_order_log_desc', [$this->user->username, $dataOrder['code']]),
+                'title'        => 'Customer #' . $customerData->cus_code . ' placed order #' . $dataOrder['code'],
+                'description'  => lang('Order.create_order_log_desc', [$customerData->cus_code, $dataOrder['code']]),
                 'properties'   => $item->toArray(),
                 'subject_id'   => $item->order_id,
                 'subject_type' => OrderModel::class,
@@ -225,12 +224,39 @@ class CreateOrderController extends OrderController
 
             $this->db->transCommit();
 
-            if (isset($inputData['save'])) return redirect()->route('edit_order', [$item->order_id])->with('message', lang('Order.addSuccess', [$item->code]));
-            else if (isset($inputData['save_exit'])) return redirect()->route('order')->with('message', lang('Order.addSuccess', [$item->code]));
-            else if (isset($inputData['save_addnew'])) return redirect()->route('add_order')->with('message', lang('Order.addSuccess', [$item->code]));
+            // send email 
+            $this->sendOrderEmail($item, $customerData);
+
+            return redirect()->route('order_success', [$item->code])->with('message', lang('Order.placeOrderSuccess', [$item->code]));
         } catch (DatabaseException $e) {
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $this->_model->errors());
         }
+    }
+
+    public function getValidationRules()
+    {
+        $rules = [
+            'customer_name' => 'required',
+            'customer_phone' => 'required',
+            'customer_email' => 'permit_empty|valid_email',
+            'delivery_type' => 'required',
+        ];
+
+        $errMess = [
+            'customer_name' => [
+                'required' => lang('Order.customer_name_required'),
+            ],
+            'customer_phone' => [
+                'required' => lang('Order.customer_phone_required'),
+            ],
+            'customer_email' => [
+                'valid_email' => lang('Order.customer_email_valid'),
+            ],
+            'delivery_type' => [
+                'required' => lang('Order.delivery_type_required'),
+            ],
+        ];
+        return [$rules, $errMess];
     }
 }

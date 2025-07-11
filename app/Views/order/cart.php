@@ -93,6 +93,17 @@ echo $this->section('content');
                             <h3><?= lang('Order.sub_total') ?></h3>
                             <span class="total-value">{{ formatCurrency(bill.sub_total) }}</span>
                         </div>
+
+                        <div class="tf-cart-totals-discounts" v-if="bill.discount > 0">
+                            <h3><?= lang('Order.discount') ?></h3>
+                            <span class="total-value">{{ formatCurrency(bill.discount) }}</span>
+                        </div>
+
+                        <div class="tf-cart-totals-discounts" v-if="bill.discount > 0">
+                            <h3><?= lang('Order.order_total') ?></h3>
+                            <span class="total-value">{{ formatCurrency(bill.total) }}</span>
+                        </div>
+
                         <!-- <p class="tf-cart-tax">
                             Taxes and <a href="shipping-delivery.html">shipping</a> calculated at checkout
                         </p>
@@ -112,7 +123,7 @@ echo $this->section('content');
                         </div>
 
                         <div class="cart-checkout-btn">
-                            <a href="#checkout" @click.prevent="checkout()"
+                            <a href="<?= route_to('order_checkout') ?>" @click.prevent="checkout($event)"
                                 class="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center">
                                 <span><?= lang('Order.check_out') ?></span>
                             </a>

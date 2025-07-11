@@ -77,6 +77,14 @@ const ecomApp = Vue.createApp({
           this.order.note = JSON.parse(orderData).note || "";
         }
 
+        // retrieve cart voucher data
+        const voucherData = localStorage.getItem(
+          "UnigemcCartVoucher_" + this.order.lang_id
+        );
+        if (voucherData) {
+          this.voucher = JSON.parse(voucherData);
+        }
+
         const localCartData = localStorage.getItem(
           "UnigemcCart_" + this.order.lang_id
         );
@@ -213,6 +221,15 @@ const ecomApp = Vue.createApp({
         currency: "USD",
       }).format(value);
     },
+    calculateFinalProductPrice(product) {
+      // Calculate the final price of a product based on its discount
+      const priceDiscount = Number(product.price_discount);
+      const price = Number(product.price);
+      const finalPrice =
+        priceDiscount > 0 && priceDiscount < price ? priceDiscount : price;
+
+      return finalPrice;
+    },
     charge() {
       let sub_total = 0;
       let total = 0;
@@ -223,14 +240,10 @@ const ecomApp = Vue.createApp({
       let shipFeeProvince = this.bill.ship_fee_province;
       // product bill
       this.carts.forEach((item) => {
-        const price = Number(
-          item.price_discount > 0 && item.price_discount < item.price
-            ? item.price_discount
-            : item.price
-        );
+        const finalPrice = this.calculateFinalProductPrice(item);
         const quantity = Number(item.quantity);
 
-        total += price * quantity;
+        total += finalPrice * quantity;
       });
       sub_total = total;
       if (this.order.delivery_type == HomeDeliveryType) {
@@ -261,18 +274,29 @@ const ecomApp = Vue.createApp({
       $.ajax({
         url:
           site_url +
-          "order/apply-voucher?voucher_code=" +
+          "ajax/order/apply-voucher?voucher_code=" +
           this.order.voucher_code,
         dataType: "json",
         contentType: false,
         processData: false,
         type: "GET",
         success: (response) => {
-          if (response.error === 1) {
-            toastr.error(response.message);
+          if (response.code === 200) {
+            if (this.order.currency !== response.voucher.currency) {
+              SwalAlert.fire({
+                icon: "error",
+                title: messages.invalidVoucherCurrency,
+              });
+            } else {
+              this.voucher = response.voucher;
+              toastr.success(
+                shopMessages.voucherAppliedSuccess +
+                  response.voucher.voucher_code
+              );
+              this.charge();
+            }
           } else {
-            this.discount = response.data;
-            this.charge();
+            toastr.error(response.message);
           }
         },
         error: (xhr) => {
@@ -296,21 +320,42 @@ const ecomApp = Vue.createApp({
       return this.formatCurrency(price);
     },
     showUnitTotalPrice(product) {
-      const price =
-        product.price_discount > 0 && product.price_discount < product.price
-          ? product.price_discount
-          : product.price;
+      const price = this.calculateFinalProductPrice(product);
 
       return this.formatCurrency(price * product.quantity);
     },
-    checkout() {
+    checkout(event) {
+      // Get the checkout URL from the clicked element's href attribute
+      const checkoutUrl = event.target.href || event.currentTarget.href;
+
       if (this.order.customer_id === 0) {
-        console.log("customer_id", this.order.customer_id);
         toastr.warning(shopMessages.loginToCheckout);
         return;
       }
 
       window.location.href = checkoutUrl; // Redirect to checkout page
+    },
+    getCustomer() {
+      $.ajax({
+        url: site_url + "ajax/customer/get-customer",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        type: "GET",
+        success: (response) => {
+          if (response.code === 200) {
+            const customer = response.customerData;
+            console.log("Customer data:", customer);
+            this.order.customer_id = customer.customer_id;
+            this.order.full_name = customer.full_name;
+            this.order.phone = customer.phone;
+            this.order.email = customer.email;
+          }
+        },
+        error: (xhr) => {
+          toastr.error(shopMessages.voucherError);
+        },
+      });
     },
   },
   mounted() {
@@ -318,6 +363,9 @@ const ecomApp = Vue.createApp({
     this.order.lang_id = lang_id;
     this.order.currency = currency;
     this.order.exchange_rate = exchange_rate;
+
+    // check if customer is logged in
+    this.getCustomer();
 
     // now recover cart with correct lang_id
     this.recoverCart();
@@ -351,6 +399,18 @@ const ecomApp = Vue.createApp({
         );
       } catch (error) {
         console.error("Error saving cart data to localStorage:", error);
+        toastr.error(shopMessages.cartSavingError);
+      }
+    },
+    voucher: function (newValue) {
+      // Update voucher data in localStorage
+      try {
+        localStorage.setItem(
+          "UnigemcCartVoucher_" + this.order.lang_id,
+          JSON.stringify(newValue)
+        );
+      } catch (error) {
+        console.error("Error saving voucher data to localStorage:", error);
         toastr.error(shopMessages.cartSavingError);
       }
     },

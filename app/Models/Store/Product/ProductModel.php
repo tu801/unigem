@@ -82,4 +82,22 @@ class ProductModel extends Model
         // 'product_content.product_info',
         'product_content.seo_meta',
     ];
+
+    /**
+     * Get product item by ID which use to add product to cart
+     * @param int $id
+     * @return object|null
+     */
+    public function getProductItemById($id, $lang = null)
+    {
+        if (!isset($lang->id)) $lang = session()->lang;
+
+        $productItem = $this
+            ->select($this->productQueryFields)
+            ->join('product_content', 'product_content.product_id = product.id')
+            ->where('product_content.lang_id', $lang->id)
+            ->find($id);
+
+        return $productItem;
+    }
 }

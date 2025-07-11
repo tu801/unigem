@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use CodeIgniter\Model;
@@ -14,7 +15,11 @@ class ConfigModel extends Model
     protected $useSoftDeletes = false;
 
     protected $allowedFields = [
-        'group_id', 'title', 'key', 'value', 'is_json'
+        'group_id',
+        'title',
+        'key',
+        'value',
+        'is_json'
     ];
 
     protected $useTimestamps = false;
@@ -36,14 +41,15 @@ class ConfigModel extends Model
      * create record item if not exist otherwise update the item
      * @param $input
      */
-    public function insertOrUpdate($input) {
+    public function insertOrUpdate($input)
+    {
         $item = $this->where('group_id', $input['group_id'])
-                ->where('key', $input['key'])
-                ->get()->getFirstRow();
-        if ( !empty($item) || isset($item->id) ) {
+            ->where('key', $input['key'])
+            ->get()->getFirstRow();
+        if (!empty($item) || isset($item->id)) {
             $updateData = [
                 'value' => $input['value'],
-                'is_json' => $input['is_json']??0,
+                'is_json' => $input['is_json'] ?? 0,
             ];
             $this->update($item->id, $updateData);
         } else {
@@ -56,9 +62,9 @@ class ConfigModel extends Model
         $_provinceModel = \model(ProvinceModel::class);
         $locale = session()->lang->locale ?? '';
 
-        if ( isset($item->title) && $item->title > 0 ) {
+        if (isset($item->title) && $item->title > 0) {
             $province = $_provinceModel->find($item->title);
-            $item->province_name = (!empty($locale) && $locale !== 'vi') ? $province['full_name_'.$locale] : $province['full_name'];
+            $item->province_name = (!empty($locale) && $locale !== 'vi') ? $province['full_name_' . $locale] : $province['full_name'];
         }
     }
 
@@ -67,24 +73,25 @@ class ConfigModel extends Model
      * @param $province_id
      * @return int
      */
-    public function getShipFee($province_id) {
+    public function getShipFee($province_id)
+    {
         $feeProvince = $this->where('group_id', ShopEnum::CONFIG_GROUP)
-                            ->where('key', ShopEnum::PROVINCE_SHIP_CONFIG)
-                            ->where('title', $province_id)
-                            ->first();
+            ->where('key', ShopEnum::PROVINCE_SHIP_CONFIG)
+            ->where('title', $province_id)
+            ->first();
         if (isset($feeProvince->id)) {
             return $feeProvince->value;
-        }else {
+        } else {
             $feeDefault = $this->where('group_id', ShopEnum::CONFIG_GROUP)
-                               ->where('key', ShopEnum::SHIP_CONFIG_KEY)
-                               ->first();
+                ->where('key', ShopEnum::SHIP_CONFIG_KEY)
+                ->first();
 
             return $feeDefault->value ?? 0;
         }
-
     }
 
-    public function getShipFeeOnWeight() {
+    public function getShipFeeOnWeight()
+    {
         $feeProvince = $this->where('group_id', ShopEnum::CONFIG_GROUP)
             ->where('key', ShopEnum::WEIGHT_SHIP_CONFIG)
             ->first();
@@ -92,5 +99,24 @@ class ConfigModel extends Model
             return $feeProvince->value;
         }
         return 0;
+    }
+
+    /**
+     * Get configuration value by key and group
+     * @param string $key
+     * @param string $group
+     * @return mixed|null
+     */
+    public function getConfigByKey($key, $group = self::DEFAULT_GROUP)
+    {
+        $config = $this->where('key', $key)
+            ->where('group_id', $group)
+            ->first();
+
+        if (isset($config->is_json) && $config->is_json == 1) {
+            return json_decode($config->value);
+        }
+
+        return $config->value ?? null;
     }
 }

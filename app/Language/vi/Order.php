@@ -19,6 +19,9 @@ return [
     'check_out'               => 'Thanh toán',
     'cart_empty'              => 'Giỏ hàng của bạn đang trống',
 
+    'discount'                => 'Giảm giá',
+    'voucher_code'            => 'Mã giảm giá',
+
     'add_note'                  => 'Thêm ghi chú',
     'add_note_placeholder'      => 'Chúng tôi có thể giúp gì cho bạn với đơn hàng này?',
     'remove_item'               => 'Xóa sản phẩm',
@@ -48,5 +51,35 @@ return [
     'deposit'                   => 'Đặt cọc',
     'image_payment'             => 'Hình ảnh thanh toán',
     'image_select'              => 'Chọn ảnh',
+
+    // checkout
+    'billing_detail'            => 'Thông tin thanh toán',
+    'customer_name'             => 'Tên khách hàng',
+    'customer_phone'            => 'Số điện thoại',
+    'customer_email'            => 'Email',
+    'shipping_address'          => 'Địa chỉ giao hàng',
+    'ship_full_name'            => 'Họ tên người nhận',
+    'ship_email'                => 'Email người nhận',
+    'ship_telephone'            => 'Số điện thoại người nhận',
+    'delivery_type'             => 'Phương thức giao hàng',
+    'deliveryMethod'            => [
+        'home_delivery' => 'Giao hàng tận nhà',
+        'pick_up'       => 'Nhận tại cửa hàng',
+    ],
+
+    'payment_currency_policy'   => 'Tất cả các giao dịch thanh toán sẽ được thực hiện bằng đồng Việt Nam (VND). Chúng tôi không chấp nhận thanh toán bằng ngoại tệ hoặc tiền điện tử. Vui lòng đảm bảo rằng bạn đã chọn đúng phương thức thanh toán và số tiền thanh toán trước khi xác nhận đơn hàng.',
+
+    'customer_name_required'    => 'Vui lòng nhập tên khách hàng',
+    'customer_phone_required'   => 'Vui lòng nhập số điện thoại khách hàng',
+    'customer_email_valid'      => 'Vui lòng nhập email hợp lệ',
+    'ship_full_name_required'   => 'Vui lòng nhập họ tên người nhận',
+    'ship_telephone_required'   => 'Vui lòng nhập số điện thoại người nhận',
+    'delivery_type_required'    => 'Vui lòng chọn phương thức giao hàng',
+
+    'voucher_code_required'     => 'Vui lòng nhập mã giảm giá',
+
+    'placeOrderSuccess'         => 'Đặt hàng thành công! Mã đơn hàng của bạn là: {0}',
+
+    'newOrderPlaced'            => 'Đơn hàng mới đã được đặt: {0}',
 
 ];

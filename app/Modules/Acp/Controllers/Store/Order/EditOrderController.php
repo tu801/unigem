@@ -9,8 +9,8 @@ use App\Enums\Store\Product\EProductType;
 use App\Enums\Store\ShopEnum;
 use App\Models\Store\Order\OrderModel;
 use CodeIgniter\Database\Exceptions\DatabaseException;
-use Modules\Acp\Controllers\Traits\ShippingFee;
-use Modules\Acp\Controllers\Traits\UseVoucher;
+use App\Traits\Store\ShippingFee;
+use App\Traits\Store\UseVoucher;
 
 class EditOrderController extends OrderController
 {

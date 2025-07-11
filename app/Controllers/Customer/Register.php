@@ -176,7 +176,6 @@ class Register extends CustomerController
                 return redirect()->to(route_to('cus_activate_account'));
             }
         } catch (DatabaseException $e) {
-            dd($e->getMessage());
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }

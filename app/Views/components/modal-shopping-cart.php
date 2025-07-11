@@ -88,7 +88,7 @@
                             <div class="tf-mini-cart-view-checkout">
                                 <a href="<?= route_to('order_cart') ?>"
                                     class="tf-btn btn-outline radius-3 link w-100 justify-content-center"><?= lang('Order.view_cart') ?></a>
-                                <a href="checkout.html" @click.prevent="checkout()"
+                                <a href="<?= route_to('order_checkout') ?>" @click.prevent="checkout($event)"
                                     class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span><?= lang('Order.check_out') ?></span></a>
                             </div>
                         </div>

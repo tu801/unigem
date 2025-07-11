@@ -39,4 +39,16 @@ class ShopModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Get the default shop that is active.
+     *
+     * @return Shop|null
+     */
+    public function getDefaultShop()
+    {
+        return $this->where('status', 1)
+            ->orderBy('created_at', 'DESC')
+            ->first();
+    }
 }
