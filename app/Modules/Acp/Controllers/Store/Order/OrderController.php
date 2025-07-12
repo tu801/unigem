@@ -57,17 +57,17 @@ class OrderController extends AcpController
         $inputData = $this->request->getGet();
 
         switch ($inputData['listType'] ?? '') {
-            case 'all':
-                $this->_data['listType'] = 'all';
-                break;
             case 'deleted':
                 $this->_model->onlyDeleted();
                 $this->_data['listType'] = 'deleted';
                 break;
             case 'user':
-            default:
                 $this->_model->where("user_init", $this->user->id);
                 $this->_data['listType'] = 'user';
+            case 'all':
+            default:
+                $this->_data['listType'] = 'all';
+                break;
                 break;
         }
 
