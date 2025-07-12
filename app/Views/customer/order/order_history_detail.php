@@ -111,12 +111,14 @@ echo $this->section('content');
                             </div>
                             <div class="widget-content-inner">
                                 <?php
-                                if ($order->delivery_type == EDeliveryType::HOME_DELIVERY) {
-                                    echo '<p class="text-2">' . $order->full_address_delivery . '</p>';
-                                } else {
+                                if ($order->delivery_type == EDeliveryType::HOME_DELIVERY) : ?>
+                                    <div class="text-2 text_black-2"><?= lang('Order.ship_full_name') ?>: <?= $order->delivery_info->ship_full_name ?></div>
+                                    <div class="text-2 text_black-2"><?= lang('Order.ship_telephone') ?>: <?= $order->delivery_info->ship_telephone ?></div>
+                                    <div class="text-2 text_black-2"><?= lang('Order.ship_email') ?>: <?= $order->delivery_info->ship_email ?></div>
+                                    <div class="text-2 text_black-2"><?= lang('Order.shipping_address') ?>: <?= $order->full_delivery_address ?></div>
+                                <?php else:
                                     echo '<p class="text-2">' . lang('Order.pick_up') . '</p>';
-                                }
-                                ?>
+                                endif; ?>
                             </div>
 
                         </div>
