@@ -19,9 +19,7 @@ echo $this->section('content');
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <?php if (session('error')) : ?>
-                    <div class="alert alert-danger"><?= session('error') ?></div>
-                <?php endif ?>
+                <?= view($configs->view . '\components\session-alert-block') ?>
 
                 <p><?= lang('Auth.emailActivateBody') ?></p><br>
 

@@ -1,5 +1,6 @@
 <?php
-namespace App\Modules\Acp\Controllers\Store\Customer;
+
+namespace Modules\Acp\Controllers\Store\Customer;
 
 
 use CodeIgniter\Database\Exceptions\DatabaseException;
@@ -13,7 +14,8 @@ use App\Enums\UserTypeEnum;
 use App\Models\Store\Customer\CustomerModel;
 use App\Models\User\UserModel;
 
-class AccountController extends CustomerController {
+class AccountController extends CustomerController
+{
 
     public function __construct()
     {

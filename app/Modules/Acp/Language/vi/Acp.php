@@ -39,6 +39,9 @@ return [
 
     'faker'             => 'Tạo dữ liệu',
 
+    'exchange_rate_manager' => 'Quản lý tỷ giá',
+    'voucher_manager'       => 'Quản lý mã giảm giá',
+
     //Action
     'add'               => 'Thêm',
     'edit'              => 'Sửa',
@@ -128,7 +131,7 @@ return [
 
     'config_title'      => 'Quản lý cấu hình',
     'cf_edit_title'     => 'Edit cấu hình',
-    'config_customtitle'=> 'Cấu hình giao diện',
+    'config_customtitle' => 'Cấu hình giao diện',
 
     'cf_title'          => 'Tên cấu hình',
     'cf_key'            => 'Từ khóa',
@@ -174,7 +177,7 @@ return [
     'category_product'     => 'Danh mục sản phẩm',
     'product'              => 'Sản phẩm',
     'product_manufacturer' => 'Quản lý nhà sản xuất',
-    
+
     'province_required'     => 'Vui lòng chọn tỉnh/thành phố',
     'district_required'     => 'Vui lòng chọn quận/huyện',
     'ward_required'         => 'Vui lòng chọn phường/xã',

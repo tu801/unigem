@@ -77,4 +77,29 @@ class CustomerModel extends Model
 
         return $this;
     }
+
+    /**
+     * Create a new customer for an order
+     * @param array $inputData
+     * @return Customer|null
+     * @throws \CodeIgniter\Database\Exceptions\DataException
+     */
+    public function createOrderCustomer($inputData)
+    {
+        $customerData = [
+            'cus_code'      => $this->generateCode(),
+            'cus_full_name' => $inputData['full_name'],
+            'cus_phone'     => $inputData['phone'],
+            'cus_email'     => $inputData['email'] ?? null,
+            'country_id'    => $inputData['country_id'] ?? 0,
+            'province_id'   => $inputData['province_id'] ?? 0,
+            'district_id'   => $inputData['district_id'] ?? 0,
+            'ward_id'       => $inputData['ward_id'] ?? 0,
+            'cus_address'   => $inputData['address'],
+        ];
+        
+        $customerID = $this->insert($customerData);
+
+        return $this->find($customerID);
+    }
 }

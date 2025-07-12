@@ -71,13 +71,8 @@ return [
     'order_by_date_low_to_high'     => 'Ngày đăng, Cũ - Mới',
     'order_by_date_high_to_low'     => 'Ngày đăng, Mới - Cũ',
 
-
     'quick_add_to_cart'             => 'Thêm vào giỏ hàng',
     'quick_view'                    => 'Xem nhanh',
-
-
-
-
 
     // errors
     'product_not_found' => 'Không tìm thấy sản phẩm',

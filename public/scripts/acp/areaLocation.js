@@ -124,10 +124,10 @@ $(function () {
 
   $(".select_province").on("change", function () {
     var province_id = $(".select_province").val();
-    getDistrict(province_id);
+    if (province_id !== null) getDistrict(province_id);
   });
   $(".select_district").on("change", function () {
     var district_id = $(".select_district").val();
-    getWard(district_id);
+    if (district_id !== null) getWard(district_id);
   });
 });

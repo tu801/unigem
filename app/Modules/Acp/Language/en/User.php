@@ -22,6 +22,9 @@ return [
     'edit_title'            => 'Edit User Information',
     'editSuccess'           => 'Successfully updated information for user #{0}',
 
+    'requiredChangePass'    => 'Require password change after login',
+    'sendMail'              => 'Send notification email',
+
     // User Info
     'username'              => 'Username',
     'email'                 => 'Email',
@@ -68,8 +71,8 @@ return [
     'delete_fail'           => 'Delete command not executed. Please try again later',
     'recover_fail'          => 'Recovery command not executed. Please try again later',
 
-    'userGroupName_required'=> 'Please enter a group name',
-    'userGroupName_is_exist'=> 'This group name already exists',
+    'userGroupName_required' => 'Please enter a group name',
+    'userGroupName_is_exist' => 'This group name already exists',
     'save_group_permission_success' => 'Successfully assigned permissions for group #{0}',
     'save_user_permission_success' => 'Successfully assigned permissions for user #{0}',
     'edit_pass_success'     => 'Password change successful',

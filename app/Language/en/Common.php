@@ -3,11 +3,14 @@
 return [
     // General
     'product_weight_unit'               => 'ct',
-    'save_changes'                      => '',
+    'save_changes'                      => 'Save Changes',
     'customer'                          => 'Customer',
+
+    'country'                           => 'Country',
 
     'edit'                              => 'Edit',
     'delete'                            => 'Delete',
+    'actions'                           => 'Actions',
 
     'internalServerError'               => 'Internal server error. Please try again later.',
     'somethingWentWrong'                => 'Something went wrong. Please try again later.',

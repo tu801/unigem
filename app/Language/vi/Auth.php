@@ -121,9 +121,10 @@ return [
     'activationBlocked'     => 'Bạn phải kích hoạt tài khoản trước khi đăng nhập.',
 
     // Groups
-    'unknownGroup' => '{0} không phải là một nhóm hợp lệ.',
-    'missingTitle' => 'Nhóm phải có tiêu đề.',
+    'unknownGroup'          => '{0} không phải là một nhóm hợp lệ.',
+    'missingTitle'          => 'Nhóm phải có tiêu đề.',
 
     // Permissions
-    'unknownPermission' => '{0} không phải là một quyền hợp lệ.',
+    'unknownPermission'     => '{0} không phải là một quyền hợp lệ.',
+    'login_required'        => 'Bạn cần đăng nhập để thực hiện hành động này.',
 ];

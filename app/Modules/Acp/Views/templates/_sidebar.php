@@ -1,7 +1,7 @@
 <!-- Brand Logo -->
 <a href="<?= base_url($config->adminSlug . '/dashboard') ?>" class="brand-link bg-danger">
     <img src="/<?= $config->templatePath ?>assets/img/logo.png" alt="TMT" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light"><?=lang('Acp.cms_brand_text')?></span>
+    <span class="brand-text font-weight-light"><?= lang('Acp.cms_brand_text') ?></span>
 </a>
 
 <!-- Sidebar -->
@@ -58,8 +58,9 @@
             </li>
 
             <!-- Shop -->
-            <li class="nav-item has-treeview <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "menu-open" : "" ?>">
-                <a href="#" class="nav-link <?= (in_array($controller, array('shopcontroller', 'contactcontroller'))) ? "active" : "" ?>">
+            <?php $shopControllers = array('shopcontroller', 'contactcontroller', 'exchangeratecontroller', 'vouchercontroller'); ?>
+            <li class="nav-item has-treeview <?= (in_array($controller, $shopControllers)) ? "menu-open" : "" ?>">
+                <a href="#" class="nav-link <?= (in_array($controller, $shopControllers)) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-store"></i>
                     <p>
                         <?= lang('Acp.shop_manager') ?>
@@ -79,11 +80,23 @@
                             <p><?= lang('Acp.contact_manager'); ?></p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<?= route_to('list_exchange_rate') ?>" class="nav-link <?= ($controller == 'exchangeratecontroller') ? "active" : '' ?>">
+                            <i class="fas fa-exchange-alt nav-icon"></i>
+                            <p><?= lang('Acp.exchange_rate_manager'); ?></p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= route_to('list_voucher') ?>" class="nav-link <?= ($controller == 'vouchercontroller') ? "active" : '' ?>">
+                            <i class="fas fa-ticket-alt  nav-icon"></i>
+                            <p><?= lang('Acp.voucher_manager'); ?></p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
-             <!-- Product -->
-             <?php
+            <!-- Product -->
+            <?php
             if (isset($cat_type) && $cat_type == 'product') $ctlArr = array('category', 'productcontroller');
             else $ctlArr = array('productcontroller', 'productmanufacturercontroller');
             ?>
@@ -112,12 +125,12 @@
             </li>
 
             <!-- order -->
-            <!-- <li class="nav-item">
-                <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller'))) ? "active" : "" ?>">
+            <li class="nav-item">
+                <a href="<?= route_to('order') ?>" class="nav-link <?= (in_array($controller, array('ordercontroller', 'invoicecontroller'))) ? "active" : "" ?>">
                     <i class="nav-icon fas fa-cart-arrow-down"></i>
                     <p><?= lang('Order.page_title') ?></p>
                 </a>
-            </li> -->
+            </li>
 
             <!-- Users -->
             <li class="nav-item has-treeview <?= (in_array($controller, array('user', 'usergroup', 'customercontroller'))) ? "menu-open" : "" ?>">

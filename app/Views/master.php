@@ -6,10 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title><?= get_theme_config('general_site_title') ?? getenv('app.site_name') ?? '' ?></title>
     <meta name="author" content="tmtuan">
-    <?php if (getenv('CI_ENVIRONMENT') === 'development') : ?>
-    <meta name="robots" content="noindex, nofollow" />
+    <?php
+
+    use App\Enums\Store\Order\EDeliveryType;
+
+    if (getenv('CI_ENVIRONMENT') === 'development') : ?>
+        <meta name="robots" content="noindex, nofollow" />
     <?php else: ?>
-    <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow" />
     <?php endif; ?>
 
     <!-- font -->
@@ -37,12 +41,12 @@
     <?= $this->renderSection('style') ?>
 
     <script type="text/javascript">
-    var site_url = '<?= base_url() ?>';
+        var site_url = '<?= base_url() ?>';
     </script>
 
 </head>
 
-<body class="preload-wrapper color-primary-4">
+<body class="preload-wrapper">
     <!-- RTL -->
     <!-- <a href="javascript:void(0);" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a> -->
     <!-- /RTL  -->
@@ -53,16 +57,27 @@
         </div>
     </div>
     <!-- /preload -->
-    <div id="wrapper">
-        <!-- header -->
-        <?= $this->include($configs->view . '\templates\header') ?>
-        <!-- /header -->
 
-        <?= $this->renderSection('content') ?>
+    <div id="ecomApp">
+        <div id="wrapper">
+            <!-- header -->
+            <?= $this->include($configs->view . '\templates\header') ?>
+            <!-- /header -->
 
-        <!-- Footer -->
-        <?= $this->include($configs->view . '\templates\footer') ?>
-        <!-- /Footer -->
+            <?= $this->renderSection('content') ?>
+
+            <!-- Footer -->
+            <?= $this->include($configs->view . '\templates\footer') ?>
+            <!-- /Footer -->
+        </div>
+
+        <!-- shoppingCart -->
+        <?= $this->include($configs->view . '\components\modal-shopping-cart') ?>
+        <!-- /shoppingCart -->
+
+        <!-- toolbar-bottom -->
+        <?= $this->include($configs->view . '\templates\toolbar-bottom') ?>
+        <!-- /toolbar-bottom -->
     </div>
 
     <!-- gotop -->
@@ -72,9 +87,6 @@
     </button>
     <!-- /gotop -->
 
-    <!-- toolbar-bottom -->
-    <?= $this->include($configs->view . '\templates\toolbar-bottom') ?>
-    <!-- /toolbar-bottom -->
 
     <!-- mobile menu -->
     <?= $this->include($configs->view . '\templates\mobile-menu') ?>
@@ -88,15 +100,11 @@
     <?= $this->include($configs->view . '\templates\toolbar-shop-mobile') ?>
     <!-- /toolbarShopmb -->
 
-    <?php if ( !auth()->loggedIn() ) : ?>
-    <!-- modal login -->
-    <?= $this->include($configs->view . '\components\modal-login') ?>
-    <!-- /modal login -->
+    <?php if (!auth()->loggedIn()) : ?>
+        <!-- modal login -->
+        <?= $this->include($configs->view . '\components\modal-login') ?>
+        <!-- /modal login -->
     <?php endif; ?>
-
-    <!-- shoppingCart -->
-    <?= $this->include($configs->view . '\components\modal-shopping-cart') ?>
-    <!-- /shoppingCart -->
 
     <!-- modal quick_view -->
     <?= $this->include($configs->view . '\components\modal-quick-view') ?>
@@ -124,17 +132,8 @@
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/subscribe.js"></script>
     <script type="text/javascript" src="<?= base_url($configs->templatePath) ?>js/customer-login.js"></script>
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('.type-languages').on('change', function() {
-            var selectedOption = $(this).find('option:selected');
-            var redirectUrl = selectedOption.data('href');
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            }
-        });
-    });
-    </script>
+    <script src="<?= base_url('/themes/store/shop.js') ?>"></script>
+    <?= $this->include($configs->view . '\components\main-scripts') ?>
 
     <?= $this->renderSection('scripts') ?>
 </body>

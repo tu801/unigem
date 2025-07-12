@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Customer;
 
 use App\Enums\UserTypeEnum;
@@ -28,27 +29,12 @@ class CustomerController extends \App\Controllers\BaseController
         return $this->checkCustomerLoggedIn();
     }
 
-
-    /**
-     * Check if the customer is logged in, if not redirect to home page
-     *
-     * @return RedirectResponse|void
-     */
-    public function checkCustomerLoggedIn()
+    public function dashboard()
     {
-        $authenticator = auth('session')->getAuthenticator();
-        if (!auth()->loggedIn()) {
-            return redirect()->route('cus_login')->with('message', lang('Customer.login_required'));
-        }
-
-        $user = $authenticator->getUser();
-        if ($user->user_type != UserTypeEnum::CUSTOMER) {
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
             return redirect()->route('/');
         }
 
-        $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
-
-        $this->user = $user;
-        $this->_data['customer'] = $customer;
+        return $this->_render('customer/dashboard', $this->_data);
     }
 }

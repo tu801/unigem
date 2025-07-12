@@ -57,7 +57,7 @@ return [
     // Form validation
     'full_name_required' => 'Please enter customer full name',
     'phone_required'     => 'Please enter customer phone number',
-    'phone_is_unique'    => 'This phone number already exists',
+    'phone_is_not_unique'    => 'This phone number already exists',
     'cus_phone_min_length'  => 'Phone number is not valid',
 
     'email_required' => 'Please enter email',
@@ -76,7 +76,7 @@ return [
     'password_min_length'   => 'Password must be at least 6 characters',
     'password_confirm_matches_password' => 'Password does not match',
 
-    'no_shipping_address' => 'Chưa có địa chỉ giao hàng',
+    'no_shipping_address' => 'No shipping address yet',
 
     // From edit modal
     'enable_warranty'                  => 'Service Warranty',

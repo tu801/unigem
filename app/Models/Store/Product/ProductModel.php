@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * created Date: 10/23/2023
@@ -54,4 +55,49 @@ class ProductModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Fields to select when querying products for order or cart
+     * @var array
+     */
+    public $productQueryFields = [
+        'id',
+        'cat_id',
+        'pd_sku',
+        'pd_image',
+        'pd_status',
+        'product.created_at',
+        'product.updated_at',
+        'deleted_at',
+        'product_content.lang_id',
+        'product_content.pd_name',
+        'product_content.pd_slug',
+        'product_content.pd_weight',
+        'product_content.pd_size',
+        'product_content.pd_cut_angle',
+        'product_content.origin_price',
+        'product_content.price',
+        'product_content.price_discount',
+        'product_content.pd_tags',
+        // 'product_content.pd_description',
+        // 'product_content.product_info',
+        'product_content.seo_meta',
+    ];
+
+    /**
+     * Get product item by ID which use to add product to cart
+     * @param int $id
+     * @return object|null
+     */
+    public function getProductItemById($id, $lang = null)
+    {
+        if (!isset($lang->id)) $lang = session()->lang;
+
+        $productItem = $this
+            ->select($this->productQueryFields)
+            ->join('product_content', 'product_content.product_id = product.id')
+            ->where('product_content.lang_id', $lang->id)
+            ->find($id);
+
+        return $productItem;
+    }
 }

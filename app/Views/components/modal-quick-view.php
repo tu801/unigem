@@ -60,7 +60,7 @@
 
                                 <div class="w-100">
                                     <a href="#" class="btns-full">
-                                        <span><?= lang('Product.buy_now') ?> -&nbsp;</span>
+                                        <span class="modalBuynowText"><?= lang('Product.buy_now') ?> -&nbsp;</span>
                                         <span class="tf-qty-price total-price"></span>
 
                                         <!-- <img
@@ -73,7 +73,7 @@
                         </div>
                         <div>
                             <a href="product-detail.html" class="tf-btn fw-6 btn-line">
-                                <?= lang('Product.see_more')?>
+                                <?= lang('Product.see_more') ?>
                                 <i class="icon icon-arrow1-top-left"></i>
                             </a>
                         </div>

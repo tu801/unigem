@@ -6,8 +6,11 @@ return [
     'save_changes'                      => 'Lưu thay đổi',
     'customer'                          => 'Khách hàng',
 
+    'country'                           => 'Quốc gia',
+
     'edit'                              => 'Chỉnh sửa',
     'delete'                            => 'Xóa',
+    'actions'                           => 'Hành động',
 
     'internalServerError'               => 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau.',
     'somethingWentWrong'                => 'Đã xảy ra lỗi. Vui lòng thử lại sau.',

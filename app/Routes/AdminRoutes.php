@@ -201,6 +201,11 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->match(['GET', 'POST'], 'add', 'ShopController::addShop', ['as' => 'add_shop']);
         $routes->match(['GET', 'POST'], 'edit/(:num)', 'ShopController::editShop/$1', ['as' => 'edit_shop']);
         $routes->post('remove', 'ShopController::ajxRemove/$1', ['as' => 'remove_shop']);
+
+        // currency exchange rate routes
+        $routes->group('exchange-rate', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
+            $routes->match(['GET', 'POST'], '/', 'ExchangeRateController::index', ['as' => 'list_exchange_rate']);
+        });
     });
 
     // contact routes
@@ -246,18 +251,35 @@ $routes->group('acp', ['namespace' => 'Modules\Acp\Controllers'], function ($rou
         $routes->get('/', 'OrderController::index', ['as' => 'order']);
         $routes->post('/', 'OrderController::index');
 
-        $routes->get('add', 'OrderController::addOrder', ['as' => 'add_order']);
-        $routes->post('add', 'OrderController::addAction');
+        $routes->get('add', 'CreateOrderController::addOrder', ['as' => 'add_order']);
+        $routes->post('add', 'CreateOrderController::addAction');
 
-        $routes->get('create', 'OrderController::createOrder', ['as' => 'create_order']);
-
-        $routes->get('edit/(:num)', 'OrderController::editOrder/$1', ['as' => 'edit_order']);
-        $routes->post('edit/(:num)', 'OrderController::editAction/$1');
+        $routes->get('edit/(:num)', 'EditOrderController::editOrder/$1', ['as' => 'edit_order']);
+        $routes->post('edit/(:num)', 'EditOrderController::editAction/$1');
 
         $routes->post('remove', 'OrderController::ajxRemove/$1', ['as' => 'remove_order']);
-        $routes->get('order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']);
+        $routes->get('get-order-items/(:num)', 'OrderController::getOrderItem/$1', ['as' => 'items_order']);
         $routes->get('recover/(:num)', 'OrderController::recover/$1', ['as' => 'recover_order']);
-        $routes->get('invoice/(:num)', 'OrderController::invoice/$1', ['as' => 'invoice_order']);
+
+        $routes->get('invoice/(:num)', 'InvoiceController::invoice/$1', ['as' => 'invoice_order']);
+        $routes->get('invoice/(:num)/invoice-print.html', 'InvoiceController::invoicePrint/$1', ['as' => 'invoice_print']);
+
         $routes->get('view-deposit/(:num)', 'OrderController::viewDeposit/$1', ['as' => 'view_deposit_order']);
+
+        $routes->get('apply-voucher', 'VoucherController::ajaxApplyVoucher', ['as' => 'apply_voucher']);
+    });
+
+    // voucher routes
+    $routes->group('voucher', ['namespace' => 'Modules\Acp\Controllers\Store', 'filter' => 'group:superadmin,admin,sale_manager'], function ($routes) {
+        $routes->match(['GET', 'POST'], '/', 'VoucherController::index', ['as' => 'list_voucher']);
+
+        $routes->match(['GET', 'POST'], 'add', 'VoucherController::add', ['as' => 'add_voucher']);
+
+        $routes->match(['GET', 'POST'], 'edit/(:num)', 'VoucherController::edit/$1', ['as' => 'edit_voucher']);
+
+        $routes->post('remove', 'VoucherController::ajxRemove/$1', ['as' => 'remove_voucher']);
+
+        $routes->get('view/(:num)', 'VoucherController::viewVoucher/$1', ['as' => 'view_voucher']);
+        $routes->post('view/(:num)', 'VoucherController::editVoucher/$1');
     });
 });
