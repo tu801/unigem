@@ -139,16 +139,17 @@ echo $this->section('content');
 
                             <div class="d-flex justify-content-between line pb_20" v-if="order.lang_id > 1">
                                 <h6 class="fw-5"><?= lang('Order.exchange_rate') ?></h6>
-                                <h6 class="total fw-5">{{ formatCurrency(order.exchange_rate) }}</h6>
-                            </div>
-                            <div class="d-flex justify-content-between line pb_20" v-if="order.lang_id > 1">
-                                <h6 class="fw-5"><?= lang('Order.total_in_vnd') ?></h6>
-                                <h6 class="total fw-5">{{ formatVnd(bill.total * order.exchange_rate) }}</h6>
+                                <h6 class="total fw-5">{{ formatVnd(order.exchange_rate) }}</h6>
                             </div>
 
                             <div class="d-flex justify-content-between line pb_20">
                                 <h6 class="fw-5"><?= lang('Order.total') ?></h6>
                                 <h6 class="total fw-5">{{ formatCurrency(bill.total) }}</h6>
+                            </div>
+
+                            <div class="d-flex justify-content-between line pb_20" v-if="order.lang_id > 1">
+                                <h6 class="fw-5"><?= lang('Order.total_in_vnd') ?></h6>
+                                <h6 class="total fw-5">{{ formatVnd(bill.total * order.exchange_rate) }}</h6>
                             </div>
 
                             <h6 class="fw-5 mb_20"><?= lang('Order.delivery_type') ?></h6>
@@ -170,7 +171,7 @@ echo $this->section('content');
                                 </div> -->
                                 <input type="hidden" name="verify_code" :value="order.verify_code" />
                             </div>
-                            <button type="submit" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"><?= lang('Order.place_order') ?></button>
+                            <button type="submit" @click.prevent="placeOrder($event)" class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"><?= lang('Order.place_order') ?></button>
                         </div>
                     </div>
                 </div>

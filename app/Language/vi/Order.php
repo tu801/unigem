@@ -75,6 +75,7 @@ return [
         'home_delivery' => 'Giao hàng tận nhà',
         'pick_up'       => 'Nhận tại cửa hàng',
     ],
+    'total_in_vnd'              => 'Tổng tiền (VND)',
 
     'payment_currency_policy'   => 'Tất cả các giao dịch thanh toán sẽ được thực hiện bằng đồng Việt Nam (VND). Chúng tôi không chấp nhận thanh toán bằng ngoại tệ hoặc tiền điện tử. Vui lòng đảm bảo rằng bạn đã chọn đúng phương thức thanh toán và số tiền thanh toán trước khi xác nhận đơn hàng.',
 
@@ -91,5 +92,5 @@ return [
 
     'newOrderPlaced'            => 'Đơn hàng mới đã được đặt: {0}',
     'invalid_order'             => 'Đơn hàng không hợp lệ, vui lòng thử lại sau.',
-
+    'emptyCart'                 => 'Giỏ hàng của bạn đang trống, vui lòng thêm sản phẩm trước khi đặt hàng.',
 ];

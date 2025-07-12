@@ -48,16 +48,27 @@ echo $this->section('content');
                         <p><?= $order->cus_phone ?></p>
                     </div>
 
+                    <?php if ($order->discount_amount > 0): ?>
+                        <div class="d-flex align-items-center justify-content-between mb_15">
+                            <div class="fs-18"><?= lang('Order.discount') ?></div>
+                            <p><?= $order->discount_amount ?></p>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if ($order->lang_id > 1) : ?>
                         <div class="d-flex align-items-center justify-content-between mb_15">
                             <div class="fs-18"><?= lang('Order.exchange_rate') ?></div>
-                            <p><?= format_currency($order->exchange_rate, $order->lang) ?></p>
+                            <p><?= vnd_encode($order->exchange_rate) ?></p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mb_24">
+                            <div class="fs-22 fw-6"><?= lang('Order.order_total') ?></div>
+                            <span class="total-value"><?= format_currency($order->total, $order->lang) ?></span>
                         </div>
                     <?php endif; ?>
 
                     <div class="d-flex align-items-center justify-content-between mb_24">
-                        <div class="fs-22 fw-6"><?= lang('Order.order_total') ?></div>
-                        <span class="total-value"><?= format_currency($order->total_amount_vnd) ?></span>
+                        <div class="fs-22 fw-6"><?= lang('Order.total_in_vnd') ?></div>
+                        <span class="total-value"><?= vnd_encode($order->total_amount_vnd) ?></span>
                     </div>
                     <div class="d-flex gap-10">
                         <a href="<?= base_url() ?>" class="tf-btn w-100 btn-outline animate-hover-btn rounded-0 justify-content-center">

@@ -95,6 +95,9 @@ class Checkout extends \App\Controllers\BaseController
         if (!$this->validate($rules, $errMess)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        if (empty($inputData['product']) || !is_array($inputData['product'])) {
+            return redirect()->back()->withInput()->with('errors', lang('Order.invalid_order'));
+        }
 
         try {
             $this->db->transBegin();
