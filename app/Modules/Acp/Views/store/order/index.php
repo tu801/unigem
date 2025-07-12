@@ -13,8 +13,8 @@ echo $this->section('content')
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <a class="<?= ($listType == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=user") ?>"><?= lang('Order.list_user') ?></a> |
                         <a class="<?= ($listType == 'all') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=all") ?>"><?= lang('Order.list_all') ?></a> |
+                        <a class="<?= ($listType == 'user') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=user") ?>"><?= lang('Order.list_user') ?></a> |
                         <a class="<?= ($listType == 'deleted') ? 'badge badge-primary text-light' : 'text-primary' ?>" href="<?= base_url("acp/order?listType=deleted") ?>"><?= lang('Order.list_delete') ?></a>
                     </div>
 
