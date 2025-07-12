@@ -36,7 +36,7 @@ echo $this->section('content');
                                 <label class="tf-field-label fw-4 text_black-2" for="cusFullName"><?=lang('Customer.fullName')?></label>
                             </div>
                             <div class="tf-field style-1 mb_15">
-                                <input class="tf-field-input tf-input" placeholder=" " type="text" id="cusEmail" value="<?= esc($customer->cus_email) ?>" disabled">
+                                <input class="tf-field-input tf-input" placeholder=" " type="text" id="cusEmail" value="<?= esc($customer->cus_email) ?>" disabled>
                                 <label class="tf-field-label fw-4 text_black-2" for="cusEmail"><?=lang('Customer.email')?></label>
                             </div>
 
@@ -112,7 +112,7 @@ echo $this->section('content');
 <?= $this->section('scripts') ?>
 <!-- Select2 -->
 <script src="<?= base_url($configs->scriptsPath) ?>/plugins/select2/js/select2.full.min.js"></script>
-<script src="<?= base_url($configs->scriptsPath) ?>areaLocation.js"></script>
+<script src="<?= base_url($configs->scriptsPath) ?>/areaLocation.js"></script>
 <script src="<?= base_url($configs->scriptsPath) ?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script>
 
@@ -170,23 +170,36 @@ $(document).ready(function () {
             $("#vietnam_address").removeClass("d-none");
             $("#other_country_address").addClass("d-none");
             $('#vietnam_address input[name="cus_address"]').prop("disabled", false);
-            $('#other_country_address input[name="cus_address"]').prop("disabled", true );
+            $('#other_country_address input[name="cus_address"]').prop("disabled", true);
+            
+            // Initialize Vietnam address selects if not already done
+            if (!$("#province").hasClass('select2-hidden-accessible')) {
+                initVietnamAddressSelects();
+            }
         } else {
             $("#vietnam_address").addClass("d-none");
             $("#other_country_address").removeClass("d-none");
             $('#vietnam_address input[name="cus_address"]').prop("disabled", true);
-            $('#other_country_address input[name="cus_address"]').prop("disabled", false );
+            $('#other_country_address input[name="cus_address"]').prop("disabled", false);
+        }
+    }
+
+    function initVietnamAddressSelects() {
+        // Initialize province, district, ward selects
+        // This function should be defined in areaLocation.js
+        if (typeof initAreaSelects === 'function') {
+            initAreaSelects();
         }
     }
 
     countryElement.on("change", toggleAddressFields);
 
-    // Set selected value sau khi bind event
+    // Set selected value after binding event
     var country_selected_value = $("#country").attr("country-selected");
     if (country_selected_value !== undefined && country_selected_value > 0) {
         $("#country").val(country_selected_value);
         $("#country").trigger("change");
-        }
+    }
 
     toggleAddressFields();
 });

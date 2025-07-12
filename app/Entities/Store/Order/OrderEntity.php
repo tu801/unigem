@@ -7,6 +7,7 @@ use App\Enums\Store\Order\EOrderStatus;
 use App\Models\Country;
 use App\Models\LangModel;
 use App\Models\Store\DistrictModel;
+use App\Models\Store\Product\ProductModel;
 use App\Models\Store\ProvinceModel;
 use App\Models\Store\ShopModel;
 use App\Models\Store\WardModel;
@@ -15,6 +16,7 @@ class OrderEntity extends Entity
 {
     protected $full_delivery_address;
     protected $lang;
+    protected $order_items = [];
 
     public function getDeliveryInfo()
     {
@@ -93,5 +95,23 @@ class OrderEntity extends Entity
             $this->lang = model(LangModel::class)->find($this->attributes['lang_id']);
         }
         return $this->lang;
+    }
+
+    public function getOrderItems()
+    {
+        if (!isset($this->attributes['order_id'])) {
+            throw new \Exception('Order ID is not set.');
+        }
+        $productModel = model(ProductModel::class);
+
+        if (!empty($this->order_items)) {
+            return $this->order_items;
+        }
+
+        $this->order_items = $productModel
+            ->join('order_items', 'product.id = order_items.product_id AND order_items.order_id = ' . $this->attributes['order_id'])
+            ->findAll();
+
+        return $this->order_items;
     }
 }

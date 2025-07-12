@@ -50,6 +50,7 @@ return [
     'order_purchased_date'      => 'Ngày mua hàng',
     'order_code'                => 'Mã',
     'view_order_history'        => 'Chi tiết',
+    'exchange_rate'             => 'Tỷ giá',
 
     // customer order detail
     'order_detail'              => 'Chi tiết đơn hàng',
@@ -57,6 +58,8 @@ return [
     'deposit'                   => 'Đặt cọc',
     'image_payment'             => 'Hình ảnh thanh toán',
     'image_select'              => 'Chọn ảnh',
+    'payment_method'            => 'Phương thức thanh toán',
+    'delivery_method'           => 'Phương thức giao hàng',
 
     // checkout
     'billing_detail'            => 'Thông tin thanh toán',

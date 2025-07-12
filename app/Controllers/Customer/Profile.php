@@ -20,19 +20,10 @@ use CodeIgniter\I18n\Time;
 
 class Profile extends CustomerController
 {
-    
+
     public function __construct()
     {
         parent::__construct();
-    }
-
-    public function profile()
-    {
-        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
-            return redirect()->route('/');
-        }
-
-        return $this->_render('customer/profile', $this->_data);
     }
 
     public function profileInfo()
@@ -88,7 +79,7 @@ class Profile extends CustomerController
             $postData['district_id']  =  0;
             $postData['ward_id']  = 0;
         }
-        
+
         try {
             $this->db->transBegin();
             $this->_model->update($this->_data['customer']->id, $postData);
@@ -96,13 +87,13 @@ class Profile extends CustomerController
             // log Action
             $logData = [
                 'title' => 'Edit Customer Profile',
-                'description' => lang('Customer.editCustomerProfileLog', [ $this->_data['customer']->cus_code . ' - ' . $this->_data['customer']->cus_full_name]),
+                'description' => lang('Customer.editCustomerProfileLog', [$this->_data['customer']->cus_code . ' - ' . $this->_data['customer']->cus_full_name]),
                 'properties' => $postData,
                 'subject_id' => $this->_data['customer']->id,
                 'subject_type' => CustomerModel::class,
             ];
             $this->logAction($logData);
-            
+
             $this->db->transCommit();
         } catch (DatabaseException $e) {
             $this->db->transRollback();
@@ -146,7 +137,7 @@ class Profile extends CustomerController
         $errMess = [
             'password' => [
                 'required' => lang('Customer.password_required'),
-                    'min_length' => lang('Customer.password_min_length'),
+                'min_length' => lang('Customer.password_min_length'),
             ],
             'password_confirm' => [
                 'required' => lang('Customer.password_confirm_required'),
@@ -158,7 +149,7 @@ class Profile extends CustomerController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         $user = $this->user;
-        
+
         // check old password
         $oldPassword = $this->request->getPost('old_password');
         /** @var Passwords $passwords */
@@ -168,11 +159,11 @@ class Profile extends CustomerController
         if (! $passwords->verify($oldPassword, $user->password_hash)) {
             return redirect()->back()->withInput()->with('error', lang('Customer.old_password_not_match'));
         }
-        
+
         // save new password 
         try {
             $this->db->transBegin();
-            
+
             //record old password
             $oldData = [
                 'user_id' => $user->id,
@@ -202,7 +193,7 @@ class Profile extends CustomerController
             $this->db->transRollback();
             return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
-        
+
         $authenticator = auth('session')->getAuthenticator();
         $authenticator->logout();
 

@@ -444,7 +444,7 @@ const ecomApp = Vue.createApp({
         success: (response) => {
           if (response.code === 200) {
             const customer = response.customerData;
-            console.log("Customer data:", customer);
+
             this.order.customer_id = customer.customer_id;
             this.order.full_name = customer.full_name;
             this.order.phone = customer.phone;
@@ -472,9 +472,9 @@ const ecomApp = Vue.createApp({
     // now recover cart with correct lang_id
     this.recoverCart();
 
-    $('[name="province_id"]').change((data) => {
-      this.getShipFee();
-    });
+    // $('[name="province_id"]').change((data) => {
+    //   this.getShipFee();
+    // });
 
     // Listen for custom event from modal
     window.addEventListener(

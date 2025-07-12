@@ -14,7 +14,7 @@ class RecentOrdersCell extends Cell
 
     public function mount()
     {
-        $user = auth()->user(); 
+        $user = auth()->user();
         $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
         $orderData = model(OrderModel::class)
             ->join('order_items', 'order.order_id = order_items.order_id')
@@ -23,17 +23,17 @@ class RecentOrdersCell extends Cell
             ->where('customer_id', $customer->id)
             ->whereIn('status', [EOrderStatus::OPEN, EOrderStatus::PROCESSED, EOrderStatus::CONFIRMED])
             ->orderBy('order_id', 'desc')
-            ->findAll();
+            ->findAll(5);
 
-        if ( count($orderData) ) {
+        if (count($orderData)) {
             $this->orders = $orderData;
         }
     }
 
     public function listOrderHistory(): string
     {
-        $user = user();
-        $customer = model(CusModel::class)->queryCustomerByUserId($user->id)->first();
+        $user = auth()->user();
+        $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
         $orderData = model(OrderModel::class)
             ->join('order_items', 'order.order_id = order_items.order_id')
             ->groupBy('order.order_id')
@@ -46,5 +46,4 @@ class RecentOrdersCell extends Cell
             'orders' => $orderData
         ]);
     }
-
 }

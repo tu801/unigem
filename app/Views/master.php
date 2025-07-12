@@ -46,7 +46,7 @@
 
 </head>
 
-<body class="preload-wrapper color-primary-4">
+<body class="preload-wrapper">
     <!-- RTL -->
     <!-- <a href="javascript:void(0);" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a> -->
     <!-- /RTL  -->

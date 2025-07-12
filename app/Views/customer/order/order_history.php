@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author tmtuan
  * @github https://github.com/tu801
@@ -8,26 +9,27 @@
 echo $this->extend($configs->viewLayout);
 echo $this->section('content');
 ?>
+<!-- page-title -->
+<div class="tf-page-title">
+    <div class="container-full">
+        <div class="heading text-center"><?= lang('Order.order_history_title') ?></div>
+    </div>
+</div>
+<!-- /page-title -->
 
-<!-- breadcrumbs -->
-<?php echo view_cell('App\Libraries\BreadCrumb\BreadCrumbCell') ?>
-<!-- account -->
-<div class="my_account_wrap section_padding_b">
+<!-- page-cart -->
+<section class="flat-spacing-11">
     <div class="container">
         <div class="row">
-            <!--  account sidebar  -->
             <div class="col-lg-3">
-                <?= view('customer/components/account_sidebar', ['user' => $user]) ?>
+                <?= view('customer/components/account_sidebar', ['customer' => $customer]) ?>
             </div>
-            <!-- account content -->
             <div class="col-lg-9">
-                <div class="account_cont_wrap">
-                    <div class="acorder_wrapper">
-                        <?php echo view_cell('\App\Cells\Customer\RecentOrdersCell::listOrderHistory') ?>
-                    </div>
-                </div>
+                <?php echo view_cell('\App\Cells\Customer\RecentOrdersCell::listOrderHistory') ?>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!-- page-cart -->
+
 <?= $this->endSection() ?>

@@ -28,4 +28,13 @@ class CustomerController extends \App\Controllers\BaseController
         // check customer logged in
         return $this->checkCustomerLoggedIn();
     }
+
+    public function dashboard()
+    {
+        if (!auth()->loggedIn() || $this->user->user_type == UserTypeEnum::ADMIN) {
+            return redirect()->route('/');
+        }
+
+        return $this->_render('customer/dashboard', $this->_data);
+    }
 }

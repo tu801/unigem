@@ -23,12 +23,12 @@ $routes->group('product', ['namespace' => '\App\Controllers\Product'], function 
  * Customer
  */
 $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], function ($routes) {
-    $routes->get('profile', 'Profile::profile', ['as' => 'cus_profile']);
+    $routes->get('dashboard', 'CustomerController::dashboard', ['as' => 'cus_profile']);
     $routes->match(['GET', 'POST'], 'account-profile-info', 'Profile::profileInfo', ['as' => 'edit_cus_profile']);
     $routes->match(['GET', 'POST'], 'change-password', 'Profile::changePassword', ['as' => 'cus_change_password']);
 
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
-    $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);
+    $routes->get('order-history/(:num)', 'OrderHistory::orderDetail/$1', ['as' => 'order_history_detail']);
 
     $routes->get('my-shipping-address', 'ShippingAddress::index', ['as' => 'my_shipping_address']);
     $routes->match(['GET', 'POST'], 'add-new-shipping-address', 'ShippingAddress::createNewAddress', ['as' => 'add_new_address']);

@@ -50,6 +50,7 @@ return [
     'order_purchased_date'      => 'Purchase Date',
     'order_code'                => 'Code',
     'view_order_history'        => 'Details',
+    'exchange_rate'             => 'Exchange Rate',
 
     // customer order detail
     'order_detail'              => 'Order Details',
@@ -57,6 +58,8 @@ return [
     'deposit'                   => 'Deposit',
     'image_payment'             => 'Payment Image',
     'image_select'              => 'Select Image',
+    'payment_method'            => 'Payment Method',
+    'delivery_method'           => 'Delivery Method',
 
     // checkout
     'billing_detail'            => 'Billing Details',
