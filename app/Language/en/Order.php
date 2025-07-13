@@ -75,6 +75,7 @@ return [
         'home_delivery' => 'Home Delivery',
         'pick_up'       => 'Store Pickup',
     ],
+    'total_in_vnd'              => 'Total (VND)',
 
     'payment_currency_policy'   => 'All payment transactions will be conducted in Vietnamese Dong (VND). We do not accept payments in foreign currency or cryptocurrency. Please ensure you have selected the correct payment method and amount before confirming your order.',
 
@@ -91,5 +92,5 @@ return [
 
     'newOrderPlaced'            => 'New order has been placed: {0}',
     'invalid_order'             => 'Invalid order, please try again later.',
-
+    'emptyCart'                 => 'Your cart is empty, please add products before placing an order.',
 ];

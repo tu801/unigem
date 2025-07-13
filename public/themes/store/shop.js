@@ -20,6 +20,7 @@ const ecomApp = Vue.createApp({
       bill: {
         sub_total: 0,
         total: 0,
+        total_vnd: 0,
         shipping_fee: 0,
         discount: 0,
         weight_product_total: 0,
@@ -363,8 +364,9 @@ const ecomApp = Vue.createApp({
         }
       }
 
-      this.bill.sub_total = sub_total * this.order.exchange_rate;
-      this.bill.total = (total - discount) * this.order.exchange_rate;
+      this.bill.sub_total = sub_total;
+      this.bill.total = total - discount;
+      this.bill.total_vnd = (total - discount) * this.order.exchange_rate;
       this.bill.shipping_fee = shipping_fee;
       this.bill.discount = discount * this.order.exchange_rate;
       this.bill.weight_product_total = weightProductTotal;
@@ -455,6 +457,14 @@ const ecomApp = Vue.createApp({
           toastr.error(shopMessages.voucherError);
         },
       });
+    },
+    placeOrder(event) {
+      if (this.carts.length === 0) {
+        toastr.error(shopMessages.emptyCart);
+        return;
+      }
+      event.target.disabled = true; // Disable the button to prevent multiple submissions
+      $("#checkoutForm").submit(); // Submit the form to place the order
     },
   },
   mounted() {

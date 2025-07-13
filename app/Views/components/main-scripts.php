@@ -26,6 +26,7 @@ use App\Enums\Store\Order\EDeliveryType;
         loginToCheckout: '<?= lang('Order.loginToCheckout') ?>',
         voucherError: '<?= lang('Order.voucherError') ?>',
         voucherAppliedSuccess: '<?= lang('Order.voucherAppliedSuccess') ?>',
+        emptyCart: '<?= lang('Order.emptyCart') ?>',
     };
 
     ecomApp.mount("#ecomApp");
