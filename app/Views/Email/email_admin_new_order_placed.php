@@ -9,7 +9,9 @@
 </head>
 
 <body>
-    <p style="line-height: 20px; font-size: 20px;">Xin chào, có đơn hàng mới vừa được đặt với mã là # <?= $order->code ?></p>
+    <p style="line-height: 20px; font-size: 20px;">
+        <?= getenv('CI_ENVIRONMENT') == 'development' ? '[Demo] ' : '' ?>Xin chào, có đơn hàng mới vừa được đặt với mã là # <?= $order->code ?>
+    </p>
 
     <p style="line-height: 20px; font-size: 20px;"><b>Một số thông tin về đơn hàng</b></p>
 
