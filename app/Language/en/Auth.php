@@ -16,7 +16,8 @@ return [
     'badToken'              => 'Invalid access token.',
     'oldToken'              => 'Access token has expired.',
     'noUserEntity'          => 'User Entity must be provided to validate the password.',
-    'invalidEmail'          => 'Unable to verify the email address matches the saved email.',
+    'emailRequired'         => 'Please enter an email.',
+    'invalidEmail'          => 'Invalid email address.',
     'unableSendEmailToUser' => 'Sorry, there was a problem sending the email. We could not send an email to "{0}".',
     'throttled'             => 'Too many requests from this IP address. You can try again in {0} seconds.',
     'notEnoughPrivilege'    => 'You do not have the necessary privileges to perform the desired action.',
@@ -25,11 +26,11 @@ return [
     'expiredJWT'     => 'Token has expired.',
     'beforeValidJWT' => 'Token is not yet valid.',
 
-    'email'           => 'Email Address',
+    'email'           => 'Email',
     'username'        => 'Username',
     'password'        => 'Password',
     'passwordConfirm' => 'Password (repeat)',
-    'haveAccount'     => 'Already have an account?',
+    'haveAccount'     => 'Already have an account? Login now!',
     'token'           => 'Token',
 
     // Buttons
@@ -37,16 +38,19 @@ return [
     'send'    => 'Send',
 
     // Registration
-    'register'         => 'Register',
-    'registerDisabled' => 'Registration is currently not allowed.',
-    'registerSuccess'  => 'Welcome to us!',
+    'register'                  => 'Register',
+    'registerDisabled'          => 'Registration is currently not allowed.',
+    'registerSuccess'           => 'Welcome to us!',
+    'newCustomerRegisterNow'    => 'Don\'t have an account? Register now!',
 
     // Login
     'login'              => 'Login',
     'needAccount'        => 'Need an account?',
     'rememberMe'         => 'Remember me?',
     'forgotPassword'     => 'Forgot password?',
-    'useMagicLink'       => 'Use Magic Link',
+    'forgotPasswordTitle' => 'Forgot Password',
+    'forgotPasswordText'  => '<p>Enter your email address and we will send you a link to reset your password.</p>',
+    'useMagicLink'       => 'Use Magic Login Link',
     'magicLinkSubject'   => 'Your Magic Login Link',
     'magicTokenNotFound' => 'Unable to verify the link.',
     'magicLinkExpired'   => 'Sorry, the link has expired.',
@@ -55,8 +59,12 @@ return [
     'magicLinkDisabled'  => 'The use of MagicLink is currently not allowed.',
     'successLogout'      => 'You have successfully logged out.',
     'backToLogin'        => 'Back to Login',
+    'loginSuccess'       => 'Login successful',
+    'already_logged_in'  => 'You are already logged in. Please log out before logging in again.',
+    'logoutSuccess'      => 'Logout successful',
 
     // Passwords
+    'passwordRequired'          => 'Please enter a password.',
     'errorPasswordLength'       => 'Password must be at least {0, number} characters.',
     'suggestPasswordLength'     => 'A passphrase - up to 255 characters - creates a safer and easier to remember password.',
     'errorPasswordCommon'       => 'Password must not be a common password.',
@@ -72,12 +80,24 @@ return [
     'passwordChangeSuccess'     => 'Password changed successfully',
     'userDoesNotExist'          => 'Password not changed. User does not exist',
     'resetTokenExpired'         => 'Sorry. Your reset token has expired.',
+    'forgotPasswordSuccess'     => 'We have sent an email with instructions to reset your password. Please check your inbox.',
+    'emailForgotPasswordExtra'  => 'Check your email to recover your password',
+    'recoverPasswordEmail'      => 'Please visit the following link to reset your password:',
+    'recoverPasswordLink'       => 'Reset Password',
+    'recoverPassword'           => 'Recover Password',
+    'recoverPasswordBody'       => 'Please enter your new password in the field below to recover your password.',
+    'passwordMaxLength'         => 'Password must not exceed 255 characters.',
+    'passwordNotMatch'          => 'Password does not match. Please try again.',
+    'recoverPasswordSuccess'    => 'Your password has been successfully reset. You can now log in with your new password.',
+    'passwordChangeRequired'    => 'Please set your password before proceeding.',
+    'oldPassword'               => 'Old Password',
 
     // Email Globals
     'emailInfo'      => 'Some information about the user:',
     'emailIpAddress' => 'IP Address:',
     'emailDevice'    => 'Device:',
     'emailDate'      => 'Date:',
+    'emailNotFound'  => 'No user found with this email address.',
 
     // 2FA
     'email2FATitle'       => 'Two-Factor Authentication',
@@ -91,6 +111,7 @@ return [
     'needVerification'    => 'Check your email to complete account activation.',
 
     // Activate
+    'activateAccountTitle' => 'Activate Account',
     'emailActivateTitle'    => 'Email Activation',
     'emailActivateBody'     => 'We have just sent you an email with a code to confirm your email address. Copy that code and paste it below.',
     'emailActivateSubject'  => 'Your activation code',
@@ -105,4 +126,5 @@ return [
 
     // Permissions
     'unknownPermission' => '{0} is not a valid permission.',
+    'login_required'    => 'You need to log in to perform this action.',
 ];

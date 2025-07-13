@@ -2,10 +2,10 @@
 
 namespace App\Cells\Customer;
 
-use App\Models\CusModel;
 use CodeIgniter\View\Cells\Cell;
 use App\Enums\Store\Order\EOrderStatus;
 use App\Models\Store\Order\OrderModel;
+use App\Models\Store\Customer\CustomerModel;
 
 class RecentOrdersCell extends Cell
 {
@@ -14,8 +14,8 @@ class RecentOrdersCell extends Cell
 
     public function mount()
     {
-        $user = user();
-        $customer = model(CusModel::class)->queryCustomerByUserId($user->id)->first();
+        $user = auth()->user();
+        $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
         $orderData = model(OrderModel::class)
             ->join('order_items', 'order.order_id = order_items.order_id')
             ->groupBy('order.order_id')
@@ -23,17 +23,17 @@ class RecentOrdersCell extends Cell
             ->where('customer_id', $customer->id)
             ->whereIn('status', [EOrderStatus::OPEN, EOrderStatus::PROCESSED, EOrderStatus::CONFIRMED])
             ->orderBy('order_id', 'desc')
-            ->findAll();
+            ->findAll(5);
 
-        if ( count($orderData) ) {
+        if (count($orderData)) {
             $this->orders = $orderData;
         }
     }
 
     public function listOrderHistory(): string
     {
-        $user = user();
-        $customer = model(CusModel::class)->queryCustomerByUserId($user->id)->first();
+        $user = auth()->user();
+        $customer = model(CustomerModel::class)->queryCustomerByUserId($user->id)->first();
         $orderData = model(OrderModel::class)
             ->join('order_items', 'order.order_id = order_items.order_id')
             ->groupBy('order.order_id')
@@ -46,5 +46,4 @@ class RecentOrdersCell extends Cell
             'orders' => $orderData
         ]);
     }
-
 }

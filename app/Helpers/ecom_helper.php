@@ -1,15 +1,21 @@
 <?php
 
+use App\Models\LangModel;
+use App\Models\Store\ExchangeRateModel;
 use CodeIgniter\I18n\Time;
 
-if (!function_exists('vnd_decode')) {
+if (!function_exists('currency_decode')) {
     /**
-     * convert VND currency value to number
-     * @param $number
-     * @return string|string[]|null
+     * convert currency text value to number
+     * @param $number string
+     * @example $number = "1,234,567.89" or "1234.567,89"
+     * @return number | float
      */
-    function vnd_decode($number) {
-        return preg_replace('/,+/', '', $number);
+    function currency_decode($number)
+    {
+        $number = preg_replace('/,+/', '', $number);
+        $number = preg_replace('/\.(?=\d{3})/', '', $number);
+        return (float)$number;
     }
 }
 
@@ -20,15 +26,16 @@ if (!function_exists('vnd_encode')) {
      * @param bool $suffixes
      * @return string
      */
-    function vnd_encode($number, $suffixes=false) {
+    function vnd_encode($number, $suffixes = false)
+    {
         if (empty($number)) {
             return '0đ';
         }
-        
+
         // Convert to integer for VND (remove decimal part)
         $number = floor((float)$number);
-        
-        if($suffixes){
+
+        if ($suffixes) {
             $Vnddot = number_format($number, 0, '', ',') . 'đ';
         } else {
             $Vnddot = number_format($number, 0, '', ',') . 'đ';
@@ -44,12 +51,13 @@ if (!function_exists('usd_encode')) {
      * @param bool $suffixes
      * @return string
      */
-    function usd_encode($number, $suffixes=false) {
+    function usd_encode($number, $suffixes = false)
+    {
         if (empty($number)) {
             return '0.00';
         }
-        
-        if($suffixes){
+
+        if ($suffixes) {
             $USDdot = '$' . number_format((float)$number, 2, '.', ',');
         } else {
             $USDdot = number_format((float)$number, 2, '.', ',');
@@ -66,14 +74,15 @@ if (!function_exists('format_currency')) {
      * @param bool $suffixes
      * @return string
      */
-    function format_currency($number) {
-        $lang = session()->lang;
+    function format_currency($number, $lang = null)
+    {
+        $lang = $lang ?? session()->lang;
         $suffixes = $lang->currency_symbol;
-        
+
         if ($lang->locale == "en") {
             return usd_encode($number, $suffixes);
         }
-        
+
         // Default to Vietnamese currency format
         return vnd_encode($number, $suffixes);
     }
@@ -85,25 +94,41 @@ if (!function_exists('create_product_thumb')) {
      * @param object $attachFile
      * @return string product thumb file url
      */
-    function create_product_thumb($attachFile) {
+    function create_product_thumb($attachFile)
+    {
         $shopConfig     = config('Shop');
         $myTime         = Time::parse($attachFile->created_at);
-        
-        $productThumbName = $shopConfig->productThumbSize['height'].'-'.$shopConfig->productThumbSize['width'].'-'.$attachFile->file_name;
-        $productThumbFile = 'uploads/attach/' . $myTime->format('Y/m').'/thumb/'.$productThumbName;
+
+        $productThumbName = $shopConfig->productThumbSize['height'] . '-' . $shopConfig->productThumbSize['width'] . '-' . $attachFile->file_name;
+        $productThumbFile = 'uploads/attach/' . $myTime->format('Y/m') . '/thumb/' . $productThumbName;
 
         // check if thumb image exist
         $productThumbFilePath = FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $productThumbFile);
-        if ( !file_exists($productThumbFilePath) ) {
+        if (!file_exists($productThumbFilePath)) {
             // create product thumbnail
             \Config\Services::image()
                 ->withFile(FCPATH . str_replace('/', DIRECTORY_SEPARATOR, $attachFile->full_image))
                 ->fit($shopConfig->productThumbSize['width'], $shopConfig->productThumbSize['height'], 'center')
                 ->save($productThumbFilePath);
             return $productThumbFile;
-        } 
+        }
 
         return $productThumbFile;
     }
 }
 
+if (!function_exists('getExchangeRate')) {
+
+    function getExchangeRate($lang_id = 0)
+    {
+        if ($lang_id == 0) {
+            $lang = session()->lang;
+        } else {
+            $lang = model(LangModel::class)->find($lang_id);
+        }
+
+        $exchangeRate = model(ExchangeRateModel::class)->getExchangeRate($lang->currency_code);
+
+        return $exchangeRate->rate ?? 1;
+    }
+}

@@ -72,6 +72,16 @@ class ResetPasswordController extends BaseController {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // check old password
+        $oldPassword = $this->request->getPost('old_password');
+        /** @var Passwords $passwords */
+        $passwords = service('passwords');
+
+        // Now, try matching the passwords.
+        if (! $passwords->verify($oldPassword, $user->password_hash)) {
+            return redirect()->back()->withInput()->with('error', lang('Customer.old_password_not_match'));
+        }
+
         //record old password
         $oldData = [
             'user_id' => $user->id,

@@ -2,29 +2,32 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="header">
-                <div class="demo-title">Log in</div>
+                <div class="demo-title"><?= lang('Auth.login') ?></div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-login-form">
-                <form class="" action="my-account.html" accept-charset="utf-8">
+                <form class="" accept-charset="utf-8" id="loginForm" >
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="">
-                        <label class="tf-field-label" for="">Email *</label>
+                        <input class="tf-field-input tf-input" placeholder=" " id="login-email" type="email" name="email">
+                        <label class="tf-field-label" for=""><?= lang('Auth.email') ?> *</label>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password"  name="">
-                        <label class="tf-field-label" for="">Password *</label>
+                        <input class="tf-field-input tf-input" placeholder=" " id="login-password" type="password" name="password">
+                        <label class="tf-field-label" for=""><?= lang('Auth.password') ?> *</label>
                     </div>
                     <div>
-                        <a href="#forgotPassword" data-bs-toggle="modal" class="btn-link link">Forgot your password?</a>
+                        <a href="#forgotPassword" data-bs-toggle="modal"
+                            class="btn-link link"><?= lang('Auth.forgotPassword') ?></a> <br>
+                        <a href="<?= base_url(route_to('cus_activate_account')) ?>" class="btn-link link"><?= lang('Auth.activateAccountTitle') ?></a>
                     </div>
-                    <div class="bottom"> 
+                    <div class="bottom">
                         <div class="w-100">
-                            <button type="submit" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Log in</span></button>
+                            <button type="submit" id="login-submit"
+                                class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span><?= lang('Auth.login') ?></span></button>
                         </div>
                         <div class="w-100">
-                            <a href="#register" data-bs-toggle="modal" class="btn-link fw-6 w-100 link">
-                                New customer? Create your account
+                            <a href="<?= base_url(route_to('cus_register')) ?>" class="btn-link fw-6 w-100 link">
+                                <?= lang('Auth.newCustomerRegisterNow') ?>
                                 <i class="icon icon-arrow1-top-left"></i>
                             </a>
                         </div>
@@ -38,24 +41,25 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="header">
-                <div class="demo-title">Reset your password</div>
+                <div class="demo-title"><?=lang('Auth.forgotPasswordTitle')?></div>
                 <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
             </div>
             <div class="tf-login-form">
-                <form class="">
+                <form class="" id="forgotPasswordForm" >
                     <div>
-                        <p>Sign up for early Sale access plus tailored new arrivals, trends and promotions. To opt out, click unsubscribe in our emails</p>
+                        <?= lang('Auth.forgotPasswordText') ?>
                     </div>
                     <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="">
-                        <label class="tf-field-label" for="">Email *</label>
+                        <input class="tf-field-input tf-input" placeholder=" " type="email" name="email" id="forgot-email">
+                        <label class="tf-field-label" for="forgot-email"><?= lang('Auth.email') ?> *</label>
                     </div>
                     <div>
-                        <a href="#login" data-bs-toggle="modal" class="btn-link link">Cancel</a>
+                        <a href="#login" data-bs-toggle="modal" class="btn-link link"><?= lang('Auth.backToLogin') ?></a>
                     </div>
-                    <div class="bottom"> 
+                    <div class="bottom">
                         <div class="w-100">
-                            <button type="submit" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Reset password</span></button>
+                            <button type="submit" id="forgot-submit"
+                                class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span><?=lang('Auth.send')?></span></button>    
                         </div>
                     </div>
                 </form>
@@ -63,44 +67,15 @@
         </div>
     </div>
 </div>
-<div class="modal modalCentered fade form-sign-in modal-part-content" id="register">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="header">
-                <div class="demo-title">Register</div>
-                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
-            </div>
-            <div class="tf-login-form">
-                <form class="">
-                    <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text"  name="">
-                        <label class="tf-field-label" for="">First name</label>
-                    </div>
-                    <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="text"  name="">
-                        <label class="tf-field-label" for="">Last name</label>
-                    </div>
-                    <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="">
-                        <label class="tf-field-label" for="">Email *</label>
-                    </div>
-                    <div class="tf-field style-1">
-                        <input class="tf-field-input tf-input" placeholder=" " type="password"  name="">
-                        <label class="tf-field-label" for="">Password *</label>
-                    </div>
-                    <div class="bottom"> 
-                        <div class="w-100">
-                            <a href="register.html" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Register</span></a>
-                        </div>
-                        <div class="w-100">
-                            <a href="#login" data-bs-toggle="modal" class="btn-link fw-6 w-100 link">
-                                Already have an account? Log in here
-                                <i class="icon icon-arrow1-top-left"></i>
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
+<script>
+    const loginValidateMessage = {
+        emailInvalid: '<?= lang('Auth.invalidEmail') ?>',
+        emailRequired: '<?= lang('Auth.emailRequired') ?>',
+        passwordRequired: '<?= lang('Auth.passwordRequired') ?>',
+        somethingWentWrong: '<?= lang('Common.somethingWentWrong') ?>',
+        loginSuccess: '<?= lang('Auth.loginSuccess') ?>',
+        processing: '<?= lang('Customer.processing') ?>',
+        forgotPasswordSuccess: '<?= lang('Auth.forgotPasswordSuccess') ?>',
+    }
+</script>

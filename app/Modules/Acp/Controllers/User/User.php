@@ -89,7 +89,11 @@ class User extends AcpController
     {
         $this->_data['title'] = lang('User.title_add');
 
-        $this->_data['list_userg'] = $this->userMetaModel->findAll();
+        $groupData = $this->config->getUserGroup();
+
+        // unset customer group
+        unset($groupData['customer']);
+        $this->_data['list_userg'] = $groupData;
         $this->_render('\user\add', $this->_data);
     }
 
@@ -102,11 +106,11 @@ class User extends AcpController
         // Validate here first, since some things,
         // like the password, can only be validated properly here.
         $rules = [
-            'username'      => 'required|alpha_numeric_space|min_length[4]|is_unique[users.username]',
-            'email'            => 'required|valid_email|is_unique[users.email]',
-            'fullname'      => 'required',
-            'password'         => 'required|min_length[4]|strong_password',
-            'pass_confirm'     => 'required|matches[password]',
+            'username'          => 'required|alpha_numeric_space|min_length[4]|is_unique[users.username]',
+            'email'             => 'required|valid_email',
+            'fullname'          => 'required',
+            'password'          => 'required|min_length[4]|strong_password',
+            'pass_confirm'      => 'required|matches[password]',
         ];
         $errMess = [
             'username' => [
@@ -156,7 +160,15 @@ class User extends AcpController
         // Success!
         $item = $this->_model->find($user_id);
 
+        // Add to default group
+        $this->_model->addToDefaultGroup($item);
+
         if (isset($postData['force_pass_reset'])) $item->forcePasswordReset();
+
+        //add user group
+        foreach ( $postData['groups'] as $group) {
+            $item->addGroup($group);
+        }
 
         //add user meta
         $this->insertUserMeta($this->request->getPost(), $user_id);
@@ -170,20 +182,6 @@ class User extends AcpController
             'subject_type' => $item->model_class,
         ];
         $this->logAction($logData);
-
-        //        if ($this->auth_config->requireActivation !== false)
-        //        {
-        //            $activator = service('activator');
-        //            $sent = $activator->send($user);
-        //
-        //            if (! $sent)
-        //            {
-        //                return redirect()->back()->withInput()->with('error', $activator->error() ?? lang('Auth.unknownError'));
-        //            }
-        //
-        //            // Success!
-        //            return redirect()->route('login')->with('message', lang('Auth.activationSuccess'));
-        //        }
 
         return redirect()->route('list_user')->with('message', lang('User.addSuccess', [$postData['username']]));
     }
@@ -203,9 +201,12 @@ class User extends AcpController
                 if (!$this->user->inGroup('superadmin', 'admin')) return redirect()->route('dashboard')->with('error', lang('Acp.no_permission'));
             }
 
-            //$this->_modelUsmeta->getMeta($user); //echo "<pre>"; print_r($user);exit;
             $this->_data['userData'] = $user;
-            $this->_data['list_userg'] = $this->userMetaModel->findAll();
+            $groupData = $this->config->getUserGroup();
+
+            // unset customer group
+            unset($groupData['customer']);
+            $this->_data['list_userg'] = $groupData;
 
             $this->_render('\user\edit', $this->_data);
         } else {
@@ -227,43 +228,15 @@ class User extends AcpController
             $inputData = $this->request->getPost();
             //validate the data
             $rules = [
-                'email'            => 'required|valid_email',
-                'fullname'      => 'required',
+                'fullname'          => 'required',
             ];
 
             $errMess = [
-                'username' => [
-                    'required' => lang('User.username_required'),
-                    'alpha_numeric_space' => lang('User.alpha_numeric_space'),
-                    'min_length' => lang('User.min_length'),
-                    'is_unique' => lang('User.user_is_exist')
-                ],
-                'email' => [
-                    'required' => lang('User.email_required'),
-                    'valid_email' => lang('User.valid_email'),
-                ],
                 'fullname' => [
                     'required' => lang('User.fullname_required')
                 ]
             ];
 
-            if (isset($inputData['password']) && $inputData['password'] !== '') {
-                $rules['password'] = 'required|min_length[4]|strong_password';
-                $rules['pass_confirm'] = 'required|matches[password]';
-
-                $errMess['password'] = [
-                    'required' => lang('User.pw_required'),
-                    'min_length' => lang('User.pw_length')
-                ];
-                $errMess['pass_confirm'] = [
-                    'required' => lang('User.pwcf_required'),
-                    'matches'  => lang('User.pwcf_matches')
-                ];
-            }
-            if (isset($inputData['email']) && $inputData['email'] !== $user->email) {
-                $rules['email'] .= '|is_unique[users.email]';
-                $errMess['email']['is_unique'] = lang('User.email_exits');
-            }
             //validate the input
             if (! $this->validate($rules, $errMess)) {
                 return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -291,6 +264,10 @@ class User extends AcpController
             // Success!
             //add user meta
             $this->updateUserMeta($inputData, $userID);
+            //add user group
+            foreach ( $inputData['groups'] as $group) {
+                $user->addGroup($group);
+            }
 
             //log Action
             $logData = [
@@ -444,6 +421,53 @@ class User extends AcpController
                 return redirect()->route('list_user')->with('message', lang('User.delete_success', [$user->id]));
             } else return redirect()->route('list_user')->with('error', lang('User.delete_fail'));
         } else return redirect()->route('list_user')->with('error', lang('Acp.invalid_request'));
+    }
+
+    /**
+     * Permanently delete a user
+     * @param $id
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function permanentDelete($id) {
+        $user = $this->_model->withDeleted()->find($id);
+        
+        if ( !isset($user->id)) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_request')
+            ]);
+        }
+
+        if ($user->deleted_at == null) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_request')
+            ]);
+        }
+
+        if ($user->id == $this->user->id) {
+            return $this->response->setJSON([
+                'error' => 1,
+                'message' => lang('Acp.invalid_delete_user')
+            ]);
+        }
+
+        // permanently delete user
+        $this->_model->delete($user->id, true);
+        // delete user meta
+        $this->userMetaModel->where('user_id', $user->id)->delete();
+        //log Action
+        $logData = [
+            'title' => 'Permanently Delete User',
+            'description' => "#{$this->user->username} đã xoá user #{$user->username}",
+            'subject_id' => $user->id,
+            'subject_type' => $user->model_class,
+        ];
+        $this->logAction($logData);
+        return $this->response->setJSON([
+            'error' => 0,
+            'message' => lang('User.delete_success', [$user->id])
+        ]);
     }
 
     /**

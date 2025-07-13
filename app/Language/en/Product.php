@@ -15,6 +15,7 @@ return [
     'pd_weight'                     => 'Weight',
     'pd_cut_angle'                  => 'Cut angle',
 
+    'product_available'             => 'Product Available',
     'ask_a_question'                => 'Request consultation',
     'return_policy'                 => 'Return policy',
     'warranty_policy'               => 'Warranty policy',

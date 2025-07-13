@@ -20,7 +20,7 @@ class ProductController extends AjaxBaseController
 
     public function getProductById($productId)
     {
-        $this->_checkSpam();
+        $this->checkSpam();
 
         $productData = $this->_model
             ->select('product.*, pdc.pd_name, pdc.pd_slug, pdc.pd_weight, pdc.pd_size, pdc.pd_cut_angle, pdc.price, pdc.price_discount')
@@ -43,6 +43,7 @@ class ProductController extends AjaxBaseController
         $product->lang = $this->currentLang;
         $product->url = $productData->url;
         $product->display_price = $productData->display_price;
+        $product->product_meta = $productData->product_meta;
 
         return $this->respond([
             'status' => 200,

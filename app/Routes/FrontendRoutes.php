@@ -23,55 +23,71 @@ $routes->group('product', ['namespace' => '\App\Controllers\Product'], function 
  * Customer
  */
 $routes->group('customer', ['namespace' => '\App\Controllers\Customer'], function ($routes) {
-    $routes->get('profile', 'Profile::profile', ['as' => 'cus_profile']);
+    $routes->get('dashboard', 'CustomerController::dashboard', ['as' => 'cus_profile']);
     $routes->match(['GET', 'POST'], 'account-profile-info', 'Profile::profileInfo', ['as' => 'edit_cus_profile']);
-    $routes->match(['GET', 'POST'], 'change-password', 'AuthCustomer::changePassword', ['as' => 'cus_change_password']);
+    $routes->match(['GET', 'POST'], 'change-password', 'Profile::changePassword', ['as' => 'cus_change_password']);
+
     $routes->get('order-history', 'OrderHistory::listOrder', ['as' => 'order_history']);
-    $routes->get('order-history/(:num)', 'OrderHistory::detail/$1', ['as' => 'order_history_detail']);
+    $routes->get('order-history/(:num)', 'OrderHistory::orderDetail/$1', ['as' => 'order_history_detail']);
 
-    $routes->get('my-voucher', 'Voucher::list', ['as' => 'voucher_list']);
-    $routes->match(['GET', 'POST'], 'my-voucher/claim-gift/(:num)', 'Voucher::claimGift/$1', ['as' => 'claim_gift']);
+    $routes->get('my-shipping-address', 'ShippingAddress::index', ['as' => 'my_shipping_address']);
+    $routes->match(['GET', 'POST'], 'add-new-shipping-address', 'ShippingAddress::createNewAddress', ['as' => 'add_new_address']);
+    $routes->match(['GET', 'POST'], 'edit-shipping-address/(:num)', 'ShippingAddress::edit/$1', ['as' => 'edit_shipping_address']);
+    $routes->get('delete-shipping-address/(:num)', 'ShippingAddress::delete/$1', ['as' => 'delete_shipping_address']);
 
-    /**
-     * Auth
-     */
-    $routes->get('login', '\App\Controllers\Login::login', ['as' => 'cus_login']);
-    $routes->post('login', '\App\Controllers\Login::actionLogin');
-    $routes->get('register', '\App\Controllers\Register::register', ['as' => 'cus_register']);
-    $routes->post('register', '\App\Controllers\Register::actionRegister');
+    // Authentication
+    $routes->get('login', 'Login::loginView', ['as' => 'cus_login']);
+    $routes->post('login', 'Login::loginSubmit');
+    $routes->get('register', 'Register::register', ['as' => 'cus_register']);
+    $routes->post('register', 'Register::registerSubmit');
     $routes->get('logout', 'AuthCustomer::logout', ['as' => 'cus_logout']);
 
     // Activation
     $routes->get('activate-account', 'AuthCustomer::activateAccount', ['as' => 'cus_activate_account']);
-    $routes->get('forgot-password', 'AuthCustomer::forgotPassword', ['as' => 'cus_forgot_password']);
+    $routes->post('activate/verify', 'AuthCustomer::verify', ['as' => 'cus_activate_account_verify']);
+    $routes->get('recover-password', 'AuthCustomer::recoverPasswordView', ['as' => 'cus_recover_password']);
+    $routes->post('recover-password', 'AuthCustomer::recoverPassword');
 });
 
 /**
  * Order
  */
 $routes->group('order', ['namespace' => '\App\Controllers\Order'], function ($routes) {
-    $routes->get('cart', 'Order::cart', ['as' => 'order_cart']);
-    $routes->get('checkout', 'Order::checkout', ['as' => 'order_checkout']);
-    $routes->post('checkout', 'Order::actionCheckout');
+    $routes->get('cart', 'Cart::index', ['as' => 'order_cart']);
+
+    $routes->match(['GET', 'POST'], 'checkout', 'Checkout::index', ['as' => 'order_checkout']);
+
     $routes->get('success/([a-zA-Z0-9_-]+)', 'Order::orderSuccess/$1', ['as' => 'order_success']);
+
     $routes->get('payment/([a-zA-Z0-9_-]+)', 'Order::orderPayment/$1', ['as' => 'order_payment']);
     $routes->post('payment/([a-zA-Z0-9_-]+)', 'Order::actionOrderPayment/$1');
     $routes->get('get-product', 'Order::getProduct');
-    $routes->get('apply-voucher', 'Order::applyVoucher');
 });
 
 // ajax routes
 $routes->group('ajax', ['namespace' => '\Modules\Ajax\Controllers'], function ($routes) {
     $routes->post('subscribe-email', 'ContactController::addSubscribeEmail');
 
-    $routes->get('get-province', 'AjaxController::getProvinces');
-    $routes->get('get-district/(:num)', 'AjaxController::getDistricts/$1');
-    $routes->get('get-ward/(:num)', 'AjaxController::getWards/$1');
-    $routes->get('get-shipping-fee', 'AjaxController::getShippingFee');
+    $routes->get('get-province', 'AreaController::getProvinces');
+    $routes->get('get-district/(:num)', 'AreaController::getDistricts/$1');
+    $routes->get('get-ward/(:num)', 'AreaController::getWards/$1');
+    $routes->get('get-shipping-fee', 'AreaController::getShippingFee');
+
+    $routes->group('customer', null, function ($routes) {
+        $routes->post('login', 'CustomerController::login');
+        $routes->post('forgot-password', 'CustomerController::forgotPassword');
+        $routes->get('logout', 'CustomerController::logout');
+        $routes->get('get-customer', 'CustomerController::getCustomer');
+    });
 
     $routes->group('product', null, function ($routes) {
         $routes->get('get-product/(:num)', 'ProductController::getProductById/$1');
         $routes->post('search', 'AjaxController::searchProduct');
+    });
+
+    $routes->group('order', null, function ($routes) {
+        $routes->get('get-products', 'OrderController::getProducts');
+        $routes->get('apply-voucher', 'OrderController::ajaxApplyVoucher');
     });
 });
 

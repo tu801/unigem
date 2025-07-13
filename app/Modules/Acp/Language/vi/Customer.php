@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: tmtuan
  * Created date: 8/19/2023
@@ -13,6 +14,9 @@ return [
     'create_customer_title' => 'Tạo tài khoản khách hàng',
     'service_information'   => 'Thông tin dịch vụ',
     'image_des'             => 'Hình đại diện phải có kích thước lớn hơn hoặc bằng 200px x 200px',
+    'search_placeholder'    => 'Mã khách hàng hoặc số điện thoại',
+    'walk_in_customer'      => 'Khách vãng lai',
+    'edit_profile'           => 'Sửa Profile',
 
     'avatar'    => 'Hỉnh đại diện',
     'full_name' => 'Họ Tên',
@@ -21,6 +25,13 @@ return [
     'email'     => 'Email',
     'birthday'  => 'Ngày sinh',
     'address'   => 'Địa chỉ',
+    'password'  => 'Mật khẩu',
+    'password_confirm' => 'Xác nhận mật khẩu',
+
+    'shipping_address'   => 'Địa chỉ giao hàng',
+    'ship_full_name'     => 'Họ tên người nhận',
+    'ship_email'         => 'Email người nhận',
+    'ship_phone'         => 'Số điện thoại người nhận',
 
     'add_service'        => 'Thêm dịch vụ',
     'edit_service'       => 'Sửa dịch vụ',
@@ -46,8 +57,8 @@ return [
     // Form validation
     'full_name_required' => 'Vui lòng điền họ tên khách hàng',
     'phone_required'     => 'Vui lòng điền số điện thoại khách hàng',
-    'phone_is_unique'    => 'Số điện thoại này đã tồn tại',
-    'phone_is_not_unique'=> 'Số điện thoại này Không tồn tại',
+    'phone_is_not_unique'    => 'Số điện thoại này đã tồn tại',
+    'cus_phone_min_length'  => 'Số điện thoại không hợp lệ',
 
     'email_required' => 'Vui lòng điền email',
     'valid_email'    => 'Email không hợp lệ',
@@ -59,6 +70,14 @@ return [
     'service_id_required'  => 'Vui lòng chọn dịch vụ',
     'service_is_not_exist' => 'Dịch vụ này không tồn tại',
 
+    'cus_address_required'  => 'Vui lòng điền địa chỉ',
+
+    'password_required'     => 'Vui lòng điền mật khẩu đăng nhập',
+    'password_min_length'   => 'Mật khẩu phải có ít nhất 6 ký tự',
+    'password_confirm_matches_password' => 'Mật khẩu không trùng khớp',
+
+    'no_shipping_address' => 'Chưa có địa chỉ giao hàng',
+
     // From edit modal
     'enable_warranty'                  => 'Bảo hành dịch vụ',
     'guarantee_time'                   => 'Thời gian bảo hành',
@@ -66,6 +85,8 @@ return [
     'guarantee_end'                    => 'Kết thúc',
     'note'                             => 'Ghi Chú',
     'status'                           => 'Trạng thái',
+    'status_1'                         => 'Đang hoạt động',
+    'status_0'                         => 'Chưa kích hoạt',
     'title_customer_service_guarantee' => 'Danh Sách Lần Bảo Hành',
     'add_service_guarantee'            => 'Ghi Chú Bảo Hành',
     'doctor'                           => 'Bác Sĩ',
@@ -73,15 +94,4 @@ return [
     'addServiceGuaranteeLog'           => '#{0} Đã Bảo Hành #{1}',
     'doctor_name_required'             => 'Vui lòng điền Tên Bác Sĩ Thực Hiện',
 
-    // check guarantee
-    'not_guarantee'          => 'Không có bảo Hành',
-    'month'                  => 'Tháng',
-    'check_guarantee_title'  => 'Tra Cứu Bảo Hành',
-    'check_guarantee_button' => 'Kiểm tra',
-    'under_warranty'         => 'Đã bảo hành',
-    'not_warranty'           => 'Không Có bảo hành',
-    'no_warranty'            => 'Chưa bảo hành',
-    'phone_support'          => 'Tổng Đài Hỗ Trợ',
-    'date_buy'               => 'Ngày mua',
-    'edit_profile'           => 'Sửa Profile',
 ];

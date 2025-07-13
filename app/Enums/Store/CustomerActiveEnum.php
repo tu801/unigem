@@ -19,4 +19,6 @@ class CustomerActiveEnum
 {
     const ACTIVE = 1;
     const INACTIVE = 0;
+
+    const FORGOT_PASSWORD_TYPE_EMAIL = 'email_forgot_password';
 }

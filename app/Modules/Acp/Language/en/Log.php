@@ -14,6 +14,8 @@ return [
     'device_login' => 'Device',
     'status' => 'Status',
     'ip_address' => 'IP Address',
+    'module' => 'Log Module',
+    'description' => 'Log Description',
 
     // Logging titles
     'add_page' => 'Add New Page',
@@ -30,4 +32,17 @@ return [
     // contact logging message
     'edit_contact'  => 'Edit Contact',
     'edit_contact_desc' => '[{0}] edited contact #{1}',
+
+    // customer logging message
+    'add_customer' => 'Add Customer',
+    'add_customer_desc' => '[{0}] successfully added customer #{1}',
+    'edit_customer' => 'Edit Customer Information',
+    'edit_customer_desc' => '[{0}] successfully edited customer information #{1}',
+
+    // voucher logging message
+    'add_voucher' => 'Add Voucher',
+    'add_voucher_desc' => '[{0}] successfully added voucher #{1}',
+
+    'edit_voucher' => 'Edit Voucher #{0}',
+    'edit_voucher_desc' => '[{0}] successfully edited voucher #{1}',
 ];

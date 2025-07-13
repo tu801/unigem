@@ -8,14 +8,20 @@ namespace Modules\Acp\Controllers\System;
 
 use Modules\Acp\Controllers\AcpController;
 use App\Models\LogModel;
+use CodeIgniter\Shield\Models\LoginModel;
 
 class Log extends AcpController
 {
+    protected $_loginModel;
+
     public function __construct()
     {
         parent::__construct();
         if (empty($this->_model)) {
             $this->_model = model(LogModel::class);
+        }
+        if (empty($this->_loginModel)) {
+            $this->_loginModel = model(LoginModel::class);
         }
     }
 

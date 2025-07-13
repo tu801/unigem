@@ -52,10 +52,10 @@ echo $this->section('content') ?>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label"><?=lang('User.user_group')?></label>
                         <div class="col-sm-10">
-                            <select class="form-control m-b" name="gid">
+                            <select class="select2 form-control m-b" name="groups[]" multiple>
                                 <?php if($list_userg){
-                                    foreach($list_userg as $userg){
-                                        echo "<option ".set_select('gid', $userg->id)." value='".$userg->id."'>".$userg->name."</option>";
+                                    foreach ($list_userg as $key => $group) {
+                                        echo "<option ".set_select('gid', $key)." value='".$key."'>".$group['title']."</option>";
                                     }
                                 }?>
                             </select>
@@ -128,6 +128,8 @@ echo $this->section('content') ?>
             format: "dd-mm-yyyy",
             autoclose: true,
         });
+        //Initialize Select2 Elements
+        $('.select2').select2();
     });
 </script>
 <?= $this->endSection() ?>

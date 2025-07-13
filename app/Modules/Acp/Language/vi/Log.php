@@ -14,6 +14,8 @@ return [
     'device_login' => 'Thiết bị',
     'status' => 'Trạng thái',
     'ip_address' => 'Địa chỉ IP',
+    'module' => 'Mô-đun',
+    'description' => 'Mô tả',
 
     //logging title
     'add_page' => 'Thêm trang mới',
@@ -30,4 +32,17 @@ return [
     // contact logging message
     'edit_contact'  => 'Sửa liên hệ',
     'edit_contact_desc' => '[{0}] đã sửa liên hệ #{1}',
+
+    // customer logging message
+    'add_customer' => 'Thêm Khách Hàng',
+    'add_customer_desc' => '[{0}] đã thêm thành công Khách Hàng #{1}',
+    'edit_customer' => 'Sửa thông tin Khách Hàng',
+    'edit_customer_desc' => '[{0}] đã sửa thành công thông tin Khách Hàng #{1}',
+
+    // voucher logging message
+    'add_voucher' => 'Thêm Voucher',
+    'add_voucher_desc' => '[{0}] đã thêm thành công Voucher #{1}',
+
+    'edit_voucher' => 'Sửa Voucher #{0}',
+    'edit_voucher_desc' => '[{0}] đã sửa thành công Voucher #{1}',
 ];
